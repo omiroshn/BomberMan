@@ -1,0 +1,21 @@
+[submodule "3rdParty/sdl2"]
+	path = 3rdParty/sdl2
+	url = https://Arxcel@bitbucket.org/Arxcel/sdl2-mirror.git
+[submodule "3rdParty/assimp"]
+	path = 3rdParty/assimp
+	url = https://github.com/assimp/assimp.git
+[submodule "3rdParty/glm"]
+	path = 3rdParty/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "3rdParty/imgui"]
+	path = 3rdParty/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "3rdParty/gl3w"]
+	path = 3rdParty/gl3w
+	url = https://github.com/skaslev/gl3w.git
+[submodule "3rdParty/glew"]
+	path = 3rdParty/glew
+	url = https://github.com/Perlmint/glew-cmake.git
+[submodule "3rdParty/stb"]
+	path = 3rdParty/stb
+	url = https://github.com/nothings/stb.git
