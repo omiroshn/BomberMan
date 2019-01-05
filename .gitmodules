@@ -19,3 +19,6 @@
 [submodule "3rdParty/stb"]
 	path = 3rdParty/stb
 	url = https://github.com/nothings/stb.git
+[submodule "3rdParty/cotire"]
+	path = 3rdParty/cotire
+	url = https://github.com/sakra/cotire.git

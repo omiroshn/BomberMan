@@ -1,6 +1,67 @@
 cmake_minimum_required(VERSION 3.13)
+
 project(bomberman)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(bomberman main.cpp)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmakeModules)
+set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "Root dir")
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib) # Setup linker libs
+
+add_subdirectory(3rdParty)
+
+set ( SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2/include )
+set ( SDL2_LIBRARY SDL2 )
+
+set ( GLEW_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glew/include )
+set ( GLEW_LIBRARIES libglew_shared )
+
+set ( ASSIMP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/assimp/include )
+set ( ASSIMP_LIBRARY assimp )
+
+set ( GLM_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glm/ )
+
+set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
+
+set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
+set ( IMGUI_LIBRARY imgui )
+
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Werror -Wextra -std=c++14")
+find_package(OpenGL REQUIRED)
+
+set(BOMBERMAN_SOURCES src/main.cpp)
+
+set(BOMBERMAN_LIBS
+ ${OPENGL_LIBRARY}
+ ${SDL2_LIBRARY}
+ ${ASSIMP_LIBRARY}
+ ${GLEW_LIBRARIES}
+ ${IMGUI_LIBRARY}
+)
+
+set(BOMBERMAN_INCLUDES
+  ${GLM_INCLUDE_DIRS}
+  ${STB_INCLUDE_DIRS}
+  ${SDL2_INCLUDE_DIR}
+  ${ASSIMP_INCLUDE_DIR}
+  ${GLEW_INCLUDE_DIRS}
+  ${IMGUI_INCLUDE_DIRS}
+)
+
+include_directories(${BOMBERMAN_INCLUDES})
+
+execute_process( COMMAND echo "\n\n\n\n\n" )
+execute_process( COMMAND echo ${BOMBERMAN_LIBS} )
+execute_process( COMMAND echo "\n\n\n\n\n" )
+
+target_link_libraries (bomberman ${BOMBERMAN_LIBS})
+
+add_executable(bomberman ${BOMBERMAN_SOURCES})
+
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bomberman)
