@@ -5,8 +5,12 @@ project(bomberman)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmakeModules)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmakeModules ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/cotire/CMake)
 set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "Root dir")
+
+set(CP_CMAKE_DIR ${PROJECT_SOURCE_DIR}/cmakeModules)
+include(cotire)
+include(${CP_CMAKE_DIR}/macros.cmake)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -55,10 +59,6 @@ set(BOMBERMAN_INCLUDES
 )
 
 include_directories(${BOMBERMAN_INCLUDES})
-
-execute_process( COMMAND echo "\n\n\n\n\n" )
-execute_process( COMMAND echo ${BOMBERMAN_LIBS} )
-execute_process( COMMAND echo "\n\n\n\n\n" )
 
 target_link_libraries (bomberman ${BOMBERMAN_LIBS})
 
