@@ -13,15 +13,6 @@ set( glew-cmake_BUILD_SINGLE_CONTEXT ON CACHE BOOL "Build the single context gle
 set( glew-cmake_BUILD_MULTI_CONTEXT OFF CACHE BOOL "Build the multi context glew library" )
 add_subdirectory( glew )
 
-## imgui
-
-# INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/imgui/)
-# IF (WIN32)
-#   add_library (imgui STATIC ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_demo.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_draw.cpp)
-# ELSE ()
-#   add_library (imgui SHARED ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_demo.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_draw.cpp)
-# ENDIF ()
-
 ## assimp
 
 set( ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "Build assimp tools" )
@@ -161,3 +152,8 @@ set( ASSIMP_BUILD_3MF_IMPORTER OFF CACHE BOOL "Build importer" )
 add_definitions(-DASSIMP_BUILD_NO_3MF_EXPORTER)
 
 add_subdirectory( assimp )
+
+## imgui
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/imgui/)
+add_library (imgui STATIC ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_demo.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_draw.cpp)
