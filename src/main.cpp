@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <iostream>
+#undef main
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480

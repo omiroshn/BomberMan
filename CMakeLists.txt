@@ -58,8 +58,14 @@ set(BOMBERMAN_INCLUDES
 
 include_directories(${BOMBERMAN_INCLUDES})
 
-add_executable(bomberman ${BOMBERMAN_SOURCES})
+add_executable(bomberman  ${BOMBERMAN_SOURCES})
 
 target_link_libraries (bomberman ${BOMBERMAN_LIBS})
+
+if (${CMAKE_SIZEOF_VOID_P} EQUAL "8")
+    set (PROJECTNAME_ARCHITECTURE "x64")
+else ()
+    set (PROJECTNAME_ARCHITECTURE "x86")
+endif ()
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bomberman)
