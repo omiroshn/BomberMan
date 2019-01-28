@@ -11,9 +11,9 @@ Frameworks and technologies used:
 
 
 How to build:
-
+```
 mkdir build
 cmake ..
 make
-
+```
 (The execution file will be in the "bin" folder)
