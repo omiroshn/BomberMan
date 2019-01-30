@@ -15,6 +15,7 @@ How to build:
 git clone --recursive https://github.com/Liudok/Bombeman.git
 cd Bombeman
 mkdir build
+cd build
 cmake ..
 make
 ```
