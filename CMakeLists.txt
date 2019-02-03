@@ -37,7 +37,11 @@ set ( IMGUI_LIBRARY imgui )
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Werror -Wextra -std=c++14")
 find_package(OpenGL REQUIRED)
 
-set(BOMBERMAN_SOURCES src/main.cpp)
+set(BOMBERMAN_SOURCES
+  src/main.cpp
+
+  inc/Core.h
+)
 
 set(BOMBERMAN_LIBS
  ${OPENGL_LIBRARY}
@@ -48,6 +52,7 @@ set(BOMBERMAN_LIBS
 )
 
 set(BOMBERMAN_INCLUDES
+  inc/
   ${GLM_INCLUDE_DIRS}
   ${STB_INCLUDE_DIRS}
   ${SDL2_INCLUDE_DIR}
