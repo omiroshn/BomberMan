@@ -1,4 +1,11 @@
 3rdParty/*
 !3rdParty/CMakeLists.txt
 build/*
+
+# Editors trash
 .vscode
+.vs/
+
+# CMake trash
+CMakeFiles/
+CMakeCache.txt

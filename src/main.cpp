@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include "Core.h"
 #include <iostream>
 #undef main
 
@@ -10,21 +10,17 @@ int main(int argc, char* args[])
   SDL_Window* window = NULL;
   SDL_Surface* screenSurface = NULL;
 
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
-  {
-    std::cout << "Could not initialize sdl2: %s\n" << SDL_GetError() << std::endl;
-    return 1;
-  }
+  BM_INIT_LOG();
+
+  BM_ASSERT(SDL_Init(SDL_INIT_VIDEO) >= 0);
+  BM_CAT_LOG(Init, "SDL Initialized");
 
   window = SDL_CreateWindow( "hello_sdl2",
 			    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			    SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
           
-  if (window == NULL)
-  {
-    std::cout << "Could not create window: %s\n" << SDL_GetError() << std::endl;
-    return 1;
-  }
+  BM_ASSERT(window);
+  BM_CAT_LOG(Init, "SDL Window Initialized");
   
   screenSurface = SDL_GetWindowSurface(window);
   SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
