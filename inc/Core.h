@@ -1,5 +1,5 @@
 #ifndef _CORE_H_
-# define _CORE_H
+# define _CORE_H_
 
 #include "SDL.h"
 
