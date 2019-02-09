@@ -39,7 +39,12 @@ find_package(OpenGL REQUIRED)
 
 set(BOMBERMAN_SOURCES
   src/main.cpp
-
+  src/nibblerRenderer/CustomException.cpp
+  src/nibblerRenderer/Renderer.cpp
+  src/nibblerRenderer/ResourceManager.cpp
+  src/nibblerRenderer/Shader.cpp
+  src/nibblerRenderer/SpriteRenderer.cpp
+  src/nibblerRenderer/Texture.cpp
   inc/Core.h
 )
 
@@ -53,6 +58,7 @@ set(BOMBERMAN_LIBS
 
 set(BOMBERMAN_INCLUDES
   inc/
+  inc/nibblerRenderer/
   ${GLM_INCLUDE_DIRS}
   ${STB_INCLUDE_DIRS}
   ${SDL2_INCLUDE_DIR}
