@@ -1,32 +1,29 @@
 #include "Core.h"
 #include <iostream>
+#include <unordered_set>
+#include <vector>
+#include "Renderer.hpp"
 #undef main
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
+std::unordered_set<std::string> mCommands;
+
 int main(int argc, char* args[])
 {
-  SDL_Window* window = NULL;
-  SDL_Surface* screenSurface = NULL;
-
-  BM_INIT_LOG();
-
-  BM_ASSERT(SDL_Init(SDL_INIT_VIDEO) >= 0);
-  BM_CAT_LOG(Init, "SDL Initialized");
-
-  window = SDL_CreateWindow( "hello_sdl2",
-			    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-			    SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-          
-  BM_ASSERT(window);
-  BM_CAT_LOG(Init, "SDL Window Initialized");
-  
-  screenSurface = SDL_GetWindowSurface(window);
-  SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
-  SDL_UpdateWindowSurface(window);
-  SDL_Delay(2000);
-  SDL_DestroyWindow(window);
-  SDL_Quit();
-  return 0;
+    bool isRunning = true;
+    Drawer drawer(SCREEN_WIDTH, SCREEN_HEIGHT, "Prototype");
+    while (isRunning)
+    {
+        std::string input = drawer.processInput(isRunning);
+        if (!input.empty())
+        {
+            mCommands.insert(std::string(input));
+        }
+        drawer.preFrame();
+        drawer.draw("block", {SCREEN_WIDTH, SCREEN_HEIGHT}, {100, 100}, 0, {1,0.5,0.5});
+        drawer.postFrame();
+    }
+    return 0;
 }
