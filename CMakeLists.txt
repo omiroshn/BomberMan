@@ -57,16 +57,6 @@ set(BOMBERMAN_LIBS
 )
 
 set(BOMBERMAN_INCLUDES
-<<<<<<< HEAD
-    inc/
-    inc/nibblerRenderer
-    ${GLM_INCLUDE_DIRS}
-    ${STB_INCLUDE_DIRS}
-    ${SDL2_INCLUDE_DIR}
-    ${ASSIMP_INCLUDE_DIR}
-    ${GLEW_INCLUDE_DIRS}
-    ${IMGUI_INCLUDE_DIRS}
-=======
   inc/
   inc/nibblerRenderer/
   ${GLM_INCLUDE_DIRS}
@@ -75,7 +65,6 @@ set(BOMBERMAN_INCLUDES
   ${ASSIMP_INCLUDE_DIR}
   ${GLEW_INCLUDE_DIRS}
   ${IMGUI_INCLUDE_DIRS}
->>>>>>> Patience
 )
 
 include_directories(${BOMBERMAN_INCLUDES})
