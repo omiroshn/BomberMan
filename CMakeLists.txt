@@ -38,13 +38,14 @@ set ( IMGUI_LIBRARY imgui )
 find_package(OpenGL REQUIRED)
 
 set(BOMBERMAN_SOURCES
-    src/main.cpp
-    src/nibblerRenderer/Renderer.cpp
-    src/nibblerRenderer/CustomException.cpp
-    src/nibblerRenderer/ResourceManager.cpp
-    src/nibblerRenderer/Shader.cpp
-    src/nibblerRenderer/SpriteRenderer.cpp
-    src/nibblerRenderer/Texture.cpp
+  src/main.cpp
+  src/nibblerRenderer/CustomException.cpp
+  src/nibblerRenderer/Renderer.cpp
+  src/nibblerRenderer/ResourceManager.cpp
+  src/nibblerRenderer/Shader.cpp
+  src/nibblerRenderer/SpriteRenderer.cpp
+  src/nibblerRenderer/Texture.cpp
+  inc/Core.h
 )
 
 set(BOMBERMAN_LIBS
@@ -56,14 +57,14 @@ set(BOMBERMAN_LIBS
 )
 
 set(BOMBERMAN_INCLUDES
-    inc/
-    inc/nibblerRenderer
-    ${GLM_INCLUDE_DIRS}
-    ${STB_INCLUDE_DIRS}
-    ${SDL2_INCLUDE_DIR}
-    ${ASSIMP_INCLUDE_DIR}
-    ${GLEW_INCLUDE_DIRS}
-    ${IMGUI_INCLUDE_DIRS}
+  inc/
+  inc/nibblerRenderer/
+  ${GLM_INCLUDE_DIRS}
+  ${STB_INCLUDE_DIRS}
+  ${SDL2_INCLUDE_DIR}
+  ${ASSIMP_INCLUDE_DIR}
+  ${GLEW_INCLUDE_DIRS}
+  ${IMGUI_INCLUDE_DIRS}
 )
 
 include_directories(${BOMBERMAN_INCLUDES})

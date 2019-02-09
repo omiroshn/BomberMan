@@ -12,18 +12,18 @@ std::unordered_set<std::string> mCommands;
 
 int main(int argc, char* args[])
 {
-  bool isRunning = true;
-  Drawer drawer(SCREEN_WIDTH, SCREEN_HEIGHT, "Prototype");
-  while (isRunning)
-  {
-    std::string input = drawer.processInput(isRunning);
-    if (!input.empty())
+    bool isRunning = true;
+    Drawer drawer(SCREEN_WIDTH, SCREEN_HEIGHT, "Prototype");
+    while (isRunning)
     {
-      mCommands.insert(std::string(input));
+        std::string input = drawer.processInput(isRunning);
+        if (!input.empty())
+        {
+            mCommands.insert(std::string(input));
+        }
+        drawer.preFrame();
+        drawer.draw("block", {SCREEN_WIDTH, SCREEN_HEIGHT}, {100, 100}, 0, {1,0.5,0.5});
+        drawer.postFrame();
     }
-    drawer.preFrame();
-    drawer.draw("block", {SCREEN_WIDTH, SCREEN_HEIGHT}, {100, 100}, 0, {1,0.5,0.5});
-    drawer.postFrame();
-  }
-  return 0;
+    return 0;
 }
