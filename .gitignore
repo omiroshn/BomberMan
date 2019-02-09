@@ -9,3 +9,9 @@ build/*
 # CMake trash
 CMakeFiles/
 CMakeCache.txt
+
+#idea
+*.cmake-build*
+*.idea*
+
+.DS_Store
