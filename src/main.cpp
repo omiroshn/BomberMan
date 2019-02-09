@@ -23,9 +23,9 @@ int main(int argc, char* args[])
     }
     drawer.preFrame();
     drawer.draw("block", {SCREEN_WIDTH, SCREEN_HEIGHT}, {100, 100}, 0, {1,0.5,0.5});
-
     drawer.postFrame();
   }
-
+  SDL_DestroyWindow(window);
+  SDL_Quit();
   return 0;
 }
