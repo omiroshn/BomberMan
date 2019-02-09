@@ -12,7 +12,7 @@
 
 #include "Renderer.hpp"
 
-void Drawer::init(int width, int height, std::string const &winName)
+void Renderer::init(int width, int height, std::string const &winName)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -34,8 +34,6 @@ void Drawer::init(int width, int height, std::string const &winName)
 	mWindow = SDL_CreateWindow(winName.c_str(),SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 	mContext = SDL_GL_CreateContext(mWindow);
 	SDL_GL_MakeCurrent(mWindow, mContext);
-	// if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
-//    glewExperimental = GL_TRUE;
     GLenum err = glewInit();
     if (GLEW_OK != err)
         throw CustomException("Failed to initialize GLEW");
@@ -44,15 +42,15 @@ void Drawer::init(int width, int height, std::string const &winName)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	auto shader = mRessourceManager.loadShader("../Assets/shader/sprite.vx.glsl", "../Assets/shader/sprite.ft.glsl", "sprite");
+	auto shader = mRessourceManager.loadShader("Assets/shader/sprite.vx.glsl", "Assets/shader/sprite.ft.glsl", "sprite");
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(width * 2), static_cast<GLfloat>(height * 2), 0.0f, -1.0f, 1.0f);
 	shader->use();
 	shader->setInt("image", 0);
 	shader->setMat4("projection", projection);
 	mSpriteRenderer = std::make_shared<SpriteRenderer>(shader);
-	mRessourceManager.loadTexture("../Assets/img/block.png", "block", false);
+	mRessourceManager.loadTexture("Assets/img/block.png", "block", false);
 
-	auto textShader = mRessourceManager.loadShader("../Assets/shader/text.vx.glsl", "../Assets/shader/text.ft.glsl", "text");
+	auto textShader = mRessourceManager.loadShader("Assets/shader/text.vx.glsl", "Assets/shader/text.ft.glsl", "text");
 
 	projection = glm::ortho(0.0f, static_cast<GLfloat>(width), static_cast<GLfloat>(height), 0.0f);
 
@@ -76,7 +74,7 @@ void Drawer::init(int width, int height, std::string const &winName)
 	mIsBtnPressed.emplace(SDLK_3, "LIB3");
 }
 
-std::string Drawer::processInput(bool &isRunning)
+std::string Renderer::processInput(bool &isRunning)
 {
 	std::string command{"nothing"};
 	if (mE.type == SDL_KEYDOWN)
@@ -90,19 +88,19 @@ std::string Drawer::processInput(bool &isRunning)
 	return command;
 }
 
-void Drawer::preFrame()
+void Renderer::preFrame()
 {
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Drawer::postFrame()
+void Renderer::postFrame()
 {
 	SDL_GL_SwapWindow(mWindow);
 	SDL_PollEvent(&mE);
 }
 
-void Drawer::draw(std::string const &tex
+void Renderer::draw(std::string const &tex
 		, glm::vec2 const &pos
 		, glm::vec2 const &scale
 		, float const &rot
@@ -111,27 +109,22 @@ void Drawer::draw(std::string const &tex
 	mSpriteRenderer->drawSprite(mRessourceManager.getTexture(tex) , pos, scale, rot, color);
 }
 
-void Drawer::deinit()
+void Renderer::deinit()
 {
 	SDL_GL_DeleteContext(mContext);
 	SDL_DestroyWindow(mWindow);
 	SDL_Quit();
 }
 
-
-
-Drawer::Drawer(int width, int height, std::string const &winName)
-		: mWidth(width)
-		, mHeight(height)
-
+Renderer::Renderer(int width, int height, std::string const &winName)
 {
 	init(width, height, winName);
 };
 
-Drawer::~Drawer()
+Renderer::~Renderer()
 {
 	deinit();
 };
 
-Drawer::Drawer(Drawer const &) {};
-Drawer &Drawer::operator=(Drawer const &) { return *this; };
+Renderer::Renderer(Renderer const &) {};
+Renderer &Renderer::operator=(Renderer const &) { return *this; };
