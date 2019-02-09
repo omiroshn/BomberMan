@@ -11,7 +11,7 @@ CMakeFiles/
 CMakeCache.txt
 
 #idea
-*.cmake-build*
+*cmake-build*
 *.idea*
 
 .DS_Store
