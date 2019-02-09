@@ -12,14 +12,14 @@ int main(int argc, char* args[])
 
   BM_INIT_LOG();
 
-  BM_ASSERT(SDL_Init(SDL_INIT_VIDEO) >= 0);
+  BM_ASSERT_ALWAYS(SDL_Init(SDL_INIT_VIDEO) >= 0);
   BM_CAT_LOG(Init, "SDL Initialized");
 
   window = SDL_CreateWindow( "hello_sdl2",
 			    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			    SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
           
-  BM_ASSERT(window);
+  BM_ASSERT_ALWAYS(window);
   BM_CAT_LOG(Init, "SDL Window Initialized");
   
   screenSurface = SDL_GetWindowSurface(window);
