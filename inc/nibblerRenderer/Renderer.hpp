@@ -9,8 +9,8 @@
 /*   Updated: 2018/07/08 00:03:00 by vkozlov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef DRAWER_H
-# define DRAWER_H
+#ifndef RENDERER_H
+# define RENDERER_H
 
 #include "GL/glew.h"
 #include <SDL.h>
@@ -20,17 +20,16 @@
 #include "SpriteRenderer.hpp"
 #include <map>
 
-class Drawer {
+class Renderer {
 public:
-	Drawer(int width, int height, std::string const &winName);
-	~Drawer();
+	Renderer(int width, int height, std::string const &winName);
+	~Renderer();
 	std::string		processInput(bool &);
 	void			preFrame();
 	void			postFrame();
 	void			draw(std::string const &texture, glm::vec2 const &pos, glm::vec2 const &scale, float const &rot = 0.0f, glm::vec3 const &color = glm::vec3(1.0f));
 //	void			putString(std::string const&what,glm::vec2 where, float size, glm::vec3 color);
 private:
-	int								mWidth, mHeight;
 	std::shared_ptr<SpriteRenderer>	mSpriteRenderer;
 	ResourceManager					mRessourceManager;
 	SDL_Window*						mWindow;
@@ -40,8 +39,8 @@ private:
 
 	void			init(int width, int height, std::string const &winName);
 	void			deinit();
-	Drawer(Drawer const &);
-	Drawer &operator=(Drawer const &);
+	Renderer(Renderer const &);
+	Renderer &operator=(Renderer const &);
 	std::map<int, std::string> mIsBtnPressed;
 };
 
