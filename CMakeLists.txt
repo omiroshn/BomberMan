@@ -45,8 +45,10 @@ set(BOMBERMAN_SOURCES
     src/nibblerRenderer/Shader.cpp
     src/nibblerRenderer/SpriteRenderer.cpp
     src/nibblerRenderer/Texture.cpp
+    inc/Core.h
     src/game_logic/MapGeneration.cpp
     inc/game_logic/MapGeneration.h inc/game_logic/Serialization.h src/game_logic/Serialization.cpp)
+
 
 set(BOMBERMAN_LIBS
     ${OPENGL_LIBRARY}
@@ -57,14 +59,14 @@ set(BOMBERMAN_LIBS
 )
 
 set(BOMBERMAN_INCLUDES
-    inc/
-    inc/nibblerRenderer
-    ${GLM_INCLUDE_DIRS}
-    ${STB_INCLUDE_DIRS}
-    ${SDL2_INCLUDE_DIR}
-    ${ASSIMP_INCLUDE_DIR}
-    ${GLEW_INCLUDE_DIRS}
-    ${IMGUI_INCLUDE_DIRS}
+  inc/
+  inc/nibblerRenderer/
+  ${GLM_INCLUDE_DIRS}
+  ${STB_INCLUDE_DIRS}
+  ${SDL2_INCLUDE_DIR}
+  ${ASSIMP_INCLUDE_DIR}
+  ${GLEW_INCLUDE_DIRS}
+  ${IMGUI_INCLUDE_DIRS}
 )
 
 include_directories(${BOMBERMAN_INCLUDES})
