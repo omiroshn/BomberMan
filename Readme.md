@@ -1,10 +1,11 @@
-# Bombeman
+# BomberMan
 
 This project is a full implementation of a 3D Bomberman video game.
 
 Frameworks and technologies used:
 - C++
 - CMake
+- OpenGL
 - ImGui
 - SDL
 - ...
