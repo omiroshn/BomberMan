@@ -84,6 +84,6 @@ endif ()
 add_custom_command(TARGET bomberman PRE_BUILD
 COMMAND ${CMAKE_COMMAND} -E copy_directory
   ${CMAKE_CURRENT_SOURCE_DIR}/Assets
-  $<TARGET_FILE_DIR:bomberman>/Assets)
+  ${CMAKE_BINARY_DIR}/Assets)
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bomberman)

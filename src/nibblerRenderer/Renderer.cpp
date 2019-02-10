@@ -42,15 +42,15 @@ void Renderer::init(int width, int height, std::string const &winName)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	auto shader = mRessourceManager.loadShader("Assets/shader/sprite.vx.glsl", "Assets/shader/sprite.ft.glsl", "sprite");
+	auto shader = mRessourceManager.loadShader("../Assets/shader/sprite.vx.glsl", "../Assets/shader/sprite.ft.glsl", "sprite");
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(width * 2), static_cast<GLfloat>(height * 2), 0.0f, -1.0f, 1.0f);
 	shader->use();
 	shader->setInt("image", 0);
 	shader->setMat4("projection", projection);
 	mSpriteRenderer = std::make_shared<SpriteRenderer>(shader);
-	mRessourceManager.loadTexture("Assets/img/block.png", "block", false);
+	mRessourceManager.loadTexture("../Assets/img/block.png", "block", false);
 
-	auto textShader = mRessourceManager.loadShader("Assets/shader/text.vx.glsl", "Assets/shader/text.ft.glsl", "text");
+	auto textShader = mRessourceManager.loadShader("../Assets/shader/text.vx.glsl", "../Assets/shader/text.ft.glsl", "text");
 
 	projection = glm::ortho(0.0f, static_cast<GLfloat>(width), static_cast<GLfloat>(height), 0.0f);
 
