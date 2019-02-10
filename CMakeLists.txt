@@ -47,7 +47,9 @@ set(BOMBERMAN_SOURCES
     src/nibblerRenderer/Texture.cpp
     inc/Core.h
     src/game_logic/MapGeneration.cpp
-    inc/game_logic/MapGeneration.h inc/game_logic/Serialization.h src/game_logic/Serialization.cpp)
+    inc/game_logic/MapGeneration.h
+    inc/game_logic/Serialization.h
+    src/game_logic/Serialization.cpp)
 
 
 set(BOMBERMAN_LIBS
