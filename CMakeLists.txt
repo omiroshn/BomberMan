@@ -38,15 +38,19 @@ set ( IMGUI_LIBRARY imgui )
 find_package(OpenGL REQUIRED)
 
 set(BOMBERMAN_SOURCES
-  src/main.cpp
-  src/nibblerRenderer/CustomException.cpp
-  src/nibblerRenderer/Renderer.cpp
-  src/nibblerRenderer/ResourceManager.cpp
-  src/nibblerRenderer/Shader.cpp
-  src/nibblerRenderer/SpriteRenderer.cpp
-  src/nibblerRenderer/Texture.cpp
-  inc/Core.h
-)
+    src/main.cpp
+    src/nibblerRenderer/Renderer.cpp
+    src/nibblerRenderer/CustomException.cpp
+    src/nibblerRenderer/ResourceManager.cpp
+    src/nibblerRenderer/Shader.cpp
+    src/nibblerRenderer/SpriteRenderer.cpp
+    src/nibblerRenderer/Texture.cpp
+    inc/Core.h
+    src/game_logic/MapGeneration.cpp
+    inc/game_logic/MapGeneration.h
+    inc/game_logic/Serialization.h
+    src/game_logic/Serialization.cpp)
+
 
 set(BOMBERMAN_LIBS
     ${OPENGL_LIBRARY}
