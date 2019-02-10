@@ -12,22 +12,6 @@ std::unordered_set<std::string> mCommands;
 
 int main(int ac, char **av)
 {
-<<<<<<< HEAD
-  bool isRunning = true;
-  Drawer drawer(SCREEN_WIDTH, SCREEN_HEIGHT, "Prototype");
-  while (isRunning)
-  {
-    std::string input = drawer.processInput(isRunning);
-    if (!input.empty())
-    {
-      mCommands.insert(std::string(input));
-    }
-    drawer.preFrame();
-    drawer.draw("block", {SCREEN_WIDTH, SCREEN_HEIGHT}, {100, 100}, 0, {1,0.5,0.5});
-    drawer.postFrame();
-  }
-  return 0;
-=======
     bool isRunning = true;
     Renderer renderer(SCREEN_WIDTH, SCREEN_HEIGHT, "Prototype");
     while (isRunning)
@@ -42,5 +26,4 @@ int main(int ac, char **av)
         renderer.postFrame();
     }
     return 0;
->>>>>>> [Renderer] Final fix
 }
