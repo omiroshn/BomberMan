@@ -13,7 +13,7 @@ Frameworks and technologies used:
 
 How to build:
 ```
-git clone --recursive https://github.com/Liudok/Bombeman.git
+git clone --recursive https://github.com/omiroshn/BomberMan.git
 cd Bombeman
 mkdir build
 cd build
