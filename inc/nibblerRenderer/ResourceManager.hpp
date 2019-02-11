@@ -7,7 +7,7 @@
 
 #include <map>
 #include <string>
-
+#include <memory>
 #include "GL/glew.h"
 #include "Texture.hpp"
 #include "Shader.hpp"
