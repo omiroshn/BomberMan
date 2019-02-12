@@ -17,8 +17,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include <memory>
 
-#include "Texture.hpp"
-#include "Shader.hpp"
+#include "renderer/Texture.hpp"
+#include "renderer/Shader.hpp"
 
 
 class SpriteRenderer
