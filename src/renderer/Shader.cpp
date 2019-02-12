@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Shader.hpp"
+#include "renderer/Shader.hpp"
 
 Shader::Shader(std::string const &vertexSrcPath, std::string const &fragmentSrcPath)
 {
@@ -39,8 +39,8 @@ Shader::Shader(std::string const &vertexSrcPath, std::string const &fragmentSrcP
 	const char* vertexShaderSrc = vertexCode.c_str();
 	const char* fragmentShaderSrc = fragmentCode.c_str();
 
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
 	glShaderSource(vertexShader, 1, &vertexShaderSrc, nullptr);
 	glCompileShader(vertexShader);

@@ -22,13 +22,13 @@
 
 class Renderer {
 public:
-	Renderer(int width, int height, std::string const &winName);
+	Renderer(int width, int height, std::string const &winName, std::string const &binFolder);
 	~Renderer();
 	std::string		processInput(bool &);
 	void			preFrame();
 	void			postFrame();
 	void			draw(std::string const &texture, glm::vec2 const &pos, glm::vec2 const &scale, float const &rot = 0.0f, glm::vec3 const &color = glm::vec3(1.0f));
-//	void			putString(std::string const&what,glm::vec2 where, float size, glm::vec3 color);
+
 private:
 	std::shared_ptr<SpriteRenderer>	mSpriteRenderer;
 	ResourceManager					mRessourceManager;
@@ -37,7 +37,7 @@ private:
 	SDL_Event						mE;
 private:
 
-	void			init(int width, int height, std::string const &winName);
+	void			init(int width, int height, std::string const &winName, std::string const &binFolder);
 	void			deinit();
 	Renderer(Renderer const &);
 	Renderer &operator=(Renderer const &);

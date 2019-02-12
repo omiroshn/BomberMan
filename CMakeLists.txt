@@ -48,6 +48,7 @@ set(BOMBERMAN_SOURCES
 set(BOMBERMAN_INCLUDE_DIRS
   inc
   inc/nibblerRenderer
+  inc/renderer
 )
 
 

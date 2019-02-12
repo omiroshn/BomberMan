@@ -1,7 +1,7 @@
 //
 // Created by Vadym KOZLOV on 7/7/18.
 //
-#include "Texture.hpp"
+#include "renderer/Texture.hpp"
 
 Texture2D::Texture2D()
 		: mWidth(0), mHeight(0), mInternalFormat(GL_RGBA), mImageFormat(GL_RGB), mWrapS(GL_REPEAT), mWrapT(GL_REPEAT), mFilterMin(GL_LINEAR), mFilterMax(GL_LINEAR)
