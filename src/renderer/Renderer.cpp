@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "TestRenderer.hpp"
+#include "Renderer.hpp"
 #include "Core.h"
 
-void TestRenderer::init(int width, int height, std::string const& winName)
+void Renderer::init(int width, int height, std::string const& winName)
 {
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -32,7 +32,7 @@ void TestRenderer::init(int width, int height, std::string const& winName)
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    mWindow = SDL_CreateWindow(winName.c_str(),SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
+    mWindow = SDL_CreateWindow(winName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
     mContext = SDL_GL_CreateContext(mWindow);
     SDL_GL_MakeCurrent(mWindow, mContext);
     GLenum err = glewInit();
@@ -43,9 +43,6 @@ void TestRenderer::init(int width, int height, std::string const& winName)
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
-
 
     mIsBtnPressed.emplace(SDLK_w, "UP");
     mIsBtnPressed.emplace(SDLK_s, "DOWN");
@@ -60,16 +57,16 @@ void TestRenderer::init(int width, int height, std::string const& winName)
     mIsBtnPressed.emplace(SDLK_SPACE, "PlaceBomb");
 }
 
-void TestRenderer::setProjection()
+void Renderer::setProjection()
 {
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(mWidth * 2), static_cast<GLfloat>(mHeight * 2), 0.0f, -1.0f, 1.0f);
-    auto shader = NewResourceManager::getInstance().getShader("sprite");
+    auto shader = RESOURCES.getShader("sprite");
     shader->use();
     shader->setMat4("projection", projection);
     mSpriteRenderer = std::make_shared<SpriteRenderer>(shader);
 }
 
-std::string TestRenderer::processInput(bool &isRunning)
+std::string Renderer::processInput(bool &isRunning)
 {
     std::string command{"nothing"};
     if (mE.type == SDL_KEYDOWN)
@@ -83,43 +80,43 @@ std::string TestRenderer::processInput(bool &isRunning)
     return command;
 }
 
-void TestRenderer::preFrame()
+void Renderer::preFrame()
 {
     glClearColor(0.f, 0.f, 0.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void TestRenderer::postFrame()
+void Renderer::postFrame()
 {
     SDL_GL_SwapWindow(mWindow);
     SDL_PollEvent(&mE);
 }
 
-void TestRenderer::draw(std::string const &tex
+void Renderer::draw(std::string const &tex
         , glm::vec2 const &pos
         , glm::vec2 const &scale
         , float const &rot
         , glm::vec3 const &color)
 {
-    mSpriteRenderer->drawSprite(NewResourceManager::getInstance().getTexture(tex) , pos, scale, rot, color);
+    mSpriteRenderer->drawSprite(ResourceManager::getInstance().getTexture(tex) , pos, scale, rot, color);
 }
 
-void TestRenderer::deinit()
+void Renderer::deinit()
 {
     SDL_GL_DeleteContext(mContext);
     SDL_DestroyWindow(mWindow);
     SDL_Quit();
 }
 
-TestRenderer::TestRenderer(int width, int height, std::string const &winName) : mWidth(width), mHeight(height)
+Renderer::Renderer(int width, int height, std::string const &winName) : mWidth(width), mHeight(height)
 {
     init(width, height, winName);
 };
 
-TestRenderer::~TestRenderer()
+Renderer::~Renderer()
 {
     deinit();
 };
 
-TestRenderer::TestRenderer(TestRenderer const &) {};
-TestRenderer &TestRenderer::operator=(TestRenderer const &) { return *this; };
+Renderer::Renderer(Renderer const &) {};
+Renderer &Renderer::operator=(Renderer const &) { return *this; };

@@ -2,21 +2,21 @@
 // Created by Vadim on 2019-02-12.
 //
 
-#ifndef BOMBERMAN_TESTRENDERER_HPP
-#define BOMBERMAN_TESTRENDERER_HPP
+#ifndef BOMBERMAN_Renderer_HPP
+#define BOMBERMAN_Renderer_HPP
 
 #include "GL/glew.h"
 #include <SDL.h>
 
 #include "CustomException.hpp"
 #include "SpriteRenderer.hpp"
-#include "NewResourceManager.hpp"
+#include "ResourceManager.hpp"
 #include <map>
 
-class TestRenderer {
+class Renderer {
 public:
-    TestRenderer(int width, int height, std::string const &winName);
-    ~TestRenderer();
+    Renderer(int width, int height, std::string const &winName);
+    ~Renderer();
     std::string		processInput(bool &);
     void			preFrame();
     void			postFrame();
@@ -31,10 +31,10 @@ private:
 private:
     void			init(int width, int height, std::string const &winName);
     void			deinit();
-    TestRenderer(TestRenderer const &);
-    TestRenderer &operator=(TestRenderer const &);
+    Renderer(Renderer const &);
+    Renderer &operator=(Renderer const &);
     std::map<int, std::string> mIsBtnPressed;
     int mWidth, mHeight;
 };
 
-#endif //BOMBERMAN_TESTRENDERER_HPP
+#endif //BOMBERMAN_Renderer_HPP
