@@ -1,4 +1,4 @@
-#include "NewResourceManager.hpp"
+#include "ResourceManager.hpp"
 
 #ifndef STB_IMAGE_IMPLEMENTATION
 # ifndef STBI_INCLUDE_STB_IMAGE_H
@@ -7,41 +7,41 @@
 # endif
 #endif
 
-NewResourceManager &NewResourceManager::getInstance()
+ResourceManager &ResourceManager::getInstance()
 {
-	static NewResourceManager manager;
+	static ResourceManager manager;
 	return manager;
 }
 
-std::shared_ptr<Shader> NewResourceManager::loadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, std::string const &name)
+std::shared_ptr<Shader> ResourceManager::loadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, std::string const &name)
 {
 	mShaders.emplace(name, loadShaderFromFile(std::string(mBinFolder + "shader/" + vShaderFile).c_str(), std::string(mBinFolder + "shader/" + fShaderFile).c_str()));
 	return mShaders[name];
 }
 
-std::shared_ptr<Shader> NewResourceManager::getShader(std::string const &name)
+std::shared_ptr<Shader> ResourceManager::getShader(std::string const &name)
 {
 	return mShaders[name];
 }
 
-std::shared_ptr<Texture2D> NewResourceManager::loadTexture(const GLchar *file, std::string const &name, bool isAlpha)
+std::shared_ptr<Texture2D> ResourceManager::loadTexture(const GLchar *file, std::string const &name, bool isAlpha)
 {
 	mTextures.emplace(name, loadTextureFromFile(std::string(mBinFolder + + "img/" + file).c_str(), isAlpha));
 	return mTextures[name];
 };
 
-std::shared_ptr<Texture2D> NewResourceManager::getTexture(std::string const &name)
+std::shared_ptr<Texture2D> ResourceManager::getTexture(std::string const &name)
 {
 	return mTextures[name];
 };
 
-void NewResourceManager::clear()
+void ResourceManager::clear()
 {
 	mTextures.clear();
 	mShaders.clear();
 };
 
-std::shared_ptr<Shader> NewResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile)
+std::shared_ptr<Shader> ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile)
 {
 	std::shared_ptr<Shader> shader;
 	try
@@ -59,7 +59,7 @@ std::shared_ptr<Shader> NewResourceManager::loadShaderFromFile(const GLchar *vSh
 	return shader;
 };
 
-std::shared_ptr<Texture2D> NewResourceManager::loadTextureFromFile(const GLchar *file, bool isAlpha)
+std::shared_ptr<Texture2D> ResourceManager::loadTextureFromFile(const GLchar *file, bool isAlpha)
 {
 	std::shared_ptr<Texture2D> texture;
 	int width, height, nrChannels;
@@ -79,17 +79,17 @@ std::shared_ptr<Texture2D> NewResourceManager::loadTextureFromFile(const GLchar 
 	return texture;
 };
 
-void NewResourceManager::setBinFolder(std::string const &aPath)
+void ResourceManager::setBinFolder(std::string const &aPath)
 {
     mBinFolder = aPath + "../Assets/";
 }
 
-NewResourceManager::NewResourceManager()
+ResourceManager::ResourceManager()
 {
 
 };
 
-NewResourceManager::~NewResourceManager()
+ResourceManager::~ResourceManager()
 {
 	clear();
 };
