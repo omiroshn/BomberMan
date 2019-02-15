@@ -1,4 +1,6 @@
 #include "ResourceManagement/ResourceManager.hpp"
+#include "Core.hpp"
+#include "CustomException.hpp"
 
 #ifndef STB_IMAGE_IMPLEMENTATION
 # ifndef STBI_INCLUDE_STB_IMAGE_H
@@ -48,14 +50,10 @@ std::shared_ptr<Shader> ResourceManager::loadShaderFromFile(const GLchar *vShade
 	{
 		shader = std::make_shared<Shader>(vShaderFile, fShaderFile);
 	}
-	catch (CustomException &e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
 	catch (...)
 	{
-		std::cerr << "Exception: Something happened when loading shader [" <<vShaderFile << ";" << fShaderFile << "]" << std::endl;
-	}
+        throw CustomException("Something happened when loading shader [" + std::string(vShaderFile) + ";" + std::string(fShaderFile) + "]");
+    }
 	return shader;
 };
 
@@ -74,7 +72,7 @@ std::shared_ptr<Texture2D> ResourceManager::loadTextureFromFile(const GLchar *fi
 	}
 	else
 	{
-		std::cerr << "Exception: Something happened when loading texture [" << file << "]" << std::endl;
+        throw CustomException("Something happened when loading texture[" + std::string(file) + "]");
 	}
 	return texture;
 };
