@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ResourceManagement/Shader.hpp"
+#include "CustomException.hpp"
 
 Shader::Shader(std::string const &vertexSrcPath, std::string const &fragmentSrcPath)
 {

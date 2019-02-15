@@ -1,4 +1,5 @@
 #include "GameWindow.hpp"
+#include "CustomException.hpp"
 
 GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
     mWidth(aWidth), mHeight(aHeight), mName(aWinName)
@@ -49,7 +50,7 @@ void GameWindow::initOpenGL()
 {
     GLenum err = glewInit();
     if (GLEW_OK != err)
-        BM_ASSERT_ALWAYS("Failed to initialize GLEW");
+        throw CustomException("Failed to initialize GLEW");
     glViewport(0, 0, mWidth, mHeight);
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
