@@ -23,7 +23,10 @@ std::shared_ptr<Shader> ResourceManager::loadShader(const GLchar *vShaderFile, c
 
 std::shared_ptr<Shader> ResourceManager::getShader(std::string const &name)
 {
-	return mShaders[name];
+	if (mShaders.count(name))
+		return mShaders[name];
+	else
+		throw CustomException("No such shader: \""  + name + "\"");
 }
 
 std::shared_ptr<Texture2D> ResourceManager::loadTexture(const GLchar *file, std::string const &name, bool isAlpha)
@@ -34,7 +37,10 @@ std::shared_ptr<Texture2D> ResourceManager::loadTexture(const GLchar *file, std:
 
 std::shared_ptr<Texture2D> ResourceManager::getTexture(std::string const &name)
 {
-	return mTextures[name];
+	if (mTextures.count(name))
+		return mTextures[name];
+	else
+		throw CustomException("No such texture: \""  + name + "\"");
 };
 
 void ResourceManager::clear()

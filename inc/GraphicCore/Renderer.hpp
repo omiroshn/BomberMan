@@ -11,7 +11,6 @@
 #include "ResourceManagement/ResourceManager.hpp"
 #include "Camera.hpp"
 
-#pragma region example
 enum class ModelType
 {
     Wall = 0,
@@ -27,8 +26,6 @@ struct Instance
     glm::vec3 position;
 };
 
-#pragma endregion
-
 class Renderer {
 public:
     Renderer();
@@ -38,9 +35,16 @@ public:
 
     Renderer(Renderer const &) = delete;
     Renderer &operator=(Renderer const &) = delete;
-
+    Camera &getCamera();
 private:
     void normalPass(/*std::vector<Instance> const& instances*/);
+    Camera mCamera;
+
+public:
+    //TEST
+    void initTestData();
+    unsigned int VBO, VAO;
+
 };
 
 #endif //BOMBERMAN_Renderer_HPP

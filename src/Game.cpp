@@ -6,7 +6,9 @@ Game::Game() : mIsRunning(true)
     mWindow = std::make_unique<GameWindow>(cDefaultScreenWidth, cDefaultScreenHeight, cWindowName);
     mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
-    //loadResources();
+    loadResources();
+
+    mRenderer->initTestData();
 }
 
 Game::~Game()
@@ -30,6 +32,12 @@ void Game::doAction(Action const& a)
     {
         case Action::Finish:
             mIsRunning = false;
+            break;
+        case Action::CameraRotate:
+            float x,y;
+            mIManager->getMouseOffset(x, y);
+            mRenderer->getCamera().processMouseMovement(x, y);
+            break;
         default:
             break;
     }
@@ -37,7 +45,9 @@ void Game::doAction(Action const& a)
 
 void Game::loadResources()
 {
-    RESOURCES.loadShader("model_core.vx.glsl", "model_core.ft.glsl", "modelShader");
+    RESOURCES.loadShader("normalModel.vx.glsl", "normalModel.ft.glsl", "modelShader");
     RESOURCES.loadShader("sprite.vx.glsl", "sprite.ft.glsl", "sprite");
     RESOURCES.loadTexture("block.png", "block", false);
+    RESOURCES.loadTexture("container.jpg", "container", false);
+    RESOURCES.loadTexture("awesomeface.png", "face", true);
 }

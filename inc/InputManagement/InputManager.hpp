@@ -4,12 +4,16 @@
 
 enum class Action
 {
-    Finish = 0,
+    Nothing = 0,
+    Finish,
     Up,
     Down,
     Right,
     Left,
-    Space
+    Space,
+//For internal testing
+    CameraRotate,
+    CameraZoom
 };
 
 class InputManager
@@ -18,6 +22,15 @@ public:
     InputManager();
     ~InputManager();
     Action processEvents(SDL_Event const &e);
+    Action processKeyDown(SDL_Keycode keyPressed);
+    Action processMouseMotion(SDL_Event const &e);
+
+
+
+    float prevMousePosX{.0f}, prevMousePosY{.0f};
+    float mouseOffsetX{.0f}, mouseOffsetY{.0f};
+    void getMouseOffset(float &x, float &y);
+
 };
 
 #endif
