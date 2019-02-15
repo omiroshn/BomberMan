@@ -1,4 +1,4 @@
-#include "ResourceManager.hpp"
+#include "ResourceManagement/ResourceManager.hpp"
 
 #ifndef STB_IMAGE_IMPLEMENTATION
 # ifndef STBI_INCLUDE_STB_IMAGE_H

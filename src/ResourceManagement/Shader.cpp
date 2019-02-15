@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "renderer/Shader.hpp"
+#include "ResourceManagement/Shader.hpp"
 
 Shader::Shader(std::string const &vertexSrcPath, std::string const &fragmentSrcPath)
 {

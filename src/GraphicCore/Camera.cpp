@@ -2,7 +2,7 @@
 // Created by Vadim on 2019-02-13.
 //
 
-#include "Camera.hpp"
+#include "GraphicCore/Camera.hpp"
 #include <iostream>
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :
