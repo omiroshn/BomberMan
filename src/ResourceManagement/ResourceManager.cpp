@@ -79,7 +79,7 @@ std::shared_ptr<Texture2D> ResourceManager::loadTextureFromFile(const GLchar *fi
 
 void ResourceManager::setBinFolder(std::string const &aPath)
 {
-    mBinFolder = aPath + "../Assets/";
+    mBinFolder = aPath + "./Assets/";
 }
 
 ResourceManager::ResourceManager()
