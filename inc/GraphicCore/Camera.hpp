@@ -1,7 +1,3 @@
-//
-// Created by Vadim on 2019-02-13.
-//
-
 #ifndef BOMBERMAN_CAMERA_HPP
 #define BOMBERMAN_CAMERA_HPP
 
@@ -11,7 +7,8 @@
 
 #include <vector>
 
-enum CameraDirection {
+enum CameraDirection
+{
     FORWARD,
     BACKWARD,
     LEFT,

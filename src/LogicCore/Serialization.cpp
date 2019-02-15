@@ -1,13 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MapGeneration.cpp                                    :+:      :+:    :+:   */
+/*   Serialization.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lberezyn <lberezyn@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/09 13:53:31 by lberezyn          #+#    #+#             */
-/*   Updated: 2019/02/09 13:53:31 by lberezyn         ###   ########.fr       */
+/*   Created: 2019/02/09 14:01:18 by lberezyn          #+#    #+#             */
+/*   Updated: 2019/02/09 14:01:18 by lberezyn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "game_logic/MapGeneration.h"
+#include "LogicCore/Serialization.hpp"
+

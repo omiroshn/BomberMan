@@ -9,8 +9,8 @@
 #include <string>
 #include <memory>
 #include "GL/glew.h"
-#include "renderer/Texture.hpp"
-#include "renderer/Shader.hpp"
+#include "ResourceManagement/Texture.hpp"
+#include "ResourceManagement/Shader.hpp"
 
 #define RESOURCES ResourceManager::getInstance()
 
