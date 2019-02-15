@@ -54,10 +54,7 @@ void GameWindow::initOpenGL()
     if (err != GLEW_OK)
         throw CustomException("Failed to initialize GLEW");
     glViewport(0, 0, mWidth, mHeight);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void GameWindow::update()

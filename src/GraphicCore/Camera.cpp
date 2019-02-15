@@ -47,7 +47,7 @@ void Camera::processMouseMovement(float xoffset, float yoffset)
 {
     mYaw   += xoffset * mMouseSensitivity;
     mPitch += yoffset * mMouseSensitivity;
-
+    std::cout << mYaw << std::endl;
     updateCameraVectors();
 }
 
