@@ -1,6 +1,6 @@
 #include "GameWindow.hpp"
 #include "CustomException.hpp"
-
+#include <iostream>
 GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
     mWidth(aWidth), mHeight(aHeight), mName(aWinName)
 {
@@ -11,6 +11,7 @@ GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
 GameWindow::~GameWindow()
 {
     SDL_GL_DeleteContext(mContext);
+
     SDL_DestroyWindow(mWindow);
     SDL_Quit();
 }
@@ -18,11 +19,12 @@ GameWindow::~GameWindow()
 void GameWindow::initWindow()
 {
     initSDL();
-    initOpenGL();
 
     mWindow = SDL_CreateWindow(mName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWidth, mHeight, SDL_WINDOW_OPENGL);
     mContext = SDL_GL_CreateContext(mWindow);
     SDL_GL_MakeCurrent(mWindow, mContext);
+
+    initOpenGL();
 }
 
 void GameWindow::initSDL()
@@ -49,7 +51,7 @@ void GameWindow::initSDL()
 void GameWindow::initOpenGL()
 {
     GLenum err = glewInit();
-    if (GLEW_OK != err)
+    if (err != GLEW_OK)
         throw CustomException("Failed to initialize GLEW");
     glViewport(0, 0, mWidth, mHeight);
     glEnable(GL_CULL_FACE);
