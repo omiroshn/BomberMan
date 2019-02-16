@@ -1,6 +1,8 @@
 #include "GameWindow.hpp"
 #include "CustomException.hpp"
 #include <iostream>
+#include <GameWindow.hpp>
+
 GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
     mWidth(aWidth), mHeight(aHeight), mName(aWinName)
 {
@@ -10,6 +12,9 @@ GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
 
 GameWindow::~GameWindow()
 {
+    ImGui_ImplSdlGL3_Shutdown();
+    ImGui::DestroyContext();
+
     SDL_GL_DeleteContext(mContext);
 
     SDL_DestroyWindow(mWindow);
@@ -23,6 +28,8 @@ void GameWindow::initWindow()
     mWindow = SDL_CreateWindow(mName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWidth, mHeight, SDL_WINDOW_OPENGL);
     mContext = SDL_GL_CreateContext(mWindow);
     SDL_GL_MakeCurrent(mWindow, mContext);
+
+    initGui();
 
     initOpenGL();
 }
@@ -46,7 +53,23 @@ void GameWindow::initSDL()
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-//    SDL_SetRelativeMouseMode(SDL_TRUE);
+    //SDL_SetRelativeMouseMode(SDL_TRUE);
+}
+
+void GameWindow::initGui() {
+
+    IMGUI_CHECKVERSION();
+
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    ImGui_ImplSdlGL3_Init(mWindow);
+
+    ImGui::StyleColorsDark();
+
+    io.Fonts->AddFontFromFileTTF("Assets/font/Roboto-Medium.ttf", 16.0f);
+
 }
 
 void GameWindow::initOpenGL()
@@ -56,11 +79,19 @@ void GameWindow::initOpenGL()
         throw CustomException("Failed to initialize GLEW");
     glViewport(0, 0, mWidth, mHeight);
     glEnable(GL_DEPTH_TEST);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 }
 
 void GameWindow::update()
 {
+    ImGui_ImplSdlGL3_NewFrame(mWindow);
+    ImGui::Render();
+    ImGui_ImplSdlGL3_RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(mWindow);
+
     SDL_PollEvent(&mEvent);
 }
 
