@@ -45,7 +45,7 @@ void GameWindow::initSDL()
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+//    SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 void GameWindow::initOpenGL()

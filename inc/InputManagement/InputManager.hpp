@@ -6,6 +6,8 @@ enum class Action
 {
     Nothing = 0,
     Finish,
+    Forward,
+    Backward,
     Up,
     Down,
     Right,
@@ -24,9 +26,9 @@ public:
     Action processEvents(SDL_Event const &e);
     Action processKeyDown(SDL_Keycode keyPressed);
     Action processMouseMotion(SDL_Event const &e);
+    void processMouseButton(SDL_MouseButtonEvent const &e, bool isPressed);
 
-
-
+    bool mRightButtonPressed {false};
     float prevMousePosX{.0f}, prevMousePosY{.0f};
     float mouseOffsetX{.0f}, mouseOffsetY{.0f};
     void getMouseOffset(float &x, float &y);

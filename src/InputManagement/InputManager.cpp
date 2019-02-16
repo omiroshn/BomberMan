@@ -23,11 +23,18 @@ Action InputManager::processEvents(SDL_Event const &e)
             return processKeyDown(e.key.keysym.sym);
         case SDL_MOUSEMOTION:
             return processMouseMotion(e);
+        case SDL_MOUSEBUTTONDOWN:
+            processMouseButton(e.button, true);
+            break;
+        case SDL_MOUSEBUTTONUP:
+            processMouseButton(e.button, false);
+            break;
         case SDL_QUIT:
             return Action::Finish;
         default:
             return Action::Nothing;
     }
+    return Action::Nothing;
 }
 
 Action InputManager::processKeyDown(SDL_Keycode keyPressed)
@@ -36,6 +43,26 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
     {
         case SDLK_ESCAPE:
             return Action::Finish;
+        case SDLK_UP:
+            //fallthrough
+        case SDLK_w:
+            return Action::Forward;
+        case SDLK_DOWN:
+            //fallthrough
+        case SDLK_s:
+            return Action::Backward;
+        case SDLK_LEFT:
+            //fallthrough
+        case SDLK_a:
+            return Action::Left;
+        case SDLK_RIGHT:
+            //fallthrough
+        case SDLK_d:
+            return Action::Right;
+        case SDLK_q:
+            return Action::Up;
+        case SDLK_e:
+            return Action::Down;
         default:
             return Action::Nothing;
     }
@@ -43,16 +70,34 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
 
 Action InputManager::processMouseMotion(SDL_Event const &e)
 {
-    mouseOffsetX = e.motion.x - prevMousePosX;
-    mouseOffsetY = prevMousePosY - e.motion.y;
+    if (mRightButtonPressed)
+    {
+        mouseOffsetX = e.motion.x - prevMousePosX;
+        mouseOffsetY = prevMousePosY - e.motion.y;
 
-    prevMousePosX = e.motion.x;
-    prevMousePosY = e.motion.y;
-    return Action::CameraRotate;
+        prevMousePosX = e.motion.x;
+        prevMousePosY = e.motion.y;
+        return Action::CameraRotate;
+    }
+    return Action::Nothing;
 }
 
 void InputManager::getMouseOffset(float &x, float &y)
 {
     x = mouseOffsetX;
     y = mouseOffsetY;
+}
+
+void InputManager::processMouseButton(SDL_MouseButtonEvent const &e, bool isPressed)
+{
+    switch (e.button)
+    {
+        case SDL_BUTTON_RIGHT:
+            mRightButtonPressed = isPressed;
+            prevMousePosX = e.x;
+            prevMousePosY = e.y;
+        break;
+        default:
+            break;
+    }
 }
