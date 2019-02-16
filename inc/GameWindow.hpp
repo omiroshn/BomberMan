@@ -2,6 +2,8 @@
 #include <string>
 #include <GL/glew.h>
 #include <SDL.h>
+#include <imgui.h>
+#include <imgui_impl_sdl_gl3.h>
 
 #include "Core.hpp"
 
@@ -16,6 +18,7 @@ public:
 private:
     void initWindow();
     void initSDL();
+	void initGui();
     void initOpenGL();
 
 private:
