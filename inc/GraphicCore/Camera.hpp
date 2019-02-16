@@ -35,6 +35,7 @@ public:
     void processMouseScroll(float zoomFactor);
 
     float zoom() const;
+    glm::vec3 position() const;
 private:
     void updateCameraVectors();
 

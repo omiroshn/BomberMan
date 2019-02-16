@@ -31,6 +31,7 @@ void GameWindow::initSDL()
 {
     SDL_Init(SDL_INIT_EVERYTHING);
 
+
     int context_flags = SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG;
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, context_flags);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);

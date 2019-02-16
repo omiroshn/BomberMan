@@ -80,3 +80,8 @@ float Camera::zoom() const
 {
     return mZoom;
 }
+
+glm::vec3 Camera::position() const
+{
+    return mPosition;
+}
