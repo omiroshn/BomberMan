@@ -4,7 +4,6 @@
 
 #include "GraphicCore/Camera.hpp"
 #include <iostream>
-
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :
 mFront(glm::vec3(0.0f, 0.0f, -1.0f)), mMovementSpeed(SPEED), mMouseSensitivity(SENSITIVITY), mZoom(ZOOM),
 mPosition(position), mWorldUp(up), mYaw(yaw), mPitch(pitch)
@@ -21,25 +20,29 @@ glm::mat4 Camera::getViewMatrix()
 void Camera::movaCamera(CameraDirection dir, float deltaTime)
 {
     float velocity = mMovementSpeed * deltaTime;
-    if (dir == FORWARD)
+    if (dir == CameraDirection::FORWARD)
     {
-        std::cout << "FORWARD" << std::endl;
         mPosition += mFront * velocity;
     }
-    else if (dir == BACKWARD)
+    else if (dir == CameraDirection::BACKWARD)
     {
-        std::cout << "BACKWARD" << std::endl;
         mPosition -= mFront * velocity;
     }
-    else if (dir == LEFT)
+    else if (dir == CameraDirection::LEFT)
     {
-        std::cout << "LEFT" << std::endl;
         mPosition -= mRight * velocity;
     }
-    else if (dir == RIGHT)
+    else if (dir == CameraDirection::RIGHT)
     {
-        std::cout << "RIGHT" << std::endl;
         mPosition += mRight * velocity;
+    }
+    else if (dir == CameraDirection::UPWARD)
+    {
+        mPosition += mUp * velocity;
+    }
+    else if (dir == CameraDirection::DOWNWARD)
+    {
+        mPosition -= mUp * velocity;
     }
 }
 
@@ -47,7 +50,6 @@ void Camera::processMouseMovement(float xoffset, float yoffset)
 {
     mYaw   += xoffset * mMouseSensitivity;
     mPitch += yoffset * mMouseSensitivity;
-    std::cout << mYaw << std::endl;
     updateCameraVectors();
 }
 

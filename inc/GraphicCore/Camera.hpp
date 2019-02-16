@@ -7,12 +7,14 @@
 
 #include <vector>
 
-enum CameraDirection
+enum class CameraDirection
 {
-    FORWARD,
+    FORWARD = 0,
     BACKWARD,
     LEFT,
-    RIGHT
+    RIGHT,
+    UPWARD,
+    DOWNWARD
 };
 
 // Default camera values

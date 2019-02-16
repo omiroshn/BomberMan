@@ -103,7 +103,7 @@ void Renderer::draw(/*std::vector<Instance> const& whatToDraw*/)
 void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
 {
     auto ourShader = RESOURCES.getShader("modelShader");
-    auto tex1 = RESOURCES.getTexture("block");
+    auto tex1 = RESOURCES.getTexture("container");
     auto tex2 = RESOURCES.getTexture("face");
 
     glActiveTexture(GL_TEXTURE0);

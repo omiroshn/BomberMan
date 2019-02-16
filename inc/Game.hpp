@@ -22,6 +22,7 @@ public:
 
 private:
     void doAction(Action const&);
+    float calcDeltaTime();
 
 private:
     void loadResources();
@@ -29,6 +30,9 @@ private:
     std::unique_ptr<Renderer> mRenderer;
     std::unique_ptr<InputManager> mIManager;
 
+    Uint64 mTimeNow;
+    Uint64 mTimeLast;
+    float mDeltaTime;
     bool mIsRunning;
 };
 
