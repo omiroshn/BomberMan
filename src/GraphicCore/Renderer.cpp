@@ -43,19 +43,6 @@ float vertices[] = {
         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f,  0.0f,
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f
 };
-// world space positions of our cubes
-glm::vec3 cubePositions[] = {
-        glm::vec3( 3.0f,  0.0f,  0.0f),
-        glm::vec3( 2.0f,  5.0f, -15.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
-        glm::vec3(-3.8f, -2.0f, -12.3f),
-        glm::vec3( 2.4f, -0.4f, -3.5f),
-        glm::vec3(-1.7f,  3.0f, -7.5f),
-        glm::vec3( 1.3f, -2.0f, -2.5f),
-        glm::vec3( 1.5f,  2.0f, -2.5f),
-        glm::vec3( 1.5f,  0.2f, -1.5f),
-        glm::vec3(-1.3f,  1.0f, -1.5f)
-};
 
 Renderer::Renderer() : mCamera(glm::vec3(0.0f, 0.0f, -3.0f))
 {
@@ -107,16 +94,18 @@ void Renderer::draw(/*std::vector<Instance> const& whatToDraw*/)
 
 void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
 {
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     auto ourShader = RESOURCES.getShader("modelShader");
     auto tex1 = RESOURCES.getTexture("container");
     auto tex2 = RESOURCES.getTexture("face");
+    auto tex3 = RESOURCES.getTexture("block");
 
     glActiveTexture(GL_TEXTURE0);
-    tex1->bind();
+    tex3->bind();
     glActiveTexture(GL_TEXTURE1);
-    tex2->bind();
-    ourShader->use();
+    tex3->bind();
 
+    ourShader->use();
     // pass projection matrix to shader (note that in this case it could change every frame)
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), (float)800 / (float)600, 0.1f, 100.0f);
     ourShader->setMat4("projection", projection);
@@ -129,16 +118,28 @@ void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
 
     //     render boxes
     glBindVertexArray(VAO);
-    for (unsigned int i = 0; i < 10; i++)
-    {
-        // calculate the model matrix for each object and pass it to shader before drawing
-        glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        model = glm::translate(model, cubePositions[i]);
-        float angle = 20.0f * i;
-        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-        ourShader->setMat4("model", model);
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+    //Draw map
+    glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+    model = glm::translate(model, glm::vec3(5.5f,  0.0f,  5.5f));
+    model = glm::scale(model, glm::vec3(11.0f, 0.1f, 11.0));
+    ourShader->setMat4("model", model);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+
+    //Draw walls
+    glActiveTexture(GL_TEXTURE0);
+    tex1->bind();
+    glActiveTexture(GL_TEXTURE1);
+    tex2->bind();
+    for (float x = 0.5f; x < 11.0f; x += 2.0f)
+    {
+        for (float y = 0.5f; y < 11.0f; y += 2.0f)
+        {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, glm::vec3( x,  0.55f, y));
+            ourShader->setMat4("model", model);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
     }
 
 }
