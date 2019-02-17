@@ -43,7 +43,7 @@ add_subdirectory(inc)
 set(BOMBERMAN_SOURCES 
   ${BOMBERMAN_LOCAL_SOURCES}
   ${BOMBERMAN_LOCAL_INCLUDES}
-)
+        src/Gui/Gui.cpp inc/Gui/Gui.h)
 
 set(BOMBERMAN_INCLUDE_DIRS
   inc
