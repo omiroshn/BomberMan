@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <SDL.h>
 #include <imgui.h>
-#include <imgui_impl_sdl_gl3.h>
+#include "Gui/imgui_impl_sdl_gl3.h"
 
 #include "Core.hpp"
 
