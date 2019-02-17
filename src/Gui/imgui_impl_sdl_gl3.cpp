@@ -41,7 +41,7 @@
 #endif
 
 #include "imgui.h"
-#include "imgui_impl_sdl_gl3.h"
+#include "Gui/imgui_impl_sdl_gl3.h"
 
 // SDL,GL3W
 #include "../sdl2/include/SDL.h"
