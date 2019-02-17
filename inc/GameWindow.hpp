@@ -2,9 +2,7 @@
 #include <string>
 #include <GL/glew.h>
 #include <SDL.h>
-#include <imgui.h>
-#include "Gui/imgui_impl_sdl_gl3.h"
-
+#include <Gui/Gui.h>
 #include "Core.hpp"
 
 class GameWindow
@@ -14,6 +12,7 @@ public:
     ~GameWindow();
     void update();
     SDL_Event const& getEvent();
+	void tickGui();
 
 private:
     void initWindow();
@@ -22,10 +21,11 @@ private:
     void initOpenGL();
 
 private:
-    int mWidth, mHeight;
-    std::string mName;
-    SDL_Window *mWindow;
+    int           mWidth, mHeight;
+    std::string   mName;
+    SDL_Window   *mWindow;
     SDL_GLContext mContext;
     SDL_Event     mEvent;
+	Gui          *mMainMenu;
 };
 

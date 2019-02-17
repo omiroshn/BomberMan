@@ -21,6 +21,7 @@ void Game::start()
     while (mIsRunning)
     {
         mDeltaTime = calcDeltaTime();
+        mWindow->tickGui();
         mRenderer->draw();
         mWindow->update();
         doAction(mIManager->processEvents(mWindow->getEvent()));
