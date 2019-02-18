@@ -2,29 +2,36 @@
 // Created by Vadym KOZLOV on 7/7/18.
 //
 #include "ResourceManagement/Texture.hpp"
+std::map <TextureType, std::string>cTextureStringTypes
+{
+	{TextureType::Diffuse, "texture_diffuse"},
+	{TextureType::Specular, "texture_specular"},
+	{TextureType::Normal, "texture_normal"},
+	{TextureType::Height, "texture_height"}
+};
 
-Texture2D::Texture2D()
-		: mWidth(0), mHeight(0), mInternalFormat(GL_RGBA), mImageFormat(GL_RGB), mWrapS(GL_REPEAT), mWrapT(GL_REPEAT), mFilterMin(GL_LINEAR), mFilterMax(GL_LINEAR)
+Texture::Texture(TextureType aType)
+		: mType(aType), mWidth(0), mHeight(0), mInternalFormat(GL_RGBA), mImageFormat(GL_RGB), mWrapS(GL_REPEAT), mWrapT(GL_REPEAT), mFilterMin(GL_LINEAR), mFilterMax(GL_LINEAR)
 {
 	glGenTextures(1, &mID);
 }
 
-Texture2D::~Texture2D()
+Texture::~Texture()
 {
 	glDeleteTextures(1, &mID);
 };
 
-Texture2D::Texture2D(Texture2D const &)
+Texture::Texture(Texture const &)
 {
 
 };
 
-Texture2D &Texture2D::operator=(Texture2D const &)
+Texture &Texture::operator=(Texture const &)
 {
 	return *this;
 };
 
-void Texture2D::setAlpha(bool isAlpha)
+void Texture::setAlpha(bool isAlpha)
 {
 	if (isAlpha)
 		mImageFormat = GL_RGBA;
@@ -32,7 +39,7 @@ void Texture2D::setAlpha(bool isAlpha)
 		mImageFormat = GL_RGB;
 }
 
-void Texture2D::generate(GLuint width, GLuint height, unsigned char* data)
+void Texture::generate(GLuint width, GLuint height, unsigned char* data)
 {
 	mWidth = width;
 	mHeight = height;
@@ -48,7 +55,17 @@ void Texture2D::generate(GLuint width, GLuint height, unsigned char* data)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture2D::bind() const
+void Texture::bind() const
 {
 	glBindTexture(GL_TEXTURE_2D, mID);
+}
+
+std::string Texture::getTextureType() const
+{
+	return cTextureStringTypes[mType];
+}
+
+GLuint Texture::getTextureID()
+{
+	return mID;
 }

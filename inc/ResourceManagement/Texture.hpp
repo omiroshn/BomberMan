@@ -5,15 +5,27 @@
 #define TEXTURE_H
 
 #include "GL/glew.h"
+#include <map>
+#include <string>
 
-class Texture2D
+enum class TextureType
+{
+	Diffuse = 0,
+	Specular,
+	Normal,
+	Height
+};
+
+class Texture
 {
 public:
-	Texture2D();
-	~Texture2D();
+	Texture(TextureType aType = TextureType::Diffuse);
+	~Texture();
 	void generate(GLuint width, GLuint height, unsigned char* data);
 	void bind() const;
 	void setAlpha(bool);
+	std::string getTextureType() const;
+	GLuint getTextureID();
 private:
 	GLuint	mID,
 			mWidth, mHeight,
@@ -23,8 +35,9 @@ private:
 			mWrapT,
 			mFilterMin,
 			mFilterMax;
-	Texture2D(Texture2D const &);
-	Texture2D &operator=(Texture2D const &);
+	TextureType mType;
+	Texture(Texture const &);
+	Texture &operator=(Texture const &);
 };
 
 #endif
