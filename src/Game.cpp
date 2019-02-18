@@ -18,13 +18,24 @@ Game::~Game()
 
 void Game::start()
 {
+    MapLoader mapLoader;
     while (mIsRunning)
     {
         mDeltaTime = calcDeltaTime();
         mWindow->tickGui();
-        mRenderer->draw();
-        mWindow->update();
-        doAction(mIManager->processEvents(mWindow->getEvent()));
+        if (mapLoader.MapIsLoaded())
+        {
+            mRenderer->draw();
+            mWindow->update();
+            doAction(mIManager->processEvents(mWindow->getEvent()));
+            mapLoader.UpdateMap();
+        }
+        else
+        {
+            mMap = std::make_unique<MapForRendering>(mapLoader.GetMap(-1));
+            mMap.get()->ParseMapBySquareInstances();
+            mWindow->update();
+        }
     }
 }
 

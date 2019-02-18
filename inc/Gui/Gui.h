@@ -17,8 +17,9 @@ private:
 	void ShowHardnessRadioButtons();
 	void ShowStartNewGameMenu();
 	void ShowLoadSavedGamesMenu();
-	bool m_showMenu = true;
-	bool m_showScore = false;
+	bool mshowMenu = true;
+	bool mshowScore = false;
+	int  mMapIndex = -1;
 };
 
 #endif //BOMBERMAN_GUI_H

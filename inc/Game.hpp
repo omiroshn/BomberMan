@@ -4,6 +4,7 @@
 #include "GameWindow.hpp"
 #include "GraphicCore/Renderer.hpp"
 #include "InputManagement/InputManager.hpp"
+#include "LogicCore/MapForRendering.h"
 
 namespace
 {
@@ -33,6 +34,7 @@ private:
     Uint64 mTimeNow;
     Uint64 mTimeLast;
     float mDeltaTime;
+	std::unique_ptr<MapForRendering> mMap;
     bool mIsRunning;
 };
 

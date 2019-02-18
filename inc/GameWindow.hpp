@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <Gui/Gui.h>
 #include "Core.hpp"
+#include "LogicCore/LoadMap.h"
 
 class GameWindow
 {
