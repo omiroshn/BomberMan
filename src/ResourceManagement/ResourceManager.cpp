@@ -29,13 +29,13 @@ std::shared_ptr<Shader> ResourceManager::getShader(std::string const &name)
 		throw CustomException("No such shader: \""  + name + "\"");
 }
 
-std::shared_ptr<Texture2D> ResourceManager::loadTexture(const GLchar *file, std::string const &name, bool isAlpha)
+std::shared_ptr<Texture> ResourceManager::loadTexture(const GLchar *file, std::string const &name, bool isAlpha)
 {
 	mTextures.emplace(name, loadTextureFromFile(std::string(mBinFolder + + "img/" + file).c_str(), isAlpha));
 	return mTextures[name];
 };
 
-std::shared_ptr<Texture2D> ResourceManager::getTexture(std::string const &name)
+std::shared_ptr<Texture> ResourceManager::getTexture(std::string const &name)
 {
 	if (mTextures.count(name))
 		return mTextures[name];
@@ -63,15 +63,15 @@ std::shared_ptr<Shader> ResourceManager::loadShaderFromFile(const GLchar *vShade
 	return shader;
 };
 
-std::shared_ptr<Texture2D> ResourceManager::loadTextureFromFile(const GLchar *file, bool isAlpha)
+std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file, bool isAlpha)
 {
-	std::shared_ptr<Texture2D> texture;
+	std::shared_ptr<Texture> texture;
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char *data = stbi_load(file, &width, &height, &nrChannels, 0);
 	if (data)
 	{
-		texture = std::make_shared<Texture2D>();
+		texture = std::make_shared<Texture>();
 		texture->setAlpha(isAlpha);
 		texture->generate(static_cast<GLuint>(width), static_cast<GLuint>(height), data);
 		stbi_image_free(data);

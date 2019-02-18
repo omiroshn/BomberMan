@@ -141,7 +141,6 @@ void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
     }
-
 }
 
 Camera &Renderer::getCamera()
