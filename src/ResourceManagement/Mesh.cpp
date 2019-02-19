@@ -1,12 +1,11 @@
    
 #include "ResourceManagement/Mesh.hpp"
  
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures) :
+    mVertices(vertices)
+    , mIndices(indices)
+    , mTextures(textures)
 {
-    mVertices = vertices;
-    mIndices = indices;
-    mTextures = textures;
-
     setupMesh();
 }
 
@@ -48,7 +47,7 @@ void Mesh::setupMesh()
     glBindVertexArray(0);
 }
 
-void Mesh::Draw(Shader shader) 
+void Mesh::Draw(std::shared_ptr<Shader> shader)
 {
     // bind appropriate textures
     unsigned int diffuseNr  = 1;
@@ -61,7 +60,7 @@ void Mesh::Draw(Shader shader)
         glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
         // retrieve texture number (the N in diffuse_textureN)
         std::string number;
-        std::string name = mTextures[i].getTextureType();
+        std::string name = mTextures[i]->getTextureType();
         if(name == "texture_diffuse")
             number = std::to_string(diffuseNr++);
         else if(name == "texture_specular")
@@ -72,9 +71,9 @@ void Mesh::Draw(Shader shader)
             number = std::to_string(heightNr++); // transfer unsigned int to stream
 
         // now set the sampler to the correct texture unit
-        glUniform1i(glGetUniformLocation(shader.mShaderProgram, (name + number).c_str()), i);
+        glUniform1i(glGetUniformLocation(shader->mShaderProgram, (name + number).c_str()), i);
         // and finally bind the texture
-        glBindTexture(GL_TEXTURE_2D, mTextures[i].getTextureID());
+        glBindTexture(GL_TEXTURE_2D, mTextures[i]->getTextureID());
     }
     
     // draw mesh

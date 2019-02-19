@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include <vector>
+#include <memory.h>
 
 #include <GL/glew.h>
 
@@ -20,6 +21,8 @@ struct Vertex
     glm::vec3 Position;
     glm::vec3 Normal;
     glm::vec2 TexCoords;
+    glm::vec3 Tangent;
+    glm::vec3 Bitangent;
 };
 
 // struct Texture {
@@ -31,9 +34,9 @@ struct Vertex
 class Mesh
 {
 public:
-    Mesh(std::vector<Vertex> aVertices, std::vector<unsigned int> aIndices, std::vector<Texture> aTextures);
+    Mesh(std::vector<Vertex> aVertices, std::vector<unsigned int> aIndices, std::vector<std::shared_ptr<Texture>> aTextures);
     // render the mesh
-    void Draw(Shader shader);
+    void Draw(std::shared_ptr<Shader> shader);
 
 private:
     unsigned int mVBO, mEBO;
@@ -42,7 +45,7 @@ private:
 private:
     std::vector<Vertex> mVertices;
     std::vector<unsigned int> mIndices;
-    std::vector<Texture> mTextures;
+    std::vector<std::shared_ptr<Texture>> mTextures;
     unsigned int mVAO;
 };
 #endif

@@ -75,7 +75,7 @@ void Renderer::initTestData()
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    auto ourShader = RESOURCES.getShader("modelShader");
+    auto ourShader = RESOURCES.getShader("normalModel");
 
     ourShader->use();
     ourShader->setInt("texture1", 0);
@@ -95,7 +95,7 @@ void Renderer::draw(/*std::vector<Instance> const& whatToDraw*/)
 void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
 {
 //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    auto ourShader = RESOURCES.getShader("modelShader");
+    auto ourShader = RESOURCES.getShader("normalModel");
     auto tex1 = RESOURCES.getTexture("container");
     auto tex2 = RESOURCES.getTexture("face");
     auto tex3 = RESOURCES.getTexture("block");
@@ -141,6 +141,10 @@ void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
     }
+
+    auto s = RESOURCES.getShader("modelShader");
+    auto m = RESOURCES.getModel("nanosuit");
+    m->Draw(s);
 }
 
 Camera &Renderer::getCamera()

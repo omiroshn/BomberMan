@@ -7,6 +7,7 @@
 #include "GL/glew.h"
 #include <map>
 #include <string>
+#include <vector>
 
 enum class TextureType
 {
@@ -15,6 +16,7 @@ enum class TextureType
 	Normal,
 	Height
 };
+
 
 class Texture
 {
@@ -25,7 +27,10 @@ public:
 	void bind() const;
 	void setAlpha(bool);
 	std::string getTextureType() const;
-	GLuint getTextureID();
+    static std::string getTextureTypeStringFromType(TextureType);
+    static TextureType getTextureTypeFromString(std::string);
+
+    GLuint getTextureID();
 private:
 	GLuint	mID,
 			mWidth, mHeight,
