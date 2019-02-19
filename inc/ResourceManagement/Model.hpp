@@ -26,25 +26,12 @@
 class Model 
 {
 public:
-    /*  Model Data */
-    vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
-    vector<Mesh> meshes;
-    string directory;
-    bool gammaCorrection;
 
     /*  Functions   */
     // constructor, expects a filepath to a 3D model.
-    Model(string const &path, bool gamma = false) : gammaCorrection(gamma)
-    {
-        loadModel(path);
-    }
-
+    Model(std::string const &path, bool gamma = false);
     // draws the model, and thus all its meshes
-    void Draw(Shader shader)
-    {
-        for(unsigned int i = 0; i < meshes.size(); i++)
-            meshes[i].Draw(shader);
-    }
+    void Draw(std::shared_ptr<Shader> shader);
     
 private:
     /*  Functions   */
@@ -57,7 +44,13 @@ private:
 
     // checks all material textures of a given type and loads the textures if they're not loaded yet.
     // the required info is returned as a Texture struct.
-    vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
+    std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
+
+private:
+    std::vector<Mesh> meshes;
+    std::string directory;
+    bool gammaCorrection;
+
 };
 
 #endif

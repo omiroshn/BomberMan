@@ -29,9 +29,9 @@ std::shared_ptr<Shader> ResourceManager::getShader(std::string const &name)
 		throw CustomException("No such shader: \""  + name + "\"");
 }
 
-std::shared_ptr<Texture> ResourceManager::loadTexture(const GLchar *file, std::string const &name, bool isAlpha)
+std::shared_ptr<Texture> ResourceManager::loadTexture(const GLchar *file, std::string const &name, bool isAlpha, std::string const &texType)
 {
-	mTextures.emplace(name, loadTextureFromFile(std::string(mBinFolder + + "img/" + file).c_str(), isAlpha));
+	mTextures.emplace(name, loadTextureFromFile(std::string(mBinFolder + "img/" + file).c_str(), isAlpha, texType));
 	return mTextures[name];
 };
 
@@ -43,10 +43,26 @@ std::shared_ptr<Texture> ResourceManager::getTexture(std::string const &name)
 		throw CustomException("No such texture: \""  + name + "\"");
 };
 
+
+std::shared_ptr<Model> ResourceManager::loadModel(const GLchar *file, std::string const &name)
+{
+	mModels.emplace(name, std::make_shared<Model>(mBinFolder + "models/" + file));
+	return mModels[name];
+};
+
+std::shared_ptr<Model> ResourceManager::getModel(std::string const &name)
+{
+	if (mModels.count(name))
+		return mModels[name];
+	else
+		throw CustomException("No such model: \"" + name + "\"");
+};
+
 void ResourceManager::clear()
 {
 	mTextures.clear();
 	mShaders.clear();
+	mModels.clear();
 };
 
 std::shared_ptr<Shader> ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile)
@@ -63,7 +79,7 @@ std::shared_ptr<Shader> ResourceManager::loadShaderFromFile(const GLchar *vShade
 	return shader;
 };
 
-std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file, bool isAlpha)
+std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file, bool isAlpha, std::string const &texType)
 {
 	std::shared_ptr<Texture> texture;
 	int width, height, nrChannels;
@@ -71,7 +87,7 @@ std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file
 	unsigned char *data = stbi_load(file, &width, &height, &nrChannels, 0);
 	if (data)
 	{
-		texture = std::make_shared<Texture>();
+		texture = std::make_shared<Texture>(Texture::getTextureTypeFromString(texType));
 		texture->setAlpha(isAlpha);
 		texture->generate(static_cast<GLuint>(width), static_cast<GLuint>(height), data);
 		stbi_image_free(data);
