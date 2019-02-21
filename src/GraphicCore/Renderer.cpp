@@ -116,11 +116,11 @@ void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
     
     ourShader->setVec3("lightPos", mCamera.position());
 
-    //     render boxes
+    //render boxes
     glBindVertexArray(VAO);
 
     //Draw map
-    glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+    glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(5.5f,  0.0f,  5.5f));
     model = glm::scale(model, glm::vec3(11.0f, 0.1f, 11.0));
     ourShader->setMat4("model", model);
@@ -142,7 +142,16 @@ void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
         }
     }
 
+    // render the loaded model
+    glm::mat4 model1 = glm::mat4(1.0f);
+    model1 = glm::translate(model1, glm::vec3(1.5f, 0.05f, 0.0f));
+    model1 = glm::scale(model1, glm::vec3(0.1f, 0.1f, 0.1f));
     auto s = RESOURCES.getShader("modelShader");
+    s->use();
+    s->setMat4("projection", projection);
+    s->setMat4("view", view);
+    s->setVec3("lightPos", mCamera.position());
+    s->setMat4("model", model1);
     auto m = RESOURCES.getModel("nanosuit");
     m->Draw(s);
 }
