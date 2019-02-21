@@ -109,6 +109,11 @@ std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file
 	return texture;
 };
 
+std::shared_ptr<Model>      ResourceManager::generateCubeModel(const GLchar *tex, std::string const &name)
+{
+
+}
+
 void ResourceManager::setBinFolder(std::string const &aPath)
 {
     mBinFolder = aPath + "./Assets/";

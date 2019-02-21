@@ -25,8 +25,8 @@ public:
 	std::shared_ptr<Texture>	loadTexture(const GLchar *, std::string const &, std::string const &texType = "texture_diffuse");
 	std::shared_ptr<Texture>	getTexture(std::string const &name);
 	std::shared_ptr<Model>		loadModel(const GLchar *, std::string const &);
-	std::shared_ptr<Model>		getModel(std::string const &name);
-
+    std::shared_ptr<Model>      generateCubeModel(const GLchar *, std::string const &);
+    std::shared_ptr<Model>		getModel(std::string const &name);
     std::shared_ptr<Texture>	loadTextureFromFile(const GLchar*, std::string const &, bool isModelTexture = false);
     void						clear();
 	ResourceManager(ResourceManager const &) = delete;

@@ -82,6 +82,12 @@ void Game::loadResources()
         RESOURCES.loadTexture("container.jpg", "container");
         RESOURCES.loadTexture("awesomeface.png", "face");
         RESOURCES.loadModel("nanosuit/nanosuit.obj", "nanosuit");
+        RESOURCES.loadModel("brick/brick.obj", "brick");
+
+//        RESOURCES.generateCube("platform");
+//        RESOURCES.generateCube("wall");
+//        RESOURCES.generateCube("brick");
+
     }
     catch (CustomException &what)
     {
