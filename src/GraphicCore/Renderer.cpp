@@ -94,66 +94,39 @@ void Renderer::draw(/*std::vector<Instance> const& whatToDraw*/)
 
 void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
 {
-//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    auto ourShader = RESOURCES.getShader("normalModel");
-    auto tex1 = RESOURCES.getTexture("container");
-    auto tex2 = RESOURCES.getTexture("face");
-    auto tex3 = RESOURCES.getTexture("block");
 
-    glActiveTexture(GL_TEXTURE0);
-    tex3->bind();
-    glActiveTexture(GL_TEXTURE1);
-    tex3->bind();
+    auto brick = RESOURCES.getModel("brick");
+    auto suite = RESOURCES.getModel("nanosuit");
 
-    ourShader->use();
-    // pass projection matrix to shader (note that in this case it could change every frame)
+    auto shader = RESOURCES.getShader("modelShader");
+    shader->use();
+
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), (float)800 / (float)600, 0.1f, 100.0f);
-    ourShader->setMat4("projection", projection);
-
-    // camera/view transformation
     glm::mat4 view = mCamera.getViewMatrix();
-    ourShader->setMat4("view", view);
-    
-    ourShader->setVec3("lightPos", mCamera.position());
 
-    //render boxes
-    glBindVertexArray(VAO);
+    shader->setMat4("projection", projection);
+    shader->setMat4("view", view);
+    shader->setVec3("lightPos", mCamera.position());
 
-    //Draw map
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(5.5f,  0.0f,  5.5f));
-    model = glm::scale(model, glm::vec3(11.0f, 0.1f, 11.0));
-    ourShader->setMat4("model", model);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    // render the suite
+    glm::mat4 suiteModel = glm::mat4(1.0f);
+    suiteModel = glm::translate(suiteModel, glm::vec3(1.5f, 0.05f, 0.0f));
+    suiteModel = glm::scale(suiteModel, glm::vec3(0.1f, 0.1f, 0.1f));
+    shader->setMat4("model", suiteModel);
+    suite->Draw(shader);
 
-    //Draw walls
-    glActiveTexture(GL_TEXTURE0);
-    tex1->bind();
-    glActiveTexture(GL_TEXTURE1);
-    tex2->bind();
+
+    // render the bricks
     for (float x = 0.5f; x < 11.0f; x += 2.0f)
     {
         for (float y = 0.5f; y < 11.0f; y += 2.0f)
         {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, glm::vec3( x,  0.55f, y));
-            ourShader->setMat4("model", model);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+            shader->setMat4("model", model);
+            brick->Draw(shader);
         }
     }
-
-    // render the loaded model
-    glm::mat4 model1 = glm::mat4(1.0f);
-    model1 = glm::translate(model1, glm::vec3(1.5f, 0.05f, 0.0f));
-    model1 = glm::scale(model1, glm::vec3(0.1f, 0.1f, 0.1f));
-    auto s = RESOURCES.getShader("modelShader");
-    s->use();
-    s->setMat4("projection", projection);
-    s->setMat4("view", view);
-    s->setVec3("lightPos", mCamera.position());
-    s->setMat4("model", model1);
-    auto m = RESOURCES.getModel("nanosuit");
-    m->Draw(s);
 }
 
 Camera &Renderer::getCamera()
