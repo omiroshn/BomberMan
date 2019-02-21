@@ -23,9 +23,8 @@ class Texture
 public:
 	Texture(TextureType aType = TextureType::Diffuse);
 	~Texture();
-	void generate(GLuint width, GLuint height, unsigned char* data);
+	void generate(GLuint width, GLuint height, unsigned char* data, GLenum format, GLuint filterMin = GL_LINEAR, GLuint filerMax = GL_LINEAR);
 	void bind() const;
-	void setAlpha(bool);
 	std::string getTextureType() const;
     static std::string getTextureTypeStringFromType(TextureType);
     static TextureType getTextureTypeFromString(std::string);

@@ -78,15 +78,14 @@ void Game::loadResources()
         RESOURCES.loadShader("normalModel.vx.glsl", "normalModel.ft.glsl", "normalModel");
         RESOURCES.loadShader("sprite.vx.glsl", "sprite.ft.glsl", "sprite");
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
-        RESOURCES.loadTexture("block.png", "block", false);
-        RESOURCES.loadTexture("container.jpg", "container", false);
-        RESOURCES.loadTexture("awesomeface.png", "face", true);
-        std::cout << "trying to load model" << std::endl;
+        RESOURCES.loadTexture("block.png", "block");
+        RESOURCES.loadTexture("container.jpg", "container");
+        RESOURCES.loadTexture("awesomeface.png", "face");
         RESOURCES.loadModel("nanosuit/nanosuit.obj", "nanosuit");
-        std::cout << "model loaded" << std::endl;
     }
     catch (CustomException &what)
     {
         std::cout << what.text << std::endl;
+        exit(42);
     }
 }

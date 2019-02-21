@@ -1,5 +1,6 @@
 #include "ResourceManagement/Model.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
+#include "CustomException.hpp"
 
 Model::Model(std::string const &path, bool gamma) : gammaCorrection(gamma)
 {
@@ -8,19 +9,11 @@ Model::Model(std::string const &path, bool gamma) : gammaCorrection(gamma)
 
 void Model::loadModel(std::string const &path)
 {
-    // read file via ASSIMP
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-    // check for errors
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
-    {
-        std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
-        return;
-    }
-    // retrieve the directory path of the filepath
+        throw CustomException(std::string("ASSIMP::") + importer.GetErrorString());
     directory = path.substr(0, path.find_last_of('/'));
-
-    // process ASSIMP's root node recursively
     processNode(scene->mRootNode, scene);
 }
 
@@ -53,7 +46,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     for(unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
         Vertex vertex;
-        glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
+        glm::vec3 vector;
         // positions
         vector.x = mesh->mVertices[i].x;
         vector.y = mesh->mVertices[i].y;
@@ -76,18 +69,9 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
         }
         else
         vertex.TexCoords = glm::vec2(0.0f, 0.0f);
-        // tangent
-        vector.x = mesh->mTangents[i].x;
-        vector.y = mesh->mTangents[i].y;
-        vector.z = mesh->mTangents[i].z;
-        vertex.Tangent = vector;
-        // bitangent
-        vector.x = mesh->mBitangents[i].x;
-        vector.y = mesh->mBitangents[i].y;
-        vector.z = mesh->mBitangents[i].z;
-        vertex.Bitangent = vector;
         vertices.push_back(vertex);
     }
+
     // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
     for(unsigned int i = 0; i < mesh->mNumFaces; i++)
     {
@@ -96,29 +80,17 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
         for(unsigned int j = 0; j < face.mNumIndices; j++)
             indices.push_back(face.mIndices[j]);
     }
+
     // process materials
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];    
-    // we assume a convention for sampler names in the shaders. Each diffuse texture should be named
-    // as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
-    // Same applies to other texture as the following list summarizes:
-    // diffuse: texture_diffuseN
-    // specular: texture_specularN
-    // normal: texture_normalN
-
-    // 1. diffuse maps
     std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-    // 2. specular maps
     std::vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    // 3. normal maps
     std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-    // 4. height maps
     std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-    
-    // return a mesh object created from the extracted mesh data
     return Mesh(vertices, indices, textures);
 }
 
@@ -130,7 +102,7 @@ std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *ma
         aiString str;
         mat->GetTexture(type, i, &str);
         std::string texFullPath(directory + "/" + std::string(str.C_Str()));
-        auto texture = RESOURCES.loadTextureFromFile(texFullPath.c_str(), false, typeName);
+        auto texture = RESOURCES.loadTextureFromFile(texFullPath.c_str(), typeName, true);
         textures.push_back(texture);
     }
     return textures;

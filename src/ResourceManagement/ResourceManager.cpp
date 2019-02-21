@@ -29,9 +29,9 @@ std::shared_ptr<Shader> ResourceManager::getShader(std::string const &name)
 		throw CustomException("No such shader: \""  + name + "\"");
 }
 
-std::shared_ptr<Texture> ResourceManager::loadTexture(const GLchar *file, std::string const &name, bool isAlpha, std::string const &texType)
+std::shared_ptr<Texture> ResourceManager::loadTexture(const GLchar *file, std::string const &name, std::string const &texType)
 {
-	mTextures.emplace(name, loadTextureFromFile(std::string(mBinFolder + "img/" + file).c_str(), isAlpha, texType));
+	mTextures.emplace(name, loadTextureFromFile(std::string(mBinFolder + "img/" + file).c_str(), texType));
 	return mTextures[name];
 };
 
@@ -79,7 +79,7 @@ std::shared_ptr<Shader> ResourceManager::loadShaderFromFile(const GLchar *vShade
 	return shader;
 };
 
-std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file, bool isAlpha, std::string const &texType)
+std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file, std::string const &texType, bool isModelTexture)
 {
 	std::shared_ptr<Texture> texture;
 	int width, height, nrChannels;
@@ -87,9 +87,19 @@ std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file
 	unsigned char *data = stbi_load(file, &width, &height, &nrChannels, 0);
 	if (data)
 	{
+        GLenum format;
+        if (nrChannels == 1)
+            format = GL_RED;
+        else if (nrChannels == 3)
+            format = GL_RGB;
+        else if (nrChannels == 4)
+            format = GL_RGBA;
+
 		texture = std::make_shared<Texture>(Texture::getTextureTypeFromString(texType));
-		texture->setAlpha(isAlpha);
-		texture->generate(static_cast<GLuint>(width), static_cast<GLuint>(height), data);
+        if (isModelTexture)
+            texture->generate(static_cast<GLuint>(width), static_cast<GLuint>(height), data, format, GL_LINEAR_MIPMAP_LINEAR);
+        else
+            texture->generate(static_cast<GLuint>(width), static_cast<GLuint>(height), data, format);
 		stbi_image_free(data);
 	}
 	else

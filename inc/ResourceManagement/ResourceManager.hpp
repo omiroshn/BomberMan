@@ -22,12 +22,12 @@ public:
 	void setBinFolder(std::string const& aPath);
 	std::shared_ptr<Shader>		loadShader(const GLchar *, const GLchar *, std::string const &);
 	std::shared_ptr<Shader>		getShader(std::string const &);
-	std::shared_ptr<Texture>	loadTexture(const GLchar *, std::string const &, bool, std::string const &texType = "texture_diffuse");
+	std::shared_ptr<Texture>	loadTexture(const GLchar *, std::string const &, std::string const &texType = "texture_diffuse");
 	std::shared_ptr<Texture>	getTexture(std::string const &name);
 	std::shared_ptr<Model>		loadModel(const GLchar *, std::string const &);
 	std::shared_ptr<Model>		getModel(std::string const &name);
 
-    std::shared_ptr<Texture>	loadTextureFromFile(const GLchar*, bool, std::string const &);
+    std::shared_ptr<Texture>	loadTextureFromFile(const GLchar*, std::string const &, bool isModelTexture = false);
     void						clear();
 	ResourceManager(ResourceManager const &) = delete;
 	ResourceManager &operator=(ResourceManager const &) = delete;

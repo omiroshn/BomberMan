@@ -41,21 +41,19 @@ Texture &Texture::operator=(Texture const &)
 	return *this;
 };
 
-void Texture::setAlpha(bool isAlpha)
-{
-	if (isAlpha)
-		mImageFormat = GL_RGBA;
-	else
-		mImageFormat = GL_RGB;
-}
-
-void Texture::generate(GLuint width, GLuint height, unsigned char* data)
+void Texture::generate(GLuint width, GLuint height, unsigned char* data, GLenum format, GLuint filterMin, GLuint filerMax)
 {
 	mWidth = width;
 	mHeight = height;
+    mImageFormat = format;
+    mInternalFormat = format;
+    mFilterMin = filterMin;
+    mFilterMax = filerMax;
 	// Create Texture
 	glBindTexture(GL_TEXTURE_2D, mID);
 	glTexImage2D(GL_TEXTURE_2D, 0, mInternalFormat, width, height, 0, mImageFormat, GL_UNSIGNED_BYTE, data);
+    if (mFilterMin == GL_LINEAR_MIPMAP_LINEAR)
+        glGenerateMipmap(GL_TEXTURE_2D);
 	// Set Texture wrap and filter modes
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, mWrapS);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, mWrapT);
