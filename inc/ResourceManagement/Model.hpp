@@ -27,7 +27,7 @@ class Model
 {
 public:
     Model(std::string const &path, bool gamma = false);
-    void Draw(std::shared_ptr<Shader> shader);
+    void draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> const & transforms);
     
 private:
 

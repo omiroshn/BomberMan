@@ -108,25 +108,27 @@ void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
     shader->setMat4("view", view);
     shader->setVec3("lightPos", mCamera.position());
 
+    std::vector<glm::mat4> transforms;
+
     // render the suite
     glm::mat4 suiteModel = glm::mat4(1.0f);
     suiteModel = glm::translate(suiteModel, glm::vec3(1.5f, 0.05f, 0.0f));
     suiteModel = glm::scale(suiteModel, glm::vec3(0.1f, 0.1f, 0.1f));
-    shader->setMat4("model", suiteModel);
-    suite->Draw(shader);
+    transforms.push_back(suiteModel);
+    suite->draw(shader, transforms);
 
-
+    transforms.clear();
     // render the bricks
-    for (float x = 0.5f; x < 11.0f; x += 2.0f)
+    for (float x = 0.5f; x < 96.0f; x += 4.0f)
     {
-        for (float y = 0.5f; y < 11.0f; y += 2.0f)
+        for (float y = 0.5f; y < 96.0f; y += 4.0f)
         {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, glm::vec3( x,  0.55f, y));
-            shader->setMat4("model", model);
-            brick->Draw(shader);
+            transforms.push_back(model);
         }
     }
+    brick->draw(shader, transforms);
 }
 
 Camera &Renderer::getCamera()
