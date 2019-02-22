@@ -74,7 +74,6 @@ void Game::loadResources()
 {
     try
     {
-
         RESOURCES.loadShader("normalModel.vx.glsl", "normalModel.ft.glsl", "normalModel");
         RESOURCES.loadShader("sprite.vx.glsl", "sprite.ft.glsl", "sprite");
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
@@ -83,11 +82,6 @@ void Game::loadResources()
         RESOURCES.loadTexture("awesomeface.png", "face");
         RESOURCES.loadModel("nanosuit/nanosuit.obj", "nanosuit");
         RESOURCES.loadModel("brick/brick.obj", "brick");
-
-//        RESOURCES.generateCube("platform");
-//        RESOURCES.generateCube("wall");
-//        RESOURCES.generateCube("brick");
-
     }
     catch (CustomException &what)
     {

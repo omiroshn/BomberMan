@@ -109,8 +109,8 @@ std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *ma
 }
 
 
-void Model::Draw(std::shared_ptr<Shader> shader)
+void Model::draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> const & transforms)
 {
     for(auto & mesh : meshes)
-        mesh.Draw(shader);
+        mesh.draw(shader, transforms);
 }

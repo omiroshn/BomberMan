@@ -27,16 +27,16 @@ class Mesh
 {
 public:
     Mesh(std::vector<Vertex> aVertices, std::vector<unsigned int> aIndices, std::vector<std::shared_ptr<Texture>> aTextures);
-    void Draw(std::shared_ptr<Shader> shader);
+    void draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> const & transforms);
 
 private:
-    unsigned int mVBO, mEBO;
     void setupMesh();
+    void setInstanceBuffer();
 
 private:
+    unsigned int mVBO, mEBO, mVAO, mIBO;
     std::vector<Vertex> mVertices;
     std::vector<unsigned int> mIndices;
     std::vector<std::shared_ptr<Texture>> mTextures;
-    unsigned int mVAO;
 };
 #endif
