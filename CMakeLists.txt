@@ -35,7 +35,14 @@ set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
 
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Werror -Wextra -std=c++14")
+
+if (APPLE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework OpenCL -framework OpenGL")
+else()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -l OpenCL")
+endif()
 find_package(OpenGL REQUIRED)
+find_package(OpenCL REQUIRED)
 
 set(BOMBERMAN_SOURCES
   src/main.cpp
@@ -45,6 +52,8 @@ set(BOMBERMAN_SOURCES
   src/nibblerRenderer/Shader.cpp
   src/nibblerRenderer/SpriteRenderer.cpp
   src/nibblerRenderer/Texture.cpp
+  src/nibblerRenderer/Program.cpp
+  src/nibblerRenderer/CLEngine.cpp
   inc/Core.h
 )
 
@@ -54,6 +63,7 @@ set(BOMBERMAN_LIBS
     ${ASSIMP_LIBRARY}
     ${GLEW_LIBRARIES}
     ${IMGUI_LIBRARY}
+	${OPENCL_LIBRARY}
 )
 
 set(BOMBERMAN_INCLUDES
@@ -65,6 +75,7 @@ set(BOMBERMAN_INCLUDES
   ${ASSIMP_INCLUDE_DIR}
   ${GLEW_INCLUDE_DIRS}
   ${IMGUI_INCLUDE_DIRS}
+  ${OPENCL_INCLUDE_DIR}
 )
 
 include_directories(${BOMBERMAN_INCLUDES})
