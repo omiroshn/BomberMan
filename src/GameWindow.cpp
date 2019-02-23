@@ -29,9 +29,10 @@ void GameWindow::initWindow()
     mContext = SDL_GL_CreateContext(mWindow);
     SDL_GL_MakeCurrent(mWindow, mContext);
 
+    initOpenGL();
+
     initGui();
 
-    initOpenGL();
 }
 
 void GameWindow::initSDL()
@@ -62,13 +63,12 @@ void GameWindow::initGui() {
 
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
-
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     ImGui_ImplSdlGL3_Init(mWindow);
 
     ImGui::StyleColorsDark();
 
-    io.Fonts->AddFontFromFileTTF("Assets/font/Roboto-Medium.ttf", 16.0f);
+    // io.Fonts->AddFontFromFileTTF("Assets/font/Roboto-Medium.ttf", 16.0f);
 
 }
 
@@ -79,10 +79,6 @@ void GameWindow::initOpenGL()
         throw CustomException("Failed to initialize GLEW");
     glViewport(0, 0, mWidth, mHeight);
     glEnable(GL_DEPTH_TEST);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 }
 
 void GameWindow::update()
