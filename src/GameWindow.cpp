@@ -74,6 +74,7 @@ void GameWindow::initGui() {
 
 void GameWindow::initOpenGL()
 {
+	glewExperimental = true;
     GLenum err = glewInit();
     if (err != GLEW_OK)
         throw CustomException("Failed to initialize GLEW");
