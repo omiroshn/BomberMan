@@ -2,7 +2,7 @@
 #include "ResourceManagement/ResourceManager.hpp"
 #include "CustomException.hpp"
 
-Model::Model(std::string const &path, bool gamma) : gammaCorrection(gamma)
+Model::Model(std::string const &path, bool gamma) : gammaCorrection(gamma), mTransFormMatrix(glm::mat4(1.0f))
 {
     loadModel(path);
 }
@@ -41,17 +41,17 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<std::shared_ptr<Texture>> textures;
-
     // Walk through each of the mesh's vertices
     for(unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
-        Vertex vertex;
+        Vertex vertex{};
         glm::vec3 vector;
         // positions
         vector.x = mesh->mVertices[i].x;
         vector.y = mesh->mVertices[i].y;
         vector.z = mesh->mVertices[i].z;
         vertex.Position = vector;
+        mAABB += vector;
         // normals
         vector.x = mesh->mNormals[i].x;
         vector.y = mesh->mNormals[i].y;
@@ -68,7 +68,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
             vertex.TexCoords = vec;
         }
         else
-        vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
         vertices.push_back(vertex);
     }
 
@@ -109,8 +109,24 @@ std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *ma
 }
 
 
-void Model::draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> const & transforms)
+void Model::draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> & transforms)
 {
+    for (auto &transform : transforms)
+    {
+        transform *= mTransFormMatrix;
+    }
+
     for(auto & mesh : meshes)
         mesh.draw(shader, transforms);
+}
+
+AABB Model::getAABB() const
+{
+    return mAABB;
+}
+
+void Model::transform(glm::mat4 const & aTransform)
+{
+    mTransFormMatrix = aTransform;
+    mAABB = mAABB.transform(mTransFormMatrix);
 }
