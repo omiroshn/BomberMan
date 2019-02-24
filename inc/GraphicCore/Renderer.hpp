@@ -26,24 +26,21 @@ struct Instance
     glm::vec3 position;
 };
 
-class Renderer {
+class MapForRendering;
+class Renderer
+{
 public:
     Renderer();
     ~Renderer();
 
-    void draw(/*std::vector<Instance> const& whatToDraw*/);
+    void draw(std::shared_ptr<MapForRendering>);
 
     Renderer(Renderer const &) = delete;
     Renderer &operator=(Renderer const &) = delete;
     Camera &getCamera();
 private:
-    void normalPass(/*std::vector<Instance> const& instances*/);
+    void normalPass(std::shared_ptr<MapForRendering>);
     Camera mCamera;
-
-public:
-    //TEST
-    void initTestData();
-    unsigned int VBO, VAO;
 
 };
 

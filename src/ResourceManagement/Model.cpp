@@ -127,6 +127,6 @@ AABB Model::getAABB() const
 
 void Model::transform(glm::mat4 const & aTransform)
 {
-    mTransFormMatrix = aTransform;
+    mTransFormMatrix *= aTransform;
     mAABB = mAABB.transform(mTransFormMatrix);
 }

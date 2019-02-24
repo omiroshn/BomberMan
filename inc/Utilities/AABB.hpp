@@ -43,8 +43,6 @@ class AABB
         glm::vec3 mMin;
         glm::vec3 mMax;
 
-        glm::vec3 mMinOrig;
-        glm::vec3 mMaxOrig;
 };
 
 #endif //BOMBERMAN_AABB_HPP

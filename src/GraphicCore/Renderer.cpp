@@ -1,50 +1,7 @@
 #include "GraphicCore/Renderer.hpp"
+#include "LogicCore/MapForRendering.h"
 
-float vertices[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
-        0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, -1.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, -1.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, -1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, -1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
-
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, -1.0f,  0.0f,  0.0f,
-
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,  0.0f,  0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,  0.0f,  0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f
-};
-
-Renderer::Renderer() : mCamera(glm::vec3(0.0f, 0.0f, -3.0f))
+Renderer::Renderer() : mCamera(glm::vec3(0.0f, 10.0f, -3.0f))
 {
 
 };
@@ -53,48 +10,21 @@ Renderer::~Renderer()
 {
 };
 
-void Renderer::initTestData()
-{
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    // normal coord attribute
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    auto ourShader = RESOURCES.getShader("normalModel");
-
-    ourShader->use();
-    ourShader->setInt("texture1", 0);
-    ourShader->setInt("texture2", 1);
-}
-
-void Renderer::draw(/*std::vector<Instance> const& whatToDraw*/)
+void Renderer::draw(std::shared_ptr<MapForRendering> aMap)
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    normalPass(/*whatToDraw*/);
+    normalPass(aMap);
 }
 
-void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
+void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
 {
 
     auto brick = RESOURCES.getModel("brick");
+    auto wall = RESOURCES.getModel("wall");
     auto suite = RESOURCES.getModel("nanosuit");
+    auto ground = RESOURCES.getModel("ground");
 
     auto shader = RESOURCES.getShader("modelShader");
     shader->use();
@@ -108,24 +38,49 @@ void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
 
     std::vector<glm::mat4> transforms;
 
+    // render the ground
+    {
+        glm::mat4 groundModel = glm::mat4(1.0f);
+        groundModel = glm::translate(groundModel, glm::vec3(9.5, -0.5f, 9.5));
+        groundModel = glm::scale(groundModel, glm::vec3(20.0f, 0.1f, 20.0f));
+        transforms.push_back(groundModel);
+        ground->draw(shader, transforms);
+    }
+
+    transforms.clear();
     // render the suite
-    glm::mat4 suiteModel = glm::mat4(1.0f);
-    suiteModel = glm::translate(suiteModel, glm::vec3(4, 0.f, 2));
-    transforms.push_back(suiteModel);
-    suite->draw(shader, transforms);
+    {
+        glm::mat4 suiteModel = glm::mat4(1.0f);
+        suiteModel = glm::translate(suiteModel, glm::vec3(2, 0.f, 2));
+        transforms.push_back(suiteModel);
+        suite->draw(shader, transforms);
+    }
+
+    transforms.clear();
+    // render the walls
+    {
+        auto walls = aMap->GetWalls();
+        for (auto const & w : walls)
+        {
+            glm::mat4 modelTransform = glm::mat4(1.0f);
+            modelTransform = glm::translate(modelTransform, glm::vec3(w->GetX(), 0.f, w->GetY()));
+            transforms.push_back(modelTransform);
+        }
+        wall->draw(shader, transforms);
+    }
 
     transforms.clear();
     // render the bricks
-    for (int x = 1; x < 100.0f; x += 2)
     {
-        for (int y = 1; y < 100.0f; y += 2)
+        auto bricks = aMap->GetBricks();
+        for (auto const & b : bricks)
         {
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(x, 0.f, y));
-            transforms.push_back(model);
+            glm::mat4 modelTransform = glm::mat4(1.0f);
+            modelTransform = glm::translate(modelTransform, glm::vec3(b->GetX(), 0.f, b->GetY()));
+            transforms.push_back(modelTransform);
         }
+        brick->draw(shader, transforms);
     }
-    brick->draw(shader, transforms);
 }
 
 Camera &Renderer::getCamera()

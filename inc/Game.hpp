@@ -34,7 +34,7 @@ private:
     Uint64 mTimeNow;
     Uint64 mTimeLast;
     float mDeltaTime;
-	std::unique_ptr<MapForRendering> mMap;
+	std::shared_ptr<MapForRendering> mMap;
     bool mIsRunning;
 };
 
