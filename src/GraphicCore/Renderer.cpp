@@ -85,7 +85,6 @@ void Renderer::initTestData()
 void Renderer::draw(/*std::vector<Instance> const& whatToDraw*/)
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-//    glClear(GL_COLOR_BUFFER_BIT);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     normalPass(/*whatToDraw*/);
@@ -111,19 +110,18 @@ void Renderer::normalPass(/*std::vector<Instance> const& instances*/)
 
     // render the suite
     glm::mat4 suiteModel = glm::mat4(1.0f);
-    suiteModel = glm::translate(suiteModel, glm::vec3(1.5f, 0.05f, 0.0f));
-    suiteModel = glm::scale(suiteModel, glm::vec3(0.1f, 0.1f, 0.1f));
+    suiteModel = glm::translate(suiteModel, glm::vec3(4, 0.f, 2));
     transforms.push_back(suiteModel);
     suite->draw(shader, transforms);
 
     transforms.clear();
     // render the bricks
-    for (float x = 0.5f; x < 96.0f; x += 4.0f)
+    for (int x = 1; x < 100.0f; x += 2)
     {
-        for (float y = 0.5f; y < 96.0f; y += 4.0f)
+        for (int y = 1; y < 100.0f; y += 2)
         {
             glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3( x,  0.55f, y));
+            model = glm::translate(model, glm::vec3(x, 0.f, y));
             transforms.push_back(model);
         }
     }

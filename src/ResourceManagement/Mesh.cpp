@@ -1,10 +1,10 @@
    
 #include "ResourceManagement/Mesh.hpp"
- 
+
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures) :
-    mVertices(vertices)
-    , mIndices(indices)
-    , mTextures(textures)
+    mVertices(std::move(vertices))
+    , mIndices(std::move(indices))
+    , mTextures(std::move(textures))
 {
     setupMesh();
     setInstanceBuffer();

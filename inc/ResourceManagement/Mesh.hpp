@@ -15,6 +15,7 @@
 
 #include "ResourceManagement/Shader.hpp"
 #include "ResourceManagement/Texture.hpp"
+#include "Utilities/AABB.hpp"
 
 struct Vertex
 {
@@ -32,7 +33,6 @@ public:
 private:
     void setupMesh();
     void setInstanceBuffer();
-
 private:
     unsigned int mVBO, mEBO, mVAO, mIBO;
     std::vector<Vertex> mVertices;
