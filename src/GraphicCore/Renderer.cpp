@@ -60,26 +60,32 @@ void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
     // render the walls
     {
         auto walls = aMap->GetWalls();
-        for (auto const & w : walls)
+        if (walls.size() > 0)
         {
-            glm::mat4 modelTransform = glm::mat4(1.0f);
-            modelTransform = glm::translate(modelTransform, glm::vec3(w->GetX(), 0.f, w->GetY()));
-            transforms.push_back(modelTransform);
+            for (auto const & w : walls)
+            {
+                glm::mat4 modelTransform = glm::mat4(1.0f);
+                modelTransform = glm::translate(modelTransform, glm::vec3(w->GetX(), 0.f, w->GetY()));
+                transforms.push_back(modelTransform);
+            }
+            wall->draw(shader, transforms);
         }
-        wall->draw(shader, transforms);
     }
 
     transforms.clear();
     // render the bricks
     {
         auto bricks = aMap->GetBricks();
-        for (auto const & b : bricks)
+        if (bricks.size() > 0)
         {
-            glm::mat4 modelTransform = glm::mat4(1.0f);
-            modelTransform = glm::translate(modelTransform, glm::vec3(b->GetX(), 0.f, b->GetY()));
-            transforms.push_back(modelTransform);
+            for (auto const & b : bricks)
+            {
+                glm::mat4 modelTransform = glm::mat4(1.0f);
+                modelTransform = glm::translate(modelTransform, glm::vec3(b->GetX(), 0.f, b->GetY()));
+                transforms.push_back(modelTransform);
+            }
+            brick->draw(shader, transforms);
         }
-        brick->draw(shader, transforms);
     }
 }
 
