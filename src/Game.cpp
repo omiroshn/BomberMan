@@ -19,8 +19,11 @@ void Game::start()
     MapLoader mapLoader;
     while (mIsRunning)
     {
+        auto size = mWindow->getSize();
         mDeltaTime = calcDeltaTime();
         mWindow->tickGui();
+        mRenderer->updateSize(size[0], size[1]);
+
         if (mapLoader.MapIsLoaded())
         {
             mRenderer->draw(mMap);
@@ -102,9 +105,6 @@ void Game::loadResources()
 //            std::cout << a->getAABB().getMax().x << " -- " << a->getAABB().getMax().y << " -- " << a->getAABB().getMax().z << std::endl;
 //            std::cout << a->getAABB().getCenter().x << " -- " << a->getAABB().getCenter().y << " -- " << a->getAABB().getCenter().z << std::endl << std::endl;
         }
-
-
-
         auto b = RESOURCES.loadModel("brick/brick.obj", "brick");
         {
 

@@ -25,10 +25,10 @@ void GameWindow::initWindow()
 {
     initSDL();
 
-    mWindow = SDL_CreateWindow(mName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWidth, mHeight, SDL_WINDOW_OPENGL);
+    mWindow = SDL_CreateWindow(mName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mWidth, mHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
     mContext = SDL_GL_CreateContext(mWindow);
     SDL_GL_MakeCurrent(mWindow, mContext);
-
+    SDL_SetWindowResizable(mWindow, SDL_TRUE);
     initOpenGL();
 
     initGui();
@@ -37,9 +37,9 @@ void GameWindow::initWindow()
 
 void GameWindow::initSDL()
 {
-    SDL_Init(SDL_INIT_EVERYTHING);
-
-
+    SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "0");
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS);
+    
     int context_flags = SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG;
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, context_flags);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -100,4 +100,11 @@ SDL_Event const& GameWindow::getEvent()
 void GameWindow::tickGui()
 {
     ImGui_ImplSdlGL3_NewFrame(mWindow);
+}
+
+std::vector<int> GameWindow::getSize()
+{
+    int w, h;
+    SDL_GetWindowSize(mWindow, &w, &h);
+    return std::vector<int>{w, h};
 }
