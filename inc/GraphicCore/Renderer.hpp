@@ -38,9 +38,11 @@ public:
     Renderer(Renderer const &) = delete;
     Renderer &operator=(Renderer const &) = delete;
     Camera &getCamera();
+    void updateSize(int x, int y);
 private:
     void normalPass(std::shared_ptr<MapForRendering>);
     Camera mCamera;
+    int mWidth, mHeight;
 
 };
 

@@ -10,6 +10,12 @@ Renderer::~Renderer()
 {
 };
 
+void Renderer::updateSize(int aWidth, int aHeight)
+{
+    mWidth = aWidth;
+    mHeight = aHeight;
+}
+
 void Renderer::draw(std::shared_ptr<MapForRendering> aMap)
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -20,6 +26,7 @@ void Renderer::draw(std::shared_ptr<MapForRendering> aMap)
 
 void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
 {
+    glViewport(0, 0, mWidth, mHeight);
 
     auto brick = RESOURCES.getModel("brick");
     auto wall = RESOURCES.getModel("wall");
@@ -29,7 +36,7 @@ void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
     auto shader = RESOURCES.getShader("modelShader");
     shader->use();
 
-    glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), (float)800 / (float)600, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 100.0f);
     glm::mat4 view = mCamera.getViewMatrix();
 
     shader->setMat4("projection", projection);
@@ -48,7 +55,7 @@ void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
     }
 
     transforms.clear();
-    // render the suite
+    // render the suite aka player
     {
         glm::mat4 suiteModel = glm::mat4(1.0f);
         suiteModel = glm::translate(suiteModel, glm::vec3(2, 0.f, 2));

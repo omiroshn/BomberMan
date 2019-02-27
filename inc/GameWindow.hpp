@@ -14,7 +14,7 @@ public:
     void update();
     SDL_Event const& getEvent();
 	void tickGui();
-
+    std::vector<int> getSize();
 private:
     void initWindow();
     void initSDL();
