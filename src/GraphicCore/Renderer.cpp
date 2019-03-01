@@ -1,5 +1,9 @@
 #include "GraphicCore/Renderer.hpp"
 #include "LogicCore/MapForRendering.h"
+#include "ResourceManagement/Texture.hpp"
+#include "ResourceManagement/Shader.hpp"
+#include "ResourceManagement/Model.hpp"
+#include "ResourceManagement/Skybox.hpp"
 
 Renderer::Renderer() : mCamera(glm::vec3(0.0f, 10.0f, -3.0f))
 {
@@ -32,16 +36,17 @@ void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
     auto wall = RESOURCES.getModel("wall");
     auto suite = RESOURCES.getModel("nanosuit");
     auto ground = RESOURCES.getModel("ground");
+    auto skybox = RESOURCES.getSkybox("defaultSkybox");
+    auto modelShader = RESOURCES.getShader("modelShader");
+    auto skyboxShader = RESOURCES.getShader("skybox");
 
-    auto shader = RESOURCES.getShader("modelShader");
-    shader->use();
-
+    modelShader->use();
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 100.0f);
     glm::mat4 view = mCamera.getViewMatrix();
 
-    shader->setMat4("projection", projection);
-    shader->setMat4("view", view);
-    shader->setVec3("lightPos", mCamera.position());
+    modelShader->setMat4("projection", projection);
+    modelShader->setMat4("view", view);
+    modelShader->setVec3("lightPos", mCamera.position());
 
     std::vector<glm::mat4> transforms;
 
@@ -51,7 +56,7 @@ void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
         groundModel = glm::translate(groundModel, glm::vec3(9.5, -0.5f, 9.5));
         groundModel = glm::scale(groundModel, glm::vec3(20.0f, 0.1f, 20.0f));
         transforms.push_back(groundModel);
-        ground->draw(shader, transforms);
+        ground->draw(modelShader, transforms);
     }
 
     transforms.clear();
@@ -60,7 +65,7 @@ void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
         glm::mat4 suiteModel = glm::mat4(1.0f);
         suiteModel = glm::translate(suiteModel, glm::vec3(2, 0.f, 2));
         transforms.push_back(suiteModel);
-        suite->draw(shader, transforms);
+        suite->draw(modelShader, transforms);
     }
 
     transforms.clear();
@@ -75,7 +80,7 @@ void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
                 modelTransform = glm::translate(modelTransform, glm::vec3(w->GetX(), 0.f, w->GetY()));
                 transforms.push_back(modelTransform);
             }
-            wall->draw(shader, transforms);
+            wall->draw(modelShader, transforms);
         }
     }
 
@@ -91,9 +96,16 @@ void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
                 modelTransform = glm::translate(modelTransform, glm::vec3(b->GetX(), 0.f, b->GetY()));
                 transforms.push_back(modelTransform);
             }
-            brick->draw(shader, transforms);
+            brick->draw(modelShader, transforms);
         }
     }
+
+    // render skybox
+    view = glm::mat4(glm::mat3(mCamera.getViewMatrix()));
+    skyboxShader->use();
+    skyboxShader->setMat4("view", view);
+    skyboxShader->setMat4("projection", projection);
+    skybox->draw(skyboxShader);
 }
 
 Camera &Renderer::getCamera()

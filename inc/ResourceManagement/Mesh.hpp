@@ -29,7 +29,7 @@ class Mesh
 public:
     Mesh(std::vector<Vertex> aVertices, std::vector<unsigned int> aIndices, std::vector<std::shared_ptr<Texture>> aTextures);
     void draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> const & transforms);
-
+    ~Mesh();
 private:
     void setupMesh();
     void setInstanceBuffer();

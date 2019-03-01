@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
-
+#include "ResourceManagement/Model.hpp"
 Game::Game() : mTimeNow(SDL_GetPerformanceCounter()), mIsRunning(true)
 {
     mWindow = std::make_unique<GameWindow>(cDefaultScreenWidth, cDefaultScreenHeight, cWindowName);
@@ -17,13 +17,13 @@ Game::~Game()
 void Game::start()
 {
     MapLoader mapLoader;
+    int width, height;
     while (mIsRunning)
     {
-        auto size = mWindow->getSize();
+        mWindow->getSize(width, height);
         mDeltaTime = calcDeltaTime();
         mWindow->tickGui();
-        mRenderer->updateSize(size[0], size[1]);
-
+        mRenderer->updateSize(width, height);
         if (mapLoader.MapIsLoaded())
         {
             mRenderer->draw(mMap);
@@ -87,12 +87,13 @@ void Game::loadResources()
 {
     try
     {
-        RESOURCES.loadShader("normalModel.vx.glsl", "normalModel.ft.glsl", "normalModel");
         RESOURCES.loadShader("sprite.vx.glsl", "sprite.ft.glsl", "sprite");
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
+        RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");
         RESOURCES.loadTexture("block.png", "block");
         RESOURCES.loadTexture("container.jpg", "container");
         RESOURCES.loadTexture("awesomeface.png", "face");
+        RESOURCES.loadSkybox("defaultSkybox");
 
         auto a = RESOURCES.loadModel("nanosuit/nanosuit.obj", "nanosuit");
         {
