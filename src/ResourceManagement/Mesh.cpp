@@ -10,6 +10,14 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
     setInstanceBuffer();
 }
 
+Mesh::~Mesh()
+{
+    glDeleteVertexArrays(1, &mVAO);
+    glDeleteBuffers(1, &mVBO);
+    glDeleteBuffers(1, &mEBO);
+    glDeleteBuffers(1, &mIBO);
+}
+
 void Mesh::setupMesh()
 {
     glGenVertexArrays(1, &mVAO);

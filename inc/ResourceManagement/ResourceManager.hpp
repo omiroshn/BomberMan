@@ -9,12 +9,13 @@
 #include <string>
 #include <memory>
 #include "GL/glew.h"
-#include "ResourceManagement/Texture.hpp"
-#include "ResourceManagement/Shader.hpp"
-#include "ResourceManagement/Model.hpp"
 
 #define RESOURCES ResourceManager::getInstance()
 
+class Shader;
+class Texture;
+class Model;
+class Skybox;
 class ResourceManager
 {
 public:
@@ -27,6 +28,8 @@ public:
 	std::shared_ptr<Model>		loadModel(const GLchar *, std::string const &);
     std::shared_ptr<Model>		getModel(std::string const &name);
     std::shared_ptr<Texture>	loadTextureFromFile(const GLchar*, std::string const &, bool isModelTexture = false);
+    std::shared_ptr<Skybox>		loadSkybox(std::string const &);
+    std::shared_ptr<Skybox>		getSkybox(std::string const &);
     void						clear();
 	ResourceManager(ResourceManager const &) = delete;
 	ResourceManager &operator=(ResourceManager const &) = delete;
@@ -34,10 +37,13 @@ private:
 	ResourceManager();
 	~ResourceManager();
 	std::shared_ptr<Shader>		loadShaderFromFile(const GLchar *, const GLchar *);
+    unsigned int loadCubemap(std::string const & aSkyboxName);
+
 private:
 	std::map<std::string, std::shared_ptr<Shader>>		mShaders;
 	std::map<std::string, std::shared_ptr<Texture>>		mTextures;
 	std::map<std::string, std::shared_ptr<Model>>		mModels;
+    std::map<std::string, std::shared_ptr<Skybox>>		mSkyboxes;
 
 	std::string mBinFolder;
 };

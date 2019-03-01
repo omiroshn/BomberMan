@@ -102,9 +102,7 @@ void GameWindow::tickGui()
     ImGui_ImplSdlGL3_NewFrame(mWindow);
 }
 
-std::vector<int> GameWindow::getSize()
+void GameWindow::getSize(int &w, int &h)
 {
-    int w, h;
     SDL_GetWindowSize(mWindow, &w, &h);
-    return std::vector<int>{w, h};
 }
