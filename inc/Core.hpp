@@ -2,6 +2,8 @@
 # define _CORE_H_
 
 #include "SDL.h"
+#include <functional>
+#include <utility>
 
 namespace bm
 {
@@ -17,12 +19,18 @@ namespace bm
 		MAX
 	};
 
-	inline void SetLogLevels()
+	void SetLogLevels();
+
+	class Tickable
 	{
-		for (LogCategory It = Default; It < MAX; (*((int*)&It))++)
-			SDL_LogSetPriority((int)It, SDL_LOG_PRIORITY_VERBOSE);
-	}
-}
+	protected:
+		Tickable();
+		~Tickable();
+	private:
+		static std::vector<Tickable *> s_Tickables;
+		virtual void tick(float DeltaTime = 0) = 0;
+	};
+
 
 /**
  *	A few macro for logging.
