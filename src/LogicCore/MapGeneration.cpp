@@ -6,7 +6,7 @@
 /*   By: liudmila <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 13:53:31 by lberezyn          #+#    #+#             */
-/*   Updated: 2019/03/02 11:01:41 by liudmila         ###   ########.fr       */
+/*   Updated: 2019/03/02 11:11:31 by liudmila         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ std::vector<int> MapGenerator::GenerateNewMap()
 			if (j == 0 || j == mWidth - 1 || i == 0 || i == mHeight - 1)
 				map.push_back((int)SquareType::Wall);
 			else if (i % 2 != 0 && j % 2 == 0)
-			{
 				map.push_back((int)SquareType::Wall);
-			}
+			else if ((j < 3 && i < 3))
+				map.push_back((int)SquareType::EmptySquare);
 			else
 			{
-				if (rand() % 3 == 0)
+				if (rand() % 5 == 0)
 					map.push_back((int)SquareType::Brick);
 				else
 					map.push_back((int)SquareType::EmptySquare);
