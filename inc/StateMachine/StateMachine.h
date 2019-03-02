@@ -1,34 +1,8 @@
 #pragma once
-#include "Core.h"
+#include "Core.hpp"
 #include <tuple>
 
 namespace bm {
-#if __SM_FULLY_TEMPLATED_IMPL__
-	// events
-	template<typename T>
-	struct tick {
-		float	DeltaTime = 0;
-		T		*UserData = 0;
-	};
-
-	template <typename... Ts>
-	class SM
-	{
-		unsigned char m_CurrentState;
-
-		auto update()
-		{
-		}
-
-	public:
-		SM() : m_CurrentState(0) {}
-		void tick(float DeltaTime = 0) {
-			update();
-			dispatch<0, Ts...>();
-		}
-	};
-#else
-
 	struct Event
 	{
 	};
@@ -133,6 +107,4 @@ namespace bm {
 				dispatchTransitionInner<Current, N + 1, Args...>();
 		}
 	};
-
-#endif
 }

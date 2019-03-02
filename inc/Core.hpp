@@ -11,7 +11,7 @@ namespace bm
 	 *	If someone wants a specific category,
 	 *	just add it here and use BM_CAT_LOG(YourCategory, ...)
 	 */
-	enum LogCategory 
+	enum LogCategory
 	{
 		Default = SDL_LOG_CATEGORY_CUSTOM,
 		Init,
@@ -23,6 +23,8 @@ namespace bm
 
 	class Tickable
 	{
+	public:
+		static void tickTickables();
 	protected:
 		Tickable();
 		~Tickable();
@@ -30,7 +32,7 @@ namespace bm
 		static std::vector<Tickable *> s_Tickables;
 		virtual void tick(float DeltaTime = 0) = 0;
 	};
-
+}
 
 /**
  *	A few macro for logging.

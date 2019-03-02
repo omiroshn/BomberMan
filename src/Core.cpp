@@ -1,9 +1,7 @@
-#include "Core.h"
+#include "Core.hpp"
 #include <algorithm>
 
 namespace bm {
-
-	
 	/** Logging stuff */
 	void SetLogLevels()
 	{
@@ -11,7 +9,7 @@ namespace bm {
 			SDL_LogSetPriority((int)It, SDL_LOG_PRIORITY_VERBOSE);
 	}
 
-	/** Tickable */
+	/** Tickable start */
 	Tickable::Tickable()
 	{
 		s_Tickables.push_back(this);
@@ -23,5 +21,11 @@ namespace bm {
 		std::remove_if(s_Tickables.begin(), s_Tickables.end(), Predicate);
 	}
 
+	void Tickable::tickTickables()
+	{
+		for_each(s_Tickables.begin(), s_Tickables.end(), [](Tickable *element) {element->tick();});
+	}
+
 	std::vector<Tickable *> Tickable::s_Tickables;
+	/** Tickable end */
 }
