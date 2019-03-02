@@ -28,7 +28,7 @@ private:
     static Uint64                    mTimeNow;
     static Uint64                    mTimeLast;
     static float                     mDeltaTime;
-	MapForRendering					 mMap;
+	MapForRendering                  mMap;
 	static CollisionInfo			 mCollisionInfo;
     bool                             mIsRunning;
 

@@ -2,6 +2,7 @@
 #define BOMBERMAN_LOADMAP_H
 
 #include "LogicCore/MapGeneration.hpp"
+#include <LogicCore/SquareInstance.h>
 
 struct CollisionInfo {
 	std::vector<SquareType> Squares;
