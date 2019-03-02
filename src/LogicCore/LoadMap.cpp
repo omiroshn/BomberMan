@@ -1,6 +1,6 @@
 
 #include "LogicCore/LoadMap.h"
-
+#include <iostream>
 
 MapLoader::MapLoader() {
 
@@ -48,8 +48,10 @@ void MapLoader::ConvertDigitsToInstances()
 
 	for (int i = 0; i < size; ++i)
 	{
-		int x = i % mWidth;
-		int y = (i % mHeight);
+		int x = i / (mWidth);
+		int y =  (i % mWidth);
+
+		std::cout << "x = " << x << "     y = " << y << std::endl;
 		if (mMapOfDigits.at(i) == 1)
 		{
 			mMapOfInstances.push_back(new SquareInstance((float)x, (float)y, SquareType::Wall));

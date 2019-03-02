@@ -6,14 +6,14 @@
 /*   By: liudmila <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 13:53:31 by lberezyn          #+#    #+#             */
-/*   Updated: 2019/02/18 05:15:33 by liudmila         ###   ########.fr       */
+/*   Updated: 2019/03/02 11:01:41 by liudmila         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <LogicCore/MapGeneration.hpp>
 
 #include "LogicCore/MapGeneration.hpp"
-
+#include <iostream>
 
 MapGenerator::MapGenerator(int hardness) :
 	mHardness(hardness)
@@ -47,11 +47,14 @@ std::vector<int> MapGenerator::GenerateNewMap()
 				map.push_back((int)SquareType::Wall);
 			else if (i % 2 != 0 && j % 2 == 0)
 			{
-				map.push_back((int)SquareType::EmptySquare);
+				map.push_back((int)SquareType::Wall);
 			}
 			else
 			{
-				map.push_back((int)SquareType::Wall);
+				if (rand() % 3 == 0)
+					map.push_back((int)SquareType::Brick);
+				else
+					map.push_back((int)SquareType::EmptySquare);
 			}
 
 		}
