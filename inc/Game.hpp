@@ -27,15 +27,15 @@ private:
 
 private:
     void loadResources();
-    std::unique_ptr<GameWindow> mWindow;
-    std::unique_ptr<Renderer> mRenderer;
-    std::unique_ptr<InputManager> mIManager;
+    std::unique_ptr<GameWindow>      mWindow;
+    std::unique_ptr<Renderer>        mRenderer;
+    std::unique_ptr<InputManager>    mIManager;
 
-    Uint64 mTimeNow;
-    Uint64 mTimeLast;
-    float mDeltaTime;
+    Uint64                           mTimeNow;
+    Uint64                           mTimeLast;
+    float                            mDeltaTime;
 	std::shared_ptr<MapForRendering> mMap;
-    bool mIsRunning;
+    bool                             mIsRunning;
 };
 
 #endif //BOMBERMAN_Renderer_HPP
