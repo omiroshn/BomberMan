@@ -8,16 +8,16 @@ class MapLoader
 public:
 	MapLoader();
 	~MapLoader();
-	std::vector<SquareInstance*> GetMap(const int index);
+	std::vector<SquareInstance*>& GetMap(const int index);
 	void UpdateMap();
 	bool MapIsLoaded();
 
 private:
 	std::vector<SquareInstance*> mMapOfInstances;
-	std::vector<int>	   mMapOfDigits;
-	bool mLoaded = false;
-	int mWidth = 30;
-	int mHeight = 20;
+	std::vector<int>	         mMapOfDigits;
+	bool                         mLoaded = false;
+	int                          mWidth = 30;
+	int                          mHeight = 20;
 
 private:
 	void ConvertDigitsToInstances();

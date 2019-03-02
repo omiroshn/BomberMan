@@ -3,6 +3,7 @@
 #define BOMBERMAN_MAPFORRENDERING_H
 
 #include <LogicCore/SquareInstance.h>
+#include <vector>
 
 class MapForRendering
 {

@@ -6,14 +6,11 @@
 /*   By: liudmila <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 13:53:31 by lberezyn          #+#    #+#             */
-/*   Updated: 2019/03/02 11:11:31 by liudmila         ###   ########.fr       */
+/*   Updated: 2019/03/02 11:12:19 by liudmila         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <LogicCore/MapGeneration.hpp>
-
-#include "LogicCore/MapGeneration.hpp"
-#include <iostream>
 
 MapGenerator::MapGenerator(int hardness) :
 	mHardness(hardness)
