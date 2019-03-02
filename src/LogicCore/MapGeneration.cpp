@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <LogicCore/MapGeneration.hpp>
+#include "LogicCore/MapGeneration.hpp"
+#include <iostream>
 
 MapGenerator::MapGenerator(int hardness) :
 	mHardness(hardness)
@@ -41,17 +42,31 @@ std::vector<SquareType> MapGenerator::GenerateNewMap()
 		for (int j = 0; j < mWidth; ++j)
 		{
 			if (j == 0 || j == mWidth - 1 || i == 0 || i == mHeight - 1)
+//<<<<<<< HEAD
+//				map.push_back(SquareType::Wall);
+//			else if (i % 2 == 0 && j % 2 == 0)
+//				map.push_back(SquareType::Wall);
+//			else if ((j < 3 && i < 3))
+//				map.push_back(SquareType::EmptySquare);
+//			else
+//			{
+//				if (rand() % 5 == 0)
+//					map.push_back(SquareType::Brick);
+//				else
+//					map.push_back(SquareType::EmptySquare);
+//=======
 				map.push_back(SquareType::Wall);
-			else if (i % 2 == 0 && j % 2 == 0)
+			else if (i % 2 != 0 && j % 2 == 0)
+			{
 				map.push_back(SquareType::Wall);
-			else if ((j < 3 && i < 3))
-				map.push_back(SquareType::EmptySquare);
+			}
 			else
 			{
-				if (rand() % 5 == 0)
+				if (rand() % 3 == 0)
 					map.push_back(SquareType::Brick);
 				else
 					map.push_back(SquareType::EmptySquare);
+//>>>>>>> bricks randomly generated
 			}
 
 		}

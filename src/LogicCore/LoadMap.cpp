@@ -1,11 +1,13 @@
 
 #include "LogicCore/LoadMap.h"
 #include <tuple>
+#include <iostream>
 
 MapLoader::MapLoader()
 {
 
 }
+
 
 MapLoader::~MapLoader()
 {
@@ -62,8 +64,19 @@ void MapLoader::ConvertDigitsToInstances()
 
 	for (unsigned i = 0; i < size; ++i)
 	{
+
 		unsigned y = i / mWidth;
 		unsigned x = i % mWidth;
+
+		std::cout << "x = " << x << "     y = " << y << std::endl;
+		if ((unsigned)mMapOfDigits.at(i) == 1)
+		{
+			mMapOfInstances.push_back(new SquareInstance((float)x, (float)y, SquareType::Wall));
+		}
+		else if ((unsigned)mMapOfDigits.at(i) == 2)
+		{
+			mMapOfInstances.push_back(new SquareInstance((float)x, (float)y, SquareType::Brick));
+		}
 
 		mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), mMapOfDigits[i]));
 	}
