@@ -3,6 +3,8 @@
 #include "InputManagement/InputManager.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
 #include "InputManagement/InputManager.hpp"
+#include <imgui.h>
+#include "Gui/imgui_impl_sdl_gl3.h"
 
 InputManager::InputManager()
 {
@@ -12,10 +14,12 @@ InputManager::~InputManager()
 {
 }
 
-Action InputManager::processEvents(SDL_Event const &e)
+Action InputManager::processEvents(SDL_Event &e)
 {
     if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
         return Action::Finish;
+
+	ImGui_ImplSdlGL3_ProcessEvent(&e);
 
     switch (e.type)
     {

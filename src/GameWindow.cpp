@@ -92,7 +92,7 @@ void GameWindow::update()
     SDL_PollEvent(&mEvent);
 }
 
-SDL_Event const& GameWindow::getEvent()
+SDL_Event & GameWindow::getEvent()
 {
     return mEvent;
 }

@@ -24,13 +24,13 @@ namespace bm
 	class Tickable
 	{
 	public:
-		static void tickTickables();
+		static void tickTickables(float DeltaTime);
 	protected:
 		Tickable();
 		~Tickable();
 	private:
 		static std::vector<Tickable *> s_Tickables;
-		virtual void tick(float DeltaTime = 0) = 0;
+		virtual void tick(float DeltaTime) = 0;
 	};
 }
 

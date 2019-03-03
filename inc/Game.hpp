@@ -10,9 +10,8 @@ namespace
 {
     int const cDefaultScreenWidth = 640;
     int const cDefaultScreenHeight = 480;
-    std::string cWindowName = "Bomberman";
+    std::string const cWindowName = "Bomberman";
 }
-
 
 class Game
 {
@@ -22,11 +21,11 @@ public:
     void start();
 
 private:
-    void doAction(Action const&);
-    float calcDeltaTime();
-
-private:
-    void loadResources();
+	void		resolveCollisions();
+    void		doAction(Action const&);
+    float		calcDeltaTime();
+    void		loadResources();
+	void		updateHeroInput();
     std::unique_ptr<GameWindow>      mWindow;
     std::unique_ptr<Renderer>        mRenderer;
     std::unique_ptr<InputManager>    mIManager;
@@ -34,8 +33,11 @@ private:
     Uint64                           mTimeNow;
     Uint64                           mTimeLast;
     float                            mDeltaTime;
-	std::shared_ptr<MapForRendering> mMap;
+	MapForRendering					 mMap;
+	CollisionInfo					 mCollisionInfo;
     bool                             mIsRunning;
+
+	static float					_inputAcceleration;
 };
 
 #endif //BOMBERMAN_Renderer_HPP

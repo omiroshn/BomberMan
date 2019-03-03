@@ -13,7 +13,7 @@ void Gui::ShowMainMenu()
 {
 	ImGui::SetNextWindowSize(WIN_SIZE, ImGuiSetCond_FirstUseEver);
 	ImGui::SetNextWindowPos({0, 0},0);
-	ImGui::SetNextWindowBgAlpha(0.7);
+	ImGui::SetNextWindowBgAlpha(0.7f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(220,100));
 	ImGui::Begin("Main Menu");
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));

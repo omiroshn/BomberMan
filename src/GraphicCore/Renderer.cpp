@@ -4,6 +4,7 @@
 #include "ResourceManagement/Shader.hpp"
 #include "ResourceManagement/Model.hpp"
 #include "ResourceManagement/Skybox.hpp"
+#include "imgui.h"
 
 Renderer::Renderer() : mCamera(glm::vec3(0.0f, 10.0f, -3.0f))
 {
@@ -20,7 +21,7 @@ void Renderer::updateSize(int aWidth, int aHeight)
     mHeight = aHeight;
 }
 
-void Renderer::draw(std::shared_ptr<MapForRendering> aMap)
+void Renderer::draw(MapForRendering& aMap)
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -28,7 +29,7 @@ void Renderer::draw(std::shared_ptr<MapForRendering> aMap)
     normalPass(aMap);
 }
 
-void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
+void Renderer::normalPass(MapForRendering& aMap)
 {
     glViewport(0, 0, mWidth, mHeight);
 
@@ -62,19 +63,19 @@ void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
     transforms.clear();
     // render the suite aka player
     {
-        glm::mat4 suiteModel = glm::mat4(1.0f);
-        suiteModel = glm::translate(suiteModel, glm::vec3(2, 0.f, 2));
-        transforms.push_back(suiteModel);
-        suite->draw(modelShader, transforms);
+        auto& Hero = aMap.GetHero();
+		Hero.Debug();
+		transforms.push_back(Hero.GetModelMatrix());
+		suite->draw(shader, transforms);
     }
 
     transforms.clear();
     // render the walls
     {
-        auto walls = aMap->GetWalls();
+        auto walls = aMap.GetWalls();
         if (walls.size() > 0)
         {
-            for (auto const & w : walls)
+            for (auto w : walls)
             {
                 glm::mat4 modelTransform = glm::mat4(1.0f);
                 modelTransform = glm::translate(modelTransform, glm::vec3(w->GetX(), 0.f, w->GetY()));
@@ -87,10 +88,10 @@ void Renderer::normalPass(std::shared_ptr<MapForRendering> aMap)
     transforms.clear();
     // render the bricks
     {
-        auto bricks = aMap->GetBricks();
+        auto bricks = aMap.GetBricks();
         if (bricks.size() > 0)
         {
-            for (auto const & b : bricks)
+            for (auto b : bricks)
             {
                 glm::mat4 modelTransform = glm::mat4(1.0f);
                 modelTransform = glm::translate(modelTransform, glm::vec3(b->GetX(), 0.f, b->GetY()));

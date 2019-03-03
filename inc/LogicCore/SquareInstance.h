@@ -4,7 +4,7 @@
 
 #include "Entity.h"
 
-enum class SquareType
+enum class SquareType : unsigned char
 {
 	EmptySquare = 0,
 	Wall,

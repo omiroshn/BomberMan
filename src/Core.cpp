@@ -10,6 +10,8 @@ namespace bm {
 	}
 
 	/** Tickable start */
+	std::vector<Tickable *> Tickable::s_Tickables;
+
 	Tickable::Tickable()
 	{
 		s_Tickables.push_back(this);
@@ -18,14 +20,13 @@ namespace bm {
 	Tickable::~Tickable()
 	{
 		const auto Predicate = [this](Tickable *element) { return element == this; };
-		std::remove_if(s_Tickables.begin(), s_Tickables.end(), Predicate);
+		auto It = std::remove_if(s_Tickables.begin(), s_Tickables.end(), Predicate);
+		s_Tickables.erase(It, s_Tickables.end());
 	}
 
-	void Tickable::tickTickables()
+	void Tickable::tickTickables(float DeltaTime)
 	{
-		for_each(s_Tickables.begin(), s_Tickables.end(), [](Tickable *element) {element->tick();});
+		for_each(s_Tickables.begin(), s_Tickables.end(), [DeltaTime](Tickable *element) {element->tick(DeltaTime);});
 	}
-
-	std::vector<Tickable *> Tickable::s_Tickables;
 	/** Tickable end */
 }

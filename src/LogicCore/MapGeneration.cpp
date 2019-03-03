@@ -30,9 +30,9 @@ MapGenerator::~MapGenerator() {
 
 }
 
-std::vector<int> MapGenerator::GenerateNewMap()
+std::vector<SquareType> MapGenerator::GenerateNewMap()
 {
-	std::vector<int> map;
+	std::vector<SquareType> map;
 	int size = mWidth * mHeight;
 	map.reserve(size);
 
@@ -41,17 +41,17 @@ std::vector<int> MapGenerator::GenerateNewMap()
 		for (int j = 0; j < mWidth; ++j)
 		{
 			if (j == 0 || j == mWidth - 1 || i == 0 || i == mHeight - 1)
-				map.push_back((int)SquareType::Wall);
-			else if (i % 2 != 0 && j % 2 == 0)
-				map.push_back((int)SquareType::Wall);
+				map.push_back(SquareType::Wall);
+			else if (i % 2 == 0 && j % 2 == 0)
+				map.push_back(SquareType::Wall);
 			else if ((j < 3 && i < 3))
-				map.push_back((int)SquareType::EmptySquare);
+				map.push_back(SquareType::EmptySquare);
 			else
 			{
 				if (rand() % 5 == 0)
-					map.push_back((int)SquareType::Brick);
+					map.push_back(SquareType::Brick);
 				else
-					map.push_back((int)SquareType::EmptySquare);
+					map.push_back(SquareType::EmptySquare);
 			}
 
 		}

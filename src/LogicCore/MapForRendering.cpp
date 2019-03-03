@@ -1,7 +1,13 @@
 #include "LogicCore/MapForRendering.h"
 
-MapForRendering::MapForRendering(std::vector<SquareInstance*> map) :
-	mRawMap(map)
+MapForRendering::MapForRendering(std::vector<SquareInstance*>& map) :
+	mRawMap(map),
+	mHero(glm::vec2(1,1))
+{
+
+}
+
+MapForRendering::MapForRendering()
 {
 
 }
@@ -30,17 +36,28 @@ std::vector<SquareInstance *> MapForRendering::GetBonuses() {
 	return mBonuses;
 }
 
-std::vector<SquareInstance *> MapForRendering::GetHeroes() {
-	return mHeroes;
+unsigned MapForRendering::getWitdh()
+{
+	return mWidth;
 }
 
-std::vector<SquareInstance *> MapForRendering::GetEnemies() {
+unsigned MapForRendering::getHeight()
+{
+	return mHeight;
+}
+
+MovingEntity& MapForRendering::GetHero()
+{
+	return mHero;
+}
+
+std::vector<MovingEntity>& MapForRendering::GetEnemies()
+{
 	return mEnemies;
 }
 
 void MapForRendering::ParseMapBySquareInstances() {
-
-	for (int i = 0; i < mRawMap.size(); ++i)
+	for (unsigned int i = 0; i < mRawMap.size(); ++i)
 	{
 		if (mRawMap.at(i)->GetType() == SquareType::Wall)
 			mWalls.push_back(mRawMap.at(i));
