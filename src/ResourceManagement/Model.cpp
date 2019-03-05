@@ -2,9 +2,13 @@
 #include "ResourceManagement/ResourceManager.hpp"
 #include "CustomException.hpp"
 
-Model::Model(std::string const &path, bool gamma) : gammaCorrection(gamma), mTransFormMatrix(glm::mat4(1.0f))
+Model::Model(std::string const &path, bool gamma) : mGammaCorrection(gamma), mTransFormMatrix(glm::mat4(1.0f))
 {
     loadModel(path);
+}
+
+Model::~Model()
+{
 }
 
 void Model::loadModel(std::string const &path)
@@ -13,7 +17,7 @@ void Model::loadModel(std::string const &path)
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
         throw CustomException(std::string("ASSIMP::") + importer.GetErrorString());
-    directory = path.substr(0, path.find_last_of('/'));
+    mDirectory = path.substr(0, path.find_last_of('/'));
     processNode(scene->mRootNode, scene);
 }
 
@@ -25,7 +29,7 @@ void Model::processNode(aiNode *node, const aiScene *scene)
         // the node object only contains indices to index the actual objects in the scene. 
         // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(processMesh(mesh, scene));
+        processMesh(mesh, scene);
     }
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
     for(unsigned int i = 0; i < node->mNumChildren; i++)
@@ -35,7 +39,7 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 
 }
 
-Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
+void Model::processMesh(aiMesh *mesh, const aiScene *scene)
 {
     // data to fill
     std::vector<Vertex> vertices;
@@ -91,7 +95,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
     std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-    return Mesh(vertices, indices, textures);
+    mMeshes.emplace_back(std::make_unique<Mesh>(vertices, indices, textures));
 }
 
 std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
@@ -101,7 +105,7 @@ std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *ma
     {
         aiString str;
         mat->GetTexture(type, i, &str);
-        std::string texFullPath(directory + "/" + std::string(str.C_Str()));
+        std::string texFullPath(mDirectory + "/" + std::string(str.C_Str()));
         auto texture = RESOURCES.loadTextureFromFile(texFullPath.c_str(), typeName, true);
         textures.push_back(texture);
     }
@@ -116,8 +120,8 @@ void Model::draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> & transf
         transform *= mTransFormMatrix;
     }
 
-    for(auto & mesh : meshes)
-        mesh.draw(shader, transforms);
+    for(auto & mesh : mMeshes)
+        mesh->draw(shader, transforms);
 }
 
 AABB Model::getAABB() const
