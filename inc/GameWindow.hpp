@@ -15,6 +15,9 @@ public:
     SDL_Event & getEvent();
 	void tickGui();
     void getSize(int &w, int &h);
+    std::vector<int> getSize();
+    bool IsGameRunning();
+
 private:
     void initWindow();
     void initSDL();

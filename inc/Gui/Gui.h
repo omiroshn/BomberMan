@@ -6,19 +6,23 @@
 
 #define  WIN_SIZE {800, 600}
 #define  STANDARD_MENU_BUTTON {200, 30}
+
 class Gui
 {
 public:
 	Gui();
 	~Gui();
 	void ShowMainMenu();
+	bool IsGameRunning();
+	void StartTheGame(bool start);
 
 private:
 	void ShowHardnessRadioButtons();
 	void ShowStartNewGameMenu();
 	void ShowLoadSavedGamesMenu();
-	bool mshowMenu = true;
-	bool mshowScore = false;
+	bool mGameStarted = false;
+	bool mShowMenu = true;
+	bool mShowScore = false;
 	int  mMapIndex = -1;
 };
 

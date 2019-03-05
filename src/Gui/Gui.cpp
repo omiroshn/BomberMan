@@ -1,11 +1,13 @@
 
 #include <Gui/Gui.h>
 
-Gui::Gui() {
+Gui::Gui()
+{
 
 }
 
-Gui::~Gui() {
+Gui::~Gui()
+{
 
 }
 
@@ -84,7 +86,9 @@ void Gui::ShowStartNewGameMenu()
 	}
 	if (ImGui::Button("Start new GAME", STANDARD_MENU_BUTTON))
 	{
-		ImGui::OpenPopup("NameFrame");
+		//ImGui::OpenPopup("NameFrame");
+		StartTheGame(true);
+
 	}
 }
 
@@ -113,5 +117,15 @@ void Gui::ShowLoadSavedGamesMenu()
 	{
 		ImGui::OpenPopup("Saved Games");
 	}
+}
+
+bool Gui::IsGameRunning()
+{
+	return mGameStarted;
+}
+
+void Gui::StartTheGame(bool start)
+{
+	mGameStarted = start;
 }
 

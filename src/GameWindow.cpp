@@ -74,6 +74,7 @@ void GameWindow::initGui() {
 
     ImGui::StyleColorsDark();
 
+	mMainMenu = new Gui();
     // io.Fonts->AddFontFromFileTTF("Assets/font/Roboto-Medium.ttf", 16.0f);
 
 }
@@ -94,7 +95,8 @@ void GameWindow::initOpenGL()
 
 void GameWindow::update()
 {
-    mMainMenu->ShowMainMenu();
+	if (!IsGameRunning())
+	    mMainMenu->ShowMainMenu();
     ImGui::Render();
     ImGui_ImplSdlGL3_RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(mWindow);
@@ -115,4 +117,8 @@ void GameWindow::tickGui()
 void GameWindow::getSize(int &w, int &h)
 {
     SDL_GetWindowSize(mWindow, &w, &h);
+}
+
+bool GameWindow::IsGameRunning() {
+    return mMainMenu->IsGameRunning();
 }
