@@ -2,8 +2,7 @@
 # define _CORE_H_
 
 #include "SDL.h"
-#include <functional>
-#include <utility>
+#include <vector>
 
 namespace bm
 {
