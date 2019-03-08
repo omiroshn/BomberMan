@@ -15,9 +15,9 @@ public:
 	void		SetAcceleration(glm::vec2);
 	void		AddAcceleration(glm::vec2);
 
-	void		Debug();
+	void		debug();
 
-	static void	DebugMovement();
+	static void	debugMovement();
 
 	/** Tickable interface */
 	void		tick(float DeltaTime = 0) override;

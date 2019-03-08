@@ -37,7 +37,7 @@ private:
 	CollisionInfo					 mCollisionInfo;
     bool                             mIsRunning;
 
-	static float					_inputAcceleration;
+	static float					sInputAcceleration;
 };
 
 #endif //BOMBERMAN_Renderer_HPP

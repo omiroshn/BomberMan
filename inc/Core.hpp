@@ -29,7 +29,7 @@ namespace bm
 		Tickable();
 		~Tickable();
 	private:
-		static std::vector<Tickable *> s_Tickables;
+		static std::vector<Tickable *> sTickables;
 		virtual void tick(float DeltaTime) = 0;
 	};
 }

@@ -64,8 +64,8 @@ void Renderer::normalPass(MapForRendering& aMap)
     // render the suite aka player
     {
         auto& Hero = aMap.GetHero();
-		Hero.Debug();
-		transforms.push_back(Hero.GetModelMatrix());
+		Hero.debug();
+		transforms.push_back(Hero.getModelMatrix());
 		suite->draw(shader, transforms);
     }
 
@@ -78,7 +78,7 @@ void Renderer::normalPass(MapForRendering& aMap)
             for (auto w : walls)
             {
                 glm::mat4 modelTransform = glm::mat4(1.0f);
-                modelTransform = glm::translate(modelTransform, glm::vec3(w->GetX(), 0.f, w->GetY()));
+                modelTransform = glm::translate(modelTransform, glm::vec3(w->getX(), 0.f, w->getY()));
                 transforms.push_back(modelTransform);
             }
             wall->draw(modelShader, transforms);
@@ -94,7 +94,7 @@ void Renderer::normalPass(MapForRendering& aMap)
             for (auto b : bricks)
             {
                 glm::mat4 modelTransform = glm::mat4(1.0f);
-                modelTransform = glm::translate(modelTransform, glm::vec3(b->GetX(), 0.f, b->GetY()));
+                modelTransform = glm::translate(modelTransform, glm::vec3(b->getX(), 0.f, b->getY()));
                 transforms.push_back(modelTransform);
             }
             brick->draw(modelShader, transforms);

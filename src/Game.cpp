@@ -29,7 +29,7 @@ void Game::start()
         mRenderer->updateSize(width, height);
         if (mapLoader.MapIsLoaded())
         {
-			MovingEntity::DebugMovement();
+			MovingEntity::debugMovement();
 			updateHeroInput();
 			bm::Tickable::tickTickables(mDeltaTime);
 			resolveCollisions();
@@ -50,16 +50,16 @@ void Game::start()
 void Game::resolveCollisions()
 {
 	auto& Hero = mMap.GetHero();
-	const glm::vec2 Position = Hero.GetPosition() + 0.5f;
+	const glm::vec2 Position = Hero.getPosition() + 0.5f;
 	bool inObstacle = mCollisionInfo[Position] != SquareType::EmptySquare;
 	if (inObstacle)
 	{
 		glm::vec2 CorrectedPosition = glm::round(Position);
 		CorrectedPosition -= Position;
 		if (fabs(CorrectedPosition.x) < fabs(CorrectedPosition.y))
-			Hero.Move({CorrectedPosition.x, 0});
+			Hero.move({CorrectedPosition.x, 0});
 		else
-			Hero.Move({0, CorrectedPosition.y});
+			Hero.move({0, CorrectedPosition.y});
 	}
 }
 
@@ -172,7 +172,7 @@ void Game::updateHeroInput()
 {
 	ImGui::Text("DeltaTime:%f", mDeltaTime);
 	auto& Hero = mMap.GetHero();
-	const float offset  = mDeltaTime * _inputAcceleration;
+	const float offset  = mDeltaTime * sInputAcceleration;
 	if (ImGui::IsKeyDown(SDL_SCANCODE_LEFT))
 		Hero.AddAcceleration(glm::vec2(-offset, 0));
 	if (ImGui::IsKeyDown(SDL_SCANCODE_RIGHT))
@@ -183,5 +183,5 @@ void Game::updateHeroInput()
 		Hero.AddAcceleration(glm::vec2(0, offset));
 }
 
-float Game::_inputAcceleration = 600;
+float Game::sInputAcceleration = 600;
 

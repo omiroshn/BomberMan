@@ -13,29 +13,28 @@ public:
 	~Entity();
 
 	/** Changes position of Entity by offset */
-	void		Move(glm::vec2);
+	void		move(glm::vec2);
 
-	glm::vec2	GetPosition() const;
-	void		SetPosition(glm::vec2 position);
-	float		GetAngle() const;
-	void		SetAngle(float angle);
-	glm::mat4	GetModelMatrix()const;
+	glm::vec2	getPosition() const;
+	void		setPosition(glm::vec2 position);
+	float		getAngle() const;
+	void		setAngle(float angle);
+	glm::mat4	getModelMatrix()const;
 
-	void		Debug();
+	void		debug();
 
 	/** compatibility with existing code */
-	float GetX() const;
-	float GetY() const;
-	void  SetX(float x);
-	void  SetY(float y);
+	float getX() const;
+	float getY() const;
+	void  setX(float x);
+	void  setY(float y);
 
 private:
 	glm::vec2	mPosition;
 	float		mAngle;
+	unsigned	mUid;
 
-	/** implementation details */
-	unsigned	_uid;
-	static unsigned _entity_counter;
+	static unsigned sEntity_counter;
 };
 
 #endif

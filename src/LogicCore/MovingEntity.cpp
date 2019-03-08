@@ -45,14 +45,14 @@ void MovingEntity::AddAcceleration(glm::vec2 accelerationOffset)
 	mAcceleration += accelerationOffset;
 }
 
-void MovingEntity::Debug()
+void MovingEntity::debug()
 {
-	Entity::Debug();
+	Entity::debug();
 	ImGui::DragFloat2("Velocity", &mVelocity[0]);
 	ImGui::DragFloat2("Acceleration", &mAcceleration[0]);
 }
 
-void MovingEntity::DebugMovement()
+void MovingEntity::debugMovement()
 {
 	ImGui::Text("MovableEntity setting:");
 	ImGui::SliderFloat("Friction", &_Friction, 0, 1);
@@ -74,5 +74,5 @@ void MovingEntity::tick(float DeltaTime)
 	mVelocity *= _Friction / DeltaTime;
 	mAcceleration *= _Drag / DeltaTime;
 	mAcceleration = glm::clamp(mAcceleration, -_MaxAcceleration, _MaxAcceleration);
-	Move(mVelocity * DeltaTime);
+	move(mVelocity * DeltaTime);
 }
