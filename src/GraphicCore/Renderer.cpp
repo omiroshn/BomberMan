@@ -66,7 +66,7 @@ void Renderer::normalPass(MapForRendering& aMap)
         auto& Hero = aMap.GetHero();
 		Hero.debug();
 		transforms.push_back(Hero.getModelMatrix());
-		suite->draw(shader, transforms);
+		suite->draw(modelShader, transforms);
     }
 
     transforms.clear();
