@@ -24,8 +24,8 @@ void Game::start()
     while (mIsRunning)
     {
         mWindow->getSize(width, height);
-        mDeltaTime = calcDeltaTime();
         mWindow->tickGui();
+        calcDeltaTime();
         mRenderer->updateSize(width, height);
         if (mapLoader.MapIsLoaded())
         {
@@ -98,12 +98,13 @@ void Game::doAction(Action const& a)
     }
 }
 
-float Game::calcDeltaTime()
+void Game::calcDeltaTime()
 {
     mTimeLast = mTimeNow;
     mTimeNow = SDL_GetPerformanceCounter();
 
-    return ((mTimeNow - mTimeLast) / static_cast<float>(SDL_GetPerformanceFrequency()));
+	mDeltaTime = (mTimeNow - mTimeLast) / static_cast<float>(SDL_GetPerformanceFrequency());
+	ImGui::Text("Delta time: %f", mDeltaTime);
 }
 
 void Game::loadResources()
@@ -170,7 +171,6 @@ void Game::loadResources()
 
 void Game::updateHeroInput()
 {
-	ImGui::Text("DeltaTime:%f", mDeltaTime);
 	auto& Hero = mMap.GetHero();
 	const float offset  = mDeltaTime * sInputAcceleration;
 	if (ImGui::IsKeyDown(SDL_SCANCODE_LEFT))
