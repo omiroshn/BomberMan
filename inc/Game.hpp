@@ -23,7 +23,7 @@ public:
 private:
 	void		resolveCollisions();
     void		doAction(Action const&);
-    float		calcDeltaTime();
+    void		calcDeltaTime();
     void		loadResources();
 	void		updateHeroInput();
     std::unique_ptr<GameWindow>      mWindow;

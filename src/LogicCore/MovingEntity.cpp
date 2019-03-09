@@ -69,10 +69,10 @@ glm::vec2 MovingEntity::GetAcceleration() const
 /** Euler integration + some friction. */
 void MovingEntity::tick(float DeltaTime)
 {
-	mVelocity += mAcceleration * DeltaTime;
-	mVelocity = glm::clamp(mVelocity, -_MaxVelocity, _MaxVelocity);
-	mVelocity *= _Friction / DeltaTime;
 	mAcceleration *= _Drag / DeltaTime;
 	mAcceleration = glm::clamp(mAcceleration, -_MaxAcceleration, _MaxAcceleration);
+	mVelocity += mAcceleration * DeltaTime;
+	mVelocity *= _Friction / DeltaTime;
+	mVelocity = glm::clamp(mVelocity, -_MaxVelocity, _MaxVelocity);
 	move(mVelocity * DeltaTime);
 }
