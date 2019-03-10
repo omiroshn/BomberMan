@@ -33,14 +33,14 @@ public:
     Renderer();
     ~Renderer();
 
-    void draw(std::shared_ptr<MapForRendering>);
+    void draw(MapForRendering&);
 
     Renderer(Renderer const &) = delete;
     Renderer &operator=(Renderer const &) = delete;
     Camera &getCamera();
     void updateSize(int x, int y);
 private:
-    void normalPass(std::shared_ptr<MapForRendering>);
+    void normalPass(MapForRendering&);
     Camera mCamera;
     int mWidth, mHeight;
 

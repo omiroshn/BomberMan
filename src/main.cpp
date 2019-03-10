@@ -8,7 +8,7 @@
 
 int main(int ac, char **av)
 {
-#if _WIN32_
+#if _WIN32 || _WIN32_
     RESOURCES.setBinFolder("");
 #else
     std::string exePath(av[0]);

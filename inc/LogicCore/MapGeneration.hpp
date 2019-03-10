@@ -22,7 +22,7 @@ public:
 	MapGenerator(int hardness);
 	MapGenerator(int width, int height, int hardness);
 	~MapGenerator();
-	std::vector<int> GenerateNewMap();
+	std::vector<SquareType> GenerateNewMap();
 	int GetWidth() const;
 	int GetHeight() const;
 

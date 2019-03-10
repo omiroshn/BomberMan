@@ -1,6 +1,9 @@
 #include "Game.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
 #include "ResourceManagement/Model.hpp"
+#include "Core.hpp"
+#include "LogicCore/MovingEntity.h"
+
 Game::Game() : mTimeNow(SDL_GetPerformanceCounter()), mIsRunning(true)
 {
     mWindow = std::make_unique<GameWindow>(cDefaultScreenWidth, cDefaultScreenHeight, cWindowName);
@@ -26,6 +29,10 @@ void Game::start()
         mRenderer->updateSize(width, height);
         if (mapLoader.MapIsLoaded())
         {
+			MovingEntity::debugMovement();
+			updateHeroInput();
+			bm::Tickable::tickTickables(mDeltaTime);
+			resolveCollisions();
             mRenderer->draw(mMap);
             mWindow->update();
             doAction(mIManager->processEvents(mWindow->getEvent()));
@@ -33,11 +40,27 @@ void Game::start()
         }
         else
         {
-            mMap = std::make_shared<MapForRendering>(mapLoader.GetMap(-1));
-            mMap.get()->ParseMapBySquareInstances();
+            std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(-1);
+            mMap.ParseMapBySquareInstances();
             mWindow->update();
         }
     }
+}
+
+void Game::resolveCollisions()
+{
+	auto& Hero = mMap.GetHero();
+	const glm::vec2 Position = Hero.getPosition() + 0.5f;
+	bool inObstacle = mCollisionInfo[Position] != SquareType::EmptySquare;
+	if (inObstacle)
+	{
+		glm::vec2 CorrectedPosition = glm::round(Position);
+		CorrectedPosition -= Position;
+		if (fabs(CorrectedPosition.x) < fabs(CorrectedPosition.y))
+			Hero.move({CorrectedPosition.x, 0});
+		else
+			Hero.move({0, CorrectedPosition.y});
+	}
 }
 
 void Game::doAction(Action const& a)
@@ -53,16 +76,16 @@ void Game::doAction(Action const& a)
             mRenderer->getCamera().processMouseMovement(x, y);
             break;
         case Action::Forward:
-            mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
+            //mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
             break;
         case Action::Backward:
-            mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime);
+            //mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime);
             break;
         case Action::Right:
-            mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime);
+            //mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime);
             break;
         case Action::Left:
-            mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
+            //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
             break;
         case Action::Up:
             mRenderer->getCamera().movaCamera(CameraDirection::UPWARD, mDeltaTime);
@@ -80,7 +103,7 @@ float Game::calcDeltaTime()
     mTimeLast = mTimeNow;
     mTimeNow = SDL_GetPerformanceCounter();
 
-    return ((static_cast<float>(mTimeNow - mTimeLast) * 1000.0f / static_cast<float>(SDL_GetPerformanceFrequency())));
+    return ((mTimeNow - mTimeLast) / static_cast<float>(SDL_GetPerformanceFrequency()));
 }
 
 void Game::loadResources()
@@ -100,7 +123,7 @@ void Game::loadResources()
             glm::mat4 basicSuite = glm::mat4(1.0f);
             auto  scale_factorY = (a->getAABB().getMax().y - a->getAABB().getMin().y);
             basicSuite = glm::scale(basicSuite, glm::vec3(1.0f / scale_factorY, 1.0f / scale_factorY, 1.0f / scale_factorY));
-            basicSuite = glm::translate(basicSuite, glm::vec3(-a->getAABB().getCenter().x, -a->getAABB().getCenter().y, -a->getAABB().getCenter().z));
+			basicSuite = glm::translate(basicSuite, -a->getAABB().getCenter());
             a->transform(basicSuite);
 //            std::cout << a->getAABB().getMin().x << " -- " << a->getAABB().getMin().y << " -- " << a->getAABB().getMin().z << std::endl;
 //            std::cout << a->getAABB().getMax().x << " -- " << a->getAABB().getMax().y << " -- " << a->getAABB().getMax().z << std::endl;
@@ -111,8 +134,8 @@ void Game::loadResources()
 
             glm::mat4 basicCube = glm::mat4(1.0f);
             auto scale_factorY = 2.0f;
-            basicCube = glm::scale(basicCube, glm::vec3(1.0f / scale_factorY, 1.0f / scale_factorY, 1.0f / scale_factorY));
-            basicCube = glm::translate(basicCube, glm::vec3(-b->getAABB().getCenter().x, -b->getAABB().getCenter().y, -b->getAABB().getCenter().z));
+            basicCube = glm::scale(basicCube,  glm::vec3(1.f / scale_factorY));
+			basicCube = glm::translate(basicCube, -b->getAABB().getCenter());
             basicCube = glm::rotate(basicCube, glm::radians(-90.0f), glm::vec3(0,0,1));
             b->transform(basicCube);
 //            std::cout << b->getAABB().getMin().x << " -- " << b->getAABB().getMin().y << " -- " << b->getAABB().getMin().z << std::endl;
@@ -124,10 +147,8 @@ void Game::loadResources()
 
             glm::mat4 basicCube = glm::mat4(1.0f);
             auto scale_factorY = 2.0f;
-            basicCube = glm::scale(basicCube,
-                                   glm::vec3(1.0f / scale_factorY, 1.0f / scale_factorY, 1.0f / scale_factorY));
-            basicCube = glm::translate(basicCube, glm::vec3(-c->getAABB().getCenter().x, -c->getAABB().getCenter().y,
-                                                            -c->getAABB().getCenter().z));
+            basicCube = glm::scale(basicCube,  glm::vec3(1.f / scale_factorY));
+            basicCube = glm::translate(basicCube, -c->getAABB().getCenter());
             c->transform(basicCube);
         }
         auto d = RESOURCES.loadModel("wall/wall.obj", "wall");
@@ -135,10 +156,8 @@ void Game::loadResources()
 
             glm::mat4 basicCube = glm::mat4(1.0f);
             auto scale_factorY = 2.0f;
-            basicCube = glm::scale(basicCube,
-                                   glm::vec3(1.0f / scale_factorY, 1.0f / scale_factorY, 1.0f / scale_factorY));
-            basicCube = glm::translate(basicCube, glm::vec3(-c->getAABB().getCenter().x, -c->getAABB().getCenter().y,
-                                                            -c->getAABB().getCenter().z));
+            basicCube = glm::scale(basicCube,  glm::vec3(1.f / scale_factorY));
+			basicCube = glm::translate(basicCube, -c->getAABB().getCenter());
             d->transform(basicCube);
         }
     }
@@ -148,3 +167,21 @@ void Game::loadResources()
         exit(42);
     }
 }
+
+void Game::updateHeroInput()
+{
+	ImGui::Text("DeltaTime:%f", mDeltaTime);
+	auto& Hero = mMap.GetHero();
+	const float offset  = mDeltaTime * sInputAcceleration;
+	if (ImGui::IsKeyDown(SDL_SCANCODE_LEFT))
+		Hero.AddAcceleration(glm::vec2(-offset, 0));
+	if (ImGui::IsKeyDown(SDL_SCANCODE_RIGHT))
+		Hero.AddAcceleration(glm::vec2(offset, 0));
+	if (ImGui::IsKeyDown(SDL_SCANCODE_UP))
+		Hero.AddAcceleration(glm::vec2(0, -offset));
+	if (ImGui::IsKeyDown(SDL_SCANCODE_DOWN))
+		Hero.AddAcceleration(glm::vec2(0, offset));
+}
+
+float Game::sInputAcceleration = 600;
+

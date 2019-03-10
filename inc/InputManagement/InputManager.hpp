@@ -23,7 +23,7 @@ class InputManager
 public:
     InputManager();
     ~InputManager();
-    Action processEvents(SDL_Event const &e);
+    Action processEvents(SDL_Event &e);
     Action processKeyDown(SDL_Keycode keyPressed);
     Action processMouseMotion(SDL_Event const &e);
     void processMouseButton(SDL_MouseButtonEvent const &e, bool isPressed);

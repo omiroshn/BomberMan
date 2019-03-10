@@ -2,19 +2,39 @@
 #ifndef BOMBERMAN_ENTITY_H
 #define BOMBERMAN_ENTITY_H
 
+#include <glm/vec2.hpp>
+#include <glm/mat4x4.hpp>
+
 class Entity
 {
 public:
-	Entity(float x, float y);
+	Entity(float x = 0, float y = 0, float angle = 0);
+	Entity(glm::vec2 aPosition = {0,0}, float angle = 0);
 	~Entity();
-	float GetX() const;
-	float GetY() const;
-	void  SetX(float x);
-	void  SetY(float y);
+
+	/** Changes position of Entity by offset */
+	void		move(glm::vec2);
+
+	glm::vec2	getPosition() const;
+	void		setPosition(glm::vec2 position);
+	float		getAngle() const;
+	void		setAngle(float angle);
+	glm::mat4	getModelMatrix()const;
+
+	void		debug();
+
+	/** compatibility with existing code */
+	float getX() const;
+	float getY() const;
+	void  setX(float x);
+	void  setY(float y);
 
 private:
-	float mX = 0.f;
-	float mY = 0.f;
+	glm::vec2	mPosition;
+	float		mAngle;
+	unsigned	mUid;
+
+	static unsigned sEntity_counter;
 };
 
 #endif

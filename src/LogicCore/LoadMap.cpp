@@ -11,7 +11,19 @@ MapLoader::~MapLoader()
 
 }
 
-std::vector<SquareInstance*>& MapLoader::GetMap(const int index)
+SquareType CollisionInfo::operator[](glm::ivec2 coords)
+{
+	if (coords.x < 0 || coords.y < 0)
+		return SquareType::Wall;
+	return Squares[coords.x + coords.y * width];
+}
+
+SquareType CollisionInfo::operator[](glm::vec2 coords)
+{
+	return operator[](glm::ivec2(coords.x, coords.y));
+}
+
+std::tuple<std::vector<SquareInstance*>, CollisionInfo> MapLoader::GetMap(const int index)
 {
 	if (index == -1)
 	{
@@ -28,8 +40,7 @@ std::vector<SquareInstance*>& MapLoader::GetMap(const int index)
 		ConvertDigitsToInstances();
 		mLoaded = true;
 	}
-	return mMapOfInstances;
-
+	return std::make_tuple(mMapOfInstances, CollisionInfo{ mMapOfDigits, mWidth });
 }
 
 void MapLoader::UpdateMap()
@@ -44,21 +55,14 @@ bool MapLoader::MapIsLoaded()
 
 void MapLoader::ConvertDigitsToInstances()
 {
-	int size = mMapOfDigits.size();
+	unsigned size = mMapOfDigits.size();
 	mMapOfInstances.reserve(size);
 
-	for (int i = 0; i < size; ++i)
+	for (unsigned i = 0; i < size; ++i)
 	{
-		int x = i / mWidth;
-		int y = i % mWidth;
+		unsigned x = i / mWidth;
+		unsigned y = i % mWidth;
 
-		if (mMapOfDigits.at(i) == 1)
-		{
-			mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), SquareType::Wall));
-		}
-		else if (mMapOfDigits.at(i) == 2)
-		{
-			mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), SquareType::Brick));
-		}
+		mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), mMapOfDigits[i]));
 	}
 }

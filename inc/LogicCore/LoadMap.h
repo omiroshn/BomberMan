@@ -3,21 +3,28 @@
 
 #include "LogicCore/MapGeneration.hpp"
 
+struct CollisionInfo {
+	std::vector<SquareType> Squares;
+	unsigned				width;
+	SquareType operator[](glm::ivec2);
+	SquareType operator[](glm::vec2);
+};
+
 class MapLoader
 {
 public:
 	MapLoader();
 	~MapLoader();
-	std::vector<SquareInstance*>& GetMap(const int index);
+	std::tuple<std::vector<SquareInstance*>, CollisionInfo> GetMap(const int index);
 	void UpdateMap();
 	bool MapIsLoaded();
 
 private:
 	std::vector<SquareInstance*> mMapOfInstances;
-	std::vector<int>	         mMapOfDigits;
+	std::vector<SquareType>      mMapOfDigits;
 	bool                         mLoaded = false;
-	int                          mWidth = 30;
-	int                          mHeight = 20;
+	unsigned                     mWidth;
+	unsigned                     mHeight;
 
 private:
 	void ConvertDigitsToInstances();

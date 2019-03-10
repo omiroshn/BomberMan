@@ -12,7 +12,7 @@ public:
     GameWindow(int width, int height, std::string const &winName);
     ~GameWindow();
     void update();
-    SDL_Event const& getEvent();
+    SDL_Event & getEvent();
 	void tickGui();
     void getSize(int &w, int &h);
 private:

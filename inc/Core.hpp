@@ -2,6 +2,7 @@
 # define _CORE_H_
 
 #include "SDL.h"
+#include <vector>
 
 namespace bm
 {
@@ -9,7 +10,7 @@ namespace bm
 	 *	If someone wants a specific category,
 	 *	just add it here and use BM_CAT_LOG(YourCategory, ...)
 	 */
-	enum LogCategory 
+	enum LogCategory
 	{
 		Default = SDL_LOG_CATEGORY_CUSTOM,
 		Init,
@@ -17,11 +18,19 @@ namespace bm
 		MAX
 	};
 
-	inline void SetLogLevels()
+	void SetLogLevels();
+
+	class Tickable
 	{
-		for (LogCategory It = Default; It < MAX; (*((int*)&It))++)
-			SDL_LogSetPriority((int)It, SDL_LOG_PRIORITY_VERBOSE);
-	}
+	public:
+		static void tickTickables(float DeltaTime);
+	protected:
+		Tickable();
+		~Tickable();
+	private:
+		static std::vector<Tickable *> sTickables;
+		virtual void tick(float DeltaTime) = 0;
+	};
 }
 
 /**
