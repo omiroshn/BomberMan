@@ -10,7 +10,7 @@ class MapForRendering
 {
 public:
 	MapForRendering();
-	MapForRendering(std::vector<SquareInstance*>& map);
+	MapForRendering(const std::vector<SquareInstance*>& map);
 	~MapForRendering();
 	std::vector<SquareInstance*> GetEmptySquares();
 	std::vector<SquareInstance*> GetWalls();

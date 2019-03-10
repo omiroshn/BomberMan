@@ -1,6 +1,6 @@
 #include "LogicCore/MapForRendering.h"
 
-MapForRendering::MapForRendering(std::vector<SquareInstance*>& map) :
+MapForRendering::MapForRendering(const std::vector<SquareInstance*>& map) :
 	mRawMap(map),
 	mHero(glm::vec2(1,1))
 {
