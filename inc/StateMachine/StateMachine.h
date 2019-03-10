@@ -11,7 +11,7 @@ namespace bm {
 	{
 		unsigned char uid;
 		void onTick(float DeltaTime = 0) {
-			BM_CAT_WARN(StateMachine, "Base tick. ID:%d", uid);
+			//BM_CAT_WARN(StateMachine, "Base tick. ID:%d", uid);
 		};
 		void onEntry() {}
 		void onExit() {}
