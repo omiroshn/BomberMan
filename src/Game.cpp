@@ -3,6 +3,7 @@
 #include "ResourceManagement/Model.hpp"
 #include "Core.hpp"
 #include "LogicCore/MovingEntity.h"
+#include <tuple>
 
 Game::Game() : mTimeNow(SDL_GetPerformanceCounter()), mIsRunning(true)
 {
