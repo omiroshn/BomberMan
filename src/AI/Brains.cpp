@@ -1,3 +1,4 @@
+#if 0
 #include "AI/Brains.h"
 
 
@@ -21,3 +22,4 @@ void bm::PatrolState::onTick(float DeltaTime)
 {
 	BM_CAT_LOG(StateMachine, "Patrol Tick. ID:%d", uid);
 }
+#endif
