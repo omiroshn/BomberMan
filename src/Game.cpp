@@ -35,6 +35,16 @@ void Game::start()
 			bm::Tickable::tickTickables(mDeltaTime);
 			resolveCollisions();
             mRenderer->draw(mMap);
+			static int index = 0;
+			ImGui::RadioButton("NO VSync", &index, 0);
+			ImGui::RadioButton("60", &index, 1);
+			ImGui::RadioButton("30", &index, 2);
+			if (index)
+			{
+				const float TargetDelta = 0.0167 * index;
+				if (mDeltaTime < TargetDelta)
+					SDL_Delay((TargetDelta - mDeltaTime) * 1000.f);
+			}
             mWindow->update();
             doAction(mIManager->processEvents(mWindow->getEvent()));
             mapLoader.UpdateMap();
@@ -174,6 +184,7 @@ void Game::loadResources()
 void Game::updateHeroInput()
 {
 	auto& Hero = mMap.GetHero();
+	ImGui::SliderFloat("Input Hero acceleration", &sInputAcceleration, 0, 10000);
 	const float offset  = mDeltaTime * sInputAcceleration;
 	if (ImGui::IsKeyDown(SDL_SCANCODE_LEFT))
 		Hero.AddAcceleration(glm::vec2(-offset, 0));
@@ -185,5 +196,5 @@ void Game::updateHeroInput()
 		Hero.AddAcceleration(glm::vec2(0, offset));
 }
 
-float Game::sInputAcceleration = 600;
+float Game::sInputAcceleration = 6000;
 
