@@ -203,7 +203,7 @@ std::shared_ptr<Skybox>		ResourceManager::getSkybox(std::string const &name)
 
 void ResourceManager::setBinFolder(std::string const &aPath)
 {
-#ifdef _WIN32
+#ifdef _WIN32 || _WIN32_
     mBinFolder = aPath + "../Assets/";
 #else
     mBinFolder = aPath + "./Assets/";
