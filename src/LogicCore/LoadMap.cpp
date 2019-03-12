@@ -1,5 +1,6 @@
 
 #include "LogicCore/LoadMap.h"
+#include <tuple>
 
 MapLoader::MapLoader()
 {
