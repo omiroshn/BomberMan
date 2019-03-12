@@ -3,6 +3,7 @@
 //
 
 #include "GraphicCore/Camera.hpp"
+#include "LogicCore\Entity.h"
 #include <iostream>
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :
 mFront(glm::vec3(0.0f, 0.0f, -1.0f)), mMovementSpeed(SPEED), mMouseSensitivity(SENSITIVITY), mZoom(ZOOM),
@@ -14,7 +15,20 @@ mPosition(position), mWorldUp(up), mYaw(yaw), mPitch(pitch)
 // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
 glm::mat4 Camera::getViewMatrix()
 {
-    return glm::lookAt(mPosition, mPosition + mFront, mUp);
+    return mViewMatrix;
+}
+
+void Camera::followEntity(Entity &aTarget, float d)
+{
+    
+    mPosition.x = aTarget.getPosition().x;
+    mPosition.y = d;
+    mPosition.z = aTarget.getPosition().y - d;
+    mViewMatrix = glm::lookAt(mPosition, glm::vec3(aTarget.getPosition().x, 0, aTarget.getPosition().y), mUp);
+}
+void Camera::applyTransform()
+{
+    mViewMatrix = glm::lookAt(mPosition, mPosition + mFront, mUp);
 }
 
 void Camera::movaCamera(CameraDirection dir, float deltaTime)
@@ -44,6 +58,7 @@ void Camera::movaCamera(CameraDirection dir, float deltaTime)
     {
         mPosition -= mUp * velocity;
     }
+    applyTransform();
 }
 
 void Camera::processMouseMovement(float xoffset, float yoffset)
@@ -51,6 +66,7 @@ void Camera::processMouseMovement(float xoffset, float yoffset)
     mYaw   += xoffset * mMouseSensitivity;
     mPitch += yoffset * mMouseSensitivity;
     updateCameraVectors();
+    applyTransform();
 }
 
 void Camera::processMouseScroll(float zoomFactor)

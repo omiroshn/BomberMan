@@ -22,7 +22,7 @@ const float SPEED       =  0.1f;
 const float SENSITIVITY =  0.3f;
 const float ZOOM        =  45.0f;
 
-
+class Entity;
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class Camera
 {
@@ -36,9 +36,10 @@ public:
 
     float zoom() const;
     glm::vec3 position() const;
+    void followEntity(Entity &, float d);
 private:
     void updateCameraVectors();
-
+    void applyTransform();
 private:
     glm::vec3 mPosition;
     glm::vec3 mFront;
@@ -46,6 +47,7 @@ private:
     glm::vec3 mRight;
     glm::vec3 mWorldUp;
 
+    glm::mat4 mViewMatrix;
     float mYaw;
     float mPitch;
 
