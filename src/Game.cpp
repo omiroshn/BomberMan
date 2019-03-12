@@ -62,6 +62,7 @@ void Game::resolveCollisions()
 		else
 			Hero.move({0, CorrectedPosition.y});
 	}
+    mRenderer->getCamera().followEntity(Hero, 10.f);
 }
 
 void Game::doAction(Action const& a)
@@ -72,9 +73,9 @@ void Game::doAction(Action const& a)
             mIsRunning = false;
             break;
         case Action::CameraRotate:
-            float x,y;
-            mIManager->getMouseOffset(x, y);
-            mRenderer->getCamera().processMouseMovement(x, y);
+            //float x,y;
+            //mIManager->getMouseOffset(x, y);
+            //mRenderer->getCamera().processMouseMovement(x, y);
             break;
         case Action::Forward:
             //mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
@@ -89,10 +90,10 @@ void Game::doAction(Action const& a)
             //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
             break;
         case Action::Up:
-            mRenderer->getCamera().movaCamera(CameraDirection::UPWARD, mDeltaTime);
+            //mRenderer->getCamera().movaCamera(CameraDirection::UPWARD, mDeltaTime);
             break;
         case Action::Down:
-            mRenderer->getCamera().movaCamera(CameraDirection::DOWNWARD, mDeltaTime);
+            //mRenderer->getCamera().movaCamera(CameraDirection::DOWNWARD, mDeltaTime);
             break;
         default:
             break;
