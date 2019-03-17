@@ -5,6 +5,7 @@
 #include "GraphicCore/Camera.hpp"
 #include "LogicCore/Entity.h"
 #include <iostream>
+#include "imgui.h"
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :
 mFront(glm::vec3(0.0f, 0.0f, -1.0f)), mMovementSpeed(SPEED), mMouseSensitivity(SENSITIVITY), mZoom(ZOOM),
 mPosition(position), mWorldUp(up), mYaw(yaw), mPitch(pitch)
@@ -20,11 +21,13 @@ glm::mat4 Camera::getViewMatrix()
 
 void Camera::followEntity(Entity &aTarget, float d)
 {
-    
+	static float zoom = 1;
+	ImGui::SliderFloat("Zoom", &zoom, 0.2, 4);
+	d *= zoom;
     mPosition.x = aTarget.getPosition().x;
-    mPosition.y = d;
-    mPosition.z = aTarget.getPosition().y - d;
-    mViewMatrix = glm::lookAt(mPosition, glm::vec3(aTarget.getPosition().x, 0, aTarget.getPosition().y), mUp);
+	mPosition.y = d * 1.4f;
+    mPosition.z = aTarget.getPosition().y + d;
+    mViewMatrix = glm::lookAt(mPosition, aTarget.getPosition3D(), mUp);
 }
 void Camera::applyTransform()
 {

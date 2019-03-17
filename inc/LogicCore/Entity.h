@@ -16,6 +16,7 @@ public:
 	void		move(glm::vec2);
 
 	glm::vec2	getPosition() const;
+	glm::vec3	getPosition3D() const;
 	void		setPosition(glm::vec2 position);
 	float		getAngle() const;
 	void		setAngle(float angle);
