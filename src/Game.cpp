@@ -4,6 +4,7 @@
 #include "Core.hpp"
 #include "LogicCore/MovingEntity.h"
 #include <tuple>
+#include "AI/Brains.h"
 
 Game::Game() : mTimeNow(SDL_GetPerformanceCounter()), mIsRunning(true)
 {
@@ -22,6 +23,9 @@ void Game::start()
 {
     MapLoader mapLoader;
     int width, height;
+
+	Brains b;
+
     while (mIsRunning)
     {
         mWindow->getSize(width, height);
