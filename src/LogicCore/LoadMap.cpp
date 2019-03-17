@@ -62,8 +62,8 @@ void MapLoader::ConvertDigitsToInstances()
 
 	for (unsigned i = 0; i < size; ++i)
 	{
-		unsigned x = i / mWidth;
-		unsigned y = i % mWidth;
+		unsigned y = i / mWidth;
+		unsigned x = i % mWidth;
 
 		mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), mMapOfDigits[i]));
 	}
