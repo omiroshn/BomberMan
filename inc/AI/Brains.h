@@ -1,5 +1,6 @@
 #pragma once
 #include "StateMachine/StateMachine.h"
+#include "LogicCore/MovingEntity.h"
 
 namespace bm {
 	struct PatrolState;
@@ -7,7 +8,7 @@ namespace bm {
 	struct IdleState : public State {
 		using State::transition;
 		bool transition(const PatrolState&);
-		void onTick(float DeltaTime = 0);
+		void onTick(MovingEntity& Owner, float DeltaTime = 0);
 	private:
 		float m_IdlingTime;
 	};
@@ -18,11 +19,11 @@ namespace bm {
 
 	struct ChaseState : public State {};
 
-	typedef SM<IdleState, PatrolState, ChaseState> BrainsSM;
-	class Brains : public BrainsSM
+	typedef SM<MovingEntity, IdleState, PatrolState, ChaseState> BrainsSM;
+	class Brains : public BrainsSM, public MovingEntity
 	{
 	public:
-		Brains()
+		Brains() : BrainsSM(*this)
 		{
 			BM_LOG("%d", sizeof(Brains));
 		}

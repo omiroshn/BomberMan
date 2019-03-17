@@ -10,21 +10,21 @@ namespace bm {
 	struct State
 	{
 		unsigned char uid;
-		void onTick(float DeltaTime = 0) {
-			//BM_CAT_WARN(StateMachine, "Base tick. ID:%d", uid);
-		};
+
+		template<typename T>
+		void onTick(T& Owner, float DeltaTime) {};
+		template<typename T>
+		bool transition(const T&) { return false; }
+
 		void onEntry() {}
 		void onExit() {}
 		void onEvent(const Event&) {}
-
-		template<typename T>
-		bool transition(const T&) { return false; }
 	};
 
-	template <typename... Ts>
+	template <typename OwnerType,typename... Ts>
 	class SM {
 	public:
-		SM() : m_CurrentState(0)
+		SM(OwnerType& owner) : m_CurrentState(0)
 		{
 			init();
 		}
@@ -42,6 +42,7 @@ namespace bm {
 
 	private:
 		std::tuple<Ts...>	m_States;
+		OwnerType&			m_Owner;
 		unsigned char		m_CurrentState : 5;
 		unsigned char		_Reserved : 3;
 
