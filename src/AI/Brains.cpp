@@ -1,6 +1,5 @@
-#if 0
+#if 1
 #include "AI/Brains.h"
-
 
 bool bm::IdleState::transition(const PatrolState&)
 {
