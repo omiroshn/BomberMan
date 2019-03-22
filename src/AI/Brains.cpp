@@ -1,20 +1,15 @@
 #if 1
 #include "AI/Brains.h"
+#include "Game.hpp"
 
 bool bm::IdleState::transition(const PatrolState&)
 {
-	if (m_IdlingTime > 5)
-	{
-		m_IdlingTime = 0;
-		return true;
-	}
-	return false;
+	return m_TransitionToPatrol >= Game::getCurrentTime();
 }
 
-void bm::IdleState::onTick(float DeltaTime)
+void bm::IdleState::onEntry(MovingEntity&)
 {
-	m_IdlingTime += DeltaTime;
-	BM_CAT_LOG(StateMachine, "Been Idle for %f. ID:%d", m_IdlingTime, uid);
+	m_TransitionToPatrol = Game::getCurrentTime() + 3;
 }
 
 void bm::PatrolState::onTick(float DeltaTime)

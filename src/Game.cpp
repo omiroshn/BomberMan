@@ -6,8 +6,9 @@
 #include <tuple>
 #include "AI/Brains.h"
 
-Game::Game() : mTimeNow(SDL_GetPerformanceCounter()), mIsRunning(true)
+Game::Game() : mIsRunning(true)
 {
+	mTimeNow = SDL_GetPerformanceCounter();
     mWindow = std::make_unique<GameWindow>(cDefaultScreenWidth, cDefaultScreenHeight, cWindowName);
     mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
@@ -24,7 +25,7 @@ void Game::start()
     MapLoader mapLoader;
     int width, height;
 
-	Brains b;
+	bm::Brains b;
 
     while (mIsRunning)
     {
@@ -60,6 +61,11 @@ void Game::start()
             mWindow->update();
         }
     }
+}
+
+float Game::getCurrentTime()
+{
+	return mTimeNow / static_cast<float>(SDL_GetPerformanceFrequency());
 }
 
 void Game::resolveCollisions()
