@@ -8,9 +8,9 @@ namespace bm {
 	struct IdleState : public State {
 		using State::transition;
 		bool transition(const PatrolState&);
-		void onTick(MovingEntity& Owner, float DeltaTime = 0);
+		void onEntry(MovingEntity&);
 	private:
-		float m_IdlingTime;
+		float m_TransitionToPatrol;
 	};
 
 	struct PatrolState : public State {
@@ -20,7 +20,7 @@ namespace bm {
 	struct ChaseState : public State {};
 
 	typedef SM<MovingEntity, IdleState, PatrolState, ChaseState> BrainsSM;
-	class Brains : public BrainsSM, public MovingEntity
+	class Brains : public BrainsSM
 	{
 	public:
 		Brains() : BrainsSM(*this)

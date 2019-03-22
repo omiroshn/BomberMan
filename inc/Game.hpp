@@ -19,6 +19,7 @@ public:
     Game();
     ~Game();
     void start();
+	static float getCurrentTime();
 
 private:
 	void		resolveCollisions();
@@ -30,9 +31,9 @@ private:
     std::unique_ptr<Renderer>        mRenderer;
     std::unique_ptr<InputManager>    mIManager;
 
-    Uint64                           mTimeNow;
-    Uint64                           mTimeLast;
-    float                            mDeltaTime;
+    static Uint64                    mTimeNow;
+    static Uint64                    mTimeLast;
+    static float                     mDeltaTime;
 	MapForRendering					 mMap;
 	CollisionInfo					 mCollisionInfo;
     bool                             mIsRunning;
