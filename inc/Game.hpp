@@ -6,13 +6,6 @@
 #include "InputManagement/InputManager.hpp"
 #include "LogicCore/MapForRendering.h"
 
-namespace
-{
-    int const cDefaultScreenWidth = 640;
-    int const cDefaultScreenHeight = 480;
-    std::string const cWindowName = "Bomberman";
-}
-
 class Game
 {
 public:

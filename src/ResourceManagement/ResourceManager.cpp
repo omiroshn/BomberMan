@@ -118,9 +118,9 @@ std::shared_ptr<Shader> ResourceManager::loadShaderFromFile(const GLchar *vShade
 	{
 		shader = std::make_shared<Shader>(vShaderFile, fShaderFile);
 	}
-	catch (...)
+	catch (std::exception& e)
 	{
-        throw CustomException("Something happened when loading shader [" + std::string(vShaderFile) + ";" + std::string(fShaderFile) + "]");
+        std::cerr << "Error:" << e.what() <<  " when loading shader [" << std::string(vShaderFile) << ";" << std::string(fShaderFile) << "]";
     }
 	return shader;
 };
@@ -203,8 +203,8 @@ std::shared_ptr<Skybox>		ResourceManager::getSkybox(std::string const &name)
 
 void ResourceManager::setBinFolder(std::string const &aPath)
 {
-#ifdef _WIN32 || _WIN32_
-    mBinFolder = aPath + "../Assets/";
+#if _MSC_VER
+    mBinFolder = "../Assets/";
 #else
     mBinFolder = aPath + "./Assets/";
 #endif

@@ -24,8 +24,9 @@ public:
 	~CustomException() throw();
 	CustomException();
 	CustomException(CustomException const &);
-	std::string text;
 	CustomException &operator=(CustomException const &);
+private:
+	std::string text;
 };
 
 #endif

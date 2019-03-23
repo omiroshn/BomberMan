@@ -3,7 +3,7 @@
 //
 
 #include "GraphicCore/Camera.hpp"
-#include "LogicCore/Entity.h"
+#include "Entity/Entity.h"
 #include <iostream>
 #include "imgui.h"
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :

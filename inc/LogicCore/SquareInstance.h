@@ -2,7 +2,7 @@
 #ifndef BOMBERMAN_IINSTANCE_H
 #define BOMBERMAN_IINSTANCE_H
 
-#include "Entity.h"
+#include "Entity/Entity.h"
 
 enum class SquareType : unsigned char
 {

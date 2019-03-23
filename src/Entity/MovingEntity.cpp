@@ -1,4 +1,4 @@
-#include "LogicCore/MovingEntity.h"
+#include "Entity/MovingEntity.h"
 #include "glm/common.hpp"
 #include "imgui.h"
 

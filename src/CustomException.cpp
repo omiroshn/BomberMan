@@ -3,14 +3,12 @@
 
 CustomException::CustomException(std::string const &err)
 {
-	text = err;
+	text = "Exception::" + err;
 };
 
 const char* CustomException::what() const throw()
 {
-	std::string res;
-	res = "Exception::" + text;
-	return (res.c_str());
+	return (text.c_str());
 };
 
 CustomException::~CustomException() throw()
