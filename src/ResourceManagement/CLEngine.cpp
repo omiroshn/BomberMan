@@ -11,6 +11,11 @@
 /* ************************************************************************** */
 
 # include "ResourceManagement/CLEngine.hpp"
+#if _MSC_VER
+#include <windows.h>
+#include <windef.h>
+#include <pplwin.h>
+#endif
 
 CLEngine* CLEngine::m_engine = nullptr;
 
@@ -46,12 +51,12 @@ void 	CLEngine::defineDevice()
 		throw CustomException("CL Platforms is not found");
 
 	m_usedPlatform = m_allPlatforms.front();
-	m_usedPlatform.getDevices(CL_DEVICE_TYPE_ALL, &m_allDevices);
-	if (m_allDevices.size() < 2)
-		throw CustomException("Grafic device is not found");
+	m_usedPlatform.getDevices(CL_DEVICE_TYPE_GPU, &m_allDevices);
+	if (m_allDevices.size() < 1)
+		throw CustomException("Graphic device is not found");
 	std::cout << "Using platform: "<< m_usedPlatform.getInfo<CL_PLATFORM_NAME>()<<"\n";
 
-	m_usedDevice = m_allDevices[1];
+	m_usedDevice = m_allDevices[0];
 	auto vendor = m_usedDevice.getInfo<CL_DEVICE_VENDOR>();
 	auto version = m_usedDevice.getInfo<CL_DEVICE_VERSION>();
 	std::cout<< "Using device: "<< m_usedDevice.getInfo<CL_DEVICE_NAME>() << std::endl;
@@ -61,13 +66,14 @@ void 	CLEngine::defineDevice()
 void 	CLEngine::defineContext()
 {
 	#if defined(_WIN32)
+		WINGDIAPI HGLRC WINAPI wglGetCurrentContext(VOID);
+		WINGDIAPI HDC   WINAPI wglGetCurrentDC(VOID);
 
 		// Windows
 		cl_context_properties conextProperties[] =
 		 {
 		  CL_GL_CONTEXT_KHR, (cl_context_properties)wglGetCurrentContext(),
 		  CL_WGL_HDC_KHR, (cl_context_properties)wglGetCurrentDC(),
-		  CL_CONTEXT_PLATFORM, (cl_context_properties)platform,
 		  0
 		};
 		m_context = cl::Context(m_usedDevice, conextProperties);
