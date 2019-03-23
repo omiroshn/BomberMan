@@ -77,6 +77,8 @@ void Game::resolveCollisions()
 
 void Game::doAction(Action const& a)
 {
+	std::vector<glm::mat4> transforms;
+	std::vector<glm::mat4> transforms1;
     switch (a)
     {
         case Action::Finish:
@@ -100,9 +102,42 @@ void Game::doAction(Action const& a)
             //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
             break;
         case Action::Up:
+			transforms.clear();
+			for (int i = 1; i < 10; ++i){
+				glm::mat4 model = glm::mat4(1.0f);
+				model = glm::translate(model, glm::vec3(2.0f * i ,1.5f,1.5f  + 2.0f * i));
+				transforms.push_back(model);
+			}
+			try {
+			//mRenderer->getParticleManager()->startDrawPS("pointSphereBomb", transforms);
+				mRenderer->getParticleManager()->startDrawPS("Cloud", transforms);
+			//mRenderer->getParticleManager()->startDrawPS("quadSphereBombTMap", transforms);
+			//	mRenderer->getParticleManager()->startDrawPS("BrickBlock", transforms);
+
+			} catch (CustomException &ex) {
+				std::cout << ex.what() << std::endl;
+				exit(42);
+			}
             //mRenderer->getCamera().movaCamera(CameraDirection::UPWARD, mDeltaTime);
             break;
         case Action::Down:
+			transforms.clear();
+			transforms1.clear();
+			for (int i = 0; i < 10; ++i){
+				glm::mat4 model = glm::mat4(1.0f);
+				//model =  glm::translate(model, glm::vec3(-2.5f, 0.0f, -2.5f));
+				model = glm::translate(model, glm::vec3(3.0f ,0.0f,2.0f* (i + 1)));
+				transforms.push_back(model);
+				model = glm::translate(model, glm::vec3(0.08f ,-0.125f,-0.25));
+				transforms1.push_back(model);
+			}
+			try {
+				mRenderer->getParticleManager()->startDrawPS("BrickBlock", transforms1);
+				mRenderer->getParticleManager()->startDrawPS("quadSphereBomb", transforms);
+			} catch (CustomException &ex) {
+				std::cout << ex.what() << std::endl;
+				exit(42);
+			}
             //mRenderer->getCamera().movaCamera(CameraDirection::DOWNWARD, mDeltaTime);
             break;
         default:
@@ -126,9 +161,15 @@ void Game::loadResources()
         RESOURCES.loadShader("sprite.vx.glsl", "sprite.ft.glsl", "sprite");
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
         RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");
+		RESOURCES.loadShader("sprite_p.vx.glsl", "sprite_p.ft.glsl", "sprite_p");
+		RESOURCES.loadShader("sprite_quad.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad");
+		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
         RESOURCES.loadTexture("block.png", "block");
         RESOURCES.loadTexture("container.jpg", "container");
         RESOURCES.loadTexture("awesomeface.png", "face");
+		RESOURCES.loadTexture("flame-fire.png", "flame-fire");
+		RESOURCES.loadTexture("cloud_trans.jpg", "cloud_trans");
+		RESOURCES.loadTexture("explode.png", "explosion_tmap_2");
         RESOURCES.loadSkybox("defaultSkybox");
 
         auto a = RESOURCES.loadModel("nanosuit/nanosuit.obj", "nanosuit");
@@ -139,7 +180,7 @@ void Game::loadResources()
 			basicSuite = glm::translate(basicSuite, -a->getAABB().getCenter());
             a->transform(basicSuite);
 //            std::cout << a->getAABB().getMin().x << " -- " << a->getAABB().getMin().y << " -- " << a->getAABB().getMin().z << std::endl;
-//            std::cout << a->getAABB().getMax().x << " -- " << a->getAABB().getMax().y << " -- " << a->getAABB().getMax().z << std::endl;
+//			 std::cout << a->getAABB().getMax().x << " -- " << a->getAABB().getMax().y << " -- " << a->getAABB().getMax().z << std::endl;
 //            std::cout << a->getAABB().getCenter().x << " -- " << a->getAABB().getCenter().y << " -- " << a->getAABB().getCenter().z << std::endl << std::endl;
         }
         auto b = RESOURCES.loadModel("brick/brick.obj", "brick");
@@ -152,7 +193,7 @@ void Game::loadResources()
             basicCube = glm::rotate(basicCube, glm::radians(-90.0f), glm::vec3(0,0,1));
             b->transform(basicCube);
 //            std::cout << b->getAABB().getMin().x << " -- " << b->getAABB().getMin().y << " -- " << b->getAABB().getMin().z << std::endl;
-//            std::cout << b->getAABB().getMax().x << " -- " << b->getAABB().getMax().y << " -- " << b->getAABB().getMax().z << std::endl;
+//           std::cout << b->getAABB().getMax().x << " -- " << b->getAABB().getMax().y << " -- " << b->getAABB().getMax().z << std::endl;
 //            std::cout << b->getAABB().getCenter().x << " -- " << b->getAABB().getCenter().y << " -- " << b->getAABB().getCenter().z << std::endl;
         }
         auto c = RESOURCES.loadModel("ground/ground.obj", "ground");
@@ -173,6 +214,7 @@ void Game::loadResources()
 			basicCube = glm::translate(basicCube, -c->getAABB().getCenter());
             d->transform(basicCube);
         }
+		mRenderer->getParticleManager()->init();
     }
     catch (CustomException &what)
     {
@@ -197,4 +239,3 @@ void Game::updateHeroInput()
 }
 
 float Game::sInputAcceleration = 6000;
-

@@ -8,7 +8,7 @@
 
 Renderer::Renderer() : mCamera(glm::vec3(0.0f, 10.0f, -3.0f))
 {
-
+	mParticleManager = std::make_unique<ParticleManager>();
 };
 
 Renderer::~Renderer()
@@ -100,16 +100,28 @@ void Renderer::normalPass(MapForRendering& aMap)
             brick->draw(modelShader, transforms);
         }
     }
-
+	// render running particle system
+	try {
+		mParticleManager->draw(projection, view);
+	} catch (CustomException &ex) {
+		std::cout << ex.what() << std::endl;
+		exit(42);
+	}
     // render skybox
     view = glm::mat4(glm::mat3(mCamera.getViewMatrix()));
     skyboxShader->use();
     skyboxShader->setMat4("view", view);
     skyboxShader->setMat4("projection", projection);
     skybox->draw(skyboxShader);
+
 }
 
 Camera &Renderer::getCamera()
 {
     return mCamera;
+}
+
+ParticleManager *Renderer::getParticleManager()
+{
+	return mParticleManager.get();
 }

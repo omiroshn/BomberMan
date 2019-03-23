@@ -9,7 +9,10 @@
 #include <SDL.h>
 #include "CustomException.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
+#include "ResourceManagement/ParticleManager.hpp"
 #include "Camera.hpp"
+
+typedef std::unique_ptr<ParticleManager> ptrPM;
 
 enum class ModelType
 {
@@ -38,11 +41,16 @@ public:
     Renderer(Renderer const &) = delete;
     Renderer &operator=(Renderer const &) = delete;
     Camera &getCamera();
+	ParticleManager *getParticleManager();
     void updateSize(int x, int y);
+
 private:
     void normalPass(MapForRendering&);
     Camera mCamera;
     int mWidth, mHeight;
+	ptrPM mParticleManager;
+
+
 
 };
 

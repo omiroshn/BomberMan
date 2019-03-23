@@ -35,12 +35,20 @@ set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++14")
+
+if (APPLE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework OpenCL -framework OpenGL")
+else()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -l OpenCL")
+endif()
+
 find_package(OpenGL REQUIRED)
+find_package(OpenCL REQUIRED)
 
 add_subdirectory(src)
 add_subdirectory(inc)
 
-set(BOMBERMAN_SOURCES 
+set(BOMBERMAN_SOURCES
   ${BOMBERMAN_LOCAL_SOURCES}
   ${BOMBERMAN_LOCAL_INCLUDES})
 
@@ -54,6 +62,7 @@ set(BOMBERMAN_LIBS
   ${ASSIMP_LIBRARY}
   ${GLEW_LIBRARIES}
   ${IMGUI_LIBRARY}
+  ${OPENCL_LIBRARY}
 )
 
 set(BOMBERMAN_INCLUDES
@@ -64,6 +73,7 @@ set(BOMBERMAN_INCLUDES
   ${ASSIMP_INCLUDE_DIR}
   ${GLEW_INCLUDE_DIRS}
   ${IMGUI_INCLUDE_DIRS}
+  ${OPENCL_INCLUDE_DIR}
 )
 
 include_directories(${BOMBERMAN_INCLUDES})
