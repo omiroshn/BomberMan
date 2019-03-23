@@ -2,13 +2,20 @@
 #include "ResourceManagement/ResourceManager.hpp"
 #include "ResourceManagement/Model.hpp"
 #include "Core.hpp"
-#include "LogicCore/MovingEntity.h"
+#include "Entity/MovingEntity.h"
 #include <tuple>
-#include "AI/Brains.h"
+#include "AI/AIController.h"
 
 Uint64 Game::mTimeNow;
 Uint64 Game::mTimeLast;
 float  Game::mDeltaTime;
+
+namespace
+{
+    int const cDefaultScreenWidth = 640;
+    int const cDefaultScreenHeight = 480;
+    std::string const cWindowName = "Bomberman";
+}
 
 Game::Game() : mIsRunning(true)
 {
@@ -226,11 +233,19 @@ void Game::loadResources()
 			basicCube = glm::translate(basicCube, -c->getAABB().getCenter());
             d->transform(basicCube);
         }
-		mRenderer->getParticleManager()->init();
+        {
+            auto Model = RESOURCES.loadModel("balloon/balloon.obj", "balloon");
+            glm::mat4 modelMatrix = glm::mat4(1.0f);
+            auto scale_factorY = 200;
+            modelMatrix = glm::scale(modelMatrix,  glm::vec3(1.f / scale_factorY));
+			modelMatrix = glm::translate(modelMatrix, glm::vec3(0,-280,0));
+			modelMatrix = glm::translate(modelMatrix, -c->getAABB().getCenter());
+            Model->transform(modelMatrix);
+        }
     }
-    catch (CustomException &what)
+    catch (CustomException &e)
     {
-        std::cout << what.text << std::endl;
+        std::cout << e.what() << std::endl;
         exit(42);
     }
 }

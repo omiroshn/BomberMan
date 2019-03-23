@@ -4,7 +4,7 @@
 
 #include <LogicCore/SquareInstance.h>
 #include <vector>
-#include "MovingEntity.h"
+#include "Entity/MovingEntity.h"
 
 class MapForRendering
 {

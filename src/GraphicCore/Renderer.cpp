@@ -35,7 +35,7 @@ void Renderer::normalPass(MapForRendering& aMap)
 
     auto brick = RESOURCES.getModel("brick");
     auto wall = RESOURCES.getModel("wall");
-    auto suite = RESOURCES.getModel("nanosuit");
+    auto suite = RESOURCES.getModel("balloon");
     auto ground = RESOURCES.getModel("ground");
     auto skybox = RESOURCES.getSkybox("defaultSkybox");
     auto modelShader = RESOURCES.getShader("modelShader");

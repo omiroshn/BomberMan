@@ -100,6 +100,7 @@ else ()
     set (PROJECTNAME_ARCHITECTURE "x86")
 endif ()
 
+if (!${MSVC})
 add_custom_command(TARGET bomberman PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E remove_directory
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Assets)
@@ -108,5 +109,6 @@ add_custom_command(TARGET bomberman PRE_BUILD
    COMMAND ${CMAKE_COMMAND} -E copy_directory
    ${CMAKE_CURRENT_SOURCE_DIR}/Assets
    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Assets)
+endif()
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bomberman)

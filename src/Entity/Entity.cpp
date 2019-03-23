@@ -1,5 +1,5 @@
 
-#include <LogicCore/Entity.h>
+#include <Entity/Entity.h>
 #include <glm/ext/matrix_transform.hpp>
 #include "imgui.h"
 

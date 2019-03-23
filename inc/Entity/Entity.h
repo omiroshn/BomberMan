@@ -17,10 +17,11 @@ public:
 
 	glm::vec2	getPosition() const;
 	glm::vec3	getPosition3D() const;
-	void		setPosition(glm::vec2 position);
-	float		getAngle() const;
-	void		setAngle(float angle);
 	glm::mat4	getModelMatrix()const;
+	float		getAngle() const;
+
+	void		setPosition(glm::vec2 position);
+	void		setAngle(float angle);
 
 	void		debug();
 
