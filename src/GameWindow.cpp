@@ -2,6 +2,7 @@
 #include "CustomException.hpp"
 #include <iostream>
 #include <GameWindow.hpp>
+#include "Core.hpp"
 
 GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
     mWidth(aWidth), mHeight(aHeight), mName(aWinName)
@@ -81,8 +82,11 @@ void GameWindow::initOpenGL()
 {
 	glewExperimental = true;
     GLenum err = glewInit();
-    if (err != GLEW_OK)
-        throw CustomException("Failed to initialize GLEW");
+	if (err != GLEW_OK)
+    {
+		BM_CAT_CRITICAL(Init, "%s", glewGetErrorString(err));
+        abort();
+    }
     glViewport(0, 0, mWidth, mHeight);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);

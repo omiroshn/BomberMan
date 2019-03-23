@@ -6,6 +6,10 @@
 #include <tuple>
 #include "AI/Brains.h"
 
+Uint64 Game::mTimeNow;
+Uint64 Game::mTimeLast;
+float  Game::mDeltaTime;
+
 Game::Game() : mIsRunning(true)
 {
 	mTimeNow = SDL_GetPerformanceCounter();
@@ -24,8 +28,6 @@ void Game::start()
 {
     MapLoader mapLoader;
     int width, height;
-
-	bm::Brains b;
 
     while (mIsRunning)
     {
