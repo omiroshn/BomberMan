@@ -13,6 +13,7 @@ public:
     ~Game();
     void start();
 	static float getCurrentTime();
+	static const CollisionInfo& getCollisionInfo();
 
 private:
 	void		resolveCollisions();
@@ -28,7 +29,7 @@ private:
     static Uint64                    mTimeLast;
     static float                     mDeltaTime;
 	MapForRendering					 mMap;
-	CollisionInfo					 mCollisionInfo;
+	static CollisionInfo			 mCollisionInfo;
     bool                             mIsRunning;
 
 	static float					sInputAcceleration;

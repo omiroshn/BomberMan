@@ -44,11 +44,10 @@ struct ChaseState : public State {};
 
 typedef SM<MovingEntity, IdleState, PatrolState> BalloonController;
 
-class AIController : public bm::Tickable
+namespace AIController 
 {
-public:
 	void addBalloon(MovingEntity&);
-private:
-	std::vector<BalloonController> mBalloonControllers;
-	virtual void tick(float DeltaTime) override;
+
+	extern std::vector<BalloonController> mBalloonControllers;
+	void tick(float DeltaTime);
 };

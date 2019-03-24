@@ -1,5 +1,6 @@
 #include "Core.hpp"
 #include <algorithm>
+#include "AI/AIController.h"
 
 namespace bm {
 	/** Logging stuff */
@@ -26,6 +27,7 @@ namespace bm {
 
 	void Tickable::tickTickables(float DeltaTime)
 	{
+		AIController::tick(DeltaTime);
 		for_each(sTickables.begin(), sTickables.end(), [DeltaTime](Tickable *element) {element->tick(DeltaTime);});
 	}
 	/** Tickable end */

@@ -12,7 +12,7 @@ MapLoader::~MapLoader()
 
 }
 
-SquareType CollisionInfo::operator[](glm::ivec2 coords)
+SquareType CollisionInfo::operator[](glm::ivec2 coords) const
 {
 	const unsigned index = coords.x + coords.y * width;
 	if (coords.x < 0 || coords.y < 0 || coords.x >= width || index >= Squares.size())
@@ -20,7 +20,7 @@ SquareType CollisionInfo::operator[](glm::ivec2 coords)
 	return Squares[index];
 }
 
-SquareType CollisionInfo::operator[](glm::vec2 coords)
+SquareType CollisionInfo::operator[](glm::vec2 coords) const
 {
 	return operator[](glm::ivec2(coords.x, coords.y));
 }
