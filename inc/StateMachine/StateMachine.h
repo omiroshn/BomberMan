@@ -49,6 +49,7 @@ private:
 	void init()
 	{
 		setStateIds<0, Ts...>();
+		dispatchEntry<0, Ts...>();
 	}
 
 	template <unsigned char N, typename T, typename... Args>
@@ -66,7 +67,7 @@ private:
 		if (m_CurrentState == N)
 			return std::get<N>(m_States).onEntry(m_Owner);
 		if constexpr (sizeof...(Args) > 0)
-			dispatchTick<N + 1, Args...>(DeltaTime);
+			dispatchEntry<N + 1, Args...>();
 	}
 
 	template<unsigned char N, typename T, typename... Args>
@@ -113,7 +114,7 @@ private:
 		if (Current != N && std::get<Current>(m_States).transition(StateToCheck))
 		{
 			m_CurrentState = N;
-			dispatchEntry();
+			dispatchEntry<0, Ts...>();
 			return;
 		}
 		if constexpr (sizeof...(Args) > 0)

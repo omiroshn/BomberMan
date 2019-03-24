@@ -35,7 +35,8 @@ void Renderer::normalPass(MapForRendering& aMap)
 
     auto brick = RESOURCES.getModel("brick");
     auto wall = RESOURCES.getModel("wall");
-    auto suite = RESOURCES.getModel("balloon");
+    auto suite = RESOURCES.getModel("nanosuit");
+    auto balloon = RESOURCES.getModel("balloon");
     auto ground = RESOURCES.getModel("ground");
     auto skybox = RESOURCES.getSkybox("defaultSkybox");
     auto modelShader = RESOURCES.getShader("modelShader");
@@ -67,6 +68,15 @@ void Renderer::normalPass(MapForRendering& aMap)
 		Hero.debug();
 		transforms.push_back(Hero.getModelMatrix());
 		suite->draw(modelShader, transforms);
+    }
+
+    transforms.clear();
+    // render balloons aka enemies
+    {
+		auto& Enemies = aMap.GetEnemies();
+		for (auto& It : Enemies)
+			transforms.push_back(It.getModelMatrix());
+		balloon->draw(modelShader, transforms);
     }
 
     transforms.clear();

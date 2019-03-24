@@ -6,9 +6,10 @@
 #include <tuple>
 #include "AI/AIController.h"
 
-Uint64 Game::mTimeNow;
-Uint64 Game::mTimeLast;
-float  Game::mDeltaTime;
+Uint64			Game::mTimeNow;
+Uint64			Game::mTimeLast;
+float			Game::mDeltaTime;
+CollisionInfo	Game::mCollisionInfo;
 
 namespace
 {
@@ -55,7 +56,7 @@ void Game::start()
 			ImGui::RadioButton("30", &index, 2);
 			if (index)
 			{
-				const float TargetDelta = 0.0167 * index;
+				const float TargetDelta = 0.0167f * index;
 				if (mDeltaTime < TargetDelta)
 					SDL_Delay((TargetDelta - mDeltaTime) * 1000.f);
 			}
@@ -67,6 +68,11 @@ void Game::start()
         {
             std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(-1);
             mMap.ParseMapBySquareInstances();
+			for (int i = 1; i < 4; i++)
+			{
+				auto& Balloon = mMap.GetEnemies().emplace_back(glm::vec2(7 + i, 1));
+				AIController::addBalloon(Balloon);
+			}
             mWindow->update();
         }
     }
@@ -75,6 +81,11 @@ void Game::start()
 float Game::getCurrentTime()
 {
 	return mTimeNow / static_cast<float>(SDL_GetPerformanceFrequency());
+}
+
+const CollisionInfo& Game::getCollisionInfo()
+{
+	return mCollisionInfo;
 }
 
 void Game::resolveCollisions()
@@ -170,6 +181,7 @@ void Game::calcDeltaTime()
     mTimeNow = SDL_GetPerformanceCounter();
 
 	mDeltaTime = (mTimeNow - mTimeLast) / static_cast<float>(SDL_GetPerformanceFrequency());
+	ImGui::Text("Current time: %f", getCurrentTime());
 	ImGui::Text("Delta time: %f", mDeltaTime);
 }
 
