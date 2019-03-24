@@ -51,10 +51,6 @@ void 		ParticleManager::init()
 void 		ParticleManager::initCLEngine()
 {
 	try {
-		//init CLEngine
-		m_CLE->defineDevice();
-		m_CLE->defineContext();
-
 		//set sources prorams and kernels for initialise Sphere by Points
 		m_CLE->addProgramSource("../Assets/kernel/init_sphere_by_points.cl", "initSpherePoints");
 		m_CLE->addProgramFromSource("initSpherePoints", "initSphereProgram");
