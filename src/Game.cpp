@@ -58,7 +58,7 @@ void Game::start()
 			{
 				const float TargetDelta = 0.0167f * index;
 				if (mDeltaTime < TargetDelta)
-					SDL_Delay((TargetDelta - mDeltaTime) * 1000.f);
+					SDL_Delay(static_cast<float>(TargetDelta - mDeltaTime) * 1000.f);
 			}
             mWindow->update();
             doAction(mIManager->processEvents(mWindow->getEvent()));
@@ -182,6 +182,8 @@ void Game::calcDeltaTime()
     mTimeNow = SDL_GetPerformanceCounter();
 
 	mDeltaTime = (mTimeNow - mTimeLast) / static_cast<float>(SDL_GetPerformanceFrequency());
+	if (mDeltaTime > 1.f)
+		mDeltaTime = 0.016f;
 	ImGui::Text("Current time: %f", getCurrentTime());
 	ImGui::Text("Delta time: %f", mDeltaTime);
 }
