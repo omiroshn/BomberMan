@@ -20,6 +20,16 @@ namespace bm
 
 	void SetLogLevels();
 
+    template <typename T>
+    const char* getTypeName()
+    {
+#if !defined(SHIPPING)
+        return typeid(T).name();
+#else
+        return "";
+#endif
+    }
+
 	class Tickable
 	{
 	public:

@@ -43,7 +43,7 @@ void Renderer::normalPass(MapForRendering& aMap)
     auto skyboxShader = RESOURCES.getShader("skybox");
 
     modelShader->use();
-    glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 2.1f, 90.0f);
     glm::mat4 view = mCamera.getViewMatrix();
 
     modelShader->setMat4("projection", projection);
