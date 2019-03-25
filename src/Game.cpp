@@ -255,6 +255,7 @@ void Game::loadResources()
 			modelMatrix = glm::translate(modelMatrix, -c->getAABB().getCenter());
             Model->transform(modelMatrix);
         }
+		mRenderer->getParticleManager()->init();
     }
     catch (CustomException &e)
     {
