@@ -81,9 +81,15 @@ namespace
 		result = getAvailableDirections(pawn);
 		if (result == EDirection::NONE)
 			return glm::vec2(0);
-		for (unsigned char i = 1; i <= 8; i <<= 1)
+		unsigned char i = 1 << (std::rand() & 3);
+		while (true)
+		{
+			if (i > 8)
+				i = 1;
 			if ((unsigned char)result & i)
 				return directionToVector((EDirection)((unsigned char)result & i));
+			i <<= 1;
+		}
 		return glm::vec2(0,1);
 	}
 }

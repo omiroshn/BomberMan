@@ -68,7 +68,8 @@ void Game::start()
         {
             std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(-1);
             mMap.ParseMapBySquareInstances();
-			for (int i = 1; i < 4; i++)
+			mMap.GetEnemies().reserve(10);
+			for (int i = 1; i <= 4; i++)
 			{
 				auto& Balloon = mMap.GetEnemies().emplace_back(glm::vec2(7 + i, 1));
 				AIController::addBalloon(Balloon);
