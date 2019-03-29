@@ -100,7 +100,7 @@ else ()
     set (PROJECTNAME_ARCHITECTURE "x86")
 endif ()
 
-if (!${MSVC})
+if (NOT (${MSVC} EQUAL 1))
 add_custom_command(TARGET bomberman PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E remove_directory
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Assets)

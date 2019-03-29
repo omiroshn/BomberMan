@@ -89,7 +89,7 @@ private:
 		if constexpr (sizeof...(Args) > 0)
 			return setStateImpl<T, N + 1, Args...>();
 		else
-			BM_CAT_CRITICAL(StateMachine, "setState<>() used with inapropriate state.");
+			BM_CRITICAL("setState<>() used with inapropriate state.");
 	}
 
 	template <unsigned char N, typename T, typename... Args>
