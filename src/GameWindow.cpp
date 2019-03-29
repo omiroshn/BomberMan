@@ -84,7 +84,7 @@ void GameWindow::initOpenGL()
     GLenum err = glewInit();
 	if (err != GLEW_OK)
     {
-		BM_CAT_CRITICAL(Init, "%s", glewGetErrorString(err));
+		BM_CRITICAL("%s", glewGetErrorString(err));
         abort();
     }
     glViewport(0, 0, mWidth, mHeight);
