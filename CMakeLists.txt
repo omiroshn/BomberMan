@@ -34,10 +34,10 @@ set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
 set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++14")
 
 if (APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework OpenCL -framework OpenGL")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++14")
 endif()
 
 find_package(OpenGL REQUIRED)
@@ -100,7 +100,11 @@ else ()
     set (PROJECTNAME_ARCHITECTURE "x86")
 endif ()
 
-if (NOT (${MSVC} EQUAL 1))
+if ($ENV{CLION_IDE})
+add_definitions(-DCLION_ASSETS=1)
+endif()
+if (DEFINED COPY_ASSETS)
+add_definitions(-DCOPY_ASSETS=1)
 add_custom_command(TARGET bomberman PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E remove_directory
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Assets)
