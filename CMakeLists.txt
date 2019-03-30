@@ -97,10 +97,21 @@ else ()
     set (PROJECTNAME_ARCHITECTURE "x86")
 endif ()
 
+<<<<<<< HEAD
 function(LINK_ASSETS TARGET_ARG SRC_ARG DIST_ARG )
   add_custom_command(TARGET ${TARGET_ARG} POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_ARG}/Assets" "${DIST_ARG}/Assets" DEPENDS "${DIST_ARG}")
 endfunction()
+=======
+if ($ENV{CLION_IDE})
+add_definitions(-DCLION_ASSETS=1)
+endif()
+if (DEFINED COPY_ASSETS)
+add_definitions(-DCOPY_ASSETS=1)
+add_custom_command(TARGET bomberman PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E remove_directory
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Assets)
+>>>>>>> the ultimate solution
 
 if ( MSVC )
   link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>")
