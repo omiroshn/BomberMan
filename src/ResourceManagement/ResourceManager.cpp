@@ -211,6 +211,11 @@ std::string const& ResourceManager::getBinFolder() const
     return mBinFolder;
 }
 
+std::string const &ResourceManager::getBinFolder() const
+{
+    return mBinFolder;
+}
+
 ResourceManager::ResourceManager()
 {
 

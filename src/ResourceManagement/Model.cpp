@@ -36,7 +36,6 @@ void Model::processNode(aiNode *node, const aiScene *scene)
     {
         processNode(node->mChildren[i], scene);
     }
-
 }
 
 void Model::processMesh(aiMesh *mesh, const aiScene *scene)
@@ -134,3 +133,8 @@ void Model::transform(glm::mat4 const & aTransform)
     mTransFormMatrix *= aTransform;
     mAABB = mAABB.transform(mTransFormMatrix);
 }
+
+Joint Model::getRootJoint()
+{
+    return Joint(0, "", glm::mat4());
+};
