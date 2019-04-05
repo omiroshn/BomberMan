@@ -116,21 +116,21 @@ void Game::doAction(Action const& a)
             mIsRunning = false;
             break;
         case Action::CameraRotate:
-            //float x,y;
-            //mIManager->getMouseOffset(x, y);
-            //mRenderer->getCamera().processMouseMovement(x, y);
+//            float x,y;
+//            mIManager->getMouseOffset(x, y);
+//            mRenderer->getCamera().processMouseMovement(x, y);
             break;
         case Action::Forward:
-            //mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
+//            mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
             break;
         case Action::Backward:
-            //mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime);
+//            mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime);
             break;
         case Action::Right:
-            //mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime);
+//            mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime);
             break;
         case Action::Left:
-            //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
+//            mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
             break;
         case Action::Up:
 			transforms.clear();
@@ -147,7 +147,7 @@ void Game::doAction(Action const& a)
 				std::cout << ex.what() << std::endl;
 				exit(42);
 			}
-            //mRenderer->getCamera().movaCamera(CameraDirection::UPWARD, mDeltaTime);
+//            mRenderer->getCamera().movaCamera(CameraDirection::UPWARD, mDeltaTime);
             break;
         case Action::Down:
 			transforms.clear();
@@ -247,6 +247,15 @@ void Game::loadResources()
 			modelMatrix = glm::translate(modelMatrix, glm::vec3(0,-280,0));
 			modelMatrix = glm::translate(modelMatrix, -c->getAABB().getCenter());
             Model->transform(modelMatrix);
+        }
+        auto z = RESOURCES.loadModel("runner/runner.dae", "runner");
+        {
+            glm::mat4 basicSuite = glm::mat4(1.0f);
+            auto  scale_factorY = (z->getAABB().getMax().y - z->getAABB().getMin().y);
+            basicSuite = glm::rotate(basicSuite, -3.14f / 2, glm::vec3(1.0f,0,0));
+            basicSuite = glm::scale(basicSuite, glm::vec3(3.0f / scale_factorY, 3.0f / scale_factorY, 3.0f / scale_factorY));
+            basicSuite = glm::translate(basicSuite, -z->getAABB().getCenter() - glm::vec3(5,0,0));
+            z->transform(basicSuite);
         }
 		mRenderer->getParticleManager()->init();
     }

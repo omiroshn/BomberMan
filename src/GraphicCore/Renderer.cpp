@@ -41,6 +41,7 @@ void Renderer::normalPass(MapForRendering& aMap)
     auto skybox = RESOURCES.getSkybox("defaultSkybox");
     auto modelShader = RESOURCES.getShader("modelShader");
     auto skyboxShader = RESOURCES.getShader("skybox");
+    auto runner = RESOURCES.getModel("runner");
 
     modelShader->use();
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 2.1f, 90.0f);
@@ -49,7 +50,7 @@ void Renderer::normalPass(MapForRendering& aMap)
     modelShader->setMat4("projection", projection);
     modelShader->setMat4("view", view);
     modelShader->setVec3("lightPos", mCamera.position());
-
+//
     std::vector<glm::mat4> transforms;
 
     // render the ground
@@ -67,7 +68,16 @@ void Renderer::normalPass(MapForRendering& aMap)
         auto& Hero = aMap.GetHero();
 		Hero.debug();
 		transforms.push_back(Hero.getModelMatrix());
-		suite->draw(modelShader, transforms);
+        runner->draw(modelShader, transforms);
+    }
+
+    transforms.clear();
+    // render the suite aka player
+    {
+        auto& Hero = aMap.GetHero();
+        Hero.debug();
+        transforms.push_back(Hero.getModelMatrix());
+        suite->draw(modelShader, transforms);
     }
 
     transforms.clear();
