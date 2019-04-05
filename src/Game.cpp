@@ -212,26 +212,18 @@ void Game::loadResources()
             basicSuite = glm::scale(basicSuite, glm::vec3(1.0f / scale_factorY, 1.0f / scale_factorY, 1.0f / scale_factorY));
 			basicSuite = glm::translate(basicSuite, -a->getAABB().getCenter());
             a->transform(basicSuite);
-//            std::cout << a->getAABB().getMin().x << " -- " << a->getAABB().getMin().y << " -- " << a->getAABB().getMin().z << std::endl;
-//			 std::cout << a->getAABB().getMax().x << " -- " << a->getAABB().getMax().y << " -- " << a->getAABB().getMax().z << std::endl;
-//            std::cout << a->getAABB().getCenter().x << " -- " << a->getAABB().getCenter().y << " -- " << a->getAABB().getCenter().z << std::endl << std::endl;
         }
         auto b = RESOURCES.loadModel("brick/brick.obj", "brick");
         {
-
             glm::mat4 basicCube = glm::mat4(1.0f);
             auto scale_factorY = 2.0f;
             basicCube = glm::scale(basicCube,  glm::vec3(1.f / scale_factorY));
 			basicCube = glm::translate(basicCube, -b->getAABB().getCenter());
             basicCube = glm::rotate(basicCube, glm::radians(-90.0f), glm::vec3(0,0,1));
             b->transform(basicCube);
-//            std::cout << b->getAABB().getMin().x << " -- " << b->getAABB().getMin().y << " -- " << b->getAABB().getMin().z << std::endl;
-//           std::cout << b->getAABB().getMax().x << " -- " << b->getAABB().getMax().y << " -- " << b->getAABB().getMax().z << std::endl;
-//            std::cout << b->getAABB().getCenter().x << " -- " << b->getAABB().getCenter().y << " -- " << b->getAABB().getCenter().z << std::endl;
         }
         auto c = RESOURCES.loadModel("ground/ground.obj", "ground");
         {
-
             glm::mat4 basicCube = glm::mat4(1.0f);
             auto scale_factorY = 2.0f;
             basicCube = glm::scale(basicCube,  glm::vec3(1.f / scale_factorY));

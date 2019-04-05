@@ -21,7 +21,7 @@ class ResourceManager
 public:
 	static ResourceManager   &getInstance();
 	void setBinFolder(std::string const& aPath);
-    std::string const& getBinFolder() const;
+	std::string const &getBinFolder() const;
 	std::shared_ptr<Shader>		loadShader(const GLchar *, const GLchar *, std::string const &);
 	std::shared_ptr<Shader>		getShader(std::string const &);
 	std::shared_ptr<Texture>	loadTexture(const GLchar *, std::string const &, std::string const &texType = "texture_diffuse");

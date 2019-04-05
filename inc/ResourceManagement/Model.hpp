@@ -22,7 +22,7 @@
 #include "ResourceManagement/Shader.hpp"
 #include "ResourceManagement/Texture.hpp"
 #include "Utilities/AABB.hpp"
-
+#include "Joint.hpp"
 
 class AABB;
 class Model 
@@ -33,7 +33,7 @@ public:
     void draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> & transforms);
     AABB getAABB() const;
     void transform(glm::mat4 const & aTransform);
-
+    Joint getRootJoint();
 private:
     void loadModel(std::string const &path);
     void processNode(aiNode *node, const aiScene *scene);
