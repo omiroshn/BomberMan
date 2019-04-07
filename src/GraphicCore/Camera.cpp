@@ -27,7 +27,7 @@ void Camera::followEntity(Entity &aTarget, float d)
     mPosition.x = aTarget.getPosition().x;
 	mPosition.y = d * 1.4f;
     mPosition.z = aTarget.getPosition().y + d;
-    mViewMatrix = glm::lookAt(mPosition, aTarget.getPosition3D(), mUp);
+//    mViewMatrix = glm::lookAt(mPosition, aTarget.getPosition3D(), mUp);
 }
 void Camera::applyTransform()
 {

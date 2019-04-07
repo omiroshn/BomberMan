@@ -22,30 +22,33 @@
 #include "ResourceManagement/Shader.hpp"
 #include "ResourceManagement/Texture.hpp"
 #include "Utilities/AABB.hpp"
-#include "Joint.hpp"
 
 class AABB;
 class Model 
 {
 public:
-    Model(std::string const &path, bool gamma = false);
+    Model(std::string const &path);
     ~Model();
     void draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> & transforms);
     AABB getAABB() const;
     void transform(glm::mat4 const & aTransform);
-    Joint getRootJoint();
+    void setAnimation(unsigned int animation, float timeInSeconds);
 private:
-    void loadModel(std::string const &path);
-    void processNode(aiNode *node, const aiScene *scene);
-    void processMesh(aiMesh *mesh, const aiScene *scene);
+    void loadModel(std::string const& path);
+    void processNode(aiNode const* node,  aiScene const* scene);
+    void processMesh(aiMesh const* mesh,  aiScene const* scene);
 
+    std::vector<Vertex> loadVertices(aiMesh const* mesh);
+    std::vector<unsigned int> loadIndices(aiMesh const* mesh);
+    std::vector<std::shared_ptr<Texture>> loadTextures(aiMesh const* mesh, aiScene const* scene);
     std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
 private:
     std::vector<std::unique_ptr<Mesh>> mMeshes;
-    std::string mDirectory;
-    bool mGammaCorrection;
-    AABB mAABB;
-    glm::mat4 mTransFormMatrix;
+    std::string         mDirectory;
+    AABB                mAABB;
+    glm::mat4           mTransFormMatrix;
+    bool                mAnimated;
+    Assimp::Importer    *mImporter;
 };
 
 #endif

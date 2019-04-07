@@ -31,6 +31,8 @@ void Renderer::draw(MapForRendering& aMap)
 
 void Renderer::normalPass(MapForRendering& aMap)
 {
+    static float fakeTime = 0.f;
+
     glViewport(0, 0, mWidth, mHeight);
 
     auto brick = RESOURCES.getModel("brick");
@@ -68,6 +70,7 @@ void Renderer::normalPass(MapForRendering& aMap)
         auto& Hero = aMap.GetHero();
 		Hero.debug();
 		transforms.push_back(Hero.getModelMatrix());
+        runner->setAnimation(1, fakeTime);
         runner->draw(modelShader, transforms);
     }
 
@@ -134,6 +137,7 @@ void Renderer::normalPass(MapForRendering& aMap)
     skyboxShader->setMat4("projection", projection);
     skybox->draw(skyboxShader);
 
+    fakeTime += 0.01;
 }
 
 Camera &Renderer::getCamera()
