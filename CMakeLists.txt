@@ -1,20 +1,12 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.13...3.14)
 
-project(bomberman)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+project(bomberman LANGUAGES CXX)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmakeModules)
-# set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "Root dir")
-
-# set(CP_CMAKE_DIR ${PROJECT_SOURCE_DIR}/cmakeModules)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib) # Setup linker libs
 
 add_subdirectory(3rdParty)
 
@@ -34,12 +26,6 @@ set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
 set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
 
-
-if (APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework OpenCL -framework OpenGL")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++14")
-endif()
-
 find_package(OpenGL REQUIRED)
 find_package(OpenCL REQUIRED)
 
@@ -48,14 +34,11 @@ message("OpenCL not found")
 return()
 endif()
 
-message("OpenCL found!")
-
 message("OPENCL LIB:")
 message( ${OpenCL_LIBRARIES} )
 
 message("OPENCL INCLUDE DIRS:")
 message(${OpenCL_INCLUDE_DIRS})
-
 
 add_subdirectory(src)
 add_subdirectory(inc)
@@ -64,9 +47,7 @@ set(BOMBERMAN_SOURCES
   ${BOMBERMAN_LOCAL_SOURCES}
   ${BOMBERMAN_LOCAL_INCLUDES})
 
-set(BOMBERMAN_INCLUDE_DIRS
-  inc
-)
+set(BOMBERMAN_INCLUDE_DIRS inc/)
 
 set(BOMBERMAN_LIBS
   ${OPENGL_LIBRARY}
@@ -74,25 +55,33 @@ set(BOMBERMAN_LIBS
   ${ASSIMP_LIBRARY}
   ${GLEW_LIBRARIES}
   ${IMGUI_LIBRARY}
-  ${OpenCL_LIBRARIES}
-)
+  ${OpenCL_LIBRARIES})
 
 set(BOMBERMAN_INCLUDES
   ${BOMBERMAN_INCLUDE_DIRS}
   ${GLM_INCLUDE_DIRS}
-  ${STB_INCLUDE_DIRS}
   ${SDL2_INCLUDE_DIR}
+  ${STB_INCLUDE_DIRS}
   ${ASSIMP_INCLUDE_DIR}
   ${GLEW_INCLUDE_DIRS}
   ${IMGUI_INCLUDE_DIRS}
-  ${OpenCL_INCLUDE_DIRS}
-)
-
-include_directories(${BOMBERMAN_INCLUDES})
+  ${OpenCL_INCLUDE_DIRS})
 
 add_executable(bomberman ${BOMBERMAN_SOURCES})
+set_target_properties(bomberman PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED YES
+	CXX_EXTENSIONS NO
+	USE_FOLDERS ON)
+target_include_directories(bomberman PRIVATE ${BOMBERMAN_INCLUDES})
+target_link_libraries (bomberman PRIVATE ${BOMBERMAN_LIBS})
 
-target_link_libraries (bomberman ${BOMBERMAN_LIBS})
+# if ( CMAKE_COMPILER_IS_GNUCC )
+#     target_compile_options(bomberman PRIVATE "-Wall -Wextra -Werror")
+# endif()
+# if ( MSVC )
+#     target_compile_options(bomberman PRIVATE "/W4")
+# endif()
 
 if (${CMAKE_SIZEOF_VOID_P} EQUAL "8")
     set (PROJECTNAME_ARCHITECTURE "x64")
@@ -100,19 +89,7 @@ else ()
     set (PROJECTNAME_ARCHITECTURE "x86")
 endif ()
 
-if ($ENV{CLION_IDE})
-add_definitions(-DCLION_ASSETS=1)
-endif()
-if (DEFINED COPY_ASSETS)
-add_definitions(-DCOPY_ASSETS=1)
 add_custom_command(TARGET bomberman PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E remove_directory
-        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Assets)
-
-add_custom_command(TARGET bomberman PRE_BUILD
-   COMMAND ${CMAKE_COMMAND} -E copy_directory
-   ${CMAKE_CURRENT_SOURCE_DIR}/Assets
-   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Assets)
-endif()
+   COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_SOURCE_DIR}/Assets" "${CMAKE_BINARY_DIR}/Assets" DEPENDS "${CMAKE_BINARY_DIR}")
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bomberman)
