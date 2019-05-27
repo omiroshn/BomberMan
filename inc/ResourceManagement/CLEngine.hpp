@@ -19,6 +19,7 @@
 #include <OpenCL/opencl.h>
 #include "cl.hpp"
 #else
+#include "GL/glew.h"
 #include <CL/cl.h>
 #include <CL/cl.hpp>
 //#include <GL/OpenGL.h>

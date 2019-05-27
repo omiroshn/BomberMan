@@ -28,7 +28,7 @@ void 		ParticleManager::init()
 	try {
 
 		initCLEngine();
-		initDefaultParticleInfo(POINT,"initSphereKernel", "updateSphereKernel","sprite_p", "", LIVE_TIME);
+		initDefaultParticleInfo(POINTCL,"initSphereKernel", "updateSphereKernel","sprite_p", "", LIVE_TIME);
 		initDefaultParticleInfo(QUAD,"initSphereKernelQuad", "updateSphereKernelQuad",
 														"sprite_quad", "flame-fire", LIVE_TIME);
 		initDefaultParticleInfo(QUAD_TMAP,"initSphereKernelQuadTMap", "updateSphereKernelQuadTMap",
@@ -37,7 +37,7 @@ void 		ParticleManager::init()
 														"sprite_quad_brick", "container", LIVE_TIME);
 		initDefaultParticleInfo(CLOUD,"initCloudKernel", "updateCloudKernel",
 																"sprite_quad_cloud", "cloud_trans", LIVE_TIME_CLOUD);
-		addParticleSystem("pointSphereBomb", POINT);
+		addParticleSystem("pointSphereBomb", POINTCL);
 		addParticleSystem("quadSphereBomb", QUAD);
 		addParticleSystem("quadSphereBombTMap", QUAD_TMAP);
 		addParticleSystem("BrickBlock", BRICK);

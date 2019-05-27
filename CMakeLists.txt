@@ -89,7 +89,22 @@ else ()
     set (PROJECTNAME_ARCHITECTURE "x86")
 endif ()
 
-add_custom_command(TARGET bomberman PRE_BUILD
-   COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_SOURCE_DIR}/Assets" "${CMAKE_BINARY_DIR}/Assets" DEPENDS "${CMAKE_BINARY_DIR}")
+
+
+
+function(LINK_ASSETS TARGET_ARG SRC_ARG DIST_ARG )
+  add_custom_command(TARGET ${TARGET_ARG} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_ARG}/Assets" "${DIST_ARG}/Assets" DEPENDS "${DIST_ARG}")
+endfunction()
+
+if ( MSVC )
+  link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+else()
+  link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_BINARY_DIR}")
+endif()
+
+
+
+
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bomberman)
