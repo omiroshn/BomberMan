@@ -203,13 +203,12 @@ std::shared_ptr<Skybox>		ResourceManager::getSkybox(std::string const &name)
 
 void ResourceManager::setBinFolder(std::string const &aPath)
 {
-#if defined (COPY_ASSETS)
-    mBinFolder = aPath + "./Assets/";
-#elif defined(CLION_ASSETS)
-    mBinFolder = "../../Assets/";
-#else
-    mBinFolder = "../Assets/";
-#endif
+    mBinFolder = aPath + "/Assets/";
+}
+
+std::string const& ResourceManager::getBinFolder() const
+{
+    return mBinFolder;
 }
 
 ResourceManager::ResourceManager()

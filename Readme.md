@@ -13,11 +13,18 @@ Frameworks and technologies used:
 
 How to build:
 ```
-git clone --recursive https://github.com/omiroshn/BomberMan.git
+git clone https://github.com/omiroshn/BomberMan.git
 cd Bombeman
 mkdir build
 cd build
 cmake ..
-make
+make [-j[number_cores]]
 ```
+
+
+```
+On Windows open bomberman.sln from VS with admin rights.
+(otherwise CMake will not be able to create a symbolic link. =\ )
+```
+
 (The execution file will be in the "bin" folder)

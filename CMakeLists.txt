@@ -26,8 +26,8 @@ set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
 set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
 
-find_package(OpenGL REQUIRED)
-find_package(OpenCL REQUIRED)
+find_package(OpenGL 3.0 REQUIRED)
+find_package(OpenCL 1.2 REQUIRED)
 
 if (!${OpenCL_FOUND})
 message("OpenCL not found")
@@ -67,6 +67,9 @@ set(BOMBERMAN_INCLUDES
   ${IMGUI_INCLUDE_DIRS}
   ${OpenCL_INCLUDE_DIRS})
 
+source_group("Source Files" FILES ${BOMBERMAN_LOCAL_SOURCES})
+source_group("Header File" FILES ${BOMBERMAN_LOCAL_INCLUDES})
+
 add_executable(bomberman ${BOMBERMAN_SOURCES})
 set_target_properties(bomberman PROPERTIES
     CXX_STANDARD 17
@@ -89,22 +92,15 @@ else ()
     set (PROJECTNAME_ARCHITECTURE "x86")
 endif ()
 
-
-
-
 function(LINK_ASSETS TARGET_ARG SRC_ARG DIST_ARG )
-  add_custom_command(TARGET ${TARGET_ARG} PRE_BUILD
+  add_custom_command(TARGET ${TARGET_ARG} POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_ARG}/Assets" "${DIST_ARG}/Assets" DEPENDS "${DIST_ARG}")
 endfunction()
 
 if ( MSVC )
-  link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+  link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>")
 else()
-  link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_BINARY_DIR}")
+  link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 endif()
-
-
-
-
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bomberman)
