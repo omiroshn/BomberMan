@@ -22,7 +22,7 @@
 
 typedef enum 	ParticleSystemType
 {
-	POINT,
+	POINTCL,
   	QUAD,
 	QUAD_TMAP,
 	BRICK,

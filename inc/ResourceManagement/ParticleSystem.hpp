@@ -13,8 +13,8 @@
 #ifndef PARTICLE_SYSTEM_HPP
 #define PARTICLE_SYSTEM_HPP
 
-#include "CLEngine.hpp"
 #include "Shader.hpp"
+#include "CLEngine.hpp"
 #include "CustomException.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
 #include <chrono>
