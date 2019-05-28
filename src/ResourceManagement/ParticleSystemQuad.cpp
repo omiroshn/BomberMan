@@ -14,7 +14,7 @@
 
 ParticleSystemQuad::ParticleSystemQuad()
 {
-	setParticleCount(20000);
+	setParticleCount(10000);
 }
 
 ParticleSystemQuad::~ParticleSystemQuad()
@@ -39,11 +39,8 @@ void 		ParticleSystemQuad::createGLBufers()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(QuadParticle), (GLvoid*)0);
 
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(QuadParticle), (GLvoid*)(8* sizeof(GLfloat)));
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(QuadParticle), (GLvoid*)(12* sizeof(GLfloat)));
-
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(QuadParticle), (GLvoid*)(4* sizeof(GLfloat)));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 

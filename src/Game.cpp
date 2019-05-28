@@ -142,9 +142,7 @@ void Game::doAction(Action const& a)
 			try {
 			//mRenderer->getParticleManager()->startDrawPS("pointSphereBomb", transforms);
 				mRenderer->getParticleManager()->startDrawPS("Cloud", transforms);
-			//mRenderer->getParticleManager()->startDrawPS("quadSphereBombTMap", transforms);
-			//	mRenderer->getParticleManager()->startDrawPS("BrickBlock", transforms);
-
+				//mRenderer->getParticleManager()->startDrawPS("quadSphereBombTMap", transforms);
 			} catch (CustomException &ex) {
 				std::cout << ex.what() << std::endl;
 				exit(42);
@@ -197,6 +195,7 @@ void Game::loadResources()
         RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");
 		RESOURCES.loadShader("sprite_p.vx.glsl", "sprite_p.ft.glsl", "sprite_p");
 		RESOURCES.loadShader("sprite_quad.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad");
+		RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
 		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
         RESOURCES.loadTexture("block.png", "block");
         RESOURCES.loadTexture("container.jpg", "container");

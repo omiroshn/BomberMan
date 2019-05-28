@@ -1,7 +1,7 @@
-#define GAME_QUAD_SIZE	1.5f
+#define GAME_QUAD_SIZE	0.5f
 #define SPHERE_RADIUS	GAME_QUAD_SIZE / 3
-#define MIN_SPHERE_RADIUS SPHERE_RADIUS *0.65f
-#define QUAD_SIZE	 SPHERE_RADIUS
+#define MIN_SPHERE_RADIUS SPHERE_RADIUS * 0.65f
+#define QUAD_SIZE	 SPHERE_RADIUS * 2
 
 #define T_MAP_STEP_X	(float)0.25
 #define T_MAP_STEP_Y	(float)0.25
@@ -19,23 +19,8 @@ typedef float2 textCoord;
 typedef struct
 {
 	float4	position;
-	float4	velocity;
-	float4	color;
-}			Particle;
-
-typedef struct
-{
-	float4	position;
-	float4	velocity;
-	float4	color;
 	float2  uv;
 }			QuadParticle;
-
-void initiatePointColorVelocity(global QuadParticle * particle)
-{
-	particle->color = WHITE;
-	particle->velocity = NULITY;
-}
 
 void kernel initialize_sphere(global QuadParticle * particles, int particleCount)
 {
@@ -77,7 +62,6 @@ void kernel initialize_sphere(global QuadParticle * particles, int particleCount
 	position->z = radius * sin(delta.x * y + offset.x) * cos(delta.y * x + offset.y)/ 3.f;
 	position->w = 0.0f;
 
-	initiatePointColorVelocity(particle_0);
 	particle_0->uv = U1;
 
 	float dist = length(*position);
@@ -91,22 +75,17 @@ void kernel initialize_sphere(global QuadParticle * particles, int particleCount
 	float4 tangent_2_norm = length(tangent_2) > MIN_SPHERE_RADIUS ?  normalize(tangent_2) : Y;
 
 	particle_1->position = *position + tangent_1_norm * QUAD_SIZE;
-	initiatePointColorVelocity(particle_1);
 	particle_1->uv = U2;
 
 	particle_3->position = *position + tangent_1_norm * QUAD_SIZE;
-	initiatePointColorVelocity(particle_3);
 	particle_3->uv = U2;
 
 	particle_2->position = *position + tangent_2_norm * QUAD_SIZE;
-	initiatePointColorVelocity(particle_2);
 	particle_2->uv = U3;
 
 	particle_5->position = *position + tangent_2_norm * QUAD_SIZE;
-	initiatePointColorVelocity(particle_5);
 	particle_5->uv = U3;
 
 	particle_4->position = *position +  tangent_1_norm * QUAD_SIZE + tangent_2_norm * QUAD_SIZE;
-	initiatePointColorVelocity(particle_4);
 	particle_4->uv = U4;
 }

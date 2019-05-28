@@ -25,8 +25,6 @@
 struct Particle
 {
 	cl_float4	position;
-	cl_float4	velocity;
-	cl_float4	color;
 };
 
 struct QuadParticle : Particle
