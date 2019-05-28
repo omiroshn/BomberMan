@@ -1,4 +1,4 @@
-#define GAME_QUAD_SIZE	1.5f
+#define GAME_QUAD_SIZE	1.0f
 #define LIVE_TIME	2.0f
 #define TEXTURE_COUNT 16
 #define TIME_FOR_TEXTURE	LIVE_TIME / TEXTURE_COUNT
@@ -18,21 +18,13 @@
 typedef struct
 {
 	float4	position;
-	float4	velocity;
-	float4	color;
-}			Particle;
-
-typedef struct
-{
-	float4	position;
-	float4	velocity;
-	float4	color;
 	float2  uv;
 }			QuadParticle;
 
 typedef float2 textCoord;
 
 void kernel update_sphere(global QuadParticle * particles, float deltaTime) {
+
 	int		i = get_global_id(0);
 
 	uint 	quadPoint = i % 6;
@@ -50,7 +42,6 @@ void kernel update_sphere(global QuadParticle * particles, float deltaTime) {
 		for (int j = 0; j < 6; ++j) {
 			global QuadParticle * particle= particles + i + j;
 			particle->position = INF;
-			particles->velocity = NULITY;
 		}
 		return;
 	}
@@ -66,33 +57,26 @@ void kernel update_sphere(global QuadParticle * particles, float deltaTime) {
 	float parDist_1 =  dist * DIV;
 	float squareParDist_1 = parDist_1 * parDist_1;
 
+	float4 velocity = particle_0->position /parDist_1;
+	velocity.x *= parDist_0;
+	velocity.z *= parDist_0;
 
 	if (parDist_0 > 0.27) {
-		particle_0->velocity.y = particle_0->velocity.y >= 0.0 ? particle_0->velocity.y + parDist_0 *  parDist_1  : -particle_0->velocity.y /5 + 0.5f * parDist_1;
+		velocity.y = velocity.y >= 0.0 ? velocity.y + parDist_0 *  parDist_1  : -velocity.y /5 + 0.5f * parDist_1;
 	} else {
-		particle_0->velocity.y = particle_0->velocity.y + parDist_0 *  parDist_1;
+		velocity.y = velocity.y + parDist_0 *  parDist_1;
 	}
 
-	particle_0->velocity = particle_0->position /parDist_1;
-	particle_0->velocity.x *= parDist_0;
-	particle_0->velocity.z *= parDist_0;
 
-	particle_0->color.x /= (1 +  0.02f *squareParDist_1);
-	particle_0->color.y /= (1 +  0.04f * squareParDist_1);
-	particle_0->color.z /= (1 +  0.04f * squareParDist_1);
-	particle_0->color.w /= (1 +  0.004f * squareParDist_1);
-	particle_0->position.xyz += particle_0->velocity.xyz * deltaTime;// * 1.5f;
+	particle_0->position.xyz += velocity.xyz * deltaTime;
 	particle_0->position.w += deltaTime;
 	particle_0->uv = U1;
 
 	float4 deltaPos = particle_0->position  - particle_0_start.position;
-	float4 deltaColor = particle_0->color - particle_0_start.color;
-
 
 	for (int j = 1; j < 6; ++j) {
 		global QuadParticle * particle= particles + i + j;
 		particle->position += deltaPos;
-		particle->color += deltaColor;
 		if (j == 1 || j == 3){
 			particle->uv = U2;
 		} else if (j == 2 || j == 5) {

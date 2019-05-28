@@ -34,7 +34,7 @@ void 		ParticleManager::init()
 		initDefaultParticleInfo(QUAD_TMAP,"initSphereKernelQuadTMap", "updateSphereKernelQuadTMap",
 														"sprite_quad", "explosion_tmap_2", LIVE_TIME);
 		initDefaultParticleInfo(BRICK,"initBrickBlockKernel", "updateBrickBlockKernel",
-														"sprite_quad", "container", LIVE_TIME);
+														"sprite_quad_brick", "container", LIVE_TIME);
 		initDefaultParticleInfo(CLOUD,"initCloudKernel", "updateCloudKernel",
 																"sprite_quad_cloud", "cloud_trans", LIVE_TIME_CLOUD);
 		addParticleSystem("pointSphereBomb", POINT);

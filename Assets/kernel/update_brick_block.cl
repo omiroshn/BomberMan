@@ -22,15 +22,6 @@
 typedef struct
 {
 	float4	position;
-	float4	velocity;
-	float4	color;
-}			Particle;
-
-typedef struct
-{
-	float4	position;
-	float4	velocity;
-	float4	color;
 	float2  uv;
 }			QuadParticle;
 
@@ -59,33 +50,30 @@ void kernel update_brick_block(global Brick * brick, float deltaTime)
 	float parDist_1 =  dist * DIV;
 	float squareParDist_1 = parDist_1 * parDist_1;
 
-	cornerParticle->velocity =   (cornerParticle->position) /parDist_1;//centerPosition/parDist_1;//
+
+	float4 velocity = (cornerParticle->position) /parDist_1;
+
 	if(cornerParticle->position.y > GAME_QUAD_SIZE / 2) {
-		cornerParticle->velocity.x *=  5 * parDist_0;
-		cornerParticle->velocity.z *=  5 * parDist_0;
+		velocity.x *=  5 * parDist_0;
+		velocity.z *=  5 * parDist_0;
 	} else {
-		cornerParticle->velocity.x = 0;
-		cornerParticle->velocity.z = 0;
-		cornerParticle->velocity.y *= 4;
+		velocity.x = 0;
+		velocity.z = 0;
+		velocity.y *= 4;
 	}
 	if (parDist_0 > 0.27) {
-		cornerParticle->velocity.y = cornerParticle->velocity.y >= 0.0 ? cornerParticle->velocity.y + parDist_0 *  parDist_1  : -cornerParticle->velocity.y /5 + 0.5f * parDist_1;
+		velocity.y = velocity.y >= 0.0 ? velocity.y + parDist_0 *  parDist_1  : -velocity.y /5 + 0.5f * parDist_1;
 	} else {
-		cornerParticle->velocity.y = cornerParticle->velocity.y + parDist_0 *  parDist_1;
+		velocity.y = velocity.y + parDist_0 *  parDist_1;
 	}
 
-	cornerParticle->color.x /= (1 +  0.02f * squareParDist_1);
-	cornerParticle->color.y /= (1 +  0.04f * squareParDist_1);
-	cornerParticle->color.z /= (1 +  0.04f * squareParDist_1);
-	cornerParticle->color.w /= (1 +  0.01f * squareParDist_1);
-	cornerParticle->position.xyz += cornerParticle->velocity.xyz * deltaTime;
+	cornerParticle->position.w += deltaTime;
+	cornerParticle->position.xyz += velocity.xyz * deltaTime;
 
 	float4 deltaPos = cornerParticle->position  - start.position;
-	float4 deltaColor = cornerParticle->color - start.color;
 
 	for (int j = 1; j < 36; ++j) {
 		global QuadParticle * particle= cornerParticle + j;
 		particle->position += deltaPos;
-		particle->color += deltaColor;
 	}
 }

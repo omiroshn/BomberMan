@@ -22,15 +22,6 @@
 typedef struct
 {
 	float4	position;
-	float4	velocity;
-	float4	color;
-}			Particle;
-
-typedef struct
-{
-	float4	position;
-	float4	velocity;
-	float4	color;
 	float2  uv;
 }			QuadParticle;
 
@@ -44,16 +35,10 @@ typedef  struct
  	Quad 	quad[6];
 }			Brick;
 
-void initiatePointColorVelocity(global QuadParticle * particle)
-{
-	particle->color = BRICK_COLOR;
-	particle->velocity = NULITY;
-}
 
 void initQuad(global Quad * quad, float4 position, int quadIndex)
 {
 	for (int i = 0; i < 6; ++i) {
-		initiatePointColorVelocity(&quad->particle[i]);
 		quad->particle[i].position = position;
 		if (i == 0) {
 			quad->particle[i].uv = U_1;
