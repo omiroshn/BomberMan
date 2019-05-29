@@ -1,5 +1,5 @@
 #define GAME_QUAD_SIZE	1.0f
-#define MAX_SPHERE_RADIUS GAME_QUAD_SIZE //* 0.9
+#define MAX_SPHERE_RADIUS GAME_QUAD_SIZE
 #define INF	(float4)(10000.0f, 10000.0f, 10000.0f, 1.0f)
 #define NULITY	(float4)(0.0f, 0.0f, 0.0f, 0.0f)
 
@@ -49,8 +49,8 @@ void kernel update_sphere(global QuadParticle * particles, float deltaTime) {
 		velocity.y = velocity.y + parDist_0 * parDist_1;
 	}
 
-	particle_0->position.xyz += velocity.xyz * deltaTime ;
-	particle_0->position.w += deltaTime;//+=  0.02f * squareParDist_1; //+= deltaTime;
+	particle_0->position.xyz += velocity.xyz * deltaTime * 0.65f;
+	particle_0->position.w += deltaTime;
 	float4 deltaPos = particle_0->position  - particle_0_start.position;
 
 	for (int j = 1; j < 6; ++j) {

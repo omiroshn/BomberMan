@@ -143,31 +143,16 @@ void 			ParticleManager::startDrawPS(std::string const & name, std::vector<glm::
 
 void 			ParticleManager::draw(glm::mat4 const & projection, glm::mat4 const & view)
 {
-	//auto start = std::chrono::high_resolution_clock::now();
 	for (auto & element : m_particleSystemMap) {
-		//std::cout << "try draw element: " << element.first<<std::endl;
 		auto & ps = element.second;
 		if (ps->chekLiveTime()){
-			// std::cout << "draw element: " << element.first<<std::endl;
-			// auto start1 = std::chrono::high_resolution_clock::now();
 			ps->updateGLBufers(ps->getUpdateKernelName());
-			// auto end1 = std::chrono::high_resolution_clock::now();
-		   // std::chrono::duration<double> diff1 = end1-start1;
-	  //std::cout << "updateGLContent: "<<diff1.count()<<std::endl;
 			auto trans = m_transformsMap.find(element.first);
 			if (trans != m_transformsMap.end()){
-				auto start = std::chrono::high_resolution_clock::now();
 				ps->drawGLContent(projection, view, trans->second);
-			// 	 auto end = std::chrono::high_resolution_clock::now();
-			// 	std::chrono::duration<double> diff = end-start;
-		   // std::cout << "drawGLContent: "<<diff.count()<<std::endl;
 			} else {
 				throw CustomException(element.first + " ParticleSystem transforms is not found");
 			}
 		}
 	}
-
-	// auto end = std::chrono::high_resolution_clock::now();
-	// std::chrono::duration<double> diff = end-start;
-    // std::cout << "draw function: " << diff.count()<<std::endl;
 }

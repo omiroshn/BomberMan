@@ -19,7 +19,7 @@
 #include "ResourceManagement/ResourceManager.hpp"
 #include <chrono>
 
-# define LIVE_TIME 2.0f
+# define LIVE_TIME 1.0f
 # define LIVE_TIME_CLOUD 2000000.0f
 
 struct Particle
