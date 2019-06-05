@@ -19,6 +19,6 @@
 [submodule "3rdParty/stb"]
 	path = 3rdParty/stb
 	url = https://github.com/nothings/stb.git
-[submodule "3rdParty/cotire"]
-	path = 3rdParty/cotire
-	url = https://github.com/sakra/cotire.git
+[submodule "3rdParty/libzip"]
+	path = 3rdParty/libzip
+	url = https://github.com/nih-at/libzip.git
