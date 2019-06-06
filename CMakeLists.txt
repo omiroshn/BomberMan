@@ -26,6 +26,12 @@ set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
 set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
 
+set ( LIBZIP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/libzip/lib ${CMAKE_CURRENT_BINARY_DIR}/3rdParty/libzip/)
+set ( LIBZIP_LIBRARY zip )
+target_compile_definitions(zip PRIVATE "-DO_CLOEXEC")
+target_compile_definitions("-DS_ISREG(m)=(((m) & S_IFMT) == S_IFREG)")
+#define S_ISREG( m ) (((m) & S_IFMT) == S_IFREG)
+
 find_package(OpenGL 3.0 REQUIRED)
 find_package(OpenCL 1.2 REQUIRED)
 
@@ -55,7 +61,8 @@ set(BOMBERMAN_LIBS
   ${ASSIMP_LIBRARY}
   ${GLEW_LIBRARIES}
   ${IMGUI_LIBRARY}
-  ${OpenCL_LIBRARIES})
+  ${OpenCL_LIBRARIES}
+  ${LIBZIP_LIBRARY})
 
 set(BOMBERMAN_INCLUDES
   ${BOMBERMAN_INCLUDE_DIRS}
@@ -65,7 +72,8 @@ set(BOMBERMAN_INCLUDES
   ${ASSIMP_INCLUDE_DIR}
   ${GLEW_INCLUDE_DIRS}
   ${IMGUI_INCLUDE_DIRS}
-  ${OpenCL_INCLUDE_DIRS})
+  ${OpenCL_INCLUDE_DIRS}
+  ${LIBZIP_INCLUDE_DIRS})
 
 source_group("Source Files" FILES ${BOMBERMAN_LOCAL_SOURCES})
 source_group("Header File" FILES ${BOMBERMAN_LOCAL_INCLUDES})

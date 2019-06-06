@@ -41,9 +41,6 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/3rdParty/libzip/CMakeLists.txt")
     message(FATAL_ERROR "libzip submodule was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
-## LIBZIP
-add_subdirectory(libzip)
-
 ## SDL2
 set( SDL_STATIC OFF CACHE BOOL "Build the static SDL library" )
 set( SDL_SHARED ON CACHE BOOL "Build the shared SDL library" )
@@ -200,3 +197,6 @@ add_subdirectory( assimp )
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/imgui/)
 add_library (imgui STATIC ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_demo.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_draw.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_widgets.cpp)
+
+## LIBZIP
+add_subdirectory(libzip)
