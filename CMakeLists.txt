@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.13...3.14)
 
 project(bomberman LANGUAGES CXX)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmakeModules)
-
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -26,18 +24,12 @@ set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
 set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
 
-set ( LIBZIP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/libzip/lib ${CMAKE_CURRENT_BINARY_DIR}/3rdParty/libzip/)
-set ( LIBZIP_LIBRARY zip )
-target_compile_definitions(zip PRIVATE "-DO_CLOEXEC")
-target_compile_definitions("-DS_ISREG(m)=(((m) & S_IFMT) == S_IFREG)")
-#define S_ISREG( m ) (((m) & S_IFMT) == S_IFREG)
-
 find_package(OpenGL 3.0 REQUIRED)
 find_package(OpenCL 1.2 REQUIRED)
 
 if (!${OpenCL_FOUND})
-message("OpenCL not found")
-return()
+	message("OpenCL not found")
+	return()
 endif()
 
 message("OPENCL LIB:")
@@ -84,6 +76,14 @@ set_target_properties(bomberman PROPERTIES
     CXX_STANDARD_REQUIRED YES
 	CXX_EXTENSIONS NO
 	USE_FOLDERS ON)
+
+if ( APPLE )
+	set ( LIBZIP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/libzip/lib ${CMAKE_CURRENT_BINARY_DIR}/3rdParty/libzip/)
+	set ( LIBZIP_LIBRARY zip )
+	target_compile_definitions(bomberman PRIVATE "-DLIBZIP_ENABLED")
+endif()
+target_compile_definitions(bomberman PRIVATE "-DCL_SILENCE_DEPRECATION")
+
 target_include_directories(bomberman PRIVATE ${BOMBERMAN_INCLUDES})
 target_link_libraries (bomberman PRIVATE ${BOMBERMAN_LIBS})
 
