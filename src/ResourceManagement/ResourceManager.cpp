@@ -5,6 +5,8 @@
 #include "ResourceManagement/Shader.hpp"
 #include "ResourceManagement/Model.hpp"
 #include "ResourceManagement/Skybox.hpp"
+#include "ResourceManagement/ZipHolder.hpp"
+
 #ifndef STB_IMAGE_IMPLEMENTATION
 # ifndef STBI_INCLUDE_STB_IMAGE_H
 #  define STB_IMAGE_IMPLEMENTATION
@@ -157,32 +159,10 @@ std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file
 
 std::shared_ptr<Skybox>		ResourceManager::loadSkybox(std::string const &aSkyboxName)
 {
-    //std::vector<unsigned char *> facesData;
-    //std::vector<std::pair<int, int>> textureSizes;
-    //int width, height, nrChannels;
-    //stbi_set_flip_vertically_on_load(true);
-    //for (unsigned int i = 0; i < cSkyboxFaces.size(); i++)
-    //{
-    //    std::string facePath(mBinFolder + "img/" + aSkyboxName + "/" + cSkyboxFaces[i]);
-    //    unsigned char *data = stbi_load(facePath.c_str(), &width, &height, &nrChannels, 0);
-    //    if (data)
-    //    {
-    //        facesData.push_back(data);
-    //        textureSizes.push_back(std::make_pair(width, height));
-    //        stbi_image_free(data);
-    //    }
-    //    else
-    //    {
-    //        throw CustomException("Skybox texture failed to load at path[" + std::string(facePath) + "]");
-    //        stbi_image_free(data);
-    //    }
-    //}
-
     std::shared_ptr<Skybox> skybox;
     try
     {
         skybox = std::make_shared<Skybox>();
-        //skybox->generate(facesData, textureSizes);
         skybox->mCubeMap = loadCubemap(aSkyboxName);
         mSkyboxes.emplace(aSkyboxName, skybox);
     }
@@ -203,12 +183,39 @@ std::shared_ptr<Skybox>		ResourceManager::getSkybox(std::string const &name)
 
 void ResourceManager::setBinFolder(std::string const &aPath)
 {
-    mBinFolder = aPath + "/Assets/";
+    mBinFolder = aPath + "Assets/";
 }
 
 std::string const& ResourceManager::getBinFolder() const
 {
     return mBinFolder;
+}
+
+void    ResourceManager::loadZip(std::string const &path)
+{
+    try {
+        mZH = std::make_unique<ZipHolder>(mBinFolder + path); //segfault on zipOpen
+    }
+    catch (CustomException const & c)
+    {
+        std::cerr << c.what() << std::endl;
+    }
+    catch (std::exception const &e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown error loading the archive" << std::endl;
+    }
+}
+
+void    ResourceManager::loadFileFromZip(std::string const & filePathInZip)
+{
+    if (!mZH)
+        throw CustomException("No archive loaded");
+    auto content = mZH->loadDataFromArchive(filePathInZip);
+    std::cout << content->mData << std::endl;
 }
 
 ResourceManager::ResourceManager()

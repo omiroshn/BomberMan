@@ -190,6 +190,8 @@ void Game::loadResources()
 {
     try
     {
+        RESOURCES.loadZip("Assets.res");
+        RESOURCES.loadFileFromZip("Assets/shader/sprite.ft.glsl");
         RESOURCES.loadShader("sprite.vx.glsl", "sprite.ft.glsl", "sprite");
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
         RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");

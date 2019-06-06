@@ -16,6 +16,7 @@ class Shader;
 class Texture;
 class Model;
 class Skybox;
+class ZipHolder;
 class ResourceManager
 {
 public:
@@ -32,6 +33,8 @@ public:
     std::shared_ptr<Skybox>		loadSkybox(std::string const &);
     std::shared_ptr<Skybox>		getSkybox(std::string const &);
     void						clear();
+    void						loadZip(std::string const &path);
+    void						loadFileFromZip(std::string const & filePathInZip);
 	ResourceManager(ResourceManager const &) = delete;
 	ResourceManager &operator=(ResourceManager const &) = delete;
 private:
@@ -47,6 +50,8 @@ private:
     std::map<std::string, std::shared_ptr<Skybox>>		mSkyboxes;
 
 	std::string mBinFolder;
+
+	std::unique_ptr<ZipHolder> mZH{nullptr};
 };
 
 

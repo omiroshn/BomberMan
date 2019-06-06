@@ -24,6 +24,12 @@ set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
 set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
 
+if ( APPLE )
+	set ( LIBZIP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/libzip/lib ${CMAKE_CURRENT_BINARY_DIR}/3rdParty/libzip/)
+	set ( LIBZIP_LIBRARY zip )
+	set ( LIBZIP_BUILD TRUE )
+endif()
+
 find_package(OpenGL 3.0 REQUIRED)
 find_package(OpenCL 1.2 REQUIRED)
 
@@ -77,11 +83,10 @@ set_target_properties(bomberman PROPERTIES
 	CXX_EXTENSIONS NO
 	USE_FOLDERS ON)
 
-if ( APPLE )
-	set ( LIBZIP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/libzip/lib ${CMAKE_CURRENT_BINARY_DIR}/3rdParty/libzip/)
-	set ( LIBZIP_LIBRARY zip )
+if ( LIBZIP_BUILD )
 	target_compile_definitions(bomberman PRIVATE "-DLIBZIP_ENABLED")
 endif()
+
 target_compile_definitions(bomberman PRIVATE "-DCL_SILENCE_DEPRECATION")
 
 target_include_directories(bomberman PRIVATE ${BOMBERMAN_INCLUDES})
