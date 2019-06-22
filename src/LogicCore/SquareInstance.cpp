@@ -2,7 +2,7 @@
 #include <LogicCore/SquareInstance.h>
 
 SquareInstance::SquareInstance(float x, float y, SquareType type) :
-	Entity(x, y),
+	Entity({x, y}),
 	mType(type)
 {
 

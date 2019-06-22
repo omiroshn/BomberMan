@@ -12,7 +12,6 @@ Entity::Entity(glm::vec2 position, float angle) :
 	mUid(sEntity_counter++)
 {}
 
-Entity::Entity(float x, float y, float angle) : Entity(glm::vec2(x,y), angle) {}
 
 Entity::~Entity() {}
 
@@ -40,7 +39,7 @@ void Entity::debug()
 {
 	ImGui::Text("Entity_%d:", mUid);
 	ImGui::DragFloat2("Position", &mPosition[0], 0.1f);
-	ImGui::SliderAngle("Angle", &mAngle);
+	ImGui::SliderAngle("Angle", &mAngle, -180, 180);
 }
 
 // left for compatibility reasons

@@ -83,8 +83,8 @@ void Renderer::normalPass(MapForRendering& aMap)
     // render balloons aka enemies
     {
 		auto& Enemies = aMap.GetEnemies();
-		for (auto& It : Enemies)
-			transforms.push_back(It.getModelMatrix());
+		for (auto It : Enemies)
+			transforms.push_back(It->getModelMatrix());
 		balloon->draw(modelShader, transforms);
     }
     transforms.clear();

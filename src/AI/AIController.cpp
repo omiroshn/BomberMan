@@ -2,8 +2,6 @@
 #include "AI/AIController.h"
 #include "Game.hpp"
 
-std::vector<BalloonController> AIController::mBalloonControllers;
-
 /** AI utility functions */
 namespace
 {
@@ -135,14 +133,3 @@ void PatrolState::onEntry(MovingEntity& Pawn, float DeltaTime /*= 0*/)
 /* Patrol state end */
 #endif
 
-
-void AIController::addBalloon(MovingEntity& Balloon)
-{
-	mBalloonControllers.emplace_back(Balloon);
-}
-
-void AIController::tick(float DeltaTime)
-{
-	for (auto& It : mBalloonControllers)
-		It.tick(DeltaTime);
-}

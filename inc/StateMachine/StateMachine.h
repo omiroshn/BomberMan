@@ -13,9 +13,10 @@ struct State
 	template<typename T>
 	void onTick(T& Owner, float DeltaTime) {};
 	template<typename T>
-	bool transition(const T&) { return false; }
-	template<typename T>
 	void onEntry(T& Owner) {}
+
+	template<typename T>
+	bool transition(const T&) { return false; }
 
 	void onEvent(const Event&) {}
 };
@@ -23,16 +24,15 @@ struct State
 template <typename OwnerType, typename... Ts>
 class SM {
 public:
-	SM(OwnerType& Owner, unsigned char InitialState = 0) :
-		m_Owner(Owner),
+	SM(unsigned char InitialState = 0) :
 		m_CurrentState(InitialState)
 	{
 		init();
 	}
 
-	void tick(float DeltaTime = 0) {
-		dispatchTransitions();
-		tickCurrentState(DeltaTime);
+	void tick(OwnerType& owner, float DeltaTime = 0) {
+		tickCurrentState(owner, DeltaTime);
+		dispatchTransitions(owner);
 	}
 
 	template <typename T>
@@ -43,31 +43,30 @@ public:
 
 private:
 	std::tuple<Ts...>	m_States;
-	OwnerType&			m_Owner;
-	unsigned char		m_CurrentState : 5;
+	unsigned char		m_CurrentState;
 
 	void init()
 	{
 		setStateIds<0, Ts...>();
-		dispatchEntry<0, Ts...>();
+		//dispatchEntry<0, Ts...>();
 	}
 
 	template <unsigned char N, typename T, typename... Args>
-	auto dispatchTick(float DeltaTime)
+	auto dispatchTick(OwnerType& owner, float DeltaTime)
 	{
 		if (m_CurrentState == N)
-			return std::get<N>(m_States).onTick(m_Owner, DeltaTime);
+			return std::get<N>(m_States).onTick(owner, DeltaTime);
 		if constexpr (sizeof...(Args) > 0)
-			dispatchTick<N + 1, Args...>(DeltaTime);
+			dispatchTick<N + 1, Args...>(owner, DeltaTime);
 	}
 
 	template <unsigned char N, typename T, typename... Args>
-	auto dispatchEntry()
+	auto dispatchEntry(OwnerType& owner)
 	{
 		if (m_CurrentState == N)
-			return std::get<N>(m_States).onEntry(m_Owner);
+			return std::get<N>(m_States).onEntry(owner);
 		if constexpr (sizeof...(Args) > 0)
-			dispatchEntry<N + 1, Args...>();
+			dispatchEntry<N + 1, Args...>(owner);
 	}
 
 	template<unsigned char N, typename T, typename... Args>
@@ -93,31 +92,31 @@ private:
 	}
 
 	template <unsigned char N, typename T, typename... Args>
-	auto dispatchTransitionsImpl()
+	auto dispatchTransitionsImpl(OwnerType& owner)
 	{
 		if (m_CurrentState == N)
-			return dispatchTransitionInner<N, 0, Ts...>();
+			return dispatchTransitionInner<N, 0, Ts...>(owner);
 		if constexpr (sizeof...(Args) > 0)
-			dispatchTransitionsImpl<N + 1, Args...>();
+			dispatchTransitionsImpl<N + 1, Args...>(owner);
 	}
 
-	void tickCurrentState(float DeltaTime) { dispatchTick<0, Ts...>(DeltaTime); }
+	void tickCurrentState(OwnerType& owner, float DeltaTime) { dispatchTick<0, Ts...>(owner, DeltaTime); }
 
-	void dispatchTransitions() {
-		dispatchTransitionsImpl<0, Ts...>();
+	void dispatchTransitions(OwnerType& owner) {
+		dispatchTransitionsImpl<0, Ts...>(owner);
 	}
 
 	template<unsigned char Current, unsigned char N, typename T, typename... Args>
-	auto dispatchTransitionInner()
+	auto dispatchTransitionInner(OwnerType& owner)
 	{
 		const auto &StateToCheck = std::get<N>(m_States);
 		if (Current != N && std::get<Current>(m_States).transition(StateToCheck))
 		{
 			m_CurrentState = N;
-			dispatchEntry<0, Ts...>();
+			dispatchEntry<0, Ts...>(owner);
 			return;
 		}
 		if constexpr (sizeof...(Args) > 0)
-			dispatchTransitionInner<Current, N + 1, Args...>();
+			dispatchTransitionInner<Current, N + 1, Args...>(owner);
 	}
 };

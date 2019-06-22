@@ -4,7 +4,6 @@
 
 /** Numbers are tweakable */
 float MovingEntity::_Friction = 17;
-float MovingEntity::_Drag = 19;
 float MovingEntity::_MaxVelocity = 4.f;
 float MovingEntity::_MaxAcceleration = 60.f;
 
@@ -61,7 +60,6 @@ void MovingEntity::debugMovement()
 {
 	ImGui::Text("MovableEntity setting:");
 	ImGui::SliderFloat("Friction", &_Friction, 0.5, 20);
-	ImGui::SliderFloat("Drag", &_Drag, 0.5, 20);
 	ImGui::SliderFloat("MaxVelocity", &_MaxVelocity, 0, 20);
 	ImGui::SliderFloat("MaxAcceleration", &_MaxAcceleration, 0, 150);
 }
@@ -110,9 +108,7 @@ void MovingEntity::tick(float DeltaTime)
 	const float velocityLength = glm::length(mVelocity);
 	if (velocityLength < 0.0001f)
 		mVelocity = glm::vec2(0.f);
-	const float accelerationLength = glm::length(mAcceleration);
-	if (accelerationLength < 0.0001f)
-		mAcceleration = glm::vec2(0.f);
+	mAcceleration = glm::vec2(0.f);
 }
 
 Animation const& MovingEntity::getAnimation() const
