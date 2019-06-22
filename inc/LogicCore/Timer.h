@@ -16,6 +16,7 @@
 #include <chrono>
 #include <iostream>
 
+template <typename... Ts>
 class Timer
 {
 private:
@@ -25,16 +26,42 @@ private:
 
 	bool toDelete;
 	bool usedEvent;
-	int number;
+	float number;
 
-	void (*event)(std::string time);
+	funcType event;
 public:
-	void Tick();
-	bool readyForDelete();
-	bool usedTheEvent();
 
-	Timer(void (*f)(std::string time), int seconds, bool everlasting);
-	virtual ~Timer();
-};
+	template <typename funcType>
+	Timer(float seconds, bool everlasting, funcType lambda) {
+		std::chrono::duration<int> chronoSeconds(seconds);
+		startTime = std::chrono::high_resolution_clock::now();
+		std::chrono::high_resolution_clock::time_point endTime = startTime + chronoSeconds;
+		duration = std::chrono::duration<float, std::ratio<1>>(0.0f);
+		endTimeDuration = endTime - startTime;
+		toDelete = everlasting == true ? false : true;
+		usedEvent = false;
+		event = lambda;
+		number = seconds;
+	}
+	
+	void Tick() {
+		duration = std::chrono::high_resolution_clock::now() - startTime;
+		if (duration.count() >= endTimeDuration.count()) {
+			// std::cout << "lul" << std::endl;
+			event(std::to_string(number));
+			usedEvent = true;
+		}
+	}
+
+	bool readyForDelete() {
+		return toDelete;
+	}
+
+	bool usedTheEvent() {
+		return usedEvent;
+	}
+
+	virtual ~Timer() {}
+}
 
 #endif
