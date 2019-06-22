@@ -43,11 +43,3 @@ struct PatrolState : public State {
 struct ChaseState : public State {};
 
 typedef SM<MovingEntity, IdleState, PatrolState> BalloonController;
-
-namespace AIController 
-{
-	void addBalloon(MovingEntity&);
-
-	extern std::vector<BalloonController> mBalloonControllers;
-	void tick(float DeltaTime);
-};

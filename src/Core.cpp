@@ -9,6 +9,7 @@ namespace bm {
 		for (LogCategory It = Default; It < MAX; (*((int*)&It))++)
 			SDL_LogSetPriority((int)It, SDL_LOG_PRIORITY_VERBOSE);
 	}
+}
 
 	/** Tickable start */
 	std::vector<Tickable *> Tickable::sTickables;
@@ -27,8 +28,6 @@ namespace bm {
 
 	void Tickable::tickTickables(float DeltaTime)
 	{
-		AIController::tick(DeltaTime);
 		for_each(sTickables.begin(), sTickables.end(), [DeltaTime](Tickable *element) {element->tick(DeltaTime);});
 	}
 	/** Tickable end */
-}

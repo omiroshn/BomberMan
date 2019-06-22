@@ -5,6 +5,7 @@
 #include <LogicCore/SquareInstance.h>
 #include <vector>
 #include "Entity/MovingEntity.h"
+#include "AI/AIController.h"
 
 class MapForRendering
 {
@@ -19,8 +20,10 @@ public:
 	std::vector<SquareInstance*> GetBonuses();
 	unsigned getWitdh();
 	unsigned getHeight();
+
 	bool     cleanMapForRendering();
-	std::vector<MovingEntity>& GetEnemies();
+	std::vector<MovingEntity*>& GetEnemies();
+	std::vector<BalloonController>& GetControllers();
 	MovingEntity& GetHero();
 
 	void ParseMapBySquareInstances();
@@ -36,8 +39,9 @@ private:
 	std::vector<SquareInstance*>	mBonuses;
 
 	std::vector<SquareType>			mCollisionMap;
-	std::vector<MovingEntity>		mEnemies;
-	MovingEntity					mHero;
+	std::vector<MovingEntity*>		mEnemies;
+	std::vector<BalloonController>	mControllers;
+	MovingEntity					*mHero;
 };
 
 #endif

@@ -30,18 +30,19 @@ namespace bm
 #endif
     }
 
-	class Tickable
-	{
-	public:
-		static void tickTickables(float DeltaTime);
-	protected:
-		Tickable();
-		~Tickable();
-	private:
-		static std::vector<Tickable *> sTickables;
-		virtual void tick(float DeltaTime) = 0;
-	};
 }
+
+class Tickable
+{
+public:
+	static void tickTickables(float DeltaTime);
+protected:
+	Tickable();
+	~Tickable();
+private:
+	static std::vector<Tickable *> sTickables;
+	virtual void tick(float DeltaTime) = 0;
+};
 
 /**
  *	A few macro for logging.

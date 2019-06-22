@@ -67,6 +67,11 @@ void Game::start()
         {
             if (mapLoader.MapIsLoaded() && !mReloadStage)
             {
+            if (ImGui::Button("Add balloon"))
+			{
+				mMap.GetEnemies().emplace_back(new MovingEntity(glm::vec2(7 + rand() % 20, 1)));
+				mMap.GetControllers().emplace_back();
+			}
                 MovingEntity::debugMovement();
                 updateHeroInput();
                 bm::Tickable::tickTickables(mDeltaTime);
@@ -93,16 +98,37 @@ void Game::start()
                 mCollisionInfo.Squares.clear();
                 std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
                 mMap.ParseMapBySquareInstances();
-                mMap.GetEnemies().reserve(10);
-                for (int i = 1; i <= 4; i++)
-                {
-                    auto& Balloon = mMap.GetEnemies().emplace_back(glm::vec2(7 + i, 1));
-                    AIController::addBalloon(Balloon);
-                }
                 mStageStartedTimer = getCurrentTime();
                 mReloadStage = 0;
             }
 
+
+            
+
+                
+			resolveCollisions();
+            mRenderer->draw(mMap);
+			static int index = 0;
+			ImGui::RadioButton("NO VSync", &index, 0);
+			ImGui::RadioButton("60", &index, 1);
+			ImGui::RadioButton("30", &index, 2);
+			if (index)
+			{
+				const float TargetDelta = 0.0167f * index;
+				if (mDeltaTime < TargetDelta)
+					SDL_Delay(TargetDelta - mDeltaTime * 1000);
+			}
+            mWindow->update();
+            doAction(mIManager->processEvents(mWindow->getEvent()));
+            mapLoader.UpdateMap();
+        }
+        else
+        {
+            auto t =  mapLoader.GetMap(-1);
+            mMap = std::get<0>(t);
+            mCollisionInfo = std::get<1>(t);
+            mMap.ParseMapBySquareInstances();
+            mWindow->update();
         }
         doAction(mIManager->processEvents(mWindow->getEvent()));
         mWindow->update();

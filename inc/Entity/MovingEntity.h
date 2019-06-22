@@ -3,7 +3,7 @@
 #include "Core.hpp"
 #include "ResourceManagement/Animation.h"
 
-class MovingEntity : public Entity, public bm::Tickable
+class MovingEntity : public Entity, public Tickable
 {
 public:
 	MovingEntity(glm::vec2 position = { 0,0 }, float angle = 0, glm::vec2 velocity = { 0,0 }, glm::vec2 acceleration = {0,0});
@@ -32,7 +32,6 @@ private:
 	glm::vec2 mVelocity;
 	glm::vec2 mAcceleration;
 	static float _Friction;
-	static float _Drag;
 	static float _MaxVelocity;
 	static float _MaxAcceleration;
     Animation    mAnimation;

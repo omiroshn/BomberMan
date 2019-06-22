@@ -2,7 +2,7 @@
 
 MapForRendering::MapForRendering(const std::vector<SquareInstance*>& map) :
 	mRawMap(map),
-	mHero(glm::vec2(1,1))
+	mHero(new MovingEntity(glm::vec2(1,1)))
 {
 
 }
@@ -61,12 +61,17 @@ bool   MapForRendering::cleanMapForRendering()
 
 MovingEntity& MapForRendering::GetHero()
 {
-	return mHero;
+	return *mHero;
 }
 
-std::vector<MovingEntity>& MapForRendering::GetEnemies()
+std::vector<MovingEntity*>& MapForRendering::GetEnemies()
 {
 	return mEnemies;
+}
+
+std::vector<BalloonController>& MapForRendering::GetControllers()
+{
+	return mControllers;
 }
 
 void MapForRendering::ParseMapBySquareInstances() {
