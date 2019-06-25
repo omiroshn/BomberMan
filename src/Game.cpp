@@ -121,16 +121,16 @@ void Game::doAction(Action const& a)
             mRenderer->getCamera().processMouseMovement(x, y);
             break;
         case Action::Forward:
-//            mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
+            //mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
             break;
         case Action::Backward:
-//            mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime);
+            //mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime);
             break;
         case Action::Right:
-//            mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime);
+            //mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime);
             break;
         case Action::Left:
-//            mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
+            //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
             break;
         case Action::Up:
 			transforms.clear();
@@ -205,7 +205,7 @@ void Game::loadResources()
 		RESOURCES.loadTexture("explode.png", "explosion_tmap_2");
         RESOURCES.loadSkybox("defaultSkybox");
 
-        auto a = RESOURCES.loadModel("nanosuit/nanosuit.obj", "nanosuit");
+        auto a = RESOURCES.loadModel("y_bot/y_bot.fbx", "bot");
         {
             glm::mat4 basicSuite = glm::mat4(1.0f);
             auto  scale_factorY = (a->getAABB().getMax().y - a->getAABB().getMin().y);
@@ -248,15 +248,6 @@ void Game::loadResources()
 			modelMatrix = glm::translate(modelMatrix, -c->getAABB().getCenter());
             Model->transform(modelMatrix);
         }
-        auto z = RESOURCES.loadModel("runner/untitled.fbx", "runner");
-        {
-            glm::mat4 basicSuite = glm::mat4(1.0f);
-            auto  scale_factorY = (z->getAABB().getMax().y - z->getAABB().getMin().y);
-//            basicSuite = glm::rotate(basicSuite, -3.14f / 2, glm::vec3(1.0f,0,0));
-            basicSuite = glm::scale(basicSuite, glm::vec3(3.0f / scale_factorY, 3.0f / scale_factorY, 3.0f / scale_factorY));
-            basicSuite = glm::translate(basicSuite, -z->getAABB().getCenter() - glm::vec3(500,0,0));
-            z->transform(basicSuite);
-        }
 		mRenderer->getParticleManager()->init();
     }
     catch (CustomException &e)
@@ -279,6 +270,15 @@ void Game::updateHeroInput()
 		Hero.AddAcceleration(glm::vec2(0, -offset));
 	if (ImGui::IsKeyDown(SDL_SCANCODE_DOWN))
 		Hero.AddAcceleration(glm::vec2(0, offset));
+
+    if (ImGui::IsKeyDown(SDL_SCANCODE_A))
+        mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime * 100);
+	if (ImGui::IsKeyDown(SDL_SCANCODE_S))
+        mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime * 100);
+	if (ImGui::IsKeyDown(SDL_SCANCODE_D))
+        mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime * 100);
+	if (ImGui::IsKeyDown(SDL_SCANCODE_W))
+        mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime * 100);
 }
 
 float Game::sInputAcceleration = 6000;

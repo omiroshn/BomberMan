@@ -31,7 +31,12 @@ struct Vertex
 class Mesh
 {
 public:
-    Mesh(std::vector<Vertex> aVertices, std::vector<unsigned int> aIndices, std::vector<std::shared_ptr<Texture>> aTextures, const aiScene *scene, const aiMesh *pMesh);
+    Mesh(std::vector<Vertex> aVertices,
+        std::vector<unsigned int> aIndices,
+        std::vector<std::shared_ptr<Texture>> aTextures,
+        std::map<std::string, unsigned int> bones,
+        std::vector<glm::mat4> aOffsets,
+        aiScene const *scene);
     void draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> const & transforms);
     ~Mesh();
     void                    doAnimation();
@@ -39,30 +44,26 @@ public:
 private:
     void                    setupMesh();
     void                    setInstanceBuffer();
-    void                    setupBones();
-    void                    addBoneData(unsigned int vertexID, unsigned int boneID, float weight);
+    //void                    setupBones();
+    //void                    addBosneData(unsigned int vertexID, unsigned int boneID, float weight);
 
-    void	                readNodeHierarchy(double animationTime, const aiNode *node, glm::mat4 parentTransform);
-    aiNodeAnim const*       findNodeAnim(const aiAnimation *animation, std::string nodeName) const;
+    void	                readNodeHierarchy(float animationTime, aiNode const* node, glm::mat4 parentTransform);
+    aiNodeAnim const*       findNodeAnimation(aiAnimation const* animation, std::string nodeName) const;
 
 private:
     unsigned int mVBO, mEBO, mVAO, mIBO;
     std::vector<Vertex> mVertices;
     std::vector<unsigned int> mIndices;
     std::vector<std::shared_ptr<Texture>> mTextures;
+    bool                mIsAnimated;
 
     unsigned int                        mCurrentAnimation;
-    unsigned int                        mTotalBones;
     float                               mAnimationTime;
 
-    std::map<std::string, unsigned int> mBones;
-    std::vector<glm::mat4>              mOffsetMatrices;
-    std::vector<glm::mat4>              mJointTransforms;
+    std::map<std::string, unsigned int> const   mBones;
+    std::vector<glm::mat4>              const   mOffsetMatrices;
+    std::vector<glm::mat4>                      mBoneTransforms;
 
-    const aiScene       *mScene;
-    const aiMesh *pMesh;
-
-
-
+    aiScene const*  mScene;
 };
 #endif

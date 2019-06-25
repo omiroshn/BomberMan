@@ -53,8 +53,37 @@ void Model::processMesh(aiMesh const* mesh,  aiScene const* scene)
     std::vector<Vertex> vertices(loadVertices(mesh));
     std::vector<unsigned int> indices(loadIndices(mesh));
     std::vector<std::shared_ptr<Texture>> textures(loadTextures(mesh, scene));
+    std::vector<glm::mat4> offsets;
+    offsets.resize(mesh->mNumBones);
+    std::map<std::string, unsigned int> bones{processBones(mesh, offsets, vertices)};
+    mMeshes.emplace_back(std::make_unique<Mesh>(vertices, indices, textures, bones, offsets, scene));
+}
 
-    mMeshes.emplace_back(std::make_unique<Mesh>(vertices, indices, textures, scene, mesh));
+std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std::vector<glm::mat4> & aOffsets, std::vector<Vertex> & vertices)
+{
+    std::map<std::string, unsigned int> bones;
+    unsigned int        totalBones{0};
+    for(unsigned int i = 0; i < mesh->mNumBones; i++)
+    {
+        unsigned int boneIndex;
+        std::string boneName(mesh->mBones[i]->mName.data);
+
+        if (bones.find(boneName) == bones.end())
+            bones[boneName] = totalBones++;
+        boneIndex = bones[boneName];
+        aOffsets[boneIndex] = aiMatToGlmMat(mesh->mBones[i]->mOffsetMatrix);
+        for(unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
+        {
+            unsigned int vertexID = mesh->mBones[i]->mWeights[j].mVertexId;
+            float weight = mesh->mBones[i]->mWeights[j].mWeight;
+            for (unsigned int i = 0; i < 3; ++i)
+            {
+                vertices[vertexID].bonesID[i] = boneIndex;
+                vertices[vertexID].weigths[i] = weight;
+            }        
+        }
+    }
+    return std::move(bones);
 }
 
 std::vector<Vertex> Model::loadVertices(aiMesh const* mesh)

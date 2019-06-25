@@ -37,16 +37,15 @@ void Renderer::normalPass(MapForRendering& aMap)
 
     auto brick = RESOURCES.getModel("brick");
     auto wall = RESOURCES.getModel("wall");
-    auto suite = RESOURCES.getModel("nanosuit");
+    auto suite = RESOURCES.getModel("bot");
     auto balloon = RESOURCES.getModel("balloon");
     auto ground = RESOURCES.getModel("ground");
     auto skybox = RESOURCES.getSkybox("defaultSkybox");
     auto modelShader = RESOURCES.getShader("modelShader");
     auto skyboxShader = RESOURCES.getShader("skybox");
-    auto runner = RESOURCES.getModel("runner");
 
     modelShader->use();
-    glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 2.1f, 90.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
     glm::mat4 view = mCamera.getViewMatrix();
 
     modelShader->setMat4("projection", projection);
@@ -65,14 +64,6 @@ void Renderer::normalPass(MapForRendering& aMap)
     }
 
     transforms.clear();
-    // render the suite aka player
-    {
-        auto& Hero = aMap.GetHero();
-		Hero.debug();
-		transforms.push_back(Hero.getModelMatrix());
-        runner->setAnimation(1, fakeTime);
-        runner->draw(modelShader, transforms);
-    }
 
     transforms.clear();
     // render the suite aka player
@@ -80,6 +71,7 @@ void Renderer::normalPass(MapForRendering& aMap)
         auto& Hero = aMap.GetHero();
         Hero.debug();
         transforms.push_back(Hero.getModelMatrix());
+        suite->setAnimation(2, fakeTime / 4);
         suite->draw(modelShader, transforms);
     }
 
