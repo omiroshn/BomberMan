@@ -21,7 +21,7 @@ public:
 	float		getAngle() const;
 
 	void		setPosition(glm::vec2 position);
-	void		setAngle(float angle);
+	void		setAngle(float radians);
 
 	void		debug();
 

@@ -75,12 +75,27 @@ void MovingEntity::animate()
         mAnimation.setType(AnimationType::Running);
 }
 
+void MovingEntity::rotate()
+{
+    float angle{0};
+    if (abs(mVelocity.x) > 1)
+    {
+        angle = M_PI_2 * (mVelocity.x > 0 ? 1 : -1);
+    }
+    if (abs(mVelocity.y) > 1)
+    {
+        angle = M_PI * (mVelocity.y > 0 ? 0 : -1);
+    }
+    setAngle(angle);
+}
+
 /** Euler integration + some friction. */
 void MovingEntity::tick(float DeltaTime)
 {
     animate();
     if (mAcceleration == glm::vec2(0.f) && mVelocity == glm::vec2(0.f))
         return;
+    rotate();
     mAcceleration -= mAcceleration * _Drag * DeltaTime;
 	mAcceleration = glm::clamp(mAcceleration, -_MaxAcceleration, _MaxAcceleration);
 	mVelocity += mAcceleration * DeltaTime;
