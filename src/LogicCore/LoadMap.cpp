@@ -13,15 +13,16 @@ MapLoader::~MapLoader()
 
 }
 
-SquareType CollisionInfo::operator[](glm::ivec2 coords) const
+SquareType& CollisionInfo::operator[](glm::ivec2 coords)
 {
 	const unsigned index = coords.x + coords.y * width;
+	static SquareType WallType = SquareType::Wall;
 	if (coords.x < 0 || coords.y < 0 || coords.x >= (int)width || index >= Squares.size())
-		return SquareType::Wall;
+		return WallType;
 	return Squares[index];
 }
 
-SquareType CollisionInfo::operator[](glm::vec2 coords) const
+SquareType& CollisionInfo::operator[](glm::vec2 coords)
 {
 	return operator[](glm::ivec2(coords.x, coords.y));
 }

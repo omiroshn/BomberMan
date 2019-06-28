@@ -25,6 +25,7 @@ public:
     static Uint64  mStageStartedTimer;
     static bool    mIsRunning;
 
+    void        explosion(glm::ivec2 position, uint32_t span);
 private:
 	void		resolveCollisions();
     void		doAction(Action const&);

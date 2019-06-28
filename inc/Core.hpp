@@ -76,5 +76,6 @@ private:
 #define BM_ASSERT_ALWAYS(x)		SDL_assert(x)
 #define BM_CRITICAL(...)		SDL_LogCritical(bm::LogCategory::Default, __VA_ARGS__)
 #define BM_CAT_CRITICAL(x, ...) SDL_LogCritical(bm::LogCategory::##x, #x ": " __VA_ARGS__)
+#define ARRAY_COUNT(x)			(sizeof(x) / sizeof(x[0]))
 
 # endif

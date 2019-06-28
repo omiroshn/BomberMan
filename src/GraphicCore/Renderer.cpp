@@ -97,7 +97,7 @@ void Renderer::normalPass(MapForRendering& aMap)
             for (auto w : walls)
             {
                 glm::mat4 modelTransform = glm::mat4(1.0f);
-                modelTransform = glm::translate(modelTransform, glm::vec3(w->getX(), 0.f, w->getY()));
+                modelTransform = glm::translate(modelTransform, glm::vec3(w->getX() + 0.5, 0.f, w->getY() + 0.5));
                 transforms.push_back(modelTransform);
             }
             wall->draw(modelShader, transforms);
@@ -113,7 +113,7 @@ void Renderer::normalPass(MapForRendering& aMap)
             for (auto b : bricks)
             {
                 glm::mat4 modelTransform = glm::mat4(1.0f);
-                modelTransform = glm::translate(modelTransform, glm::vec3(b->getX(), 0.f, b->getY()));
+                modelTransform = glm::translate(modelTransform, glm::vec3(b->getX() + 0.5, 0.f, b->getY() + 0.5));
                 transforms.push_back(modelTransform);
             }
             brick->draw(modelShader, transforms);

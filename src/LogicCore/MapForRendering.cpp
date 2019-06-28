@@ -1,8 +1,9 @@
 #include "LogicCore/MapForRendering.h"
 
+
 MapForRendering::MapForRendering(const std::vector<SquareInstance*>& map) :
 	mRawMap(map),
-	mHero(new MovingEntity(glm::vec2(1,1)))
+	mHero(new MovingEntity(glm::vec2(1.5,1.5)))
 {
 
 }
@@ -16,24 +17,29 @@ MapForRendering::~MapForRendering() {
 
 }
 
-std::vector<SquareInstance *> MapForRendering::GetEmptySquares() {
-	return mEmptySquares;
+std::vector<SquareInstance *> MapForRendering::Filter(SquareType type)
+{
+	std::vector<SquareInstance *> Result;
+	for (auto It : mRawMap)
+		if (It->GetType() == type)
+			Result.push_back(It);
+	return Result;
 }
 
 std::vector<SquareInstance *> MapForRendering::GetWalls() {
-	return mWalls;
+	return Filter(SquareType::Wall);
 }
 
 std::vector<SquareInstance *> MapForRendering::GetBricks() {
-	return mBricks;
+	return Filter(SquareType::Brick);
 }
 
 std::vector<SquareInstance *> MapForRendering::GetBombs() {
-	return mBombs;
+	return Filter(SquareType::Bomb);
 }
 
 std::vector<SquareInstance *> MapForRendering::GetBonuses() {
-	return mBonuses;
+	return Filter(SquareType::Bonus);
 }
 
 unsigned MapForRendering::getWitdh()
@@ -74,12 +80,7 @@ std::vector<BalloonController>& MapForRendering::GetControllers()
 	return mControllers;
 }
 
-void MapForRendering::ParseMapBySquareInstances() {
-	for (unsigned int i = 0; i < mRawMap.size(); ++i)
-	{
-		if (mRawMap.at(i)->GetType() == SquareType::Wall)
-			mWalls.push_back(mRawMap.at(i));
-		else if (mRawMap.at(i)->GetType() == SquareType::Brick)
-			mBricks.push_back(mRawMap.at(i));
-	}
+std::vector<SquareInstance *> &MapForRendering::GetRawMap()
+{
+	return mRawMap;
 }

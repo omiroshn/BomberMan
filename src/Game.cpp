@@ -19,6 +19,8 @@ Uint64          Game::mStageStartedTimer = 0;
 
 namespace
 {
+    int const cDefaultScreenWidth = 2048;
+    int const cDefaultScreenHeight = 1024;
     std::string const cWindowName = "Bomberman";
 }
 
@@ -69,7 +71,7 @@ void Game::start()
             {
             if (ImGui::Button("Add balloon"))
 			{
-				mMap.GetEnemies().emplace_back(new MovingEntity(glm::vec2(7 + rand() % 20, 1)));
+				mMap.GetEnemies().emplace_back(new MovingEntity(glm::vec2(7.5 + rand() % 20, 5.5)));
 				mMap.GetControllers().emplace_back();
 			}
                 MovingEntity::debugMovement();
@@ -102,11 +104,8 @@ void Game::start()
                 mReloadStage = 0;
             }
 
-
-            
-
-                
 			resolveCollisions();
+            mRenderer->getCamera().followEntity(mMap.GetHero(), 10.f);
             mRenderer->draw(mMap);
 			static int index = 0;
 			ImGui::RadioButton("NO VSync", &index, 0);
@@ -116,8 +115,9 @@ void Game::start()
 			{
 				const float TargetDelta = 0.0167f * index;
 				if (mDeltaTime < TargetDelta)
-					SDL_Delay(TargetDelta - mDeltaTime * 1000);
+					SDL_Delay((TargetDelta - mDeltaTime) * 1000);
 			}
+
             mWindow->update();
             doAction(mIManager->processEvents(mWindow->getEvent()));
             mapLoader.UpdateMap();
@@ -127,7 +127,6 @@ void Game::start()
             auto t =  mapLoader.GetMap(-1);
             mMap = std::get<0>(t);
             mCollisionInfo = std::get<1>(t);
-            mMap.ParseMapBySquareInstances();
             mWindow->update();
         }
         doAction(mIManager->processEvents(mWindow->getEvent()));
@@ -146,35 +145,70 @@ float Game::getCurrentTime()
 	return mTimeNow / static_cast<float>(SDL_GetPerformanceFrequency());
 }
 
-const CollisionInfo& Game::getCollisionInfo()
+CollisionInfo& Game::getCollisionInfo()
 {
 	return mCollisionInfo;
 }
 
+bool circle_box_collision(glm::vec2 position, float radius, glm::vec2 min, glm::vec2 max, glm::vec2 *resolutionOffset = NULL)
+{
+    glm::vec2 PossibleCollisionPoint = glm::clamp(position, min, max);
+    glm::vec2 CollisionDirection = position - PossibleCollisionPoint;
+    float distance = glm::length(CollisionDirection);
+    bool overlaps = distance < radius;
+    if (!overlaps)
+        return false;
+
+    bool inside = position.x > min.x && position.y > min.y
+               && position.x < max.x && position.y < max.y;
+
+    if (resolutionOffset)
+    {
+        glm::vec2 CollisionNormal;
+        if (inside)
+            CollisionNormal = -CollisionDirection;
+        else
+            CollisionNormal = CollisionDirection / distance;
+        float coefficient = (radius - distance) / radius;
+        *resolutionOffset = (CollisionNormal) * (coefficient);
+    }
+
+    return true;
+}
+
 void Game::resolveCollisions()
 {
-	auto& Hero = mMap.GetHero();
-	const glm::vec2 Position = Hero.getPosition() + 0.5f;
-	bool inObstacle = mCollisionInfo[Position] != SquareType::EmptySquare;
-	fl
 	glm::vec2 offsets[] = {
-		{0, radius},
-		{},
-		{},
-		{}
-	};
-	// Poor man's collision
-	inObstacle |= mCollisionInfo[Position + glm::vec2(0, radius)] != SquareType::EmptySquare;
-	if (inObstacle)
-	{
-		glm::vec2 CorrectedPosition = glm::round(Position);
-		CorrectedPosition -= Position;
-		if (fabs(CorrectedPosition.x) < fabs(CorrectedPosition.y))
-			Hero.move({CorrectedPosition.x, 0});
-		else
-			Hero.move({0, CorrectedPosition.y});
-	}
-    mRenderer->getCamera().followEntity(Hero, 10.f);
+		{-1, -1},
+		{1, -1},
+		{-1, 1},
+		{-1, -1},
+		{1 , 0},
+		{-1, 0},
+		{0, 1},
+		{0, -1}
+    };
+
+	auto& Hero = mMap.GetHero();
+    glm::vec2 CollisionOffset(0);
+	const glm::vec2 Position = Hero.getPosition();
+	static float radius = 0.24;
+    ImGui::SliderFloat("Collision radius", &radius, 0.05, 1);
+    for (int i = 0; i < ARRAY_COUNT(offsets); i++)
+    {
+        glm::vec2 ProbePoint = Position + offsets[i];
+        bool inObstacle = mCollisionInfo[ProbePoint] != SquareType::EmptySquare;
+        if (!inObstacle)
+            continue;
+        glm::vec2 ResolutionOffset;
+        if (circle_box_collision(Position, radius, glm::floor(ProbePoint), glm::ceil(ProbePoint), &ResolutionOffset))
+            CollisionOffset += ResolutionOffset;
+    }
+
+    // Hero.move(CollisionOffset);
+    static float CollisionResolveMultiplier = 350.f;
+    ImGui::SliderFloat("CollisionResolveMultiplier", &CollisionResolveMultiplier, 100, 1000);
+    Hero.AddAcceleration(CollisionOffset * CollisionResolveMultiplier);
 }
 
 void Game::doAction(Action const& a)
@@ -334,6 +368,65 @@ void Game::loadResources()
     }
 }
 
+void Game::explosion(glm::ivec2 position, uint32_t span)
+{
+    glm::vec2 directions[] = {
+        {-1, 0},
+        {1, 0},
+        {0, -1},
+        {0, 1}
+    };
+
+    glm::ivec2 minMax[] = {
+        position,
+        position + glm::ivec2(1),
+        position,
+        position + glm::ivec2(1)
+    };
+
+    glm::vec2 centerPosition = glm::vec2(position) + glm::vec2(0.5f);
+
+    std::vector<glm::mat4> transforms;
+    transforms.push_back(glm::translate(glm::mat4(1), glm::vec3(centerPosition.x, 0, centerPosition.y)));
+
+    for (int i = 0; i < ARRAY_COUNT(directions); i++)
+    for (int j = 1; j <= span; ++j)
+    {
+        glm::vec2 testPosition = centerPosition + (float)j * directions[i];
+        auto& type = mCollisionInfo[testPosition];
+        if (type == SquareType::Wall)
+            break;
+
+        transforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
+        minMax[i] += directions[i];
+
+        if (type == SquareType::Brick)
+        {
+            type = SquareType::EmptySquare;
+            break;
+        }
+    }
+
+    auto hMin = minMax[0];
+    auto hMax = minMax[1];
+    auto vMin = minMax[2];
+    auto vMax = minMax[3];
+
+    auto &rawMap = mMap.GetRawMap();
+    std::remove_if(rawMap.begin(), rawMap.end(), [this, hMin, hMax, vMin, vMax](SquareInstance *instance) {
+        return instance->GetType() == SquareType::Brick
+        && (circle_box_collision(instance->getPosition() + glm::vec2(0.5), 0.001, hMin, hMax)
+        || circle_box_collision(instance->getPosition() + glm::vec2(0.5), 0.001, vMin, vMax));
+    });
+
+    auto &enemies = mMap.GetEnemies();
+    std::remove_if(enemies.begin(), enemies.end(), [this, hMin, hMax, vMin, vMax](MovingEntity *entity) {
+        return (circle_box_collision(entity->getPosition() + glm::vec2(0.5), 0.1, hMin, hMax)
+        || circle_box_collision(entity->getPosition() + glm::vec2(0.5), 0.1, vMin, vMax));
+    });
+    mRenderer->getParticleManager()->startDrawPS("quadSphereBomb", transforms);
+}
+
 void Game::updateHeroInput()
 {
 	auto& Hero = mMap.GetHero();
@@ -356,6 +449,8 @@ void Game::updateHeroInput()
         mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime * 100);
 	if (ImGui::IsKeyDown(SDL_SCANCODE_W))
         mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime * 100);
+    if (ImGui::IsKeyPressed(SDL_SCANCODE_0))
+        explosion(Hero.getPosition(), 1);
 }
 
 void 		Game::saveCurrentState(std::string fileName)

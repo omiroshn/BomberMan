@@ -14,7 +14,7 @@
 
 ParticleSystemQuad::ParticleSystemQuad()
 {
-	setParticleCount(10000);
+	setParticleCount(500);
 }
 
 ParticleSystemQuad::~ParticleSystemQuad()
@@ -87,9 +87,9 @@ void 			ParticleSystemQuad::initGLBufers(std::string const & initKernelName)
 	kernel.setArg(1, m_particleCount);
 
 	commandQueue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(m_particleCount * 6), cl::NullRange);
-	commandQueue.finish();
+	//commandQueue.finish();
 	commandQueue.enqueueReleaseGLObjects(&m_memory);
-	cl::finish();
+	//cl::finish();
 }
 
 void 			ParticleSystemQuad::updateGLBufers(std::string const & updateKernelName)
@@ -105,8 +105,8 @@ void 			ParticleSystemQuad::updateGLBufers(std::string const & updateKernelName)
 	kernel.setArg(1, m_deltaTime);
 	commandQueue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(m_particleCount * 6), cl::NullRange);
 	commandQueue.enqueueReleaseGLObjects(&m_memory);
-	commandQueue.finish();
-	cl::finish();
+	//commandQueue.finish();
+	//cl::finish();
 }
 
 void 			ParticleSystemQuad::drawGLContent(glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms)
@@ -119,7 +119,8 @@ void 			ParticleSystemQuad::drawGLContent(glm::mat4 const & projection, glm::mat
 	m_shader->setMat4("projection", projection);
 	m_shader->setMat4("view", view);
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_ONE, GL_ONE);
+	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
 	m_texture->bind();
 	glBindBuffer(GL_ARRAY_BUFFER, m_IBO);
@@ -129,6 +130,6 @@ void 			ParticleSystemQuad::drawGLContent(glm::mat4 const & projection, glm::mat
     glBindVertexArray(m_VAO);
     glDrawArraysInstanced(GL_TRIANGLES, 0, m_particleCount * 6, transforms.size());
     glBindVertexArray(0);
+	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	glFinish();
 }
