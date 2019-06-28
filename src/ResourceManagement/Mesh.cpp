@@ -95,6 +95,8 @@ void	Mesh::setInstanceBuffer()
 
 void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> const & transforms)
 {
+	if (transforms.size() == 0)
+		return;
     unsigned int diffuseNr  = 1;
     unsigned int specularNr = 1;
     unsigned int normalNr   = 1;

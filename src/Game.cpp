@@ -156,6 +156,15 @@ void Game::resolveCollisions()
 	auto& Hero = mMap.GetHero();
 	const glm::vec2 Position = Hero.getPosition() + 0.5f;
 	bool inObstacle = mCollisionInfo[Position] != SquareType::EmptySquare;
+	fl
+	glm::vec2 offsets[] = {
+		{0, radius},
+		{},
+		{},
+		{}
+	};
+	// Poor man's collision
+	inObstacle |= mCollisionInfo[Position + glm::vec2(0, radius)] != SquareType::EmptySquare;
 	if (inObstacle)
 	{
 		glm::vec2 CorrectedPosition = glm::round(Position);
