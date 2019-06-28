@@ -130,6 +130,11 @@ void GameWindow::ShowStartingMenu()
     mMainMenu->ShowMainMenu();
 }
 
+void GameWindow::ShowInGameMenu()
+{
+    mMainMenu->ShowInGameMenu();
+}
+
 void GameWindow::PauseGame(bool state)
 {
     mMainMenu->GamePaused(state);

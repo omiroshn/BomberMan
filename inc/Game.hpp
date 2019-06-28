@@ -15,6 +15,12 @@ public:
     void pause();
 	static float getCurrentTime();
 	static const CollisionInfo& getCollisionInfo();
+    static bool  mIsRunning;
+    static int   mMusicVolume;
+    static int   mSoundsVolume;
+    static int   mKeyBindVolume;
+    static int   mScreenResolution;
+    static bool  mWindowed;
 
 private:
 	void		resolveCollisions();
@@ -31,7 +37,6 @@ private:
     static float                     mDeltaTime;
 	MapForRendering                  mMap;
 	static CollisionInfo			 mCollisionInfo;
-    bool                             mIsRunning;
     bool                             mIsPaused;
 	static float					sInputAcceleration;
 };

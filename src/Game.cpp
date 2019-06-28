@@ -11,6 +11,13 @@ Uint64			Game::mTimeLast;
 float			Game::mDeltaTime;
 CollisionInfo	Game::mCollisionInfo;
 
+bool  Game::mIsRunning = true;
+int   Game::mMusicVolume = 5;
+int   Game::mSoundsVolume = 2;
+int   Game::mKeyBindVolume = 0;
+int   Game::mScreenResolution = 3;
+bool  Game::mWindowed = true;
+
 namespace
 {
     int const cDefaultScreenWidth = 640;
@@ -18,7 +25,7 @@ namespace
     std::string const cWindowName = "Bomberman";
 }
 
-Game::Game() : mIsRunning(true)
+Game::Game()
 {
 	mTimeNow = SDL_GetPerformanceCounter();
     mWindow = std::make_unique<GameWindow>(cDefaultScreenWidth, cDefaultScreenHeight, cWindowName);
@@ -43,17 +50,15 @@ void Game::start()
         mWindow->getSize(width, height);
         calcDeltaTime();
         mRenderer->updateSize(width, height);
-        if (!mWindow.get()->IsGameRunning())// || mIsPaused)
+        if (!mWindow.get()->IsGameRunning())
         {
             mWindow.get()->ShowStartingMenu();
-            //std::string s = "dsfdfs";
-            //mRenderer->drawPicture(s);
         }
         else
         {
             if (mapLoader.MapIsLoaded())
             {
-                //MovingEntity::debugMovement();
+                MovingEntity::debugMovement();
                 updateHeroInput();
                 bm::Tickable::tickTickables(mDeltaTime);
                 resolveCollisions();
@@ -68,7 +73,7 @@ void Game::start()
                     if (mDeltaTime < TargetDelta)
                         SDL_Delay(TargetDelta - mDeltaTime * 1000);
                 }
-                
+                mWindow->ShowInGameMenu();
                 mapLoader.UpdateMap();
             }
             else

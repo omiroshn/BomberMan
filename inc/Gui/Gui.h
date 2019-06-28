@@ -4,9 +4,7 @@
 #include <imgui.h>
 #include "Gui/imgui_impl_sdl_gl3.h"
 #include "StateMachine/StateMachine.h"
-#include <Gui/MainMenu.h>
 
-#define  WIN_SIZE {800, 600}
 #define  STANDARD_MENU_BUTTON {200, 30}
 
 class Gui
@@ -15,19 +13,26 @@ public:
 	Gui();
 	~Gui();
 	void ShowMainMenu();
+	void ShowInGameMenu();
 	bool IsGameRunning();
 	void StartTheGame(bool start);
 	void GamePaused(bool state);
+	void SetBackground(const char* texture);
+	void ChangeMenuSize(int w, int h);
 
 private:
 	void ShowHardnessRadioButtons();
 	void ShowStartNewGameMenu();
 	void ShowLoadSavedGamesMenu();
+	void ShowSettingsMenu();
 	bool mGameStarted = false;
-	bool mGamePaused = false;
+	bool mGamePaused = false; //make static in Game
 	bool mShowMenu = true;
 	bool mShowScore = false;
 	int  mMapIndex = -1;
+	ImTextureID mBackground = nullptr;
+	float mWidth = 800.0f;
+	float mHeight = 600.0f;
 };
 
 #endif //BOMBERMAN_GUI_H
