@@ -67,7 +67,7 @@ void MapLoader::ConvertDigitsToInstances()
 		unsigned y = i / mWidth;
 		unsigned x = i % mWidth;
 
-		std::cout << "x = " << x << "     y = " << y << std::endl;
+		//std::cout << "x = " << x << "     y = " << y << std::endl;
 		if ((unsigned)mMapOfDigits.at(i) == 1)
 		{
 			mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), SquareType::Wall));

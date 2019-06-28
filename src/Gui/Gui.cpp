@@ -1,5 +1,8 @@
 
 #include <Gui/Gui.h>
+#include "ResourceManagement/ResourceManager.hpp"
+#include "ResourceManagement/Texture.hpp"
+#include "GL/glew.h"
 
 Gui::Gui()
 {
@@ -15,9 +18,24 @@ void Gui::ShowMainMenu()
 {
 	ImGui::SetNextWindowSize(WIN_SIZE, ImGuiSetCond_FirstUseEver);
 	ImGui::SetNextWindowPos({0, 0},0);
-	ImGui::SetNextWindowBgAlpha(0.7f);
+	ImGui::SetNextWindowBgAlpha(1);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(220,100));
+	ImGui::SetNextWindowCollapsed(0);
+
+
+	// glGenTextures(1, &m_id);
+    // glBindTexture(GL_TEXTURE_2D, m_id);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // m_image = std::make_shared<Image>("someImage.png");
+    // assert( m_image );
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_image ->width(), m_image ->height(), 0, GL_BGR, GL_UNSIGNED_BYTE, m_image ->data());
+
+	//ImGui::BeginMainMenuBar();
 	ImGui::Begin("Main Menu");
+	ImTextureID background = (ImTextureID)RESOURCES.getTexture("face")->getTextureID();
+	ImGui::Image(background,{200,200}, {1,1}, {0,0});
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
 	ImGui::Text("Welcome to BomberMan game!");
 
@@ -25,7 +43,7 @@ void Gui::ShowMainMenu()
 
 	//ImGui::Separator();
 
-	ShowHardnessRadioButtons();
+	//ShowHardnessRadioButtons();
 
 	/////////////////////////////////START GAME////////////////////////////////////
 
@@ -121,7 +139,7 @@ void Gui::ShowLoadSavedGamesMenu()
 
 bool Gui::IsGameRunning()
 {
-	return mGameStarted;
+	return mGameStarted && !mGamePaused;
 }
 
 void Gui::StartTheGame(bool start)
@@ -129,3 +147,7 @@ void Gui::StartTheGame(bool start)
 	mGameStarted = start;
 }
 
+void Gui::GamePaused(bool state)
+{
+	mGamePaused = state;
+}

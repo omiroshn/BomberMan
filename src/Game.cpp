@@ -43,40 +43,56 @@ void Game::start()
         mWindow->getSize(width, height);
         calcDeltaTime();
         mRenderer->updateSize(width, height);
-        if (mapLoader.MapIsLoaded())
+        if (!mWindow.get()->IsGameRunning())// || mIsPaused)
         {
-			MovingEntity::debugMovement();
-			updateHeroInput();
-			bm::Tickable::tickTickables(mDeltaTime);
-			resolveCollisions();
-            mRenderer->draw(mMap);
-			static int index = 0;
-			ImGui::RadioButton("NO VSync", &index, 0);
-			ImGui::RadioButton("60", &index, 1);
-			ImGui::RadioButton("30", &index, 2);
-			if (index)
-			{
-				const float TargetDelta = 0.0167f * index;
-				if (mDeltaTime < TargetDelta)
-					SDL_Delay(TargetDelta - mDeltaTime * 1000);
-			}
-            mWindow->update();
-            doAction(mIManager->processEvents(mWindow->getEvent()));
-            mapLoader.UpdateMap();
+            mWindow.get()->ShowStartingMenu();
+            //std::string s = "dsfdfs";
+            //mRenderer->drawPicture(s);
         }
         else
         {
-            std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(-1);
-            mMap.ParseMapBySquareInstances();
-			mMap.GetEnemies().reserve(10);
-			for (int i = 1; i <= 4; i++)
-			{
-				auto& Balloon = mMap.GetEnemies().emplace_back(glm::vec2(7 + i, 1));
-				AIController::addBalloon(Balloon);
-			}
-            mWindow->update();
+            if (mapLoader.MapIsLoaded())
+            {
+                //MovingEntity::debugMovement();
+                updateHeroInput();
+                bm::Tickable::tickTickables(mDeltaTime);
+                resolveCollisions();
+                mRenderer->draw(mMap);
+                static int index = 0;
+                ImGui::RadioButton("NO VSync", &index, 0);
+                ImGui::RadioButton("60", &index, 1);
+                ImGui::RadioButton("30", &index, 2);
+                if (index)
+                {
+                    const float TargetDelta = 0.0167f * index;
+                    if (mDeltaTime < TargetDelta)
+                        SDL_Delay(TargetDelta - mDeltaTime * 1000);
+                }
+                
+                mapLoader.UpdateMap();
+            }
+            else
+            {
+                std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(-1);
+                mMap.ParseMapBySquareInstances();
+                mMap.GetEnemies().reserve(10);
+                for (int i = 1; i <= 4; i++)
+                {
+                    auto& Balloon = mMap.GetEnemies().emplace_back(glm::vec2(7 + i, 1));
+                    AIController::addBalloon(Balloon);
+                }
+            }
+
         }
+        doAction(mIManager->processEvents(mWindow->getEvent()));
+        mWindow->update();
     }
+}
+
+void Game::pause()
+{
+    mIsPaused = !mIsPaused;
+    mWindow.get()->PauseGame(mIsPaused);
 }
 
 float Game::getCurrentTime()
@@ -114,6 +130,9 @@ void Game::doAction(Action const& a)
     {
         case Action::Finish:
             mIsRunning = false;
+            break;
+        case Action::Pause:
+            pause();
             break;
         case Action::CameraRotate:
             float x,y;

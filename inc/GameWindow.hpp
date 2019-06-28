@@ -17,6 +17,8 @@ public:
     void getSize(int &w, int &h);
     std::vector<int> getSize();
     bool IsGameRunning();
+    void ShowStartingMenu();
+    void PauseGame(bool state);
 
 private:
     void initWindow();

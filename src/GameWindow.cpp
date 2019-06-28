@@ -95,8 +95,10 @@ void GameWindow::initOpenGL()
 
 void GameWindow::update()
 {
-	if (!IsGameRunning())
-	    mMainMenu->ShowMainMenu();
+	// if (!IsGameRunning())
+	//     {
+    //         mMainMenu->ShowMainMenu();
+    //     }
     ImGui::Render();
     ImGui_ImplSdlGL3_RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(mWindow);
@@ -121,4 +123,15 @@ void GameWindow::getSize(int &w, int &h)
 
 bool GameWindow::IsGameRunning() {
     return mMainMenu->IsGameRunning();
+}
+
+void GameWindow::ShowStartingMenu()
+{
+    mMainMenu->ShowMainMenu();
+}
+
+void GameWindow::PauseGame(bool state)
+{
+    mMainMenu->GamePaused(state);
+    mMainMenu->ShowMainMenu();
 }

@@ -3,6 +3,8 @@
 
 #include <imgui.h>
 #include "Gui/imgui_impl_sdl_gl3.h"
+#include "StateMachine/StateMachine.h"
+#include <Gui/MainMenu.h>
 
 #define  WIN_SIZE {800, 600}
 #define  STANDARD_MENU_BUTTON {200, 30}
@@ -15,12 +17,14 @@ public:
 	void ShowMainMenu();
 	bool IsGameRunning();
 	void StartTheGame(bool start);
+	void GamePaused(bool state);
 
 private:
 	void ShowHardnessRadioButtons();
 	void ShowStartNewGameMenu();
 	void ShowLoadSavedGamesMenu();
 	bool mGameStarted = false;
+	bool mGamePaused = false;
 	bool mShowMenu = true;
 	bool mShowScore = false;
 	int  mMapIndex = -1;
