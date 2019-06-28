@@ -27,6 +27,7 @@ public:
 
 private:
     void animate();
+    void rotate();
 private:
 	glm::vec2 mVelocity;
 	glm::vec2 mAcceleration;

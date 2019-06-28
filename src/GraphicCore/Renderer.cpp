@@ -36,7 +36,7 @@ void Renderer::normalPass(MapForRendering& aMap)
 
     auto brick = RESOURCES.getModel("brick");
     auto wall = RESOURCES.getModel("wall");
-    auto suite = RESOURCES.getModel("bot");
+    auto heroModel = RESOURCES.getModel("bot");
     auto balloon = RESOURCES.getModel("balloon");
     auto ground = RESOURCES.getModel("ground");
     auto skybox = RESOURCES.getSkybox("defaultSkybox");
@@ -50,7 +50,6 @@ void Renderer::normalPass(MapForRendering& aMap)
     modelShader->setMat4("projection", projection);
     modelShader->setMat4("view", view);
     modelShader->setVec3("lightPos", mCamera.position());
-//
     std::vector<glm::mat4> transforms;
 
     // render the ground
@@ -61,15 +60,14 @@ void Renderer::normalPass(MapForRendering& aMap)
         transforms.push_back(groundModel);
         ground->draw(modelShader, transforms);
     }
-
     transforms.clear();
-    // render the suite aka player
+
     {
         auto& Hero = aMap.GetHero();
         Hero.debug();
         transforms.push_back(Hero.getModelMatrix());
-        suite->setAnimation(Hero.getAnimation());
-        suite->draw(modelShader, transforms);
+        heroModel->setAnimation(Hero.getAnimation());
+        heroModel->draw(modelShader, transforms);
     }
 
     transforms.clear();
@@ -80,12 +78,12 @@ void Renderer::normalPass(MapForRendering& aMap)
 			transforms.push_back(It.getModelMatrix());
 		balloon->draw(modelShader, transforms);
     }
-
     transforms.clear();
+
     // render the walls
     {
         auto walls = aMap.GetWalls();
-        if (walls.size() > 0)
+        if (!walls.empty())
         {
             for (auto w : walls)
             {
@@ -101,7 +99,7 @@ void Renderer::normalPass(MapForRendering& aMap)
     // render the bricks
     {
         auto bricks = aMap.GetBricks();
-        if (bricks.size() > 0)
+        if (!bricks.empty())
         {
             for (auto b : bricks)
             {

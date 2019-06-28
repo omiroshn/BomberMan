@@ -21,7 +21,7 @@ glm::vec2	Entity::getPosition() const				{ return mPosition; }
 glm::vec3   Entity::getPosition3D() const           { return glm::vec3(mPosition.x, 0, mPosition.y); }
 float		Entity::getAngle() const				{ return mAngle; }
 void		Entity::setPosition(glm::vec2 position)	{ mPosition = position; }
-void		Entity::setAngle(float angle)			{ mAngle = angle; }
+void		Entity::setAngle(float radians)			{ mAngle = radians; }
 
 /** changes the position of Entity by offset */
 void Entity::move(glm::vec2 offset)
