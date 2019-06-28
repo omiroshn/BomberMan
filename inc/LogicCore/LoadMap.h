@@ -8,8 +8,8 @@
 struct CollisionInfo {
 	std::vector<SquareType> Squares;
 	unsigned				width;
-	SquareType operator[](glm::ivec2) const;
-	SquareType operator[](glm::vec2) const;
+	SquareType& operator[](glm::ivec2);
+	SquareType& operator[](glm::vec2);
 };
 
 class MapLoader
