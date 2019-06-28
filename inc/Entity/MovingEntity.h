@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "Core.hpp"
+#include "ResourceManagement/Animation.h"
 
 class MovingEntity : public Entity, public bm::Tickable
 {
@@ -15,12 +16,17 @@ public:
 	void		SetAcceleration(glm::vec2);
 	void		AddAcceleration(glm::vec2);
 
+    Animation const& getAnimation() const;
 	void		debug();
+
 
 	static void	debugMovement();
 
 	/** Tickable interface */
 	void		tick(float DeltaTime = 0) override;
+
+private:
+    void animate();
 private:
 	glm::vec2 mVelocity;
 	glm::vec2 mAcceleration;
@@ -28,4 +34,5 @@ private:
 	static float _Drag;
 	static float _MaxVelocity;
 	static float _MaxAcceleration;
+    Animation    mAnimation;
 };

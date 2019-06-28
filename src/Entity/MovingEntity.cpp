@@ -66,13 +66,22 @@ glm::vec2 MovingEntity::GetAcceleration() const
 	return mAcceleration;
 }
 
+void MovingEntity::animate()
+{
+    mAnimation.tick();
+    if (GetSpeed() < 1)
+        mAnimation.setType(AnimationType::Idle);
+    else
+        mAnimation.setType(AnimationType::Running);
+}
+
 /** Euler integration + some friction. */
 void MovingEntity::tick(float DeltaTime)
 {
-	if (mAcceleration == glm::vec2(0.f) && mVelocity == glm::vec2(0.f))
-		return;
-		
-	mAcceleration -= mAcceleration * _Drag * DeltaTime;
+    animate();
+    if (mAcceleration == glm::vec2(0.f) && mVelocity == glm::vec2(0.f))
+        return;
+    mAcceleration -= mAcceleration * _Drag * DeltaTime;
 	mAcceleration = glm::clamp(mAcceleration, -_MaxAcceleration, _MaxAcceleration);
 	mVelocity += mAcceleration * DeltaTime;
 	mVelocity -= mVelocity * _Friction * DeltaTime;
@@ -84,4 +93,9 @@ void MovingEntity::tick(float DeltaTime)
 	const float accelerationLength = glm::length(mAcceleration);
 	if (accelerationLength < 0.0001f)
 		mAcceleration = glm::vec2(0.f);
+}
+
+Animation const& MovingEntity::getAnimation() const
+{
+    return mAnimation;
 }

@@ -21,13 +21,13 @@ glm::mat4 Camera::getViewMatrix()
 
 void Camera::followEntity(Entity &aTarget, float d)
 {
-	//static float zoom = 1;
-	//ImGui::SliderFloat("Zoom", &zoom, 0.2f, 4.f);
-	//d *= zoom;
- //   mPosition.x = aTarget.getPosition().x;
-	//mPosition.y = d * 1.4f;
- //   mPosition.z = aTarget.getPosition().y + d;
-//    mViewMatrix = glm::lookAt(mPosition, aTarget.getPosition3D(), mUp);
+	static float zoom = 1;
+	ImGui::SliderFloat("Zoom", &zoom, 0.2f, 4.f);
+	d *= zoom;
+    mPosition.x = aTarget.getPosition().x;
+	mPosition.y = d * 1.4f;
+    mPosition.z = aTarget.getPosition().y + d;
+    mViewMatrix = glm::lookAt(mPosition, aTarget.getPosition3D(), mUp);
 }
 void Camera::applyTransform()
 {

@@ -31,7 +31,6 @@ void Renderer::draw(MapForRendering& aMap)
 
 void Renderer::normalPass(MapForRendering& aMap)
 {
-    static float fakeTime = 0.f;
 
     glViewport(0, 0, mWidth, mHeight);
 
@@ -64,14 +63,12 @@ void Renderer::normalPass(MapForRendering& aMap)
     }
 
     transforms.clear();
-
-    transforms.clear();
     // render the suite aka player
     {
         auto& Hero = aMap.GetHero();
         Hero.debug();
         transforms.push_back(Hero.getModelMatrix());
-        suite->setAnimation(2, fakeTime / 4);
+        suite->setAnimation(Hero.getAnimation());
         suite->draw(modelShader, transforms);
     }
 
@@ -128,8 +125,6 @@ void Renderer::normalPass(MapForRendering& aMap)
     skyboxShader->setMat4("view", view);
     skyboxShader->setMat4("projection", projection);
     skybox->draw(skyboxShader);
-
-    fakeTime += 0.01;
 }
 
 Camera &Renderer::getCamera()

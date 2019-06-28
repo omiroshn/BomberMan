@@ -23,16 +23,17 @@
 #include "ResourceManagement/Texture.hpp"
 #include "Utilities/AABB.hpp"
 
+class Animation;
 class AABB;
 class Model 
 {
 public:
     Model(std::string const &path);
     ~Model();
-    void draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> & transforms);
+    void draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> & transforms);
     AABB getAABB() const;
     void transform(glm::mat4 const & aTransform);
-    void setAnimation(unsigned int animation, float timeInSeconds);
+    void setAnimation(Animation const& anim);
 private:
     void loadModel(std::string const& path);
     void processNode(aiNode const* node,  aiScene const* scene);

@@ -1,19 +1,8 @@
 #include "ResourceManagement/Model.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
 #include "CustomException.hpp"
-
-namespace
-{
-    glm::mat4			aiMatToGlmMat(aiMatrix4x4 ai)
-    {
-        glm::mat4 mat;
-        mat[0][0] = ai.a1; mat[1][0] = ai.a2; mat[2][0] = ai.a3; mat[3][0] = ai.a4;
-        mat[0][1] = ai.b1; mat[1][1] = ai.b2; mat[2][1] = ai.b3; mat[3][1] = ai.b4;
-        mat[0][2] = ai.c1; mat[1][2] = ai.c2; mat[2][2] = ai.c3; mat[3][2] = ai.c4;
-        mat[0][3] = ai.d1; mat[1][3] = ai.d2; mat[2][3] = ai.d3; mat[3][3] = ai.d4;
-        return mat;
-    }
-}
+#include "Utilities/AnimationUtils.h"
+#include "ResourceManagement/Animation.h"
 
 Model::Model(std::string const &path) : mTransFormMatrix(glm::mat4(1.0f)), mImporter(new Assimp::Importer())
 {
@@ -27,7 +16,7 @@ Model::~Model()
 
 void Model::loadModel(std::string const &path)
 {
-    const aiScene* scene = mImporter->ReadFile(path, aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_FlipUVs);
+    auto const* scene = mImporter->ReadFile(path, aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_FlipUVs);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         throw CustomException(std::string("ASSIMP::") + mImporter->GetErrorString());
     mDirectory = path.substr(0, path.find_last_of('/'));
@@ -71,15 +60,15 @@ std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std:
         if (bones.find(boneName) == bones.end())
             bones[boneName] = totalBones++;
         boneIndex = bones[boneName];
-        aOffsets[boneIndex] = aiMatToGlmMat(mesh->mBones[i]->mOffsetMatrix);
+        aOffsets[boneIndex] = AnimationUtils::aiMatToGlmMat(mesh->mBones[i]->mOffsetMatrix);
         for(unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
         {
             unsigned int vertexID = mesh->mBones[i]->mWeights[j].mVertexId;
             float weight = mesh->mBones[i]->mWeights[j].mWeight;
-            for (unsigned int i = 0; i < 3; ++i)
+            for (unsigned int k = 0; k < 3; ++k)
             {
-                vertices[vertexID].bonesID[i] = boneIndex;
-                vertices[vertexID].weigths[i] = weight;
+                vertices[vertexID].bonesID[k] = boneIndex;
+                vertices[vertexID].weigths[k] = weight;
             }        
         }
     }
@@ -138,7 +127,6 @@ std::vector<std::shared_ptr<Texture>> Model::loadTextures(aiMesh const* mesh, ai
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
     std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-
     return std::move(textures);
 }
 
@@ -157,7 +145,7 @@ std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *ma
 }
 
 
-void Model::draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> & transforms)
+void Model::draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> & transforms)
 {
     for (auto &transform : transforms)
     {
@@ -183,13 +171,13 @@ void Model::transform(glm::mat4 const & aTransform)
     mAABB = mAABB.transform(mTransFormMatrix);
 }
 
-void	Model::setAnimation(unsigned int animation, float timeInSeconds)
+void	Model::setAnimation(Animation const& anim)
 {
     if (mAnimated)
     {
         for (auto & mesh : mMeshes)
         {
-            mesh->setAnimation(animation, timeInSeconds);
+            mesh->setAnimation(anim);
         }
     }
 }

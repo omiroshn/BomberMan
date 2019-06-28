@@ -16,6 +16,7 @@
 
 #include "ResourceManagement/Shader.hpp"
 #include "ResourceManagement/Texture.hpp"
+#include "ResourceManagement/Animation.h"
 #include "Utilities/AABB.hpp"
 
 struct Vertex
@@ -23,7 +24,6 @@ struct Vertex
     glm::vec3 Position;
     glm::vec3 Normal;
     glm::vec2 TexCoords;
-
     glm::ivec3 bonesID;
     glm::vec3  weigths;
 };
@@ -37,16 +37,13 @@ public:
         std::map<std::string, unsigned int> bones,
         std::vector<glm::mat4> aOffsets,
         aiScene const *scene);
-    void draw(std::shared_ptr<Shader> shader, std::vector<glm::mat4> const & transforms);
-    ~Mesh();
+    void                    draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> const& transforms);
     void                    doAnimation();
-    void                    setAnimation(unsigned int animation, float timeInSeconds);
+    void	                setAnimation(Animation const& anim);
+    ~Mesh();
 private:
     void                    setupMesh();
     void                    setInstanceBuffer();
-    //void                    setupBones();
-    //void                    addBosneData(unsigned int vertexID, unsigned int boneID, float weight);
-
     void	                readNodeHierarchy(float animationTime, aiNode const* node, glm::mat4 parentTransform);
     aiNodeAnim const*       findNodeAnimation(aiAnimation const* animation, std::string nodeName) const;
 

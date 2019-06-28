@@ -39,8 +39,8 @@ void Game::start()
 
     while (mIsRunning)
     {
-        mWindow->getSize(width, height);
         mWindow->tickGui();
+        mWindow->getSize(width, height);
         calcDeltaTime();
         mRenderer->updateSize(width, height);
         if (mapLoader.MapIsLoaded())
