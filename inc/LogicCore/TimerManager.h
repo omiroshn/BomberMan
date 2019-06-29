@@ -21,13 +21,19 @@ class TimerManager
 {
 private:
 	static TimerManager* sInstance;
-	std::vector<Timer *> v;
+	std::vector<TimerBase *> v;
 public:
 	static TimerManager *Instance();
 	static void Release();
-
-	void AddTimer(void (*f)(std::string time), int seconds, bool ever);
 	void Update();
+
+	template<typename funcType>
+	void AddTimer(float seconds, bool ever, funcType type)
+	{
+		auto timer = new Timer<funcType>(seconds * 1000, ever, type);
+		v.push_back(timer);
+	}
+
 private:
 	TimerManager();
 	~TimerManager();

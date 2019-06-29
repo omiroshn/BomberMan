@@ -13,42 +13,42 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+#include "TimerBase.h"
 #include <chrono>
-#include <iostream>
 
-template <typename... Ts>
-class Timer
+template <typename funcType>
+class Timer : public TimerBase
 {
-private:
+
+ private:
+
 	std::chrono::high_resolution_clock::time_point startTime;
-	std::chrono::duration<float, std::ratio<1>> duration;
-	std::chrono::duration<float, std::ratio<1>> endTimeDuration;
+	std::chrono::duration<float, std::milli> duration;
+	std::chrono::duration<float, std::milli> endTimeDuration;
 
 	bool toDelete;
 	bool usedEvent;
-	float number;
 
 	funcType event;
+
 public:
 
-	template <typename funcType>
-	Timer(float seconds, bool everlasting, funcType lambda) {
-		std::chrono::duration<int> chronoSeconds(seconds);
-		startTime = std::chrono::high_resolution_clock::now();
-		std::chrono::high_resolution_clock::time_point endTime = startTime + chronoSeconds;
-		duration = std::chrono::duration<float, std::ratio<1>>(0.0f);
-		endTimeDuration = endTime - startTime;
-		toDelete = everlasting == true ? false : true;
-		usedEvent = false;
-		event = lambda;
-		number = seconds;
+	Timer(int miliseconds, bool everlasting, funcType lambda) : event(lambda) {
+			startTime = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<int, std::milli>
+			milli(miliseconds);
+		std::chrono::high_resolution_clock::time_point
+			endTime = startTime + milli;
+			duration = std::chrono::duration<float, std::milli>(0.0f);
+			endTimeDuration = endTime - startTime;
+			toDelete = everlasting == true ? false : true;
+			usedEvent = false;
 	}
-	
+
 	void Tick() {
 		duration = std::chrono::high_resolution_clock::now() - startTime;
 		if (duration.count() >= endTimeDuration.count()) {
-			// std::cout << "lul" << std::endl;
-			event(std::to_string(number));
+			event();
 			usedEvent = true;
 		}
 	}
@@ -62,6 +62,6 @@ public:
 	}
 
 	virtual ~Timer() {}
-}
+};
 
 #endif
