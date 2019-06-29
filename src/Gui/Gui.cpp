@@ -27,7 +27,7 @@ void Gui::ShowMainMenu()
 	SetBackground("face");
 
 	ImGui::Begin("Main Menu");
-	ImGui::Image(mBackground,{200,200}, {1,1}, {0,0});
+	//ImGui::Image(mBackground,{200,200}, {1,1}, {0,0});
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
 	ImGui::Text("Welcome to BomberMan game!");
 
@@ -39,9 +39,7 @@ void Gui::ShowMainMenu()
 
 	/////////////////////////////////START GAME////////////////////////////////////
 
-	//ImGui::Separator();
-
-	const ImVec2 menu_frame = {200, 120};
+	const ImVec2 menu_frame = {200, 158};
 	const float spacing = 10;
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, spacing));
 	ImGui::BeginChildFrame(1, menu_frame, 4);
@@ -95,29 +93,70 @@ void Gui::ShowInGameMenu()
 
 void Gui::ShowStartNewGameMenu()
 {
-	if (ImGui::BeginPopup("NameFrame"))
+	if (ImGui::BeginPopup("Select stage"))
 	{
-		ImGui::BeginChildFrame(2, {200, 40}, 4);
-		static char str0[128] = "Your name";
-		ImGui::InputText("", str0, IM_ARRAYSIZE(str0));
-
+		ImGui::BeginChildFrame(2, {200, 204}, 4);
+		ImGui::Text("     Choose campaign");
+		// static char str0[128] = "Your name";
+		// ImGui::InputText("", str0, IM_ARRAYSIZE(str0));
+		ImTextureID b1 = (ImTextureID)RESOURCES.getTexture("face")->getTextureID();
+		ImTextureID b2 = (ImTextureID)RESOURCES.getTexture("flame-fire")->getTextureID();
+		ImTextureID b3 = (ImTextureID)RESOURCES.getTexture("cloud_trans")->getTextureID();
+		ImTextureID b4 = (ImTextureID)RESOURCES.getTexture("explosion_tmap_2")->getTextureID();
+		if (ImGui::ImageButton(b1, ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		{
+			Game::mChosenStage = 1;
+			GamePaused(false);
+			StartTheGame(true);
+		}
+		ImGui::SameLine();
+		ImGui::Text("\nStage 1");
+		if (ImGui::ImageButton(b2, ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		{
+			Game::mChosenStage = 2;
+			GamePaused(false);
+			StartTheGame(true);
+		}
+		ImGui::SameLine();
+		ImGui::Text("\nStage 2");
+		if (ImGui::ImageButton(b3, ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		{
+			Game::mChosenStage = 3;
+			GamePaused(false);
+			StartTheGame(true);
+		}
+		ImGui::SameLine();
+		ImGui::Text("\nStage 3");
+		if (ImGui::ImageButton(b4, ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		{
+			Game::mChosenStage = -1;
+			GamePaused(false);
+			StartTheGame(true);
+		}
+		ImGui::SameLine();
+		ImGui::Text("\nBonus level");
 		ImGui::EndChildFrame();
-		ImGui::Button("PLAY", STANDARD_MENU_BUTTON);
+		// if (ImGui::Button("PLAY", STANDARD_MENU_BUTTON))
+		// {
+		// 	GamePaused(false);
+		// 	StartTheGame(true);
+		// 	return;
+		// }
 		ImGui::EndPopup();
 	}
 	if (ImGui::Button("Start new GAME", STANDARD_MENU_BUTTON))
 	{
-		//ImGui::OpenPopup("NameFrame");
-		StartTheGame(true);
+		ImGui::OpenPopup("Select stage");
+		
 
 	}
 }
 
 void Gui::ShowLoadSavedGamesMenu()
 {
-	if (ImGui::BeginPopup("Saved Games"))
+	if (ImGui::BeginPopup("Continue"))
 	{
-		const ImVec2 saved_frame = {200, 300};
+		const ImVec2 saved_frame = {200, 260};
 		ImGui::BeginChildFrame(3, saved_frame, 4);
 		ImGui::Columns(2);
 		ImGui::AlignTextToFramePadding();
@@ -144,8 +183,8 @@ void Gui::ShowSettingsMenu()
 {
 	if (ImGui::BeginPopup("Settings of the Games"))
 	{
-		const ImVec2 saved_frame = {400, 400};
-		ImGui::BeginChildFrame(1, saved_frame, 4);
+		const ImVec2 saved_frame = {200, 320};
+		ImGui::BeginChildFrame(3, saved_frame, 4);
 
 		ImGui::Text("\nSet music volume\n");
 		ImGui::SliderInt("10", &Game::mMusicVolume, 0, 10, "Music");
@@ -199,7 +238,6 @@ void Gui::ShowSettingsMenu()
 			if (Game::mScreenResolution < 4)
 				Game::mScreenResolution++;
 		}
-		ImGui::Separator();
 
 		ImGui::EndChildFrame();
 		if (ImGui::Button("CONTINUE", STANDARD_MENU_BUTTON))

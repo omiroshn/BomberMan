@@ -11,6 +11,7 @@ Uint64			Game::mTimeLast;
 float			Game::mDeltaTime;
 CollisionInfo	Game::mCollisionInfo;
 
+int   Game::mChosenStage = 2;
 bool  Game::mIsRunning = true;
 int   Game::mMusicVolume = 5;
 int   Game::mSoundsVolume = 2;
@@ -78,7 +79,7 @@ void Game::start()
             }
             else
             {
-                std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(-1);
+                std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(mChosenStage);
                 mMap.ParseMapBySquareInstances();
                 mMap.GetEnemies().reserve(10);
                 for (int i = 1; i <= 4; i++)

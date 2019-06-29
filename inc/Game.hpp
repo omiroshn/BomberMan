@@ -15,6 +15,7 @@ public:
     void pause();
 	static float getCurrentTime();
 	static const CollisionInfo& getCollisionInfo();
+    static int   mChosenStage;
     static bool  mIsRunning;
     static int   mMusicVolume;
     static int   mSoundsVolume;
