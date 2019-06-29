@@ -14,6 +14,8 @@ float			Game::mDeltaTime;
 CollisionInfo	Game::mCollisionInfo;
 
 int   Game::mChosenStage = 1;
+int   Game::mScore = 100;
+int   Game::mLives = 3;
 bool  Game::mIsRunning = true;
 int   Game::mMusicVolume = 5;
 int   Game::mSoundsVolume = 2;

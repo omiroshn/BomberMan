@@ -16,6 +16,8 @@ public:
 	static float getCurrentTime();
 	static const CollisionInfo& getCollisionInfo();
     static int   mChosenStage;
+    static int   mScore;
+    static int   mLives;
     static bool  mIsRunning;
     static int   mMusicVolume;
     static int   mSoundsVolume;
