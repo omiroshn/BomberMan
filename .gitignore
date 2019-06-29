@@ -1,5 +1,5 @@
-3rdParty/*
-!3rdParty/CMakeLists.txt
+#3rdParty/*
+#!3rdParty/CMakeLists.txt
 build/*
 
 # Editors trash

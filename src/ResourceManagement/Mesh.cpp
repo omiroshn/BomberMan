@@ -55,10 +55,16 @@ void Mesh::setupMesh()
 
 
     glEnableVertexAttribArray(7);
-    glVertexAttribIPointer(7, 3, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, bonesID));
+    glVertexAttribIPointer(7, 3, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, BonesID));
 
     glEnableVertexAttribArray(8);
-    glVertexAttribPointer(8, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, weigths));
+    glVertexAttribPointer(8, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Weighs));
+
+    glEnableVertexAttribArray(9);
+    glVertexAttribPointer(9, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+
+    glEnableVertexAttribArray(10);
+    glVertexAttribPointer(10, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
 
     glBindVertexArray(0);
 }
@@ -107,12 +113,11 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
             number = std::to_string(normalNr++);
         else if(name == "texture_height")
             number = std::to_string(heightNr++);
-
         glUniform1i(glGetUniformLocation(shader->mShaderProgram, (name + number).c_str()), i);
         glBindTexture(GL_TEXTURE_2D, mTextures[i]->getTextureID());
     }
+    shader->setBool("hasNormalMap", normalNr > 1);
     glActiveTexture(GL_TEXTURE0);
-
     glBindBuffer(GL_ARRAY_BUFFER, mIBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
