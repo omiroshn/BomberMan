@@ -386,8 +386,9 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 
     glm::vec2 centerPosition = glm::vec2(position) + glm::vec2(0.5f);
 
-    std::vector<glm::mat4> transforms;
-    transforms.push_back(glm::translate(glm::mat4(1), glm::vec3(centerPosition.x, 0, centerPosition.y)));
+    std::vector<glm::mat4> fireTransforms;
+    std::vector<glm::mat4> brickTransforms;
+    fireTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(centerPosition.x, 0, centerPosition.y)));
 
     for (int i = 0; i < ARRAY_COUNT(directions); i++)
     for (int j = 1; j <= span; ++j)
@@ -397,11 +398,12 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
         if (type == SquareType::Wall)
             break;
 
-        transforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
+        fireTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
         minMax[i] += directions[i];
 
         if (type == SquareType::Brick)
         {
+            brickTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
             type = SquareType::EmptySquare;
             break;
         }
@@ -424,7 +426,8 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
         return (circle_box_collision(entity->getPosition() + glm::vec2(0.5), 0.1, hMin, hMax)
         || circle_box_collision(entity->getPosition() + glm::vec2(0.5), 0.1, vMin, vMax));
     });
-    mRenderer->getParticleManager()->startDrawPS("quadSphereBomb", transforms);
+    mRenderer->getParticleManager()->startDrawPS("BrickBlock", brickTransforms);
+    mRenderer->getParticleManager()->startDrawPS("pointSphereBomb", fireTransforms);
 }
 
 void Game::updateHeroInput()
@@ -450,7 +453,7 @@ void Game::updateHeroInput()
 	if (ImGui::IsKeyDown(SDL_SCANCODE_W))
         mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime * 100);
     if (ImGui::IsKeyPressed(SDL_SCANCODE_0))
-        explosion(Hero.getPosition(), 1);
+        explosion(Hero.getPosition(), 2);
 }
 
 void 		Game::saveCurrentState(std::string fileName)

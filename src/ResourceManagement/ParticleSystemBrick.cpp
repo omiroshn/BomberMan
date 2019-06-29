@@ -22,11 +22,6 @@ ParticleSystemBrick::~ParticleSystemBrick()
 
 }
 
-void 		ParticleSystemBrick::setTexture(std::string const & textureName)
-{
-	m_texture = RESOURCES.getTexture(textureName);
-}
-
 void 		ParticleSystemBrick::createGLBufers()
 {
 	glGenVertexArrays(1, &m_VAO);
@@ -76,7 +71,7 @@ void 				ParticleSystemBrick::setInstanceBuffer()
 
 void 			ParticleSystemBrick::initGLBufers(std::string const & initKernelName)
 {
-	glFinish();
+	//glFinish();
 	cl::Kernel kernel;
 
 	m_CLE->getKernel(initKernelName, kernel);
@@ -89,9 +84,9 @@ void 			ParticleSystemBrick::initGLBufers(std::string const & initKernelName)
 	kernel.setArg(0, m_memory.front());
 
 	commandQueue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(m_particleCount), cl::NullRange);
-	commandQueue.finish();
+	//commandQueue.finish();
 	commandQueue.enqueueReleaseGLObjects(&m_memory);
-	cl::finish();
+	//cl::finish();
 }
 
 void 			ParticleSystemBrick::updateGLBufers(std::string const & updateKernelName)
@@ -107,8 +102,8 @@ void 			ParticleSystemBrick::updateGLBufers(std::string const & updateKernelName
 	kernel.setArg(1, m_deltaTime);
 	commandQueue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(m_particleCount), cl::NullRange);
 	commandQueue.enqueueReleaseGLObjects(&m_memory);
-	commandQueue.finish();
-	cl::finish();
+	//commandQueue.finish();
+	//cl::finish();
 }
 
 void 			ParticleSystemBrick::drawGLContent(glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms)
@@ -121,17 +116,17 @@ void 			ParticleSystemBrick::drawGLContent(glm::mat4 const & projection, glm::ma
 	m_shader->use();
 	m_shader->setMat4("projection", projection);
 	m_shader->setMat4("view", view);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glDisable(GL_DEPTH_TEST);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glActiveTexture(GL_TEXTURE0);
 	m_texture->bind();
 	glBindBuffer(GL_ARRAY_BUFFER, m_IBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindVertexArray(m_VAO);
     glDrawArraysInstanced(GL_TRIANGLES, 0, m_particleCount * 36, transforms.size());
-    glBindVertexArray(0);
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
+	//glEnable(GL_DEPTH_TEST);
 	glFinish();
 }

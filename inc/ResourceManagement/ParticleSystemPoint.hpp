@@ -16,7 +16,6 @@ public:
 
 	virtual void 		createGLBufers();
 	virtual void 		setInstanceBuffer();
-	virtual void 		setTexture(std::string const & textureName);
 	virtual void 		initGLBufers(std::string const & initKernelName);
 	virtual void 		updateGLBufers(std::string const & updateKernelName);
 	virtual void 		drawGLContent(glm::mat4 const & projection, glm::mat4 const & view,

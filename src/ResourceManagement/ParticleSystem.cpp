@@ -62,6 +62,11 @@ void 	ParticleSystem::setShader(std::string shaderName)
 	m_shader = RESOURCES.getShader(shaderName);
 }
 
+void 		ParticleSystem::setTexture(std::string const & textureName)
+{
+	m_texture = RESOURCES.getTexture(textureName);
+}
+
 void 	ParticleSystem::setParticleCount(int particleCount)
 {
 	m_particleCount = particleCount;

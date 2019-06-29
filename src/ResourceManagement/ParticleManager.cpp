@@ -27,17 +27,12 @@ ParticleManager::~ParticleManager()
 void 		ParticleManager::init()
 {
 	try {
-
 		initCLEngine();
-		initDefaultParticleInfo(POINTCL,"initSphereKernel", "updateSphereKernel","sprite_p", "", LIVE_TIME);
-		initDefaultParticleInfo(QUAD,"initSphereKernelQuad", "updateSphereKernelQuad",
-														"sprite_quad", "flame-fire", LIVE_TIME);
-		initDefaultParticleInfo(QUAD_TMAP,"initSphereKernelQuadTMap", "updateSphereKernelQuadTMap",
-														"sprite_quad", "explosion_tmap_2", LIVE_TIME);
-		initDefaultParticleInfo(BRICK,"initBrickBlockKernel", "updateBrickBlockKernel",
-														"sprite_quad_brick", "container", LIVE_TIME);
-		initDefaultParticleInfo(CLOUD,"initCloudKernel", "updateCloudKernel",
-																"sprite_quad_cloud", "cloud_trans", LIVE_TIME_CLOUD);
+		initDefaultParticleInfo(POINTCL,	"initSphereKernel", 		"updateSphereKernel", 			"sprite_p", 		 "flame-fire", LIVE_TIME);
+		initDefaultParticleInfo(QUAD,		"initSphereKernelQuad", 	"updateSphereKernelQuad", 		"sprite_quad", 		 "flame-fire", LIVE_TIME);
+		initDefaultParticleInfo(QUAD_TMAP,	"initSphereKernelQuadTMap", "updateSphereKernelQuadTMap", 	"sprite_quad", 		 "explosion_tmap_2", LIVE_TIME);
+		initDefaultParticleInfo(BRICK,		"initBrickBlockKernel", 	"updateBrickBlockKernel", 		"sprite_quad_brick", "container", LIVE_TIME);
+		initDefaultParticleInfo(CLOUD,		"initCloudKernel", 			"updateCloudKernel", 			"sprite_quad_cloud", "cloud_trans", LIVE_TIME_CLOUD);
 		addParticleSystem("pointSphereBomb", POINTCL);
 		addParticleSystem("quadSphereBomb", QUAD);
 		addParticleSystem("quadSphereBombTMap", QUAD_TMAP);

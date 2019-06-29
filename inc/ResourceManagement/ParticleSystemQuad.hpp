@@ -27,7 +27,6 @@ public:
 	ParticleSystemQuad();
 	virtual ~ParticleSystemQuad();
 
-	virtual void 					setTexture(std::string const & textureName);
 	virtual void 					createGLBufers();
 	virtual void 					setInstanceBuffer();
 	virtual void 					initGLBufers(std::string const & initKernelName);
