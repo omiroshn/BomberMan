@@ -2,6 +2,8 @@
 #define BOMBERMAN_LOADMAP_H
 
 #include "LogicCore/MapGeneration.hpp"
+#include <LogicCore/SquareInstance.h>
+#include "LogicCore/Serialization.hpp"
 
 struct CollisionInfo {
 	std::vector<SquareType> Squares;
@@ -25,6 +27,7 @@ private:
 	bool                         mLoaded = false;
 	unsigned                     mWidth;
 	unsigned                     mHeight;
+	Serialization                mReaderWriter;
 
 private:
 	void ConvertDigitsToInstances();

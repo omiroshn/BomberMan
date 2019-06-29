@@ -31,6 +31,7 @@ public:
     std::shared_ptr<Texture>	loadTextureFromFile(const GLchar*, std::string const &, bool isModelTexture = false);
     std::shared_ptr<Skybox>		loadSkybox(std::string const &);
     std::shared_ptr<Skybox>		getSkybox(std::string const &);
+	std::string                 loadMapFromFile(std::string name);
     void						clear();
 	ResourceManager(ResourceManager const &) = delete;
 	ResourceManager &operator=(ResourceManager const &) = delete;
@@ -45,7 +46,7 @@ private:
 	std::map<std::string, std::shared_ptr<Texture>>		mTextures;
 	std::map<std::string, std::shared_ptr<Model>>		mModels;
     std::map<std::string, std::shared_ptr<Skybox>>		mSkyboxes;
-
+	//std::string                                         
 	std::string mBinFolder;
 };
 

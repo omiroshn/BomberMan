@@ -37,6 +37,7 @@ public:
     ~Renderer();
 
     void draw(MapForRendering&);
+    void drawPicture(const std::string& pic);
 
     Renderer(Renderer const &) = delete;
     Renderer &operator=(Renderer const &) = delete;

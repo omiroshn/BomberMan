@@ -12,8 +12,16 @@ public:
     Game();
     ~Game();
     void start();
+    void pause();
 	static float getCurrentTime();
 	static const CollisionInfo& getCollisionInfo();
+    static int   mChosenStage;
+    static bool  mIsRunning;
+    static int   mMusicVolume;
+    static int   mSoundsVolume;
+    static int   mKeyBindVolume;
+    static int   mScreenResolution;
+    static bool  mWindowed;
 
 private:
 	void		resolveCollisions();
@@ -28,10 +36,9 @@ private:
     static Uint64                    mTimeNow;
     static Uint64                    mTimeLast;
     static float                     mDeltaTime;
-	MapForRendering					 mMap;
+	MapForRendering                  mMap;
 	static CollisionInfo			 mCollisionInfo;
-    bool                             mIsRunning;
-
+    bool                             mIsPaused;
 	static float					sInputAcceleration;
 };
 

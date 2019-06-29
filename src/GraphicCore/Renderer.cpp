@@ -5,7 +5,7 @@
 #include "ResourceManagement/Model.hpp"
 #include "ResourceManagement/Skybox.hpp"
 #include "imgui.h"
-
+#include <iostream>
 Renderer::Renderer() : mCamera(glm::vec3(0.0f, 10.0f, -3.0f))
 {
 	mParticleManager = std::make_unique<ParticleManager>();
@@ -27,6 +27,14 @@ void Renderer::draw(MapForRendering& aMap)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     normalPass(aMap);
+}
+
+void Renderer::drawPicture(const std::string& pic)
+{
+    auto block = RESOURCES.getTexture("block");
+    block->bind();
+    std::cout << "textture showed" << std::endl;
+
 }
 
 void Renderer::normalPass(MapForRendering& aMap)

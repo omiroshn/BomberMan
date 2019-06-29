@@ -1,6 +1,7 @@
 
 #include "LogicCore/LoadMap.h"
 #include <tuple>
+#include <iostream>
 
 MapLoader::MapLoader()
 {
@@ -39,6 +40,9 @@ std::tuple<std::vector<SquareInstance*>, CollisionInfo> MapLoader::GetMap(const 
 	else if (index >= 0)
 	{
 		//load from disk
+		mMapOfDigits = mReaderWriter.LoadCampaignMap(index);
+		mWidth = mMapOfDigits.size() / 20;
+		mHeight = mMapOfDigits.size() / mWidth;
 		ConvertDigitsToInstances();
 		mLoaded = true;
 	}
@@ -62,8 +66,19 @@ void MapLoader::ConvertDigitsToInstances()
 
 	for (unsigned i = 0; i < size; ++i)
 	{
+
 		unsigned y = i / mWidth;
 		unsigned x = i % mWidth;
+
+		//std::cout << "x = " << x << "     y = " << y << std::endl;
+		if ((unsigned)mMapOfDigits.at(i) == 1)
+		{
+			mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), SquareType::Wall));
+		}
+		else if ((unsigned)mMapOfDigits.at(i) == 2)
+		{
+			mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), SquareType::Brick));
+		}
 
 		mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), mMapOfDigits[i]));
 	}

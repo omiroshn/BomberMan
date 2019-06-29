@@ -6,6 +6,7 @@ enum class Action
 {
     Nothing = 0,
     Finish,
+    Pause,
     Forward,
     Backward,
     Up,
