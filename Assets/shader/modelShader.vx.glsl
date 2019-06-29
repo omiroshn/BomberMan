@@ -17,7 +17,9 @@ layout (location = 10) in vec3 aBitangent;
 out VS_OUT {
     vec3 FragPos;
     vec2 TexCoords;
-    mat3 TBN;
+    vec3 TangentLightPos;
+    vec3 TangentViewPos;
+    vec3 TangentFragPos;
     vec3 Normal;
 } vs_out;
 
@@ -28,6 +30,7 @@ uniform mat4 boneTransforms[MAX_BONES];
 uniform bool isAnimated;
 
 uniform bool hasNormalMap;
+uniform vec3 lightPos;
 
 void main()
 {
@@ -46,19 +49,26 @@ void main()
     {
         transformModelMat = modelsMatrix;
     }
+
+
+    gl_Position = projection * view * transformModelMat * vec4(aPos, 1.0);
+    vs_out.TexCoords = aTexCoords;
+    vs_out.FragPos = vec3(transformModelMat * vec4(aPos, 1.0));
+
     if (hasNormalMap)
     {
-        vec3 T = normalize(vec3(transformModelMat * vec4(aTangent,   0.0)));
-        vec3 B = normalize(vec3(transformModelMat * vec4(aBitangent, 0.0)));
-        vec3 N = normalize(vec3(transformModelMat * vec4(aNormal,    0.0)));
-        vs_out.TBN = mat3(T, B, N);
+        vec3 T   = normalize(mat3(transformModelMat) * aTangent);
+        vec3 B   = normalize(mat3(transformModelMat) * aBitangent);
+        vec3 N   = normalize(mat3(transformModelMat) * aNormal);
+        mat3 TBN = transpose(mat3(T, B, N));
+
+        vs_out.TangentLightPos = TBN * lightPos;
+        vs_out.TangentViewPos  = TBN * lightPos;
+        vs_out.TangentFragPos  = TBN * vs_out.FragPos;
     }
     else
     {
         vs_out.Normal =  mat3(transpose(inverse(transformModelMat))) * aNormal;
     }
 
-    gl_Position = projection * view * transformModelMat * vec4(aPos, 1.0);
-    vs_out.TexCoords = aTexCoords;
-    vs_out.FragPos = vec3(transformModelMat * vec4(aPos, 1.0));
 }

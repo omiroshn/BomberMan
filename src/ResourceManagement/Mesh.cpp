@@ -107,16 +107,17 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
         std::string name = mTextures[i]->getTextureType();
         if(name == "texture_diffuse")
             number = std::to_string(diffuseNr++);
-        else if(name == "texture_specular")
+        else if (name == "texture_specular")
             number = std::to_string(specularNr++);
-        else if(name == "texture_normal")
+        else if (name == "texture_normal")
             number = std::to_string(normalNr++);
-        else if(name == "texture_height")
+        else if (name == "texture_height")
             number = std::to_string(heightNr++);
         glUniform1i(glGetUniformLocation(shader->mShaderProgram, (name + number).c_str()), i);
         glBindTexture(GL_TEXTURE_2D, mTextures[i]->getTextureID());
     }
     shader->setBool("hasNormalMap", normalNr > 1);
+    shader->setBool("hasHeightMap", heightNr > 1);
     glActiveTexture(GL_TEXTURE0);
     glBindBuffer(GL_ARRAY_BUFFER, mIBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
