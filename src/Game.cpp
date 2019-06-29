@@ -5,6 +5,8 @@
 #include "Entity/MovingEntity.h"
 #include <tuple>
 #include "AI/AIController.h"
+#include "LogicCore/Timer.h"
+#include "LogicCore/TimerManager.h"
 
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
@@ -33,6 +35,7 @@ Game::Game()
     mWindow = std::make_unique<GameWindow>(cDefaultScreenWidth, cDefaultScreenHeight, cWindowName);
     mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
+    // timerManager = TimerManager::Instance();
     loadResources();
 }
 
@@ -46,8 +49,11 @@ void Game::start()
     MapLoader mapLoader;
     int width, height;
 
+    // auto lambda1 = []() { std::cout << ":)" << std::endl; };
+    // timerManager->AddTimer(1, false, lambda1);
     while (mIsRunning)
     {
+        // timerManager->Update();
         mWindow->tickGui();
         mWindow->getSize(width, height);
         calcDeltaTime();

@@ -67,8 +67,8 @@ std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std:
             float weight = mesh->mBones[i]->mWeights[j].mWeight;
             for (unsigned int k = 0; k < 3; ++k)
             {
-                vertices[vertexID].bonesID[k] = boneIndex;
-                vertices[vertexID].weigths[k] = weight;
+                vertices[vertexID].BonesID[k] = boneIndex;
+                vertices[vertexID].Weighs[k] = weight;
             }        
         }
     }
@@ -88,6 +88,12 @@ std::vector<Vertex> Model::loadVertices(aiMesh const* mesh)
         vertex.Normal.x = mesh->mNormals[i].x;
         vertex.Normal.y = mesh->mNormals[i].y;
         vertex.Normal.z = mesh->mNormals[i].z;
+        vertex.Tangent.x = mesh->mTangents[i].x;
+        vertex.Tangent.y = mesh->mTangents[i].y;
+        vertex.Tangent.z = mesh->mTangents[i].z;
+        vertex.Bitangent.x = mesh->mBitangents[i].x;
+        vertex.Bitangent.y = mesh->mBitangents[i].y;
+        vertex.Bitangent.z = mesh->mBitangents[i].z;
         if(mesh->mTextureCoords[0])
         {
             vertex.TexCoords.x = mesh->mTextureCoords[0][i].x;
@@ -125,7 +131,7 @@ std::vector<std::shared_ptr<Texture>> Model::loadTextures(aiMesh const* mesh, ai
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-    std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+    std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(material, aiTextureType_DISPLACEMENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
     return std::move(textures);
 }
