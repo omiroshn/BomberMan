@@ -1,9 +1,13 @@
 #version 330 core
-in vec4 	colorBuf;
+in float 	vtime;
 out vec4 	color;
 
+uniform sampler2D image;
 
 void main()
 {
-    color = colorBuf;
+    vec4 tex = texture(image, gl_PointCoord) / vtime;
+    if (tex.a < 0.01)
+        discard;
+    color =  vec4(tex.rgb * tex.a, 1);
 }

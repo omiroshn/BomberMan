@@ -43,6 +43,7 @@ psPtr 	ParticleSystemCreator::createParticleSystemPoint(clePtr clEngine, psInfo 
 {
 	psPtr psPoint = std::shared_ptr<ParticleSystem>(new ParticleSystemPoint());
 	initParticleSystem(psPoint, clEngine, info);
+	psPoint->setTexture(info.textureName);
 	return psPoint;
 }
 

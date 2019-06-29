@@ -76,7 +76,7 @@ public:
 
 	virtual void				createGLBufers() = 0;
 	virtual void 				setInstanceBuffer() = 0;
-	virtual void 				setTexture(std::string const & textureName) = 0;
+	virtual void 				setTexture(std::string const & textureName);
 	virtual void 				initGLBufers(std::string const & initKernelName) = 0;
 	virtual void 				updateGLBufers(std::string const & updateKernelName) = 0;
 	virtual void				drawGLContent(glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms) = 0;

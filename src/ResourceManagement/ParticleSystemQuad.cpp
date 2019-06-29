@@ -22,11 +22,6 @@ ParticleSystemQuad::~ParticleSystemQuad()
 
 }
 
-void 		ParticleSystemQuad::setTexture(std::string const & textureName)
-{
-	m_texture = RESOURCES.getTexture(textureName);
-}
-
 void 		ParticleSystemQuad::createGLBufers()
 {
 	glGenVertexArrays(1, &m_VAO);

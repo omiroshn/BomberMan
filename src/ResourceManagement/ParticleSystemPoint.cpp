@@ -1,8 +1,10 @@
 #include "ResourceManagement/ParticleSystemPoint.hpp"
+#include "ResourceManagement/Texture.hpp"
 
 ParticleSystemPoint::ParticleSystemPoint()
 {
-
+	glEnable(GL_PROGRAM_POINT_SIZE);
+	setParticleCount(30);
 }
 
 ParticleSystemPoint::~ParticleSystemPoint()
@@ -78,7 +80,7 @@ void 			ParticleSystemPoint::initGLBufers(std::string const & initKernelName)
 
 void 			ParticleSystemPoint::updateGLBufers(std::string const & updateKernelName)
 {
-	glFinish();
+	// glFinish();
 
 	cl::Kernel kernel;
 	m_CLE->getKernel(updateKernelName, kernel);
@@ -90,8 +92,8 @@ void 			ParticleSystemPoint::updateGLBufers(std::string const & updateKernelName
 
 	commandQueue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(m_particleCount), cl::NullRange);
 	commandQueue.enqueueReleaseGLObjects(&m_memory);
-	commandQueue.finish();
-	cl::finish();
+	// commandQueue.finish();
+	// cl::finish();
 }
 
 void 			ParticleSystemPoint::drawGLContent(glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms)
@@ -103,19 +105,18 @@ void 			ParticleSystemPoint::drawGLContent(glm::mat4 const & projection, glm::ma
 	m_shader->setMat4("projection", projection);
 	m_shader->setMat4("view", view);
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_ONE, GL_ONE);
 	glBindBuffer(GL_ARRAY_BUFFER, m_IBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glActiveTexture(GL_TEXTURE0);
+	m_texture->bind();
 
     glBindVertexArray(m_VAO);
     glDrawArraysInstanced(GL_POINTS, 0, m_particleCount, transforms.size());
     glBindVertexArray(0);
 	glDisable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
 	glFinish();
-}
-
-void 				ParticleSystemPoint::setTexture(std::string const & textureName)
-{
-
 }
