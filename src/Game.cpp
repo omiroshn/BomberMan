@@ -11,7 +11,7 @@ Uint64			Game::mTimeLast;
 float			Game::mDeltaTime;
 CollisionInfo	Game::mCollisionInfo;
 
-int   Game::mChosenStage = 2;
+int   Game::mChosenStage = 1;
 bool  Game::mIsRunning = true;
 int   Game::mMusicVolume = 5;
 int   Game::mSoundsVolume = 2;
@@ -29,6 +29,7 @@ namespace
 Game::Game()
 {
 	mTimeNow = SDL_GetPerformanceCounter();
+    //RESOURCES.loadTexture("unlocked.png", "unlocked");
     mWindow = std::make_unique<GameWindow>(cDefaultScreenWidth, cDefaultScreenHeight, cWindowName);
     mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
@@ -223,6 +224,7 @@ void Game::loadResources()
 		RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
 		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
         RESOURCES.loadTexture("block.png", "block");
+        RESOURCES.loadTexture("unlocked.png", "unlocked");
         RESOURCES.loadTexture("container.jpg", "container");
         RESOURCES.loadTexture("awesomeface.png", "face");
 		RESOURCES.loadTexture("flame-fire.png", "flame-fire");

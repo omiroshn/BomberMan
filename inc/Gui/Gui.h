@@ -33,6 +33,7 @@ private:
 	ImTextureID mBackground = nullptr;
 	float mWidth = 800.0f;
 	float mHeight = 600.0f;
+	std::vector<ImTextureID> mButtonsTextures;
 };
 
 #endif //BOMBERMAN_GUI_H
