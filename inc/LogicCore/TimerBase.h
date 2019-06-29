@@ -16,9 +16,17 @@
 class TimerBase
 {
 public:
+	bool toDelete;
+	bool usedEvent;
+
     virtual void Tick() = 0;
-	virtual bool readyForDelete() = 0;
-	virtual bool usedTheEvent() = 0;
+	virtual bool readyForDelete() {
+		return toDelete;
+	}
+	virtual bool usedTheEvent() {
+		return usedEvent;
+	}
+	virtual ~TimerBase(){};
 };
 
 #endif

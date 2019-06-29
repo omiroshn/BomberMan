@@ -5,6 +5,8 @@
 #include "Entity/MovingEntity.h"
 #include <tuple>
 #include "AI/AIController.h"
+#include "LogicCore/Timer.h"
+#include "LogicCore/TimerManager.h"
 
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
@@ -32,6 +34,7 @@ Game::Game()
     mWindow = std::make_unique<GameWindow>(cDefaultScreenWidth, cDefaultScreenHeight, cWindowName);
     mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
+    // timerManager = TimerManager::Instance();
     loadResources();
 }
 
@@ -45,8 +48,12 @@ void Game::start()
     MapLoader mapLoader;
     int width, height;
 
+    // auto lambda1 = []() { std::cout << ":)" << std::endl; };
+    // timerManager->AddTimer(1, false, lambda1);
+
     while (mIsRunning)
     {
+        // timerManager->Update();
         mWindow->tickGui();
         mWindow->getSize(width, height);
         calcDeltaTime();
@@ -207,8 +214,9 @@ void Game::calcDeltaTime()
 	mDeltaTime = (mTimeNow - mTimeLast) / static_cast<float>(SDL_GetPerformanceFrequency());
 	if (mDeltaTime > 1.f)
 		mDeltaTime = 0.016f;
-	ImGui::Text("Current time: %f", getCurrentTime());
-	ImGui::Text("Delta time: %f", mDeltaTime);
+    // std::cout << "Current time: " << getCurrentTime() << std::endl;
+	//ImGui::Text("Current time: %f", getCurrentTime());
+	//ImGui::Text("Delta time: %f", mDeltaTime);
 }
 
 void Game::loadResources()

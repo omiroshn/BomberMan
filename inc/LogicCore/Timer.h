@@ -14,51 +14,33 @@
 #define TIMER_H
 
 #include "TimerBase.h"
-#include <chrono>
+#include "Game.hpp"
 
 template <typename funcType>
 class Timer : public TimerBase
 {
-
  private:
-
-	std::chrono::high_resolution_clock::time_point startTime;
-	std::chrono::duration<float, std::milli> duration;
-	std::chrono::duration<float, std::milli> endTimeDuration;
-
-	bool toDelete;
-	bool usedEvent;
+	float duration;
+	float endTime;
 
 	funcType event;
 
 public:
-
-	Timer(int miliseconds, bool everlasting, funcType lambda) : event(lambda) {
-			startTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<int, std::milli>
-			milli(miliseconds);
-		std::chrono::high_resolution_clock::time_point
-			endTime = startTime + milli;
-			duration = std::chrono::duration<float, std::milli>(0.0f);
-			endTimeDuration = endTime - startTime;
-			toDelete = everlasting == true ? false : true;
-			usedEvent = false;
+	Timer(float seconds, bool everlasting, funcType lambda) : event(lambda) {
+		float startTime = Game::getCurrentTime();
+		duration = seconds;
+		endTime = startTime + seconds;
+		toDelete = !everlasting;
+		usedEvent = false;
 	}
 
 	void Tick() {
-		duration = std::chrono::high_resolution_clock::now() - startTime;
-		if (duration.count() >= endTimeDuration.count()) {
+		if (Game::getCurrentTime() >= endTime)
+		{
 			event();
+			endTime += duration;
 			usedEvent = true;
 		}
-	}
-
-	bool readyForDelete() {
-		return toDelete;
-	}
-
-	bool usedTheEvent() {
-		return usedEvent;
 	}
 
 	virtual ~Timer() {}

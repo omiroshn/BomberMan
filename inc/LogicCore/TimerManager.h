@@ -28,11 +28,14 @@ public:
 	void Update();
 
 	template<typename funcType>
-	void AddTimer(float seconds, bool ever, funcType type)
+	TimerBase *AddTimer(float seconds, bool ever, funcType type)
 	{
-		auto timer = new Timer<funcType>(seconds * 1000, ever, type);
+		TimerBase *timer = new Timer<funcType>(seconds, ever, type);
 		v.push_back(timer);
+		return timer;
 	}
+
+	void RemoveTimer(TimerBase *timer);
 
 private:
 	TimerManager();
