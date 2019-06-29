@@ -36,13 +36,8 @@ void TimerManager::Release() {
 	sInstance = nullptr;
 }
 
-void TimerManager::AddTimer(void f(std::string time), int seconds, bool ever) {
-	Timer *timer = new Timer(f, seconds, ever);
-	v.push_back(timer);
-}
-
 void TimerManager::Update() {
-	for (std::vector<Timer *>::iterator it = v.begin(); it != v.end(); ++it) {
+	for (std::vector<TimerBase *>::iterator it = v.begin(); it != v.end(); ++it) {
 		if (!v.empty()) {
 			(*it)->Tick();
 			if ((*it)->readyForDelete() && (*it)->usedTheEvent())
@@ -51,13 +46,4 @@ void TimerManager::Update() {
 		if (it == v.end())
 			break;
 	}
-	// for (auto timer : v) {
-	// 	timer->Tick();
-	// 	if (timer->readyForDelete() && timer->usedTheEvent()) {
-	// 		v.erase(v[i]);
-	// 	}
-	// 	i++;
-	// 	// std::cout << timer->getStartTime() << std::endl;
-	// 	// std::cout << timer->RemainingTime() << std::endl;
-	// }
 }
