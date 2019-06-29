@@ -8,6 +8,11 @@ float MovingEntity::_Drag = 19;
 float MovingEntity::_MaxVelocity = 4.f;
 float MovingEntity::_MaxAcceleration = 60.f;
 
+#ifndef M_PI_2
+# define M_PI_2 1.57079632679
+#endif // !M_PI_2
+
+
 MovingEntity::MovingEntity(glm::vec2 position, float angle, glm::vec2 velocity, glm::vec2 acceleration) :
 	Entity(position, angle),
 	mVelocity(velocity),

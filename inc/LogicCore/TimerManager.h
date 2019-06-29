@@ -14,7 +14,9 @@
 #define TIMERMANAGER_H
 
 #include "Timer.h"
+#include <algorithm>
 #include <vector>
+
 #include <iostream>
 
 class TimerManager
