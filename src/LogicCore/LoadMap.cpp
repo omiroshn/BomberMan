@@ -41,6 +41,8 @@ std::tuple<std::vector<SquareInstance*>, CollisionInfo> MapLoader::GetMap(const 
 	{
 		//load from disk
 		mMapOfDigits = mReaderWriter.LoadCampaignMap(index);
+		mWidth = mMapOfDigits.size() / 20;
+		mHeight = mMapOfDigits.size() / mWidth;
 		//if (mMapOfDigits[6] == SquareType::Brick)
 		for (int i = 0; i < mMapOfDigits.size(); i++)
 		{
