@@ -58,6 +58,7 @@ void Renderer::normalPass(MapForRendering& aMap)
     modelShader->setMat4("projection", projection);
     modelShader->setMat4("view", view);
     modelShader->setVec3("lightPos", mCamera.position());
+
     std::vector<glm::mat4> transforms;
 
     // render the ground

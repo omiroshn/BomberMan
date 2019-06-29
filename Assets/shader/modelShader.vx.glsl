@@ -11,15 +11,23 @@ layout (location = 3) in mat4 modelsMatrix;
 layout(location = 7) in ivec3 bonesID;
 layout(location = 8) in vec3 weights;
 
-out vec2 TexCoords;
-out vec3 Normal;
-out vec3 FragPos;
+layout (location = 9) in vec3 aTangent;
+layout (location = 10) in vec3 aBitangent;
+
+out VS_OUT {
+    vec3 FragPos;
+    vec2 TexCoords;
+    mat3 TBN;
+    vec3 Normal;
+} vs_out;
 
 uniform mat4 view;
 uniform mat4 projection;
 
 uniform mat4 boneTransforms[MAX_BONES];
 uniform bool isAnimated;
+
+uniform bool hasNormalMap;
 
 void main()
 {
@@ -38,9 +46,19 @@ void main()
     {
         transformModelMat = modelsMatrix;
     }
+    if (hasNormalMap)
+    {
+        vec3 T = normalize(vec3(transformModelMat * vec4(aTangent,   0.0)));
+        vec3 B = normalize(vec3(transformModelMat * vec4(aBitangent, 0.0)));
+        vec3 N = normalize(vec3(transformModelMat * vec4(aNormal,    0.0)));
+        vs_out.TBN = mat3(T, B, N);
+    }
+    else
+    {
+        vs_out.Normal =  mat3(transpose(inverse(transformModelMat))) * aNormal;
+    }
 
     gl_Position = projection * view * transformModelMat * vec4(aPos, 1.0);
-    TexCoords = aTexCoords;
-    Normal = mat3(transpose(inverse(transformModelMat))) * aNormal;
-    FragPos = vec3(transformModelMat * vec4(aPos, 1.0));
+    vs_out.TexCoords = aTexCoords;
+    vs_out.FragPos = vec3(transformModelMat * vec4(aPos, 1.0));
 }
