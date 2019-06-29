@@ -109,12 +109,14 @@ void Gui::ShowLoadSavedGamesMenu()
 {
 	if (ImGui::BeginPopup("Saved Games"))
 	{
-		mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked")->getTextureID());
-		mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("cloud_trans")->getTextureID());
+		if (mButtonsTextures.empty())
+		{
+			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("cloud_trans")->getTextureID());
+		}
 		
 		ImGui::BeginChildFrame(2, {201, 204}, 4);
 		ImGui::Text("Choose stage of the campaign");
-		bool enabled = true;
 		if (ImGui::ImageButton(mButtonsTextures.at(Game::mChosenStage > 0 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			Game::mChosenStage = 1;
