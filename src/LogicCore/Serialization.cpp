@@ -11,15 +11,15 @@
 /* ************************************************************************** */
 
 #include "LogicCore/Serialization.hpp"
-#include <iostream>
-#include <fstream>
+#include "ResourceManagement/ResourceManager.hpp"
 
 std::vector<SquareType> Serialization::LoadCampaignMap(int stage)
 {
     std::vector<SquareType> map;
     map.reserve(400);
     std::string line;
-    std::ifstream f ("map1.txt");
+
+    std::fstream f{RESOURCES.getMap("map1.txt")};
     if(std::getline(f, line))
     {
         for (int i = 0; i < line.size(); i++)

@@ -9,6 +9,8 @@
 #include <string>
 #include <memory>
 #include "GL/glew.h"
+#include <iostream>
+#include <fstream>
 
 #define RESOURCES ResourceManager::getInstance()
 
@@ -31,10 +33,13 @@ public:
     std::shared_ptr<Texture>	loadTextureFromFile(const GLchar*, std::string const &, bool isModelTexture = false);
     std::shared_ptr<Skybox>		loadSkybox(std::string const &);
     std::shared_ptr<Skybox>		getSkybox(std::string const &);
-	std::string                 loadMapFromFile(std::string name);
+
     void						clear();
 	ResourceManager(ResourceManager const &) = delete;
 	ResourceManager &operator=(ResourceManager const &) = delete;
+
+	std::fstream getMap(std::string const & aName);
+
 private:
 	ResourceManager();
 	~ResourceManager();
