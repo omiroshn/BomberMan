@@ -22,28 +22,28 @@ TimerManager *TimerManager::Instance() {
 	return sInstance;
 }
 
-TimerManager::TimerManager() {
-	
-}
+TimerManager::TimerManager() {}
+TimerManager::~TimerManager() {}
 
-TimerManager::~TimerManager() {
-
-}
-
-void TimerManager::Release() {
+void TimerManager::Release()
+{
 
 	delete sInstance;
 	sInstance = nullptr;
 }
 
 void TimerManager::Update() {
-	for (std::vector<TimerBase *>::iterator it = v.begin(); it != v.end(); ++it) {
-		if (!v.empty()) {
-			(*it)->Tick();
-			if ((*it)->readyForDelete() && (*it)->usedTheEvent())
-				v.erase(it);
-		}
-		if (it == v.end())
-			break;
+	for (auto it : v)
+	{
+		it->Tick();
 	}
+	std::remove_if(v.begin(), v.end(), [](TimerBase *timer){
+		return timer->readyForDelete() && timer->usedTheEvent();
+	});
+}
+
+void TimerManager::RemoveTimer(TimerBase *timer)
+{
+	delete timer;
+	v.erase(std::remove(v.begin(), v.end(), timer), v.end());
 }
