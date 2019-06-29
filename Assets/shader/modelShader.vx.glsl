@@ -11,15 +11,26 @@ layout (location = 3) in mat4 modelsMatrix;
 layout(location = 7) in ivec3 bonesID;
 layout(location = 8) in vec3 weights;
 
-out vec2 TexCoords;
-out vec3 Normal;
-out vec3 FragPos;
+layout (location = 9) in vec3 aTangent;
+layout (location = 10) in vec3 aBitangent;
+
+out VS_OUT {
+    vec3 FragPos;
+    vec2 TexCoords;
+    vec3 TangentLightPos;
+    vec3 TangentViewPos;
+    vec3 TangentFragPos;
+    vec3 Normal;
+} vs_out;
 
 uniform mat4 view;
 uniform mat4 projection;
 
 uniform mat4 boneTransforms[MAX_BONES];
 uniform bool isAnimated;
+
+uniform bool hasNormalMap;
+uniform vec3 lightPos;
 
 void main()
 {
@@ -39,8 +50,25 @@ void main()
         transformModelMat = modelsMatrix;
     }
 
+
     gl_Position = projection * view * transformModelMat * vec4(aPos, 1.0);
-    TexCoords = aTexCoords;
-    Normal = mat3(transpose(inverse(transformModelMat))) * aNormal;
-    FragPos = vec3(transformModelMat * vec4(aPos, 1.0));
+    vs_out.TexCoords = aTexCoords;
+    vs_out.FragPos = vec3(transformModelMat * vec4(aPos, 1.0));
+
+    if (hasNormalMap)
+    {
+        vec3 T   = normalize(mat3(transformModelMat) * aTangent);
+        vec3 B   = normalize(mat3(transformModelMat) * aBitangent);
+        vec3 N   = normalize(mat3(transformModelMat) * aNormal);
+        mat3 TBN = transpose(mat3(T, B, N));
+
+        vs_out.TangentLightPos = TBN * lightPos;
+        vs_out.TangentViewPos  = TBN * lightPos;
+        vs_out.TangentFragPos  = TBN * vs_out.FragPos;
+    }
+    else
+    {
+        vs_out.Normal =  mat3(transpose(inverse(transformModelMat))) * aNormal;
+    }
+
 }
