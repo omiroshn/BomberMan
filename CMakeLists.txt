@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.13...3.14)
 
 project(bomberman LANGUAGES CXX)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmakeModules)
-
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -78,6 +76,9 @@ set_target_properties(bomberman PROPERTIES
 	USE_FOLDERS ON)
 target_include_directories(bomberman PRIVATE ${BOMBERMAN_INCLUDES})
 target_link_libraries (bomberman PRIVATE ${BOMBERMAN_LIBS})
+
+target_link_libraries(bomberman PUBLIC Boost::serialization)
+target_link_libraries(bomberman PUBLIC Boost::boost)
 
 # if ( CMAKE_COMPILER_IS_GNUCC )
 #     target_compile_options(bomberman PRIVATE "-Wall -Wextra -Werror")
