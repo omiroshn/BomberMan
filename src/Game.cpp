@@ -12,6 +12,8 @@ float			Game::mDeltaTime;
 CollisionInfo	Game::mCollisionInfo;
 
 int   Game::mChosenStage = 1;
+int   Game::mScore = 100;
+int   Game::mLives = 3;
 bool  Game::mIsRunning = true;
 int   Game::mMusicVolume = 5;
 int   Game::mSoundsVolume = 2;
@@ -29,7 +31,6 @@ namespace
 Game::Game()
 {
 	mTimeNow = SDL_GetPerformanceCounter();
-    //RESOURCES.loadTexture("unlocked.png", "unlocked");
     mWindow = std::make_unique<GameWindow>(cDefaultScreenWidth, cDefaultScreenHeight, cWindowName);
     mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();

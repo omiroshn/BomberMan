@@ -24,18 +24,11 @@ void Gui::ShowMainMenu()
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(220,100));
 	ImGui::SetNextWindowCollapsed(0);
 
-	//SetBackground("unlocked");
-
 	ImGui::Begin("Main Menu");
+	//SetBackground("unlocked");
 	//ImGui::Image(mBackground,{200,200}, {1,1}, {0,0});
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
 	ImGui::Text("Welcome to BomberMan game!");
-
-	/////////////////////////////////HARDNESS////////////////////////////////////
-
-	//ImGui::Separator();
-
-	//ShowHardnessRadioButtons();
 
 	/////////////////////////////////START GAME////////////////////////////////////
 
@@ -72,15 +65,14 @@ void Gui::ShowInGameMenu()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
-		if (ImGui::BeginMenu("Settings"))
-		{
-			if (ImGui::MenuItem("Open Popup"))
-			{
-				ImGui::OpenPopup("Some Popup");
-			}
-			ImGui::EndMenu();
-		}
-		ImGui::Text("Your score is:");
+		ImGui::Text("Score: ");
+		ImGui::Text(std::to_string(Game::mScore).c_str());
+
+		ImGui::Text("   Time: ");
+		ImGui::Text(std::to_string(Game::mScore).c_str());
+
+		ImGui::Text("   Lives: ");
+		ImGui::Text(std::to_string(Game::mLives).c_str());
 		ImGui::EndMainMenuBar();
 	}
 
@@ -95,7 +87,8 @@ void Gui::ShowStartNewGameMenu()
 {
 	if (ImGui::BeginPopup("Select stage"))
 	{
-		
+		//ShowHardnessRadioButtons();
+
 		ImGui::BeginChildFrame(2, {200, 204}, 4);
 		ImGui::Text("     Enter your name");
 		 static char str0[128] = "Your name";
@@ -119,7 +112,7 @@ void Gui::ShowLoadSavedGamesMenu()
 		mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked")->getTextureID());
 		mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("cloud_trans")->getTextureID());
 		
-		ImGui::BeginChildFrame(2, {200, 204}, 4);
+		ImGui::BeginChildFrame(2, {201, 204}, 4);
 		ImGui::Text("Choose stage of the campaign");
 		bool enabled = true;
 		if (ImGui::ImageButton(mButtonsTextures.at(Game::mChosenStage > 0 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
