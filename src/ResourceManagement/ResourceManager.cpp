@@ -193,14 +193,6 @@ std::shared_ptr<Skybox>		ResourceManager::loadSkybox(std::string const &aSkyboxN
     return skybox;
 }
 
-std::string    ResourceManager::loadMapFromFile(std::string name)
-{
-    std::string path = std::string(mBinFolder + "maps/" + name);
-    std::string ret;
-
-    return ret;
-}
-
 std::shared_ptr<Skybox>		ResourceManager::getSkybox(std::string const &name)
 {
     if (mSkyboxes.count(name))
@@ -228,3 +220,9 @@ ResourceManager::~ResourceManager()
 {
 	clear();
 };
+
+std::fstream ResourceManager::getMap(std::string const & aName)
+{
+    std::fstream f(mBinFolder + "maps/" + "map1.txt");
+    return f;
+}
