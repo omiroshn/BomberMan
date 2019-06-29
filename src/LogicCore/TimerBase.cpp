@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   TimerBase.h                                        :+:      :+:    :+:   */
+/*   TimerBase.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omiroshn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/29 16:38:46 by omiroshn          #+#    #+#             */
-/*   Updated: 2019/06/29 16:38:47 by omiroshn         ###   ########.fr       */
+/*   Created: 2019/06/29 20:43:29 by omiroshn          #+#    #+#             */
+/*   Updated: 2019/06/29 20:43:31 by omiroshn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TIMER_BASE_H
-#define TIMER_BASE_H
+#include "LogicCore/TimerBase.h"
 
-class TimerBase
-{
-public:
-	bool toDelete;
-	bool usedEvent;
+bool TimerBase::readyForDelete() {
+    return toDelete;
+}
 
-    virtual void Tick() = 0;
-	bool readyForDelete();
-	bool usedTheEvent();
-	virtual ~TimerBase(){};
-};
-
-#endif
+bool TimerBase::usedTheEvent() {
+    return usedEvent;
+}

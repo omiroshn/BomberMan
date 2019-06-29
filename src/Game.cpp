@@ -50,7 +50,6 @@ void Game::start()
 
     // auto lambda1 = []() { std::cout << ":)" << std::endl; };
     // timerManager->AddTimer(1, false, lambda1);
-
     while (mIsRunning)
     {
         // timerManager->Update();
@@ -214,9 +213,8 @@ void Game::calcDeltaTime()
 	mDeltaTime = (mTimeNow - mTimeLast) / static_cast<float>(SDL_GetPerformanceFrequency());
 	if (mDeltaTime > 1.f)
 		mDeltaTime = 0.016f;
-    // std::cout << "Current time: " << getCurrentTime() << std::endl;
-	//ImGui::Text("Current time: %f", getCurrentTime());
-	//ImGui::Text("Delta time: %f", mDeltaTime);
+	ImGui::Text("Current time: %f", getCurrentTime());
+	ImGui::Text("Delta time: %f", mDeltaTime);
 }
 
 void Game::loadResources()
