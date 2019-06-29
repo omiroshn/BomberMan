@@ -125,7 +125,7 @@ void Game::resolveCollisions()
 		else
 			Hero.move({0, CorrectedPosition.y});
 	}
-//    mRenderer->getCamera().followEntity(Hero, 10.f);
+    mRenderer->getCamera().followEntity(Hero, 10.f);
 }
 
 void Game::doAction(Action const& a)
