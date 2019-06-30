@@ -4,6 +4,9 @@
 #include "ResourceManagement/Texture.hpp"
 #include "GL/glew.h"
 #include "Game.hpp"
+#include  "Configure.hpp"
+
+//bool isWindowed = CONFIGURATION.getWindowed();
 
 Gui::Gui()
 {
@@ -66,13 +69,13 @@ void Gui::ShowInGameMenu()
 	if (ImGui::BeginMainMenuBar())
 	{
 		ImGui::Text("Score: ");
-		ImGui::Text(std::to_string(Game::mScore).c_str());
+		ImGui::Text(std::to_string(CONFIGURATION.getScore()).c_str());
 
 		ImGui::Text("   Time: ");
-		ImGui::Text(std::to_string(Game::mScore).c_str());
+		ImGui::Text(std::to_string(CONFIGURATION.getScore()).c_str());
 
 		ImGui::Text("   Lives: ");
-		ImGui::Text(std::to_string(Game::mLives).c_str());
+		ImGui::Text(std::to_string(CONFIGURATION.getLives()).c_str());
 		ImGui::EndMainMenuBar();
 	}
 
@@ -99,7 +102,7 @@ void Gui::ShowStartNewGameMenu()
 	if (ImGui::Button("Start new Campaign", STANDARD_MENU_BUTTON))
 	{
 		//ImGui::OpenPopup("Select stage");
-		Game::mChosenStage = 1;
+		CONFIGURATION.setChosenStage(1);
 		GamePaused(false);
 		StartTheGame(true);
 	}
@@ -114,36 +117,36 @@ void Gui::ShowLoadSavedGamesMenu()
 			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked")->getTextureID());
 			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("cloud_trans")->getTextureID());
 		}
-		
+
 		ImGui::BeginChildFrame(2, {201, 204}, 4);
 		ImGui::Text("Choose stage of the campaign");
-		if (ImGui::ImageButton(mButtonsTextures.at(Game::mChosenStage > 0 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 0 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
-			Game::mChosenStage = 1;
+			CONFIGURATION.setChosenStage(1);
 			GamePaused(false);
 			StartTheGame(true);
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 1");
-		if (ImGui::ImageButton(mButtonsTextures.at(Game::mChosenStage > 1 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 1 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
-			Game::mChosenStage = 2;
+			CONFIGURATION.setChosenStage(2);
 			GamePaused(false);
 			StartTheGame(true);
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 2");
-		if (ImGui::ImageButton(mButtonsTextures.at(Game::mChosenStage > 2 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 2 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
-			Game::mChosenStage = 3;
+			CONFIGURATION.setChosenStage(3);
 			GamePaused(false);
 			StartTheGame(true);
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 3");
-		if (ImGui::ImageButton(mButtonsTextures.at(Game::mChosenStage == -1 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() == -1 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
-			Game::mChosenStage = -1;
+			CONFIGURATION.setChosenStage(-1);
 			GamePaused(false);
 			StartTheGame(true);
 		}
@@ -152,7 +155,7 @@ void Gui::ShowLoadSavedGamesMenu()
 		ImGui::EndChildFrame();
 		if (ImGui::Button("PLAY", STANDARD_MENU_BUTTON))
 		{
-			Game::mChosenStage = 1;
+			CONFIGURATION.setChosenStage(1);
 			GamePaused(false);
 			StartTheGame(true);
 		}
@@ -173,24 +176,27 @@ void Gui::ShowSettingsMenu()
 		ImGui::BeginChildFrame(3, saved_frame, 4);
 
 		ImGui::Text("\nSet music volume\n");
-		ImGui::SliderInt("10", &Game::mMusicVolume, 0, 10, "Music");
+		ImGui::SliderInt("10", &CONFIGURATION.getMusicVolume(), 0, 10, "Music");
 		ImGui::Separator();
 
 		ImGui::Text("\nSet sounds volume\n");
-		ImGui::SliderInt("9", &Game::mSoundsVolume, 0, 9, "Sounds");
+		ImGui::SliderInt("9", &CONFIGURATION.getSoundVolume(), 0, 9, "Sounds");
 		ImGui::Separator();
 
 		ImGui::Text("\nSet keybinding\n");
-		ImGui::RadioButton("Arrows", &Game::mKeyBindVolume, 0);ImGui::SameLine();
-		ImGui::RadioButton("ASWD", &Game::mKeyBindVolume, 1);ImGui::SameLine();
-		ImGui::RadioButton("HJKL", &Game::mKeyBindVolume, 2);
+		ImGui::RadioButton("Arrows", &CONFIGURATION.getKeyBindVolume(), 0);ImGui::SameLine();
+		ImGui::RadioButton("ASWD", &CONFIGURATION.getKeyBindVolume(), 1);ImGui::SameLine();
+		ImGui::RadioButton("HJKL", &CONFIGURATION.getKeyBindVolume(), 2);
 		ImGui::Separator();
 
-		ImGui::Checkbox("FullScreen", &Game::mWindowed);
-		
+		if (ImGui::Checkbox("FullScreen", &CONFIGURATION.getWindowed()))
+		{
+			CONFIGURATION.setWindowed(CONFIGURATION.getWindowed());
+		}
+
 		ImGui::Text("\nSet screen resolution\n");
          const char* items[] = {"360", "480", "720", "1400"};
-		//ImGui::Combo("combo", &Game::mScreenResolution, "360\0res480\0res720\0res1000\0res1200\0\0");
+		//ImGui::Combo("combo", &CONFIGURATION.getScreenResolution(), "360\0res480\0res720\0res1000\0res1200\0\0");
 		ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
 
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -200,10 +206,10 @@ void Gui::ShowSettingsMenu()
 		ImGui::PushItemWidth(w - spacing * 2.0f - button_sz * 2.0f);
 		if (ImGui::ArrowButton("##r", ImGuiDir_Left))
 		{
-			if (Game::mScreenResolution > 0)
-				Game::mScreenResolution--;
+			if (CONFIGURATION.getScreenResolution() > 0)
+				CONFIGURATION.getScreenResolution()--;
 		}
-		static const char* current_item = items[Game::mScreenResolution];
+		static const char* current_item = items[CONFIGURATION.getScreenResolution()];
 		ImGui::SameLine(0, spacing);
 		if (ImGui::BeginCombo("##custom combo", current_item, ImGuiComboFlags_NoArrowButton))
 		{
@@ -221,8 +227,8 @@ void Gui::ShowSettingsMenu()
 		ImGui::SameLine(0, spacing);
 		if (ImGui::ArrowButton("##r", ImGuiDir_Right))
 		{
-			if (Game::mScreenResolution < 4)
-				Game::mScreenResolution++;
+			if (CONFIGURATION.getScreenResolution() < 4)
+				CONFIGURATION.getScreenResolution()++;
 		}
 
 		ImGui::EndChildFrame();

@@ -20,6 +20,8 @@ public:
     void ShowStartingMenu();
     void ShowInGameMenu();
     void PauseGame(bool state);
+	void setSize(int const w, int const h);
+	void setFullScreen(bool isFullScreen);
 
 private:
     void initWindow();
@@ -35,4 +37,3 @@ private:
     SDL_Event     mEvent;
 	Gui          *mMainMenu;
 };
-
