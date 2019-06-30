@@ -67,67 +67,47 @@ void Game::start()
         }
         else
         {
-            if (mapLoader.MapIsLoaded() && !mReloadStage)
-            {
-            if (ImGui::Button("Add balloon"))
+			if (mapLoader.MapIsLoaded())
 			{
-				mMap.GetEnemies().emplace_back(new MovingEntity(glm::vec2(7.5 + rand() % 20, 5.5)));
-				mMap.GetControllers().emplace_back();
-			}
-                MovingEntity::debugMovement();
-                updateHeroInput();
-                bm::Tickable::tickTickables(mDeltaTime);
-                resolveCollisions();
-                mRenderer->draw(mMap);
-                static int index = 0;
-                ImGui::RadioButton("NO VSync", &index, 0);
-                ImGui::RadioButton("60", &index, 1);
-                ImGui::RadioButton("30", &index, 2);
-                if (index)
-                {
-                    const float TargetDelta = 0.0167f * index;
-                    if (mDeltaTime < TargetDelta)
-                        SDL_Delay(TargetDelta - mDeltaTime * 1000);
-                }
-                mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
-                mWindow->ShowInGameMenu();
-            }
-            else
-            {
-                if (CONFIGURATION.getLives() == 0)
-                    CONFIGURATION.setChosenStage(1);
-                mMap.cleanMapForRendering();
-                mCollisionInfo.Squares.clear();
-                std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
-                mMap.ParseMapBySquareInstances();
-                mStageStartedTimer = getCurrentTime();
-                mReloadStage = 0;
-            }
+				if (ImGui::Button("Add balloon"))
+				{
+					mMap.GetEnemies().emplace_back(new MovingEntity(glm::vec2(7.5 + rand() % 20, 5.5)));
+					mMap.GetControllers().emplace_back();
+				}
+				MovingEntity::debugMovement();
+				updateHeroInput();
+				Tickable::tickTickables(mDeltaTime); //buggy code
 
-			resolveCollisions();
-            mRenderer->getCamera().followEntity(mMap.GetHero(), 10.f);
-            mRenderer->draw(mMap);
-			static int index = 0;
-			ImGui::RadioButton("NO VSync", &index, 0);
-			ImGui::RadioButton("60", &index, 1);
-			ImGui::RadioButton("30", &index, 2);
-			if (index)
+				// mMap.GetHero().tick(mDeltaTime);
+				// for (auto& It : mMap.GetEnemies())
+				//     It.tick(mDeltaTime);
+				for (int i = 0; i < mMap.GetControllers().size(); i++)
+				{
+					mMap.GetControllers()[i].tick(*mMap.GetEnemies()[i]);
+				}
+
+				resolveCollisions();
+				mRenderer->draw(mMap);
+				static int index = 0;
+				ImGui::RadioButton("NO VSync", &index, 0);
+				ImGui::RadioButton("60", &index, 1);
+				ImGui::RadioButton("30", &index, 2);
+				if (index)
+				{
+					const float TargetDelta = 0.0167f * index;
+					if (mDeltaTime < TargetDelta)
+						SDL_Delay((TargetDelta - mDeltaTime) * 1000);
+				}
+				mWindow->ShowInGameMenu();
+				mapLoader.UpdateMap();
+			}
+			else
 			{
-				const float TargetDelta = 0.0167f * index;
-				if (mDeltaTime < TargetDelta)
-					SDL_Delay((TargetDelta - mDeltaTime) * 1000);
+				auto t =  mapLoader.GetMap(-1);
+				mMap = std::get<0>(t);
+				mCollisionInfo = std::get<1>(t);
+				mWindow->update();
 			}
-
-            mWindow->update();
-            doAction(mIManager->processEvents(mWindow->getEvent()));
-            mapLoader.UpdateMap();
-        }
-        else
-        {
-            auto t =  mapLoader.GetMap(-1);
-            mMap = std::get<0>(t);
-            mCollisionInfo = std::get<1>(t);
-            mWindow->update();
         }
         doAction(mIManager->processEvents(mWindow->getEvent()));
         mWindow->update();
@@ -209,6 +189,7 @@ void Game::resolveCollisions()
     static float CollisionResolveMultiplier = 350.f;
     ImGui::SliderFloat("CollisionResolveMultiplier", &CollisionResolveMultiplier, 100, 1000);
     Hero.AddAcceleration(CollisionOffset * CollisionResolveMultiplier);
+	mRenderer->getCamera().followEntity(mMap.GetHero(), 10.f);
 }
 
 void Game::doAction(Action const& a)
@@ -315,6 +296,8 @@ void Game::loadResources()
 		RESOURCES.loadTexture("cloud_trans.jpg", "cloud_trans");
 		RESOURCES.loadTexture("explode.png", "explosion_tmap_2");
         RESOURCES.loadSkybox("defaultSkybox");
+        RESOURCES.loadSkybox("blue");
+        RESOURCES.loadSkybox("lightblue");
 
         auto a = RESOURCES.loadModel("y_bot/y_bot.fbx", "bot");
         {
@@ -453,7 +436,7 @@ void Game::updateHeroInput()
 	if (ImGui::IsKeyDown(SDL_SCANCODE_W))
         mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime * 100);
     if (ImGui::IsKeyPressed(SDL_SCANCODE_0))
-        explosion(Hero.getPosition(), 2);
+        explosion(Hero.getPosition(), 10);
 }
 
 void 		Game::saveCurrentState(std::string fileName)

@@ -38,6 +38,7 @@ public:
 	static void tickTickables(float DeltaTime);
 protected:
 	Tickable();
+	Tickable(Tickable&& Other);
 	~Tickable();
 private:
 	static std::vector<Tickable *> sTickables;

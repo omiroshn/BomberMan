@@ -1,4 +1,5 @@
 #include "GraphicCore/Renderer.hpp"
+#include "Game.hpp"
 #include "LogicCore/MapForRendering.h"
 #include "ResourceManagement/Texture.hpp"
 #include "ResourceManagement/Shader.hpp"
@@ -39,17 +40,31 @@ void Renderer::drawPicture(const std::string& pic)
 
 void Renderer::normalPass(MapForRendering& aMap)
 {
-
     glViewport(0, 0, mWidth, mHeight);
+    
+    int stage = CONFIGURATION.getChosenStage();
+    static std::shared_ptr<Model> bricks[] = {
+        RESOURCES.getModel("wall"),
+        RESOURCES.getModel("brick"),
+        RESOURCES.getModel("brick"),
+        RESOURCES.getModel("brick")
+    };
+    static std::shared_ptr<Skybox> skyboxes[] = {
+        RESOURCES.getSkybox("defaultSkybox"),
+        RESOURCES.getSkybox("lightblue"),
+        RESOURCES.getSkybox("defaultSkybox"),
+        RESOURCES.getSkybox("blue")
+    };
 
-    auto brick = RESOURCES.getModel("brick");
-    auto wall = RESOURCES.getModel("wall");
-    auto heroModel = RESOURCES.getModel("bot");
-    auto balloon = RESOURCES.getModel("balloon");
-    auto ground = RESOURCES.getModel("ground");
-    auto skybox = RESOURCES.getSkybox("defaultSkybox");
-    auto modelShader = RESOURCES.getShader("modelShader");
-    auto skyboxShader = RESOURCES.getShader("skybox");
+    static auto wall = RESOURCES.getModel("wall");
+    static auto heroModel = RESOURCES.getModel("bot");
+    static auto balloon = RESOURCES.getModel("balloon");
+    static auto ground = RESOURCES.getModel("ground");
+    static auto modelShader = RESOURCES.getShader("modelShader");
+    static auto skyboxShader = RESOURCES.getShader("skybox");
+
+    auto brick = bricks[stage];
+    auto skybox = skyboxes[stage];
 
     modelShader->use();
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
@@ -61,16 +76,6 @@ void Renderer::normalPass(MapForRendering& aMap)
 
     std::vector<glm::mat4> transforms;
 
-    // render the ground
-    {
-        glm::mat4 groundModel = glm::mat4(1.0f);
-        groundModel = glm::translate(groundModel, glm::vec3(9.5, -0.5f, 9.5));
-        groundModel = glm::scale(groundModel, glm::vec3(20.0f, 0.1f, 20.0f));
-        transforms.push_back(groundModel);
-        ground->draw(modelShader, transforms);
-    }
-    transforms.clear();
-
     {
         auto& Hero = aMap.GetHero();
         Hero.debug();
@@ -78,8 +83,8 @@ void Renderer::normalPass(MapForRendering& aMap)
         heroModel->setAnimation(Hero.getAnimation());
         heroModel->draw(modelShader, transforms);
     }
-
     transforms.clear();
+
     // render balloons aka enemies
     {
 		auto& Enemies = aMap.GetEnemies();
@@ -119,6 +124,26 @@ void Renderer::normalPass(MapForRendering& aMap)
             brick->draw(modelShader, transforms);
         }
     }
+
+    // render the ground
+    {
+        glm::mat4 groundModel = glm::mat4(1.0f);
+        groundModel = glm::translate(groundModel, glm::vec3(.0f, -0.5f, .0f));
+        groundModel = glm::scale(groundModel, glm::vec3(1.0f, 0.1f, 1.0f));
+
+        CollisionInfo &info = Game::getCollisionInfo();
+        for (int i = 0; i < info.Squares.size(); i++)
+        {
+            glm::mat4 groundTransform = groundModel;
+            groundTransform = glm::translate(groundTransform,
+                glm::vec3(i%info.width + .5f, 0, i/info.width + .5f)
+            );
+            transforms.push_back(groundTransform);
+        }
+        ground->draw(modelShader, transforms);
+    }
+    transforms.clear();
+
 	// render running particle system
 	try {
 		mParticleManager->draw(projection, view);

@@ -29,15 +29,11 @@ void 		ParticleManager::init()
 	try {
 		initCLEngine();
 		initDefaultParticleInfo(POINTCL,	"initSphereKernel", 		"updateSphereKernel", 			"sprite_p", 		 "flame-fire", LIVE_TIME);
-		initDefaultParticleInfo(QUAD,		"initSphereKernelQuad", 	"updateSphereKernelQuad", 		"sprite_quad", 		 "flame-fire", LIVE_TIME);
-		initDefaultParticleInfo(QUAD_TMAP,	"initSphereKernelQuadTMap", "updateSphereKernelQuadTMap", 	"sprite_quad", 		 "explosion_tmap_2", LIVE_TIME);
 		initDefaultParticleInfo(BRICK,		"initBrickBlockKernel", 	"updateBrickBlockKernel", 		"sprite_quad_brick", "container", LIVE_TIME);
-		initDefaultParticleInfo(CLOUD,		"initCloudKernel", 			"updateCloudKernel", 			"sprite_quad_cloud", "cloud_trans", LIVE_TIME_CLOUD);
 		addParticleSystem("pointSphereBomb", POINTCL);
-		addParticleSystem("quadSphereBomb", QUAD);
-		addParticleSystem("quadSphereBombTMap", QUAD_TMAP);
+		addParticleSystem("pointSphereBomb2", POINTCL);
 		addParticleSystem("BrickBlock", BRICK);
-		addParticleSystem("Cloud", CLOUD);
+		addParticleSystem("BrickBlock2", BRICK);
 	} catch (CustomException &ex) {
 		std::cout << ex.what() << std::endl;
 		exit(42);
@@ -59,22 +55,22 @@ void 		ParticleManager::initCLEngine()
 		m_CLE->addKernel("updateSphereProgram", "updateSphereKernel","update_sphere");
 
 		//set sources prorams and kernels for initialise Sphere by Quads
-		m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/init_sphere_by_quads.cl", "initSphereQuads");
-		m_CLE->addProgramFromSource("initSphereQuads", "initSphereProgramQuad");
-		m_CLE->addKernel("initSphereProgramQuad", "initSphereKernelQuad","initialize_sphere");
+		// m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/init_sphere_by_quads.cl", "initSphereQuads");
+		// m_CLE->addProgramFromSource("initSphereQuads", "initSphereProgramQuad");
+		// m_CLE->addKernel("initSphereProgramQuad", "initSphereKernelQuad","initialize_sphere");
 		//set sources prorams and kernels for update Sphere by Quads
-		m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/update_sphere_by_quads.cl", "updateSphereQuads");
-		m_CLE->addProgramFromSource("updateSphereQuads", "updateSphereProgramQuad");
-		m_CLE->addKernel("updateSphereProgramQuad", "updateSphereKernelQuad","update_sphere");
+		// m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/update_sphere_by_quads.cl", "updateSphereQuads");
+		// m_CLE->addProgramFromSource("updateSphereQuads", "updateSphereProgramQuad");
+		// m_CLE->addKernel("updateSphereProgramQuad", "updateSphereKernelQuad","update_sphere");
 
 		//set sources prorams and kernels for initialise Sphere by Quads with texture map
-		m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/init_sphere_by_quads_tmap.cl", "initSphereQuadsTMap");
-		m_CLE->addProgramFromSource("initSphereQuadsTMap", "initSphereProgramQuadTMap");
-		m_CLE->addKernel("initSphereProgramQuadTMap", "initSphereKernelQuadTMap","initialize_sphere");
+		// m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/init_sphere_by_quads_tmap.cl", "initSphereQuadsTMap");
+		// m_CLE->addProgramFromSource("initSphereQuadsTMap", "initSphereProgramQuadTMap");
+		// m_CLE->addKernel("initSphereProgramQuadTMap", "initSphereKernelQuadTMap","initialize_sphere");
 		//set sources prorams and kernels for update Sphere by Quads with texture map
-		m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/update_sphere_by_quads_tmap.cl", "updateSphereQuadsTMap");
-		m_CLE->addProgramFromSource("updateSphereQuadsTMap", "updateSphereProgramQuadTMap");
-		m_CLE->addKernel("updateSphereProgramQuadTMap", "updateSphereKernelQuadTMap","update_sphere");
+		// m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/update_sphere_by_quads_tmap.cl", "updateSphereQuadsTMap");
+		// m_CLE->addProgramFromSource("updateSphereQuadsTMap", "updateSphereProgramQuadTMap");
+		// m_CLE->addKernel("updateSphereProgramQuadTMap", "updateSphereKernelQuadTMap","update_sphere");
 
 		//set sources prorams and kernels for initialise Brick Block
 		m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/init_brick_block.cl", "initBrickBlock");
@@ -86,13 +82,13 @@ void 		ParticleManager::initCLEngine()
 		m_CLE->addKernel("updateBrickBlockProgram", "updateBrickBlockKernel","update_brick_block");
 
 		//set sources prorams and kernels for initialise Cloud
-		m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/init_cloud.cl", "initCloud");
-		m_CLE->addProgramFromSource("initCloud", "initCloudProgram");
-		m_CLE->addKernel("initCloudProgram", "initCloudKernel","initialize_cloud");
-		//set sources prorams and kernels for update  Cloud
-		m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/update_cloud.cl", "updateCloud");
-		m_CLE->addProgramFromSource("updateCloud", "updateCloudProgram");
-		m_CLE->addKernel("updateCloudProgram", "updateCloudKernel","update_cloud");
+		// m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/init_cloud.cl", "initCloud");
+		// m_CLE->addProgramFromSource("initCloud", "initCloudProgram");
+		// m_CLE->addKernel("initCloudProgram", "initCloudKernel","initialize_cloud");
+		// //set sources prorams and kernels for update  Cloud
+		// m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/update_cloud.cl", "updateCloud");
+		// m_CLE->addProgramFromSource("updateCloud", "updateCloudProgram");
+		// m_CLE->addKernel("updateCloudProgram", "updateCloudKernel","update_cloud");
 	} catch (CustomException &ex) {
 		std::cout << ex.what() << std::endl;
 		exit(42);

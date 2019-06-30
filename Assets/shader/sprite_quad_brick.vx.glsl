@@ -12,6 +12,6 @@ uniform mat4 view;
 void main()
 {
     gl_Position = projection * view * model * vec4(vertex.xyz, 1.0);
-	time = vertex.w;
+	time = 1-vertex.w;
 	TexCoords = uv;
 }
