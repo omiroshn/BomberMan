@@ -15,16 +15,17 @@
 
 std::vector<SquareType> Serialization::LoadCampaignMap(int stage)
 {
+    std::string map_name = "map" + std::to_string(stage) + ".txt";
     std::vector<SquareType> map;
     map.reserve(400);
     std::string line;
-
-    std::fstream f{RESOURCES.getMap("map1.txt")};
+    std::cout << map_name << std::endl;
+    std::fstream f{RESOURCES.getMap(map_name)};
     if(std::getline(f, line))
     {
         for (int i = 0; i < line.size(); i++)
         {
-            std::cout << "line[" <<i << "]" << line[i] << std::endl;
+            //std::cout << "line[" <<i << "]" << line[i] << std::endl;
             if (line[i] == '0')
                 map.push_back(SquareType::EmptySquare);
             else if (line[i] == '1')
@@ -40,6 +41,7 @@ std::vector<SquareType> Serialization::LoadCampaignMap(int stage)
     }
     else{
             std::cout << "Not opened file" << stage << std::endl;
+            map = LoadCampaignMap(1);
 
     }
 

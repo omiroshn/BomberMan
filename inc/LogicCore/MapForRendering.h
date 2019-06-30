@@ -19,7 +19,7 @@ public:
 	std::vector<SquareInstance*> GetBonuses();
 	unsigned getWitdh();
 	unsigned getHeight();
-
+	bool     cleanMapForRendering();
 	std::vector<MovingEntity>& GetEnemies();
 	MovingEntity& GetHero();
 

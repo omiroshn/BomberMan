@@ -20,16 +20,16 @@ Gui::~Gui()
 
 void Gui::ShowMainMenu()
 {
-	glViewport(0, 0, mWidth, mHeight);
-	ImGui::SetNextWindowSize({mWidth, mHeight}, ImGuiSetCond_FirstUseEver);
+	ImGuiWindowFlags window_flags = 0;
+	window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar ;
+	mWidth = CONFIGURATION.getWidth();
+	mHeight = CONFIGURATION.getHeight();
+	
 	ImGui::SetNextWindowPos({0, 0},0);
-	ImGui::SetNextWindowBgAlpha(1);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(220,100));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(mWidth / 2 - 100, mHeight / 2 - 79));
 	ImGui::SetNextWindowCollapsed(0);
 
-	ImGui::Begin("Main Menu");
-	//SetBackground("unlocked");
-	//ImGui::Image(mBackground,{200,200}, {1,1}, {0,0});
+	ImGui::Begin("Main Menu", NULL,window_flags);
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
 	ImGui::Text("Welcome to BomberMan game!");
 
@@ -69,13 +69,13 @@ void Gui::ShowInGameMenu()
 	if (ImGui::BeginMainMenuBar())
 	{
 		ImGui::Text("Score: ");
-		ImGui::Text(std::to_string(CONFIGURATION.getScore()).c_str());
+		ImGui::Text("%s", std::to_string(CONFIGURATION.getScore()).c_str());
 
 		ImGui::Text("   Time: ");
-		ImGui::Text(std::to_string(CONFIGURATION.getScore()).c_str());
+		ImGui::Text("%s", std::to_string(Game::mStageTimer).c_str());
 
 		ImGui::Text("   Lives: ");
-		ImGui::Text(std::to_string(CONFIGURATION.getLives()).c_str());
+		ImGui::Text("%s", std::to_string(CONFIGURATION.getLives()).c_str());
 		ImGui::EndMainMenuBar();
 	}
 
@@ -125,6 +125,7 @@ void Gui::ShowLoadSavedGamesMenu()
 			CONFIGURATION.setChosenStage(1);
 			GamePaused(false);
 			StartTheGame(true);
+			Game::mReloadStage = true;
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 1");
@@ -133,6 +134,7 @@ void Gui::ShowLoadSavedGamesMenu()
 			CONFIGURATION.setChosenStage(2);
 			GamePaused(false);
 			StartTheGame(true);
+			Game::mReloadStage = true;
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 2");
@@ -141,6 +143,7 @@ void Gui::ShowLoadSavedGamesMenu()
 			CONFIGURATION.setChosenStage(3);
 			GamePaused(false);
 			StartTheGame(true);
+			Game::mReloadStage = true;
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 3");
@@ -149,16 +152,11 @@ void Gui::ShowLoadSavedGamesMenu()
 			CONFIGURATION.setChosenStage(-1);
 			GamePaused(false);
 			StartTheGame(true);
+			Game::mReloadStage = true;
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nBonus level");
 		ImGui::EndChildFrame();
-		if (ImGui::Button("PLAY", STANDARD_MENU_BUTTON))
-		{
-			CONFIGURATION.setChosenStage(1);
-			GamePaused(false);
-			StartTheGame(true);
-		}
 		ImGui::EndPopup();
 	}
 

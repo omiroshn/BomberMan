@@ -223,6 +223,6 @@ ResourceManager::~ResourceManager()
 
 std::fstream ResourceManager::getMap(std::string const & aName)
 {
-    std::fstream f(mBinFolder + "maps/" + "map1.txt");
+    std::fstream f(mBinFolder + "maps/" + aName);
     return f;
 }

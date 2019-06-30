@@ -51,7 +51,7 @@ std::tuple<std::vector<SquareInstance*>, CollisionInfo> MapLoader::GetMap(const 
 
 void MapLoader::UpdateMap()
 {
-
+	mLoaded = false;
 }
 
 bool MapLoader::MapIsLoaded()
