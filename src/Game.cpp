@@ -67,47 +67,36 @@ void Game::start()
         }
         else
         {
-			if (mapLoader.MapIsLoaded())
-			{
-				if (ImGui::Button("Add balloon"))
-				{
-					mMap.GetEnemies().emplace_back(new MovingEntity(glm::vec2(7.5 + rand() % 20, 5.5)));
-					mMap.GetControllers().emplace_back();
-				}
-				MovingEntity::debugMovement();
-				updateHeroInput();
-				Tickable::tickTickables(mDeltaTime); //buggy code
-
-				// mMap.GetHero().tick(mDeltaTime);
-				// for (auto& It : mMap.GetEnemies())
-				//     It.tick(mDeltaTime);
-				for (int i = 0; i < mMap.GetControllers().size(); i++)
-				{
-					mMap.GetControllers()[i].tick(*mMap.GetEnemies()[i]);
-				}
-
-				resolveCollisions();
-				mRenderer->draw(mMap);
-				static int index = 0;
-				ImGui::RadioButton("NO VSync", &index, 0);
-				ImGui::RadioButton("60", &index, 1);
-				ImGui::RadioButton("30", &index, 2);
-				if (index)
-				{
-					const float TargetDelta = 0.0167f * index;
-					if (mDeltaTime < TargetDelta)
-						SDL_Delay((TargetDelta - mDeltaTime) * 1000);
-				}
-				mWindow->ShowInGameMenu();
-				mapLoader.UpdateMap();
-			}
-			else
-			{
-				auto t =  mapLoader.GetMap(-1);
-				mMap = std::get<0>(t);
-				mCollisionInfo = std::get<1>(t);
-				mWindow->update();
-			}
+            if (mapLoader.MapIsLoaded() && !mReloadStage)
+            {
+                MovingEntity::debugMovement();
+                updateHeroInput();
+                Tickable::tickTickables(mDeltaTime);
+                resolveCollisions();
+                mRenderer->draw(mMap);
+                static int index = 0;
+                ImGui::RadioButton("NO VSync", &index, 0);
+                ImGui::RadioButton("60", &index, 1);
+                ImGui::RadioButton("30", &index, 2);
+                if (index)
+                {
+                    const float TargetDelta = 0.0167f * index;
+                    if (mDeltaTime < TargetDelta)
+                        SDL_Delay(TargetDelta - mDeltaTime * 1000);
+                }
+                mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
+                mWindow->ShowInGameMenu();
+            }
+            else
+            {
+                if (CONFIGURATION.getLives() == 0)
+                    CONFIGURATION.setChosenStage(1);
+                mMap.cleanMapForRendering();
+                mCollisionInfo.Squares.clear();
+                std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
+                mStageStartedTimer = getCurrentTime();
+                mReloadStage = 0;
+            }
         }
         doAction(mIManager->processEvents(mWindow->getEvent()));
         mWindow->update();
