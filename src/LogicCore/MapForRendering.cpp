@@ -55,12 +55,6 @@ unsigned MapForRendering::getHeight()
 bool   MapForRendering::cleanMapForRendering()
 {
 	mRawMap.clear();
-	mEmptySquares.clear();
-	mWalls.clear();
-	mBricks.clear();
-	mBombs.clear();
-	mBonuses.clear();
-	mCollisionMap.clear();
 	mEnemies.clear();
 	return true;
 }
