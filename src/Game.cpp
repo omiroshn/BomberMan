@@ -185,6 +185,10 @@ void Game::resolveCollisions()
 
 void Game::doAction(Action const& a)
 {
+    auto& Hero = mMap.GetHero();
+    const float offset  = mDeltaTime * sInputAcceleration;
+	std::vector<glm::mat4> transforms;
+	std::vector<glm::mat4> transforms1;
     switch (a)
     {
         case Action::Finish:
@@ -200,18 +204,50 @@ void Game::doAction(Action const& a)
             mRenderer->getCamera().processMouseMovement(x, y);
             break;
         case Action::Forward:
+            Hero.AddAcceleration(glm::vec2(0, -offset));
             //mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
             break;
         case Action::Backward:
+            Hero.AddAcceleration(glm::vec2(0, offset));
             //mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime);
             break;
         case Action::Right:
+            Hero.AddAcceleration(glm::vec2(offset, 0));
             //mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime);
             break;
         case Action::Left:
+            Hero.AddAcceleration(glm::vec2(-offset, 0));
             //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
             break;
+        case Action::UpLeft:
+            Hero.AddAcceleration(glm::vec2(-offset, -offset));
+            break;
+        case Action::UpRight:
+            Hero.AddAcceleration(glm::vec2(offset, -offset));
+            break;
+         case Action::DownLeft:
+            Hero.AddAcceleration(glm::vec2(-offset, offset));
+            break;
+        case Action::DownRight:
+            Hero.AddAcceleration(glm::vec2(offset, offset));
+            break;
         case Action::Up:
+			transforms.clear();
+			for (int i = 1; i < 10; ++i){
+				glm::mat4 model = glm::mat4(1.0f);
+				model = glm::translate(model, glm::vec3(2.0f * i ,1.5f,1.5f  + 2.0f * i));
+				transforms.push_back(model);
+			}
+			try {
+			    //mRenderer->getParticleManager()->startDrawPS("pointSphereBomb", transforms);
+				mRenderer->getParticleManager()->startDrawPS("Cloud", transforms);
+				//mRenderer->getParticleManager()->startDrawPS("quadSphereBombTMap", transforms);
+			} catch (CustomException &ex) {
+				std::cout << ex.what() << std::endl;
+				exit(42);
+			}
+            //mRenderer->getCamera().movaCamera(CameraDirection::UPWARD, mDeltaTime);
+            break;
         case Action::Down:
         default:
             break;

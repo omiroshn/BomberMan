@@ -2,6 +2,9 @@
 #define BOMBERMAN_InputManager_HPP
 #include <SDL.h>
 
+//Analog joystick dead zone
+const int JOYSTICK_DEAD_ZONE = 8000;
+
 enum class Action
 {
     Nothing = 0,
@@ -13,6 +16,10 @@ enum class Action
     Down,
     Right,
     Left,
+    UpLeft,
+    UpRight,
+    DownLeft,
+    DownRight,
     Space,
 //For internal testing
     CameraRotate,
@@ -27,6 +34,8 @@ public:
     Action processEvents(SDL_Event &e);
     Action processKeyDown(SDL_Keycode keyPressed);
     Action processMouseMotion(SDL_Event const &e);
+    Action processJoystickMotion(SDL_JoyAxisEvent jaxis);
+    Action processJoystickButtonDown(SDL_JoyButtonEvent jbutton);
     void processMouseButton(SDL_MouseButtonEvent const &e, bool isPressed);
 
     bool mRightButtonPressed {false};
