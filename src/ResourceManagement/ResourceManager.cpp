@@ -14,12 +14,12 @@
 
 std::vector<std::string> const cSkyboxFaces
 {
-    "right.jpg",
-    "left.jpg",
-    "top.jpg",
-    "bottom.jpg",
-    "front.jpg",
-    "back.jpg"
+    "right.png",
+    "left.png",
+    "top.png",
+    "bottom.png",
+    "front.png",
+    "back.png"
 };
 
 unsigned int ResourceManager::loadCubemap(std::string const & aSkyboxName)
@@ -36,7 +36,8 @@ unsigned int ResourceManager::loadCubemap(std::string const & aSkyboxName)
         unsigned char *data = stbi_load(facePath.c_str(), &width, &height, &nrChannels, 0);
         if (data)
         {
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
             stbi_image_free(data);
         }
         else

@@ -19,6 +19,18 @@ namespace bm {
 		sTickables.push_back(this);
 	}
 
+	Tickable::Tickable(Tickable&& Other)
+	{
+		for (auto& It : sTickables)
+		{
+			if (It == &Other)
+			{
+				It = this;
+				break;
+			}
+		}
+	}
+
 	Tickable::~Tickable()
 	{
 		const auto Predicate = [this](Tickable *element) { return element == this; };

@@ -59,7 +59,6 @@ void 				ParticleSystemPoint::setInstanceBuffer()
 
 void 			ParticleSystemPoint::initGLBufers(std::string const & initKernelName)
 {
-	glFinish();
 	cl::Kernel kernel;
 
 	clearMemoryStack();
@@ -73,15 +72,11 @@ void 			ParticleSystemPoint::initGLBufers(std::string const & initKernelName)
 	kernel.setArg(1, m_particleCount);
 
 	commandQueue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(m_particleCount), cl::NullRange);
-	commandQueue.finish();
 	commandQueue.enqueueReleaseGLObjects(&m_memory);
-	cl::finish();
 }
 
 void 			ParticleSystemPoint::updateGLBufers(std::string const & updateKernelName)
 {
-	// glFinish();
-
 	cl::Kernel kernel;
 	m_CLE->getKernel(updateKernelName, kernel);
 
@@ -92,8 +87,6 @@ void 			ParticleSystemPoint::updateGLBufers(std::string const & updateKernelName
 
 	commandQueue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(m_particleCount), cl::NullRange);
 	commandQueue.enqueueReleaseGLObjects(&m_memory);
-	// commandQueue.finish();
-	// cl::finish();
 }
 
 void 			ParticleSystemPoint::drawGLContent(glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms)
@@ -115,8 +108,6 @@ void 			ParticleSystemPoint::drawGLContent(glm::mat4 const & projection, glm::ma
 
     glBindVertexArray(m_VAO);
     glDrawArraysInstanced(GL_POINTS, 0, m_particleCount, transforms.size());
-    glBindVertexArray(0);
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
-	glFinish();
 }

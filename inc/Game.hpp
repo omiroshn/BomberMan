@@ -15,7 +15,7 @@ public:
     void start();
     void pause();
 	static float getCurrentTime();
-	static const CollisionInfo& getCollisionInfo();
+	static CollisionInfo& getCollisionInfo();
 	void 		saveCurrentState(std::string fileName  = "ConfigureFile");
 	void 		loadStateFromFile(std::string fileName  = "ConfigureFile");
 	void 		applyWindowChange();

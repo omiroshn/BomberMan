@@ -15,6 +15,7 @@
 ParticleSystemBrick::ParticleSystemBrick()
 {
 	setParticleCount(48);
+	glEnable(GL_DEPTH_WRITEMASK);
 }
 
 ParticleSystemBrick::~ParticleSystemBrick()
@@ -71,7 +72,6 @@ void 				ParticleSystemBrick::setInstanceBuffer()
 
 void 			ParticleSystemBrick::initGLBufers(std::string const & initKernelName)
 {
-	//glFinish();
 	cl::Kernel kernel;
 
 	m_CLE->getKernel(initKernelName, kernel);
@@ -84,15 +84,11 @@ void 			ParticleSystemBrick::initGLBufers(std::string const & initKernelName)
 	kernel.setArg(0, m_memory.front());
 
 	commandQueue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(m_particleCount), cl::NullRange);
-	//commandQueue.finish();
 	commandQueue.enqueueReleaseGLObjects(&m_memory);
-	//cl::finish();
 }
 
 void 			ParticleSystemBrick::updateGLBufers(std::string const & updateKernelName)
 {
-	glFinish();
-
 	cl::Kernel kernel;
 	m_CLE->getKernel(updateKernelName, kernel);
 
@@ -102,8 +98,6 @@ void 			ParticleSystemBrick::updateGLBufers(std::string const & updateKernelName
 	kernel.setArg(1, m_deltaTime);
 	commandQueue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(m_particleCount), cl::NullRange);
 	commandQueue.enqueueReleaseGLObjects(&m_memory);
-	//commandQueue.finish();
-	//cl::finish();
 }
 
 void 			ParticleSystemBrick::drawGLContent(glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms)
@@ -116,9 +110,11 @@ void 			ParticleSystemBrick::drawGLContent(glm::mat4 const & projection, glm::ma
 	m_shader->use();
 	m_shader->setMat4("projection", projection);
 	m_shader->setMat4("view", view);
-	//glEnable(GL_BLEND);
-	//glDisable(GL_DEPTH_TEST);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDepthMask(GL_FALSE);
+
 	glActiveTexture(GL_TEXTURE0);
 	m_texture->bind();
 	glBindBuffer(GL_ARRAY_BUFFER, m_IBO);
@@ -126,7 +122,7 @@ void 			ParticleSystemBrick::drawGLContent(glm::mat4 const & projection, glm::ma
 
     glBindVertexArray(m_VAO);
     glDrawArraysInstanced(GL_TRIANGLES, 0, m_particleCount * 36, transforms.size());
-	//glDisable(GL_BLEND);
-	//glEnable(GL_DEPTH_TEST);
-	glFinish();
+	glDisable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
 }

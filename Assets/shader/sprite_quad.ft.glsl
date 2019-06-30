@@ -8,8 +8,8 @@ uniform sampler2D image;
 
 void main()
 {
-	vec4 texColor = texture(image, TexCoords);
-	if (texColor.a < 0.05f)
-		discard;
+	vec4 texColor;
+	texColor = texture(image, TexCoords);
+	texColor.a = time;
     color = texColor;
 }

@@ -147,9 +147,9 @@ void Gui::ShowLoadSavedGamesMenu()
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 3");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() == -1 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() == 0 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
-			CONFIGURATION.setChosenStage(-1);
+			CONFIGURATION.setChosenStage(0);
 			GamePaused(false);
 			StartTheGame(true);
 			Game::mReloadStage = true;
@@ -184,7 +184,8 @@ void Gui::ShowSettingsMenu()
 		ImGui::Text("\nSet keybinding\n");
 		ImGui::RadioButton("Arrows", &CONFIGURATION.getKeyBindVolume(), 0);ImGui::SameLine();
 		ImGui::RadioButton("ASWD", &CONFIGURATION.getKeyBindVolume(), 1);ImGui::SameLine();
-		ImGui::RadioButton("HJKL", &CONFIGURATION.getKeyBindVolume(), 2);
+		ImGui::RadioButton("🎮", &CONFIGURATION.getKeyBindVolume(), 2);ImGui::SameLine();
+		ImGui::RadioButton("HJKL", &CONFIGURATION.getKeyBindVolume(), 3);
 		ImGui::Separator();
 
 		if (ImGui::Checkbox("FullScreen", &CONFIGURATION.getWindowed()))
