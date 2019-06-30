@@ -6,6 +6,9 @@
 #include <imgui.h>
 #include "Gui/imgui_impl_sdl_gl3.h"
 
+int xDir = 0;
+int yDir = 0;
+
 InputManager::InputManager()
 {
 }
@@ -33,10 +36,78 @@ Action InputManager::processEvents(SDL_Event &e)
         case SDL_MOUSEBUTTONUP:
             processMouseButton(e.button, false);
             break;
+        case SDL_JOYAXISMOTION:
+            return processJoystickMotion(e.jaxis);
+        case SDL_JOYBUTTONDOWN:
+            return processJoystickButtonDown(e.jbutton);
         case SDL_QUIT:
             return Action::Finish;
         default:
             return Action::Nothing;
+    }
+    return Action::Nothing;
+}
+
+Action InputManager::processJoystickMotion(SDL_JoyAxisEvent jaxis)
+{
+    if (jaxis.which == 0)
+    {
+        // X axis motion
+        if (jaxis.axis == 0)
+        {
+            //Left of dead zone
+            if (jaxis.value < -JOYSTICK_DEAD_ZONE)
+                xDir = -1;
+            //Right of dead zone
+            else if (jaxis.value > JOYSTICK_DEAD_ZONE)
+                xDir = 1;
+            else
+                xDir = 0;
+        } //Y axis motion
+        else if (jaxis.axis == 1)
+        {
+            //Below of dead zone
+            if (jaxis.value < -JOYSTICK_DEAD_ZONE)
+                yDir = -1;
+            //Above of dead zone
+            else if (jaxis.value > JOYSTICK_DEAD_ZONE )
+                yDir = 1;
+            else
+                yDir = 0;
+        }
+        //Calculate angle
+        double joystickAngle = atan2((double)yDir, (double)xDir) * (180.0 / M_PI);
+        //Correct angle
+        if (xDir == 0 && yDir == 0)
+            joystickAngle = 0;
+        if (joystickAngle == 0 && xDir == 1)
+            return Action::Right;
+        else if (joystickAngle == 45)
+            return Action::DownRight;
+        else if (joystickAngle == 90)
+            return Action::Backward;
+        else if (joystickAngle == 135)
+            return Action::DownLeft;
+        else if (joystickAngle == 180)
+            return Action::Left;
+        else if (joystickAngle == -135)
+            return Action::UpLeft;
+        else if (joystickAngle == -90)
+            return Action::Forward;
+        else if (joystickAngle == -45)
+            return Action::UpRight;
+    }
+    return Action::Nothing;
+}
+
+Action InputManager::processJoystickButtonDown(SDL_JoyButtonEvent jbutton)
+{
+    if (jbutton.which == 0)
+    {
+        if (jbutton.button == 2)
+            return Action::Down;
+        else if (jbutton.button == 1)
+            return Action::Up;
     }
     return Action::Nothing;
 }

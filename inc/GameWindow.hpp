@@ -35,5 +35,6 @@ private:
     SDL_Window   *mWindow;
     SDL_GLContext mContext;
     SDL_Event     mEvent;
+    SDL_Joystick *mJoystick;
 	Gui          *mMainMenu;
 };

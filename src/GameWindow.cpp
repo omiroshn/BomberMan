@@ -19,6 +19,7 @@ GameWindow::~GameWindow()
     SDL_GL_DeleteContext(mContext);
 
     SDL_DestroyWindow(mWindow);
+    SDL_JoystickClose(mJoystick);
     SDL_Quit();
 }
 
@@ -39,8 +40,8 @@ void GameWindow::initWindow()
 void GameWindow::initSDL()
 {
     SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "0");
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS);
-
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS | SDL_INIT_JOYSTICK);
+    
     int context_flags = SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG;
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, context_flags);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -59,8 +60,18 @@ void GameWindow::initSDL()
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-
     //SDL_SetRelativeMouseMode(SDL_TRUE);
+
+    if (SDL_NumJoysticks() < 1)
+        std::cout << "Warning: No joysticks connected!" << std::endl;
+
+    mJoystick = SDL_JoystickOpen(0);
+    if (mJoystick == NULL)
+        printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
+    std::cout << "Connected joysticks: " << SDL_NumJoysticks() << std::endl;
+    std::cout << "Controller name: " << SDL_JoystickName(mJoystick) << std::endl;
+    std::cout << "Num axes: " << SDL_JoystickNumAxes(mJoystick) << std::endl;
+    std::cout << "Num buttons: " << SDL_JoystickNumButtons(mJoystick) << std::endl;
 }
 
 void GameWindow::initGui() {
