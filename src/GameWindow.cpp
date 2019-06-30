@@ -68,10 +68,13 @@ void GameWindow::initSDL()
     mJoystick = SDL_JoystickOpen(0);
     if (mJoystick == NULL)
         printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
-    std::cout << "Connected joysticks: " << SDL_NumJoysticks() << std::endl;
-    std::cout << "Controller name: " << SDL_JoystickName(mJoystick) << std::endl;
-    std::cout << "Num axes: " << SDL_JoystickNumAxes(mJoystick) << std::endl;
-    std::cout << "Num buttons: " << SDL_JoystickNumButtons(mJoystick) << std::endl;
+    else
+    {
+        std::cout << "Connected joysticks: " << SDL_NumJoysticks() << std::endl;
+        std::cout << "Controller name: " << SDL_JoystickName(mJoystick) << std::endl;
+        std::cout << "Num axes: " << SDL_JoystickNumAxes(mJoystick) << std::endl;
+        std::cout << "Num buttons: " << SDL_JoystickNumButtons(mJoystick) << std::endl;
+    }
 }
 
 void GameWindow::initGui() {
