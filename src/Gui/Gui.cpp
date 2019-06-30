@@ -134,6 +134,7 @@ void Gui::ShowLoadSavedGamesMenu()
 			CONFIGURATION.setChosenStage(2);
 			GamePaused(false);
 			StartTheGame(true);
+			ShowLoadingScreen("face");
 			Game::mReloadStage = true;
 		}
 		ImGui::SameLine();
@@ -143,6 +144,7 @@ void Gui::ShowLoadSavedGamesMenu()
 			CONFIGURATION.setChosenStage(3);
 			GamePaused(false);
 			StartTheGame(true);
+			ShowLoadingScreen("flame-fire");
 			Game::mReloadStage = true;
 		}
 		ImGui::SameLine();
@@ -292,4 +294,18 @@ void Gui::ChangeMenuSize(int w, int h)
 {
 	mWidth = w;
 	mHeight = h;
+}
+
+void Gui::ShowLoadingScreen(const char* screen)
+{
+	ImTextureID im = (ImTextureID)RESOURCES.getTexture(screen)->getTextureID();
+	ImGuiWindowFlags window_flags = 0;
+	window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar ;
+	ImGui::SetNextWindowPos({0, 0},0);
+	mWidth = CONFIGURATION.getWidth();
+	mHeight = CONFIGURATION.getHeight();
+	ImGui::SetNextWindowSize({mWidth,mHeight});
+	ImGui::Begin("Screeeeeen", NULL, window_flags);
+	ImGui::Image(im,{400,400}, {1,1}, {0,0});
+	ImGui::End();
 }
