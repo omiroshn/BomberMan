@@ -20,15 +20,10 @@ public:
 	void 		loadStateFromFile(std::string fileName  = "ConfigureFile");
 	void 		applyWindowChange();
 
-    static int   mChosenStage;
-    static int   mScore;
-    static int   mLives;
-    static bool  mIsRunning;
-    static int   mMusicVolume;
-    static int   mSoundsVolume;
-    static int   mKeyBindVolume;
-    static int   mScreenResolution;
-    static bool  mWindowed;
+    static bool    mReloadStage;
+    static Uint64  mStageTimer;
+    static Uint64  mStageStartedTimer;
+    static bool    mIsRunning;
 
 private:
 	void		resolveCollisions();

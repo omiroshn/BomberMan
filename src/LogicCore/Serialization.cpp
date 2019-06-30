@@ -25,7 +25,7 @@ std::vector<SquareType> Serialization::LoadCampaignMap(int stage)
     {
         for (int i = 0; i < line.size(); i++)
         {
-            std::cout << "line[" <<i << "]" << line[i] << std::endl;
+            //std::cout << "line[" <<i << "]" << line[i] << std::endl;
             if (line[i] == '0')
                 map.push_back(SquareType::EmptySquare);
             else if (line[i] == '1')

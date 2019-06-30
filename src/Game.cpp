@@ -12,8 +12,10 @@ Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
 float			Game::mDeltaTime;
 CollisionInfo	Game::mCollisionInfo;
-
-bool  Game::mIsRunning = true;
+bool            Game::mReloadStage = false;
+bool            Game::mIsRunning = true;
+Uint64          Game::mStageTimer = 200;
+Uint64          Game::mStageStartedTimer = 0;
 
 namespace
 {
@@ -23,7 +25,7 @@ namespace
 Game::Game()
 {
 	mTimeNow = SDL_GetPerformanceCounter();
-
+    
 	loadStateFromFile();
     mWindow = std::make_shared<GameWindow>(CONFIGURATION.getWidth(), CONFIGURATION.getHeight(), cWindowName);
 	mWindow->setFullScreen(CONFIGURATION.getWindowed());
@@ -55,13 +57,15 @@ void Game::start()
         mWindow->getSize(width, height);
         calcDeltaTime();
         mRenderer->updateSize(width, height);
+        CONFIGURATION.setHeight(height);
+        CONFIGURATION.setWidth(width);
         if (!mWindow.get()->IsGameRunning())
         {
             mWindow.get()->ShowStartingMenu();
         }
         else
         {
-            if (mapLoader.MapIsLoaded())
+            if (mapLoader.MapIsLoaded() && !mReloadStage)
             {
                 MovingEntity::debugMovement();
                 updateHeroInput();
@@ -78,11 +82,15 @@ void Game::start()
                     if (mDeltaTime < TargetDelta)
                         SDL_Delay(TargetDelta - mDeltaTime * 1000);
                 }
+                mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
                 mWindow->ShowInGameMenu();
-                mapLoader.UpdateMap();
             }
             else
             {
+                if (CONFIGURATION.getLives() == 0)
+                    CONFIGURATION.setChosenStage(1);
+                mMap.cleanMapForRendering();
+                mCollisionInfo.Squares.clear();
                 std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
                 mMap.ParseMapBySquareInstances();
                 mMap.GetEnemies().reserve(10);
@@ -91,6 +99,8 @@ void Game::start()
                     auto& Balloon = mMap.GetEnemies().emplace_back(glm::vec2(7 + i, 1));
                     AIController::addBalloon(Balloon);
                 }
+                mStageStartedTimer = getCurrentTime();
+                mReloadStage = 0;
             }
 
         }
