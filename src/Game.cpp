@@ -13,31 +13,27 @@ Uint64			Game::mTimeLast;
 float			Game::mDeltaTime;
 CollisionInfo	Game::mCollisionInfo;
 
-int   Game::mChosenStage = 1;
-int   Game::mScore = 100;
-int   Game::mLives = 3;
 bool  Game::mIsRunning = true;
-int   Game::mMusicVolume = 5;
-int   Game::mSoundsVolume = 2;
-int   Game::mKeyBindVolume = 0;
-int   Game::mScreenResolution = 3;
-bool  Game::mWindowed = true;
 
 namespace
 {
-    int const cDefaultScreenWidth = 640;
-    int const cDefaultScreenHeight = 480;
     std::string const cWindowName = "Bomberman";
 }
 
 Game::Game()
 {
 	mTimeNow = SDL_GetPerformanceCounter();
-    mWindow = std::make_unique<GameWindow>(cDefaultScreenWidth, cDefaultScreenHeight, cWindowName);
-    mRenderer = std::make_unique<Renderer>();
+
+	loadStateFromFile();
+    mWindow = std::make_shared<GameWindow>(CONFIGURATION.getWidth(), CONFIGURATION.getHeight(), cWindowName);
+	mWindow->setFullScreen(CONFIGURATION.getWindowed());
+	CONFIGURATION.setObservableWindow(mWindow);
+
+	mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
     // timerManager = TimerManager::Instance();
     loadResources();
+
 }
 
 Game::~Game()
@@ -87,7 +83,7 @@ void Game::start()
             }
             else
             {
-                std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(mChosenStage);
+                std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
                 mMap.ParseMapBySquareInstances();
                 mMap.GetEnemies().reserve(10);
                 for (int i = 1; i <= 4; i++)
@@ -144,6 +140,7 @@ void Game::doAction(Action const& a)
     {
         case Action::Finish:
             mIsRunning = false;
+			saveCurrentState();
             break;
         case Action::Pause:
             pause();
@@ -200,6 +197,7 @@ void Game::doAction(Action const& a)
 				std::cout << ex.what() << std::endl;
 				exit(42);
 			}
+			//loadStateFromFile();
             //mRenderer->getCamera().movaCamera(CameraDirection::DOWNWARD, mDeltaTime);
             break;
         default:
@@ -313,6 +311,29 @@ void Game::updateHeroInput()
         mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime * 100);
 	if (ImGui::IsKeyDown(SDL_SCANCODE_W))
         mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime * 100);
+}
+
+void 		Game::saveCurrentState(std::string fileName)
+{
+	int w, h;
+	mWindow->getSize(w,h);
+	CONFIGURATION.setSize(w,h);
+	CONFIGURATION.serialise(fileName);
+}
+
+void 		Game::loadStateFromFile(std::string fileName)
+{
+	CONFIGURATION.deserialise(fileName);
+	applyWindowChange();
+}
+
+void 		Game::applyWindowChange()
+{
+	if (mWindow)
+	{
+		mWindow->setSize(CONFIGURATION.getWidth(), CONFIGURATION.getHeight());
+		mWindow->setFullScreen(CONFIGURATION.getWindowed());
+	}
 }
 
 float Game::sInputAcceleration = 6000;

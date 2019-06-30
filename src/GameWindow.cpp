@@ -40,7 +40,7 @@ void GameWindow::initSDL()
 {
     SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "0");
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS);
-    
+
     int context_flags = SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG;
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, context_flags);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -139,4 +139,17 @@ void GameWindow::PauseGame(bool state)
 {
     mMainMenu->GamePaused(state);
     mMainMenu->ShowMainMenu();
+}
+
+void GameWindow::setSize(int const w, int const h)
+{
+    SDL_SetWindowSize(mWindow, w, h);
+}
+
+void GameWindow::setFullScreen(bool isFullScreen)
+{
+	if (isFullScreen)
+		SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	else
+		SDL_SetWindowFullscreen(mWindow, 0);
 }
