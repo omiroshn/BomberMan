@@ -86,7 +86,7 @@ void Game::start()
                         SDL_Delay(ms * 1000);
                 }
                 mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
-                mWindow->ShowInGameMenu();
+                mWindow->ShowInGameMenu();git status
             }
             else
             {
