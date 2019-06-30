@@ -27,23 +27,23 @@ TimerManager::~TimerManager() {}
 
 void TimerManager::Release()
 {
-
 	delete sInstance;
 	sInstance = nullptr;
 }
 
 void TimerManager::Update() {
-	for (auto it : v)
+	for (auto& it : v)
 	{
 		it->Tick();
 	}
-	std::remove_if(v.begin(), v.end(), [](TimerBase *timer){
+	std::remove_if(v.begin(), v.end(), [](const std::unique_ptr<TimerBase>& timer){
 		return timer->readyForDelete() && timer->usedTheEvent();
 	});
 }
 
-void TimerManager::RemoveTimer(TimerBase *timer)
+void TimerManager::RemoveTimer(TimerBase *toDelete)
 {
-	delete timer;
-	v.erase(std::remove(v.begin(), v.end(), timer), v.end());
+	std::remove_if(v.begin(), v.end(), [toDelete](const std::unique_ptr<TimerBase>& timer){
+		return timer.get() == toDelete;
+	});
 }
