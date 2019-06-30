@@ -18,12 +18,13 @@
 #include <vector>
 
 #include <iostream>
+#include <memory>
 
 class TimerManager
 {
 private:
 	static TimerManager* sInstance;
-	std::vector<TimerBase *> v;
+	std::vector<std::unique_ptr<TimerBase>> v;
 public:
 	static TimerManager *Instance();
 	static void Release();
@@ -33,7 +34,7 @@ public:
 	TimerBase *AddTimer(float seconds, bool ever, funcType type)
 	{
 		TimerBase *timer = new Timer<funcType>(seconds, ever, type);
-		v.push_back(timer);
+		v.emplace_back(timer);
 		return timer;
 	}
 
