@@ -86,7 +86,7 @@ void Game::start()
                         SDL_Delay(ms * 1000);
                 }
                 mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
-                mWindow->ShowInGameMenu();
+                mWindow->ShowInGameMenu();git status
             }
             else
             {
@@ -95,6 +95,18 @@ void Game::start()
                 mMap.cleanMapForRendering();
                 mCollisionInfo.Squares.clear();
                 std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
+                mMap.ParseMapBySquareInstances();
+                mMap.GetEnemies().reserve(10);
+                for (int i = 1; i <= 4; i++)
+                {
+                    auto& Balloon = mMap.GetEnemies().emplace_back(glm::vec2(7 + i, 1));
+                    AIController::addBalloon(Balloon);
+                }
+                if (mReloadStage)
+                {
+                    mWindow->update();
+                    SDL_Delay(3000);
+                }
                 mStageStartedTimer = getCurrentTime();
                 mReloadStage = 0;
             }
@@ -424,3 +436,6 @@ void 		Game::applyWindowChange()
 		mWindow->setFullScreen(CONFIGURATION.getWindowed());
 	}
 }
+
+
+float Game::sInputAcceleration = 6000;
