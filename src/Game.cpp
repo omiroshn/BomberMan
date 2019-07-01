@@ -185,8 +185,6 @@ void Game::resolveCollisions()
 
 void Game::doAction(Action const& a)
 {
-	std::vector<glm::mat4> transforms;
-	std::vector<glm::mat4> transforms1;
     switch (a)
     {
         case Action::Finish:
@@ -214,43 +212,7 @@ void Game::doAction(Action const& a)
             //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
             break;
         case Action::Up:
-			transforms.clear();
-			for (int i = 1; i < 10; ++i){
-				glm::mat4 model = glm::mat4(1.0f);
-				model = glm::translate(model, glm::vec3(2.0f * i ,1.5f,1.5f  + 2.0f * i));
-				transforms.push_back(model);
-			}
-			try {
-			//mRenderer->getParticleManager()->startDrawPS("pointSphereBomb", transforms);
-				mRenderer->getParticleManager()->startDrawPS("Cloud", transforms);
-				//mRenderer->getParticleManager()->startDrawPS("quadSphereBombTMap", transforms);
-			} catch (CustomException &ex) {
-				std::cout << ex.what() << std::endl;
-				exit(42);
-			}
-//            mRenderer->getCamera().movaCamera(CameraDirection::UPWARD, mDeltaTime);
-            break;
         case Action::Down:
-			transforms.clear();
-			transforms1.clear();
-			for (int i = 0; i < 10; ++i){
-				glm::mat4 model = glm::mat4(1.0f);
-				//model =  glm::translate(model, glm::vec3(-2.5f, 0.0f, -2.5f));
-				model = glm::translate(model, glm::vec3(3.0f ,0.0f,2.0f* (i + 1)));
-				transforms.push_back(model);
-				model = glm::translate(model, glm::vec3(0.08f ,-0.125f,-0.25));
-				transforms1.push_back(model);
-			}
-			try {
-				mRenderer->getParticleManager()->startDrawPS("BrickBlock", transforms1);
-				mRenderer->getParticleManager()->startDrawPS("quadSphereBomb", transforms);
-			} catch (CustomException &ex) {
-				std::cout << ex.what() << std::endl;
-				exit(42);
-			}
-			//loadStateFromFile();
-            //mRenderer->getCamera().movaCamera(CameraDirection::DOWNWARD, mDeltaTime);
-            break;
         default:
             break;
     }
