@@ -306,6 +306,17 @@ void Game::loadResources()
 
 void Game::explosion(glm::ivec2 position, uint32_t span)
 {
+	static int which;
+	static std::string brickPool[] {
+		"BrickBlock", 
+		"BrickBlock2", 
+	};
+	static std::string bombPool[] {
+		"pointSphereBomb",
+		"pointSphereBomb2",
+	};
+	
+
     glm::vec2 directions[] = {
         {-1, 0},
         {1, 0},
@@ -362,8 +373,10 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
         return (circle_box_collision(entity->getPosition() + glm::vec2(0.5), 0.1, hMin, hMax)
         || circle_box_collision(entity->getPosition() + glm::vec2(0.5), 0.1, vMin, vMax));
     });
-    mRenderer->getParticleManager()->startDrawPS("BrickBlock", brickTransforms);
-    mRenderer->getParticleManager()->startDrawPS("pointSphereBomb", fireTransforms);
+
+    mRenderer->getParticleManager()->startDrawPS(brickPool[which], brickTransforms);
+    mRenderer->getParticleManager()->startDrawPS(bombPool[which], fireTransforms);
+	which = !which;
 }
 
 void Game::updateHeroInput()
