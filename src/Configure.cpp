@@ -11,6 +11,9 @@
 /* ************************************************************************** */
 
 #include  "Configure.hpp"
+#include <cereal/cereal.hpp>
+#include <cereal/details/helpers.hpp>
+#include <cereal/archives/binary.hpp>
 
 Configure   & Configure::getInstance()
 {
@@ -150,7 +153,7 @@ void 			Configure::serialise(std::string fileName)
 	try
 	{
 		std::ofstream ofs(fileName);
-		boost::archive::text_oarchive oa(ofs);
+		cereal::BinaryOutputArchive oa(ofs);
 		oa << *this;
 	} catch (std::exception &e) {
 		std::cout << "configuration saving is failed due to " << e.what() << std::endl;
@@ -164,7 +167,7 @@ void 			Configure::deserialise(std::string fileName)
 		return;
 	try
 	{
-		boost::archive::text_iarchive ia(ifs);
+		cereal::BinaryInputArchive ia(ifs);
 		ia >> *this;
 	} catch (std::exception &e) {
 		std::cout << "configuration loading is failed due to " << e.what() << std::endl;

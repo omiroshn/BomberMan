@@ -16,10 +16,6 @@
 #include "GameWindow.hpp"
 #include "Game.hpp"
 
-// include headers that implement a archive in simple text format
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-
 #define CONFIGURATION Configure::getInstance()
 
 int const DefaultScreenWidth = 640;
@@ -71,23 +67,25 @@ private:
 	Configure(Configure const & rhs) = delete;
 	Configure & operator=(Configure const & rhs) = delete;
 	~Configure();
-private:
-	friend class boost::serialization::access;
+	//friend class boost::serialization::access;
+
+public:
 	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version)
+	void serialize(Archive & ar)
 	{
-		ar & mWindowWidth;
-		ar & mWindowHeight;
-		ar & mWindowed;
-		ar & mChosenStage;
-		ar & mScore;
-		ar & mLives;
-		ar & mMusicVolume;
-		ar & mSoundsVolume;
-		ar & mKeyBindVolume;
-		ar & mScreenResolution;
+		ar (mWindowWidth,
+		mWindowHeight,
+		mWindowed,
+		mChosenStage,
+		mScore,
+		mLives,
+		mMusicVolume,
+		mSoundsVolume,
+		mKeyBindVolume,
+		mScreenResolution);
 	}
 
+private:
 	int 			mWindowWidth;
 	int 			mWindowHeight;
 	bool  			mWindowed;
