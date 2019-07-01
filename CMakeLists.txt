@@ -23,6 +23,8 @@ set ( ASSIMP_LIBRARY assimp )
 
 set ( GLM_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glm/ )
 
+set ( CEREAL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/cereal/include )
+
 set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
 
 set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
@@ -62,6 +64,7 @@ set(BOMBERMAN_LIBS
 set(BOMBERMAN_INCLUDES
   ${BOMBERMAN_INCLUDE_DIRS}
   ${GLM_INCLUDE_DIRS}
+  ${CEREAL_INCLUDE_DIRS}
   ${SDL2_INCLUDE_DIR}
   ${STB_INCLUDE_DIRS}
   ${ASSIMP_INCLUDE_DIR}
@@ -80,9 +83,6 @@ set_target_properties(bomberman PROPERTIES
 	USE_FOLDERS ON)
 target_include_directories(bomberman PRIVATE ${BOMBERMAN_INCLUDES})
 target_link_libraries (bomberman PRIVATE ${BOMBERMAN_LIBS})
-
-target_link_libraries(bomberman PUBLIC Boost::serialization)
-target_link_libraries(bomberman PUBLIC Boost::boost)
 
 # if ( CMAKE_COMPILER_IS_GNUCC )
 #     target_compile_options(bomberman PRIVATE "-Wall -Wextra -Werror")

@@ -22,6 +22,6 @@
 [submodule "3rdParty/cotire"]
 	path = 3rdParty/cotire
 	url = https://github.com/sakra/cotire.git
-[submodule "3rdParty/boost"]
-	path = 3rdParty/boost
-	url = https://github.com/Orphis/boost-cmake.git
+[submodule "3rdParty/cereal"]
+	path = 3rdParty/cereal
+	url = https://github.com/USCiLab/cereal.git
