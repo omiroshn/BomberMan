@@ -140,7 +140,6 @@ void 			ParticleManager::draw(glm::mat4 const & projection, glm::mat4 const & vi
 	for (auto & element : m_particleSystemMap) {
 		auto & ps = element.second;
 		if (ps->chekLiveTime()){
-			ps->updateGLBufers(ps->getUpdateKernelName());
 			auto trans = m_transformsMap.find(element.first);
 			if (trans != m_transformsMap.end()){
 				ps->drawGLContent(projection, view, trans->second);
@@ -148,5 +147,14 @@ void 			ParticleManager::draw(glm::mat4 const & projection, glm::mat4 const & vi
 				throw CustomException(element.first + " ParticleSystem transforms is not found");
 			}
 		}
+	}
+}
+
+void ParticleManager::update()
+{
+	for (auto& element : m_particleSystemMap) {
+		auto& ps = element.second;
+		if (ps->chekLiveTime())
+			ps->updateGLBufers(ps->getUpdateKernelName());
 	}
 }
