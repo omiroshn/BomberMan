@@ -81,8 +81,9 @@ void Game::start()
                 if (index)
                 {
                     const float TargetDelta = 0.0167f * index;
+					unsigned ms = TargetDelta - mDeltaTime;
                     if (mDeltaTime < TargetDelta)
-                        SDL_Delay(TargetDelta - mDeltaTime * 1000);
+                        SDL_Delay(ms * 1000);
                 }
                 mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
                 mWindow->ShowInGameMenu();
@@ -99,6 +100,7 @@ void Game::start()
             }
         }
         doAction(mIManager->processEvents(mWindow->getEvent()));
+		mRenderer->getParticleManager()->update();
         mWindow->update();
     }
 }
