@@ -29,14 +29,23 @@ struct Instance
     glm::vec3 position;
 };
 
+
 class MapForRendering;
 class Renderer
 {
+	struct Quad {
+		glm::vec3 topLeft;
+		glm::vec3 bottomRight;
+		Shader shader;
+		Texture* texture = nullptr;
+	};
 public:
     Renderer();
     ~Renderer();
 
     void draw(MapForRendering&);
+    void drawQuad(Quad);
+    void drawPicture(const std::string& pic);
 
     Renderer(Renderer const &) = delete;
     Renderer &operator=(Renderer const &) = delete;
@@ -46,11 +55,12 @@ public:
 
 private:
     void normalPass(MapForRendering&);
-    
+    void drawQuadsDeferred();
     Camera mCamera;
     int mWidth, mHeight;
 	ptrPM mParticleManager;
-
+	
+	std::vector<Quad> mQuads;
 
 
 };

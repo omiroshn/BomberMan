@@ -30,6 +30,19 @@ void Renderer::draw(MapForRendering& aMap)
     normalPass(aMap);
 }
 
+void Renderer::drawQuad(Quad quad)
+{
+	mQuads.push_back(quad);
+}
+
+void Renderer::drawPicture(const std::string& pic)
+{
+    auto block = RESOURCES.getTexture("block");
+    block->bind();
+    std::cout << "textture showed" << std::endl;
+
+}
+
 void Renderer::normalPass(MapForRendering& aMap)
 {
     glViewport(0, 0, mWidth, mHeight);
@@ -140,6 +153,8 @@ void Renderer::normalPass(MapForRendering& aMap)
     }
     transforms.clear();
 
+	drawQuadsDeferred();
+
 	// render running particle system
 	try {
 		mParticleManager->draw(projection, view);
@@ -153,6 +168,14 @@ void Renderer::normalPass(MapForRendering& aMap)
     skyboxShader->setMat4("view", view);
     skyboxShader->setMat4("projection", projection);
     skybox->draw(skyboxShader);
+}
+
+void Renderer::drawQuadsDeferred()
+{
+	if (mQuads.empty())
+		return;
+	
+	
 }
 
 Camera &Renderer::getCamera()

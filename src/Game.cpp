@@ -277,6 +277,7 @@ void Game::loadResources()
 		RESOURCES.loadShader("sprite_quad.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad");
 		RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
 		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
+		RESOURCES.loadShader("quad.vx.glsl", "quad_shadow.ft.glsl", "shadow");
         RESOURCES.loadTexture("block.png", "block");
         RESOURCES.loadTexture("unlocked.png", "unlocked");
         RESOURCES.loadTexture("container.jpg", "container");

@@ -154,16 +154,3 @@ Shader::~Shader()
 {
 	glDeleteProgram(mShaderProgram);
 };
-
-Shader::Shader(Shader const &)
-{
-};
-
-Shader::Shader()
-{
-};
-
-Shader &Shader::operator=(Shader const &)
-{
-	return *this;
-};

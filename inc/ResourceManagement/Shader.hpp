@@ -17,8 +17,6 @@ public:
 	Shader(std::string const &vertexSrcPath, std::string const &fragmentSrcPath);
 	~Shader();
 	Shader();
-	Shader(Shader const &);
-	Shader &operator=(Shader const &);
 
 public:
 	void use();
