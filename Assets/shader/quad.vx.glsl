@@ -9,6 +9,6 @@ uniform mat4 view;
 
 void main()
 {
-    gl_Position = projection * view * vertex;
+    gl_Position = projection * view * iVertex;
     UV = iUV;
 }

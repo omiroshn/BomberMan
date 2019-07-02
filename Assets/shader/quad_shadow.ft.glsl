@@ -11,7 +11,5 @@ void main()
 	vec2 centeredUV = UV * .5f - .5f;
 	float reversed = max(.5f - length(centeredUV), 0);
 	float alpha = pow(reversed, power);
-	if (alpha < 0.01)
-		discard;
-	color = vec4(0,0,0, alpha);
+	color = vec4(0,1,0,alpha);
 }

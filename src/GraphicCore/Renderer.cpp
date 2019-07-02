@@ -10,6 +10,16 @@
 Renderer::Renderer() : mCamera(glm::vec3(0.0f, 10.0f, -3.0f))
 {
 	mParticleManager = std::make_unique<ParticleManager>();
+
+	glGenVertexArrays(1, &mQuadsArray);
+	glGenBuffers(1, &mQuadsBuffer);
+	glBindVertexArray(mQuadsArray);
+	glBindBuffer(GL_ARRAY_BUFFER, mQuadsBuffer);
+
+    glEnableVertexAttribArray(0);	
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vert), (void*)0);
+    glEnableVertexAttribArray(1);	
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vert), (void *)offsetof(Vert, uv));
 };
 
 Renderer::~Renderer()
@@ -32,7 +42,7 @@ void Renderer::draw(MapForRendering& aMap)
 
 void Renderer::drawQuad(Quad quad)
 {
-	mQuads.push_back(quad);
+	mShadowQuads.push_back(quad);
 }
 
 void Renderer::drawPicture(const std::string& pic)
@@ -83,6 +93,7 @@ void Renderer::normalPass(MapForRendering& aMap)
     modelShader->setMat4("view", view);
     modelShader->setVec3("lightPos", mCamera.position());
 
+
     std::vector<glm::mat4> transforms;
 
     {
@@ -91,6 +102,14 @@ void Renderer::normalPass(MapForRendering& aMap)
         transforms.push_back(Hero.getModelMatrix());
         heroModel->setAnimation(Hero.getAnimation());
         heroModel->draw(modelShader, transforms);
+		glm::vec3 heroPosition = Hero.getPosition3D();
+		Renderer::Quad shadow(
+			{ heroPosition + glm::vec3{1,0,1} },
+			{ heroPosition + glm::vec3{1,0,-1} },
+			{ heroPosition + glm::vec3{-1,0,1} },
+			{ heroPosition + glm::vec3{-1,0,-1} }
+		);
+		drawQuad(shadow);
     }
     transforms.clear();
 
@@ -172,10 +191,24 @@ void Renderer::normalPass(MapForRendering& aMap)
 
 void Renderer::drawQuadsDeferred()
 {
-	if (mQuads.empty())
+	static auto ShadowShader = RESOURCES.getShader("shadow");
+	if (mShadowQuads.empty())
 		return;
 	
-	
+	glBindBuffer(GL_ARRAY_BUFFER, mQuadsBuffer);
+	glBufferData(GL_ARRAY_BUFFER, mShadowQuads.size() * sizeof(Renderer::Quad), mShadowQuads.data(), GL_DYNAMIC_DRAW);
+	glBindVertexArray(mQuadsArray);
+
+    glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
+    glm::mat4 view = mCamera.getViewMatrix();
+	ShadowShader->use();
+    ShadowShader->setMat4("view", view);
+    ShadowShader->setMat4("projection", projection);
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
+	glDrawArrays(GL_TRIANGLES, 0, mShadowQuads.size() * 6);
 }
 
 Camera &Renderer::getCamera()
