@@ -29,10 +29,12 @@ private:
     void animate(float DeltaTime);
     void rotate(float DeltaTime);
 private:
-	glm::vec2 mVelocity;
-	glm::vec2 mAcceleration;
+	glm::vec2	mVelocity;
+	glm::vec2	mAcceleration;
+    Animation   mAnimation;
+	bool		mShouldDie;
+
 	static float _Friction;
 	static float _MaxVelocity;
 	static float _MaxAcceleration;
-    Animation    mAnimation;
 };

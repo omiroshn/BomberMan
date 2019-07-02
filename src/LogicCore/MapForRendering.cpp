@@ -26,6 +26,13 @@ std::vector<SquareInstance *> MapForRendering::Filter(SquareType type)
 	return Result;
 }
 
+void MapForRendering::recacheEnemies()
+{
+	mEnemies.clear();
+	for (auto& It : mBalloons)
+		mEnemies.push_back(It);
+}
+
 std::vector<SquareInstance *> MapForRendering::GetWalls() {
 	return Filter(SquareType::Wall);
 }
@@ -55,7 +62,6 @@ unsigned MapForRendering::getHeight()
 bool   MapForRendering::cleanMapForRendering()
 {
 	mRawMap.clear();
-	mEnemies.clear();
 	return true;
 }
 
@@ -66,12 +72,8 @@ MovingEntity& MapForRendering::GetHero()
 
 std::vector<MovingEntity*>& MapForRendering::GetEnemies()
 {
+	recacheEnemies();
 	return mEnemies;
-}
-
-std::vector<BalloonController>& MapForRendering::GetControllers()
-{
-	return mControllers;
 }
 
 std::vector<SquareInstance *> &MapForRendering::GetRawMap()

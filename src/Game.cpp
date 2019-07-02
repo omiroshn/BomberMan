@@ -71,6 +71,10 @@ void Game::start()
         {
             if (mapLoader.MapIsLoaded() && !mReloadStage)
             {
+				if (ImGui::Button("Add ballon"))
+				{
+					;
+				}
                 MovingEntity::debugMovement();
                 Tickable::tickTickables(mDeltaTime);
                 resolveCollisions();
