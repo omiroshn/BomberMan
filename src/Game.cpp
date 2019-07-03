@@ -193,8 +193,7 @@ void Game::doAction(Action const& a)
     auto *joystick = mWindow->getJoystick();
     x_move = SDL_JoystickGetAxis(joystick, 0);
     y_move = SDL_JoystickGetAxis(joystick, 1);
-	std::vector<glm::mat4> transforms;
-	std::vector<glm::mat4> transforms1;
+    
     glm::vec2 normalizedJoystick(
         x_move / (float)MAX_JOYSTICK_VALUE,
         y_move / (float)MAX_JOYSTICK_VALUE
@@ -214,9 +213,13 @@ void Game::doAction(Action const& a)
             mRenderer->getCamera().processMouseMovement(x, y);
             break;
         case Action::Forward:
+            //mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
         case Action::Backward:
+            //mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime);
         case Action::Right:
+            //mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime);
         case Action::Left:
+            //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
         case Action::UpLeft:
         case Action::UpRight:
         case Action::DownLeft:
@@ -224,22 +227,6 @@ void Game::doAction(Action const& a)
             Hero.AddAcceleration(normalizedJoystick * offset);
             break;
         case Action::Up:
-			transforms.clear();
-			for (int i = 1; i < 10; ++i){
-				glm::mat4 model = glm::mat4(1.0f);
-				model = glm::translate(model, glm::vec3(2.0f * i ,1.5f,1.5f  + 2.0f * i));
-				transforms.push_back(model);
-			}
-			try {
-			    //mRenderer->getParticleManager()->startDrawPS("pointSphereBomb", transforms);
-				mRenderer->getParticleManager()->startDrawPS("Cloud", transforms);
-				//mRenderer->getParticleManager()->startDrawPS("quadSphereBombTMap", transforms);
-			} catch (CustomException &ex) {
-				std::cout << ex.what() << std::endl;
-				exit(42);
-			}
-            //mRenderer->getCamera().movaCamera(CameraDirection::UPWARD, mDeltaTime);
-            break;
         case Action::Down:
         default:
             break;

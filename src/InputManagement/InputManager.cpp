@@ -52,41 +52,27 @@ Action InputManager::processJoystickMotion(SDL_JoyAxisEvent jaxis)
 {
     if (jaxis.which == 0)
     {
-        // X axis motion
         if (jaxis.axis == 0)
         {
             
             if (jaxis.value < -JOYSTICK_DEAD_ZONE)
-            {
                 xDir = -1;
-                // PRINT(jaxis.value);
-            }
             else if (jaxis.value > JOYSTICK_DEAD_ZONE)
-            {
                 xDir = 1;
-                // PRINT(jaxis.value);
-            }
             else
                 xDir = 0;
         }
         else if (jaxis.axis == 1)
         {
             if (jaxis.value < -JOYSTICK_DEAD_ZONE)
-            {
                 yDir = -1;
-                // PRINT(jaxis.value);
-            }
             else if (jaxis.value > JOYSTICK_DEAD_ZONE)
-            {
                 yDir = 1;
-                // PRINT(jaxis.value);
-            }
             else
                 yDir = 0;
         }
-        //Calculate angle
         double joystickAngle = atan2((double)yDir, (double)xDir) * (180.0 / M_PI);
-        //Correct angle
+        
         if (xDir == 0 && yDir == 0)
             joystickAngle = 0;
         if (joystickAngle == 0 && xDir == 1)
