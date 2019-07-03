@@ -31,7 +31,6 @@ private:
     void		doAction(Action const&);
     void		calcDeltaTime();
     void		loadResources();
-	void		updateHeroInput();
     std::shared_ptr<GameWindow>      mWindow;
     std::unique_ptr<Renderer>        mRenderer;
     std::unique_ptr<InputManager>    mIManager;

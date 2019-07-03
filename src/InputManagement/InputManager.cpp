@@ -97,6 +97,8 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
             return Action::Up;
         case SDLK_e:
             return Action::Down;
+        case SDLK_0:
+            return Action::Explosion;
         default:
             return Action::Nothing;
     }
