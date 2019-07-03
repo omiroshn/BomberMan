@@ -190,14 +190,6 @@ void Game::doAction(Action const& a)
     auto& Hero = mMap.GetHero();
     const float offset  = mDeltaTime * sInputAcceleration;
     
-    auto *joystick = mWindow->getJoystick();
-    x_move = SDL_JoystickGetAxis(joystick, 0);
-    y_move = SDL_JoystickGetAxis(joystick, 1);
-    
-    glm::vec2 normalizedJoystick(
-        x_move / (float)MAX_JOYSTICK_VALUE,
-        y_move / (float)MAX_JOYSTICK_VALUE
-    );
     switch (a)
     {
         case Action::Finish:
@@ -224,9 +216,17 @@ void Game::doAction(Action const& a)
         case Action::Left:
             //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
             break;
-        case Action::Joystick:
+        case Action::Joystick: {
+            auto *joystick = mWindow->getJoystick();
+            x_move = SDL_JoystickGetAxis(joystick, 0);
+            y_move = SDL_JoystickGetAxis(joystick, 1);
+            glm::vec2 normalizedJoystick(
+                x_move / (float)MAX_JOYSTICK_VALUE,
+                y_move / (float)MAX_JOYSTICK_VALUE
+            );
             Hero.AddAcceleration(normalizedJoystick * offset);
             break;
+        }
         case Action::JoystickButtonX:
             explosion(Hero.getPosition(), 10);
             break;
