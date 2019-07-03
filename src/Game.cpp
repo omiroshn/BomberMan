@@ -188,7 +188,6 @@ short x_move, y_move;
 void Game::doAction(Action const& a)
 {
     auto& Hero = mMap.GetHero();
-    const float offset  = mDeltaTime * sInputAcceleration;
     
     switch (a)
     {
@@ -217,6 +216,7 @@ void Game::doAction(Action const& a)
             //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
             break;
         case Action::Joystick: {
+            const float offset  = mDeltaTime * sInputAcceleration;
             auto *joystick = mWindow->getJoystick();
             x_move = SDL_JoystickGetAxis(joystick, 0);
             y_move = SDL_JoystickGetAxis(joystick, 1);
