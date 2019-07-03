@@ -183,12 +183,22 @@ void Game::resolveCollisions()
 	mRenderer->getCamera().followEntity(mMap.GetHero(), 10.f);
 }
 
+short x_move, y_move;
+
 void Game::doAction(Action const& a)
 {
     auto& Hero = mMap.GetHero();
     const float offset  = mDeltaTime * sInputAcceleration;
+    
+    auto *joystick = mWindow->getJoystick();
+    x_move = SDL_JoystickGetAxis(joystick, 0);
+    y_move = SDL_JoystickGetAxis(joystick, 1);
 	std::vector<glm::mat4> transforms;
 	std::vector<glm::mat4> transforms1;
+    glm::vec2 normalizedJoystick(
+        x_move / (float)MAX_JOYSTICK_VALUE,
+        y_move / (float)MAX_JOYSTICK_VALUE
+    );
     switch (a)
     {
         case Action::Finish:
@@ -204,32 +214,14 @@ void Game::doAction(Action const& a)
             mRenderer->getCamera().processMouseMovement(x, y);
             break;
         case Action::Forward:
-            Hero.AddAcceleration(glm::vec2(0, -offset));
-            //mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
-            break;
         case Action::Backward:
-            Hero.AddAcceleration(glm::vec2(0, offset));
-            //mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime);
-            break;
         case Action::Right:
-            Hero.AddAcceleration(glm::vec2(offset, 0));
-            //mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime);
-            break;
         case Action::Left:
-            Hero.AddAcceleration(glm::vec2(-offset, 0));
-            //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
-            break;
         case Action::UpLeft:
-            Hero.AddAcceleration(glm::vec2(-offset, -offset));
-            break;
         case Action::UpRight:
-            Hero.AddAcceleration(glm::vec2(offset, -offset));
-            break;
-         case Action::DownLeft:
-            Hero.AddAcceleration(glm::vec2(-offset, offset));
-            break;
+        case Action::DownLeft:
         case Action::DownRight:
-            Hero.AddAcceleration(glm::vec2(offset, offset));
+            Hero.AddAcceleration(normalizedJoystick * offset);
             break;
         case Action::Up:
 			transforms.clear();

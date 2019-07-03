@@ -7,6 +7,8 @@
 #include "LogicCore/MapForRendering.h"
 #include "Configure.hpp"
 
+#define PRINT(x) std::cout << #x << " = " << x << "\n"
+
 class Game
 {
 public:

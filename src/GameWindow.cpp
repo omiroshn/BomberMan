@@ -125,6 +125,11 @@ SDL_Event & GameWindow::getEvent()
     return mEvent;
 }
 
+SDL_Joystick * GameWindow::getJoystick()
+{
+    return mJoystick;
+}
+
 void GameWindow::tickGui()
 {
     ImGui_ImplSdlGL3_NewFrame(mWindow);
