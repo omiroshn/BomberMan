@@ -214,17 +214,21 @@ void Game::doAction(Action const& a)
             break;
         case Action::Forward:
             //mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
+            break;
         case Action::Backward:
             //mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime);
+            break;
         case Action::Right:
             //mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime);
+            break;
         case Action::Left:
             //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
-        case Action::UpLeft:
-        case Action::UpRight:
-        case Action::DownLeft:
-        case Action::DownRight:
+            break;
+        case Action::Joystick:
             Hero.AddAcceleration(normalizedJoystick * offset);
+            break;
+        case Action::JoystickButtonX:
+            explosion(Hero.getPosition(), 10);
             break;
         case Action::Up:
         case Action::Down:
