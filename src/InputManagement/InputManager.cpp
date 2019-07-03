@@ -55,23 +55,32 @@ Action InputManager::processJoystickMotion(SDL_JoyAxisEvent jaxis)
         // X axis motion
         if (jaxis.axis == 0)
         {
-            //Left of dead zone
+            
             if (jaxis.value < -JOYSTICK_DEAD_ZONE)
+            {
                 xDir = -1;
-            //Right of dead zone
+                // PRINT(jaxis.value);
+            }
             else if (jaxis.value > JOYSTICK_DEAD_ZONE)
+            {
                 xDir = 1;
+                // PRINT(jaxis.value);
+            }
             else
                 xDir = 0;
-        } //Y axis motion
+        }
         else if (jaxis.axis == 1)
         {
-            //Below of dead zone
             if (jaxis.value < -JOYSTICK_DEAD_ZONE)
+            {
                 yDir = -1;
-            //Above of dead zone
-            else if (jaxis.value > JOYSTICK_DEAD_ZONE )
+                // PRINT(jaxis.value);
+            }
+            else if (jaxis.value > JOYSTICK_DEAD_ZONE)
+            {
                 yDir = 1;
+                // PRINT(jaxis.value);
+            }
             else
                 yDir = 0;
         }

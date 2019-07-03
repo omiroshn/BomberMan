@@ -13,6 +13,7 @@ public:
     ~GameWindow();
     void update();
     SDL_Event & getEvent();
+    SDL_Joystick *getJoystick();
 	void tickGui();
     void getSize(int &w, int &h);
     std::vector<int> getSize();

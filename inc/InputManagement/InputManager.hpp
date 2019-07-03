@@ -2,8 +2,11 @@
 #define BOMBERMAN_InputManager_HPP
 #include <SDL.h>
 
+#define PRINT(x) std::cout << #x << " = " << x << "\n"
+
 //Analog joystick dead zone
 const int JOYSTICK_DEAD_ZONE = 8000;
+const int MAX_JOYSTICK_VALUE = 32767;
 
 enum class Action
 {
