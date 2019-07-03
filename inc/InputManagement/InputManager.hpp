@@ -22,6 +22,7 @@ enum class Action
     JoystickButtonY,
     JoystickButtonA,
     JoystickButtonB,
+    Explosion,
     Space,
 //For internal testing
     CameraRotate,

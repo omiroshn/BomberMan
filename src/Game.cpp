@@ -16,6 +16,7 @@ bool            Game::mReloadStage = false;
 bool            Game::mIsRunning = true;
 Uint64          Game::mStageTimer = 200;
 Uint64          Game::mStageStartedTimer = 0;
+float           Game::sInputAcceleration = 6000;
 
 namespace
 {
@@ -70,7 +71,6 @@ void Game::start()
             if (mapLoader.MapIsLoaded() && !mReloadStage)
             {
                 MovingEntity::debugMovement();
-                updateHeroInput();
                 Tickable::tickTickables(mDeltaTime);
                 resolveCollisions();
                 mRenderer->draw(mMap);
@@ -183,11 +183,11 @@ void Game::resolveCollisions()
 	mRenderer->getCamera().followEntity(mMap.GetHero(), 10.f);
 }
 
-short x_move, y_move;
-
 void Game::doAction(Action const& a)
 {
     auto& Hero = mMap.GetHero();
+    ImGui::SliderFloat("Input Hero acceleration", &sInputAcceleration, 0, 10000);
+	const float offset  = mDeltaTime * sInputAcceleration;
     
     switch (a)
     {
@@ -204,22 +204,25 @@ void Game::doAction(Action const& a)
             mRenderer->getCamera().processMouseMovement(x, y);
             break;
         case Action::Forward:
-            //mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime);
+            Hero.AddAcceleration(glm::vec2(0, -offset));
+            //mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime * 100);
             break;
         case Action::Backward:
-            //mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime);
+            Hero.AddAcceleration(glm::vec2(0, offset));
+            //mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime * 100);
             break;
         case Action::Right:
-            //mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime);
+            Hero.AddAcceleration(glm::vec2(offset, 0));
+            //mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime * 100);
             break;
         case Action::Left:
-            //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime);
+            Hero.AddAcceleration(glm::vec2(-offset, 0));
+            //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime * 100);
             break;
         case Action::Joystick: {
-            const float offset  = mDeltaTime * sInputAcceleration;
             auto *joystick = mWindow->getJoystick();
-            x_move = SDL_JoystickGetAxis(joystick, 0);
-            y_move = SDL_JoystickGetAxis(joystick, 1);
+            short x_move = SDL_JoystickGetAxis(joystick, 0);
+            short y_move = SDL_JoystickGetAxis(joystick, 1);
             glm::vec2 normalizedJoystick(
                 x_move / (float)MAX_JOYSTICK_VALUE,
                 y_move / (float)MAX_JOYSTICK_VALUE
@@ -227,6 +230,7 @@ void Game::doAction(Action const& a)
             Hero.AddAcceleration(normalizedJoystick * offset);
             break;
         }
+        case Action::Explosion:
         case Action::JoystickButtonX:
             explosion(Hero.getPosition(), 10);
             break;
@@ -398,32 +402,6 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 	which = !which;
 }
 
-void Game::updateHeroInput()
-{
-	auto& Hero = mMap.GetHero();
-	ImGui::SliderFloat("Input Hero acceleration", &sInputAcceleration, 0, 10000);
-	const float offset  = mDeltaTime * sInputAcceleration;
-	if (ImGui::IsKeyDown(SDL_SCANCODE_LEFT))
-		Hero.AddAcceleration(glm::vec2(-offset, 0));
-	if (ImGui::IsKeyDown(SDL_SCANCODE_RIGHT))
-		Hero.AddAcceleration(glm::vec2(offset, 0));
-	if (ImGui::IsKeyDown(SDL_SCANCODE_UP))
-		Hero.AddAcceleration(glm::vec2(0, -offset));
-	if (ImGui::IsKeyDown(SDL_SCANCODE_DOWN))
-		Hero.AddAcceleration(glm::vec2(0, offset));
-
-    if (ImGui::IsKeyDown(SDL_SCANCODE_A))
-        mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime * 100);
-	if (ImGui::IsKeyDown(SDL_SCANCODE_S))
-        mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime * 100);
-	if (ImGui::IsKeyDown(SDL_SCANCODE_D))
-        mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime * 100);
-	if (ImGui::IsKeyDown(SDL_SCANCODE_W))
-        mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime * 100);
-    if (ImGui::IsKeyPressed(SDL_SCANCODE_0))
-        explosion(Hero.getPosition(), 10);
-}
-
 void 		Game::saveCurrentState(std::string fileName)
 {
 	int w, h;
@@ -446,5 +424,3 @@ void 		Game::applyWindowChange()
 		mWindow->setFullScreen(CONFIGURATION.getWindowed());
 	}
 }
-
-float Game::sInputAcceleration = 6000;
