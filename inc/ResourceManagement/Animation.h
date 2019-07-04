@@ -25,7 +25,7 @@ public:
     AnimationType   getType() const;
     void            setType(AnimationType mType);
     std::string     getName() const;
-    void            tick();
+    void            tick(float DeltaTime);
 private:
     double mTime;
     AnimationType mType;

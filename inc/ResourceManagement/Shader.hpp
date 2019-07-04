@@ -9,6 +9,7 @@
 
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include <map>
 
 class Shader
 {
@@ -36,6 +37,10 @@ public:
 	bool isShaderCompiled(unsigned int, int, char *) const;
 	bool isProgramLinked(unsigned int, int, char *) const;
 	unsigned int mShaderProgram;
+
+private:
+    GLuint getUniformLocation(std::string const&) const;
+    mutable std::map<std::string, GLuint> mUniformLocations;
 };
 
 #endif

@@ -26,7 +26,7 @@ public:
 	void		tick(float DeltaTime = 0) override;
 
 private:
-    void animate();
+    void animate(float DeltaTime);
     void rotate(float DeltaTime);
 private:
 	glm::vec2 mVelocity;
