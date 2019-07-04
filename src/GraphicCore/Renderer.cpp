@@ -97,19 +97,15 @@ void Renderer::normalPass(MapForRendering& aMap)
     std::vector<glm::mat4> transforms;
 
     {
-        auto& Hero = aMap.GetHero();
-        Hero.debug();
-        transforms.push_back(Hero.getModelMatrix());
-        heroModel->setAnimation(Hero.getAnimation());
-        heroModel->draw(modelShader, transforms);
-		glm::vec3 heroPosition = Hero.getPosition3D();
-		Renderer::Quad shadow(
-			{ heroPosition + glm::vec3{1,0,1} },
-			{ heroPosition + glm::vec3{1,0,-1} },
-			{ heroPosition + glm::vec3{-1,0,1} },
-			{ heroPosition + glm::vec3{-1,0,-1} }
-		);
-		drawQuad(shadow);
+
+	    auto& Hero = aMap.GetHero();
+	    Hero.debug();
+
+	    transforms.push_back(Hero.getModelMatrix());
+	    heroModel->setAnimation(Hero.getAnimation());
+	    heroModel->draw(modelShader, transforms);
+	    glm::vec3 heroPosition = Hero.getPosition3D();
+	    drawShadow(heroPosition);
     }
     transforms.clear();
 
@@ -117,7 +113,10 @@ void Renderer::normalPass(MapForRendering& aMap)
     {
 		auto& Enemies = aMap.GetEnemies();
 		for (auto It : Enemies)
+		{
 			transforms.push_back(It->getModelMatrix());
+			drawShadow(It->getPosition3D());
+		}
 		balloon->draw(modelShader, transforms);
     }
     transforms.clear();
@@ -152,27 +151,27 @@ void Renderer::normalPass(MapForRendering& aMap)
             brick->draw(modelShader, transforms);
         }
     }
+    transforms.clear();
 
     // render the ground
     {
         glm::mat4 groundModel = glm::mat4(1.0f);
-        groundModel = glm::translate(groundModel, glm::vec3(.0f, -0.5f, .0f));
-        groundModel = glm::scale(groundModel, glm::vec3(1.0f, 0.1f, 1.0f));
+        groundModel = glm::translate(groundModel, glm::vec3(.0f, -1.f, .0f));
 
         CollisionInfo &info = Game::getCollisionInfo();
         for (int i = 0; i < info.Squares.size(); i++)
         {
             glm::mat4 groundTransform = groundModel;
             groundTransform = glm::translate(groundTransform,
-                glm::vec3(i%info.width + .5f, 0, i/info.width + .5f)
+                glm::vec3(i%info.width + .5f, i, i/info.width + .5f)
             );
             transforms.push_back(groundTransform);
         }
-        ground->draw(modelShader, transforms);
+        //ground->draw(modelShader, transforms);
     }
     transforms.clear();
 
-	drawQuadsDeferred();
+    drawQuadsDeferred(view, projection);
 
 	// render running particle system
 	try {
@@ -189,26 +188,41 @@ void Renderer::normalPass(MapForRendering& aMap)
     skybox->draw(skyboxShader);
 }
 
-void Renderer::drawQuadsDeferred()
+void Renderer::drawShadow(glm::vec3 position)
+{
+	float shadowYOffset = -0.445;
+	float shadowSize = 0.241f;
+	Renderer::Quad shadow(
+	    position + glm::vec3{ shadowSize,shadowYOffset, shadowSize},
+	    position + glm::vec3{ shadowSize,shadowYOffset,-shadowSize},
+	    position + glm::vec3{-shadowSize,shadowYOffset, shadowSize},
+	    position + glm::vec3{-shadowSize,shadowYOffset,-shadowSize}
+	);
+	drawQuad(shadow);
+}
+
+void Renderer::drawQuadsDeferred(glm::mat4 view, glm::mat4 projection)
 {
 	static auto ShadowShader = RESOURCES.getShader("shadow");
 	if (mShadowQuads.empty())
 		return;
-	
+
 	glBindBuffer(GL_ARRAY_BUFFER, mQuadsBuffer);
 	glBufferData(GL_ARRAY_BUFFER, mShadowQuads.size() * sizeof(Renderer::Quad), mShadowQuads.data(), GL_DYNAMIC_DRAW);
 	glBindVertexArray(mQuadsArray);
 
-    glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
-    glm::mat4 view = mCamera.getViewMatrix();
 	ShadowShader->use();
-    ShadowShader->setMat4("view", view);
-    ShadowShader->setMat4("projection", projection);
+	ShadowShader->setMat4("view", view);
+	ShadowShader->setMat4("projection", projection);
 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	glDepthMask(false);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glDrawArrays(GL_TRIANGLES, 0, mShadowQuads.size() * 6);
+	mShadowQuads.clear();
+	glDisable(GL_BLEND);
+	glDepthMask(true);
 }
 
 Camera &Renderer::getCamera()

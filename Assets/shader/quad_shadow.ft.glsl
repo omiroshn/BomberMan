@@ -5,11 +5,13 @@ in vec2 UV;
 out vec4 color;
 
 uniform float power = 1;
+uniform float radius = 1;
 
 void main()
 {
-	vec2 centeredUV = UV * .5f - .5f;
-	float reversed = max(.5f - length(centeredUV), 0);
-	float alpha = pow(reversed, power);
-	color = vec4(0,1,0,alpha);
+	vec2 centeredUV = (UV - .5f);
+	float alpha = max(.5f - length(centeredUV), 0);
+	if (alpha < 0.001)
+		discard;
+	color = vec4(0,0,0,alpha);
 }

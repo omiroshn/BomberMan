@@ -67,7 +67,8 @@ public:
 
 private:
     void normalPass(MapForRendering&);
-    void drawQuadsDeferred();
+    void drawShadow(glm::vec3 position);
+    void drawQuadsDeferred(glm::mat4 view, glm::mat4 projection);
     Camera mCamera;
     int mWidth, mHeight;
 	ptrPM mParticleManager;
