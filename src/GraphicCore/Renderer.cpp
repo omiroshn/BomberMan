@@ -163,11 +163,11 @@ void Renderer::normalPass(MapForRendering& aMap)
         {
             glm::mat4 groundTransform = groundModel;
             groundTransform = glm::translate(groundTransform,
-                glm::vec3(i%info.width + .5f, i, i/info.width + .5f)
+                glm::vec3(i%info.width + .5f, 0, i/info.width + .5f)
             );
             transforms.push_back(groundTransform);
         }
-        //ground->draw(modelShader, transforms);
+        ground->draw(modelShader, transforms);
     }
     transforms.clear();
 
