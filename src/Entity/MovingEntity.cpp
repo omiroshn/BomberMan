@@ -73,13 +73,13 @@ glm::vec2 MovingEntity::GetAcceleration() const
 	return mAcceleration;
 }
 
-void MovingEntity::animate()
+void MovingEntity::animate(float DeltaTime)
 {
-    mAnimation.tick();
-    if (GetSpeed() < 1)
-        mAnimation.setType(AnimationType::Idle);
-    else
+    mAnimation.tick(DeltaTime);
+    if (GetSpeed() >= 0.2)
         mAnimation.setType(AnimationType::Running);
+    else
+        mAnimation.setType(AnimationType::Idle);
 }
 
 void MovingEntity::rotate(float DeltaTime)
@@ -102,7 +102,7 @@ void MovingEntity::rotate(float DeltaTime)
 /** Euler integration + some friction. */
 void MovingEntity::tick(float DeltaTime)
 {
-    animate();
+    animate(DeltaTime);
     if (mAcceleration == glm::vec2(0.f) && mVelocity == glm::vec2(0.f))
         return;
     rotate(DeltaTime);

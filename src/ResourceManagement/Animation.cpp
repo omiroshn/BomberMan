@@ -46,7 +46,7 @@ std::string  Animation::getName() const
     }
 }
 
-void         Animation::tick()
+void         Animation::tick(float DeltaTime)
 {
-    mTime += 0.01;
+    mTime += DeltaTime;
 }
