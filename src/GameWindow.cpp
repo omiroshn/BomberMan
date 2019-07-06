@@ -154,6 +154,11 @@ void GameWindow::ShowInGameMenu()
     mMainMenu->ShowInGameMenu();
 }
 
+void GameWindow::ShowBetweenStageScreen()
+{
+    mMainMenu->ShowBetweenStageScreen();
+}
+
 void GameWindow::PauseGame(bool state)
 {
     mMainMenu->GamePaused(state);

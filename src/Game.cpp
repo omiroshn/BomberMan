@@ -210,6 +210,9 @@ void Game::doAction(Action const& a)
         case Action::Pause:
             pause();
             break;
+        case Action::StageFinished:
+            stageFinished();
+            break;
         case Action::CameraRotate:
             float x,y;
             mIManager->getMouseOffset(x, y);
@@ -437,5 +440,12 @@ void 		Game::applyWindowChange()
 	}
 }
 
+
+void       Game::stageFinished()
+{
+    int current_stage = CONFIGURATION.getChosenStage();
+    CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
+    Game::mReloadStage = true;
+}
 
 float Game::sInputAcceleration = 6000;

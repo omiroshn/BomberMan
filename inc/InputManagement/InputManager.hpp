@@ -11,6 +11,7 @@ enum class Action
     Nothing = 0,
     Finish,
     Pause,
+    StageFinished,
     Forward,
     Backward,
     Up,
