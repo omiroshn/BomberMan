@@ -1,4 +1,5 @@
 #include "LogicCore/MapForRendering.h"
+#include <imgui.h>
 
 
 MapForRendering::MapForRendering(const std::vector<SquareInstance*>& map) :
@@ -29,6 +30,10 @@ std::vector<SquareInstance *> MapForRendering::Filter(SquareType type)
 void MapForRendering::recacheEnemies()
 {
 	mEnemies.clear();
+	mBalloons.erase(std::remove_if(mBalloons.begin(), mBalloons.end(), [](const MovingEntity *balloon){
+		return balloon->isDead();
+	}), mBalloons.end());
+
 	for (auto& It : mBalloons)
 		mEnemies.push_back(It);
 }
@@ -72,11 +77,26 @@ MovingEntity& MapForRendering::GetHero()
 
 std::vector<MovingEntity*>& MapForRendering::GetEnemies()
 {
-	recacheEnemies();
 	return mEnemies;
 }
 
 std::vector<SquareInstance *> &MapForRendering::GetRawMap()
 {
 	return mRawMap;
+}
+
+std::vector<MapForRendering::Balloon>& MapForRendering::GetBalloons()
+{
+	return mBalloons;
+}
+
+void							MapForRendering::tick(float deltaTime)
+{
+	if (ImGui::Button("Add balloon"))
+	{
+		GetBalloons().emplace_back(glm::vec2{9.5, 9.5});
+	}
+	recacheEnemies();
+	for (auto& It : mBalloons)
+		It.controller.tick(*It, deltaTime);
 }

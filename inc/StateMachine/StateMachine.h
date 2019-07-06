@@ -23,14 +23,21 @@ struct State
 
 template <typename OwnerType, typename... Ts>
 class SM {
+	static const uint8_t INVALID_STATE = 255;
 public:
-	SM(unsigned char InitialState = 0) :
-		m_CurrentState(InitialState)
+	SM() :
+		m_CurrentState(INVALID_STATE)
 	{
 		init();
 	}
 
-	void tick(OwnerType& owner, float DeltaTime = 0) {
+	void tick(OwnerType& owner, float DeltaTime = 0)
+	{
+		if (m_CurrentState == INVALID_STATE)
+		{
+			m_CurrentState = 0;
+			dispatchEntry<0, Ts...>(owner);
+		}
 		tickCurrentState(owner, DeltaTime);
 		dispatchTransitions(owner);
 	}
@@ -48,7 +55,6 @@ private:
 	void init()
 	{
 		setStateIds<0, Ts...>();
-		//dispatchEntry<0, Ts...>();
 	}
 
 	template <unsigned char N, typename T, typename... Args>

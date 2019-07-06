@@ -62,7 +62,7 @@ namespace
 		return result;
 	}
 
-	glm::vec2 pickDirection(Entity& pawn)
+	glm::vec2 pickRandomDirection(Entity& pawn)
 	{
 		union {
 			uint8_t mask;
@@ -82,37 +82,154 @@ namespace
 		}
 		return glm::vec2(0,1);
 	}
+
+	void	recenter(MovingEntity& pawn)
+	{
+		glm::vec2 position = pawn.getPosition();
+		glm::vec2 closestCenter = (glm::floor(position) + glm::ceil(position)) / 2.f;
+		pawn.AddVelocity(closestCenter - position);
+	}
+
+	bool	moveAI(MovingEntity& pawn, glm::vec2 destination, float deltaTime)
+	{
+		auto& info = Game::getCollisionInfo();
+		glm::vec2 position = pawn.getPosition();
+		glm::vec2 direction = destination - position;
+		float length = glm::length(direction);
+
+		if (length < 0.02)
+		{
+			recenter(pawn);
+			return false;
+		}
+
+		glm::vec2 acceleration = direction / length * 40.f;
+
+		pawn.AddAcceleration(acceleration);
+		return true;
+	}
+
+	glm::vec2	march(glm::vec2 start, glm::vec2 direction, int distance)
+	{
+		auto& info = Game::getCollisionInfo();
+		
+		for (int i = 1; i <= distance; i++)
+		{
+			if (info[start + direction] == SquareType::EmptySquare)
+				start += direction;
+		}
+		return (glm::floor(start) + glm::ceil(start)) / 2.f;
+	}
+
+	bool checkVisibility(MovingEntity& a, MovingEntity& b)
+	{
+		auto& info = Game::getCollisionInfo();
+
+		glm::ivec2 positionA = a.getPosition();
+		glm::ivec2 positionB = b.getPosition();
+
+		if (positionA == positionB)
+			return true;
+
+		if (positionA.x == positionB.x)
+		{
+			int min = glm::min(positionA.y, positionB.y);
+			int max = glm::max(positionA.y, positionB.y);
+
+			for (int i = min; i < max; i++)
+				if (info[glm::ivec2{positionA.x, i}] != SquareType::EmptySquare)
+					return false;
+
+			return true;
+		}
+		else if (positionA.y == positionB.y)
+		{
+			int min = glm::min(positionA.x, positionB.x);
+			int max = glm::max(positionA.x, positionB.x);
+
+			for (int i = min; i < max; i++)
+				if (info[glm::ivec2{i, positionA.x}] != SquareType::EmptySquare)
+					return false;
+
+			return true;
+		}
+		return false;
+	}
 }
 /** AI utility functions - end */
 
 /* Idle state -  start */
-void IdleState::onEntry(MovingEntity&)		   { m_TransitionToPatrol = Game::getCurrentTime() + 1.f; }
+void IdleState::onEntry(MovingEntity&)		   { m_TransitionToPatrol = Game::getCurrentTime() + .3f; }
 bool IdleState::transition(const PatrolState&) { return m_TransitionToPatrol <= Game::getCurrentTime(); }
 /* Idle state -  end */
 
-
-
 /* Patrol state - start */
-void PatrolState::onTick(MovingEntity& pawn, float DeltaTime)
+void PatrolState::onTick(MovingEntity& pawn, float deltaTime)
 {
 	const glm::bvec2 NotZeroVec = glm::notEqual(mCurrentDirection, glm::vec2(0));
 	const bool HasDirection = NotZeroVec.x || NotZeroVec.y;
 
-///		pawn.AddAcceleration(mCurrentDirection * 60.f);
-	if (HasDirection && isEmpty(pawn.getPosition() + mCurrentDirection))
+	if (!moveAI(pawn, mShortTermGoal, deltaTime))
 	{
+		mShouldIdle = true;
 		return;
 	}
-	else
-		mShouldIdle = true;
+
+	MapForRendering *map = Game::getMap();
+	auto& Hero = map->GetHero();
+	mPawnSeesPlayer = checkVisibility(pawn, Hero);
 }
 bool PatrolState::transition(const IdleState&)
 {
 	return mShouldIdle;
 }
+
+bool PatrolState::transition(const ChaseState&)
+{
+	return mPawnSeesPlayer;
+}
+
 void PatrolState::onEntry(MovingEntity& Pawn, float DeltaTime /*= 0*/)
 {
-	mCurrentDirection = pickDirection(Pawn);
+	auto& info = Game::getCollisionInfo();
+
+	mCurrentDirection = pickRandomDirection(Pawn);
+	glm::vec2 start = Pawn.getPosition();
+	int distance = rand() % info.width;
+	mShortTermGoal = march(start, mCurrentDirection, distance);
 	mShouldIdle = false;
 }
 /* Patrol state -  end */
+
+
+/* Chase state - start */
+void ChaseState::onTick(MovingEntity& pawn, float deltaTime)
+{
+	MapForRendering *map = Game::getMap();
+	auto& Hero = map->GetHero();
+	mPawnSeesPlayer = checkVisibility(pawn, Hero);
+	if (mPawnSeesPlayer)
+		mLastSeenPlayer = (glm::floor(Hero.getPosition()) + glm::ceil(Hero.getPosition())) / 2.f;
+	if (!moveAI(pawn, mLastSeenPlayer, deltaTime))
+	{
+		mIsConfused = true;
+		return;
+	}
+}
+
+bool ChaseState::transition(const IdleState&)
+{
+	return mIsConfused;
+}
+
+bool ChaseState::transition(const ConfusedState&)
+{
+	return mPawnSeesPlayer;
+}
+
+void ChaseState::onEntry(MovingEntity& Pawn, float DeltaTime /*= 0*/)
+{
+	mPawnSeesPlayer = true;
+	mIsConfused = false;
+}
+/* Chase state -  end */

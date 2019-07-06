@@ -8,11 +8,13 @@ class MovingEntity;
 /* It's better to provide forward declarations so that any type knows of any other type */
 struct IdleState;
 struct PatrolState;
+struct ChaseState;
+struct ConfusedState;
 
 /**
  * Idle state
  *
- * Can be used in any Controller. Makes pawn stay in place for 1s.
+ * Makes pawn stay in place for 1s.
  */
 struct IdleState : public State {
 	using State::transition;
@@ -27,19 +29,44 @@ private:
 /**
  * Patrol state
  *
- * Can be used in any Controller. Makes pawn walk through the maze randomly.
+ * Makes pawn walk through the maze randomly.
  */
 struct PatrolState : public State {
 	/** State interface */
 	using State::transition;
 	bool transition(const IdleState&);
+	bool transition(const ChaseState&);
 	void onTick(MovingEntity&, float DeltaTime = 0);
 	void onEntry(MovingEntity&, float DeltaTime = 0);
 
 	glm::vec2 mCurrentDirection;
+	glm::vec2 mShortTermGoal;
 	bool mShouldIdle;
+	bool mPawnSeesPlayer;
 };
 
-struct ChaseState : public State {};
+/**
+ * Patrol state
+ *
+ * Makes pawn walk through the maze randomly.
+ */
+struct ChaseState : public State {
+	using State::transition;
+	bool transition(const ConfusedState&);
+	bool transition(const IdleState&);
+	void onTick(MovingEntity&, float DeltaTime = 0);
+	void onEntry(MovingEntity&, float DeltaTime = 0);
 
-typedef SM<MovingEntity, IdleState, PatrolState> BalloonController;
+	glm::vec2 mLastSeenPlayer;
+	bool mPawnSeesPlayer;
+	bool mIsConfused;
+};
+
+struct ConfusedState : public State {
+	using State::transition;
+	bool transition(const IdleState&);
+	void onTick(MovingEntity&, float DeltaTime = 0);
+	void onEntry(MovingEntity&, float DeltaTime = 0);
+};
+
+typedef SM<MovingEntity, IdleState, PatrolState, ChaseState> BalloonController;

@@ -28,6 +28,9 @@ public:
     static bool    mIsRunning;
 
     void        explosion(glm::ivec2 position, uint32_t span);
+
+    static Game             *get();
+    static MapForRendering  *getMap();
 private:
 	void		resolveCollisions();
     void		doAction(Action const&);
@@ -46,6 +49,7 @@ private:
 	static CollisionInfo			 mCollisionInfo;
     bool                             mIsPaused;
 	static float					 sInputAcceleration;
+	static Game					    *sInstance;
 };
 
 #endif //BOMBERMAN_Renderer_HPP

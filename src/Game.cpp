@@ -40,6 +40,7 @@ Game::Game()
     // timerManager = TimerManager::Instance();
     loadResources();
 
+    sInstance = this;
 }
 
 Game::~Game()
@@ -71,10 +72,7 @@ void Game::start()
         {
             if (mapLoader.MapIsLoaded() && !mReloadStage)
             {
-				if (ImGui::Button("Add ballon"))
-				{
-					;
-				}
+                mMap.tick(mDeltaTime);
                 MovingEntity::debugMovement();
                 Tickable::tickTickables(mDeltaTime);
                 resolveCollisions();
@@ -366,16 +364,17 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
     auto vMax = minMax[3];
 
     auto &rawMap = mMap.GetRawMap();
-    std::remove_if(rawMap.begin(), rawMap.end(), [this, hMin, hMax, vMin, vMax](SquareInstance *instance) {
+    rawMap.erase(std::remove_if(rawMap.begin(), rawMap.end(), [this, hMin, hMax, vMin, vMax](SquareInstance *instance) {
         return instance->GetType() == SquareType::Brick
         && (circle_box_collision(instance->getPosition() + glm::vec2(0.5), 0.001, hMin, hMax)
-        || circle_box_collision(instance->getPosition() + glm::vec2(0.5), 0.001, vMin, vMax));
-    });
+        ||  circle_box_collision(instance->getPosition() + glm::vec2(0.5), 0.001, vMin, vMax));
+    }), rawMap.end());
 
     auto &enemies = mMap.GetEnemies();
-    std::remove_if(enemies.begin(), enemies.end(), [this, hMin, hMax, vMin, vMax](MovingEntity *entity) {
-        return (circle_box_collision(entity->getPosition() + glm::vec2(0.5), 0.1, hMin, hMax)
-        || circle_box_collision(entity->getPosition() + glm::vec2(0.5), 0.1, vMin, vMax));
+    std::for_each(enemies.begin(), enemies.end(), [this, hMin, hMax, vMin, vMax](MovingEntity *entity) {
+        if (circle_box_collision(entity->getPosition() + glm::vec2(0.5), .3, hMin, hMax)
+        || circle_box_collision(entity->getPosition() + glm::vec2(0.5), .3, vMin, vMax))
+            entity->kill();
     });
 
     mRenderer->getParticleManager()->startDrawPS(brickPool[which], brickTransforms);

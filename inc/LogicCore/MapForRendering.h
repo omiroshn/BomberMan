@@ -10,6 +10,7 @@
 
 class MapForRendering
 {
+	typedef Agent<MovingEntity, BalloonController> Balloon;
 public:
 	MapForRendering();
 	MapForRendering(const std::vector<SquareInstance*>& map);
@@ -22,12 +23,13 @@ public:
 	bool     cleanMapForRendering();
 	std::vector<SquareInstance*>&	GetRawMap();
 	std::vector<MovingEntity*>&		GetEnemies();
-	MovingEntity& GetHero();
+	std::vector<Balloon>&			GetBalloons();
+	MovingEntity&					GetHero();
+	void							tick(float deltaTime);
 
 	unsigned getWitdh();
 	unsigned getHeight();
 private:
-	typedef Agent<MovingEntity, BalloonController> Balloon;
 
 	unsigned						mWidth;
 	unsigned						mHeight;

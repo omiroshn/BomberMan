@@ -8,4 +8,10 @@ struct Agent
     Controller				controller;
 
     operator Pawn*() {return pawn.get();}
+
+    template<typename... Args>
+    Agent(Args ...arg)
+    : pawn(std::make_shared<Pawn>(arg...))
+    {
+    }
 };

@@ -36,9 +36,9 @@ void TimerManager::Update() {
 	{
 		it->Tick();
 	}
-	std::remove_if(v.begin(), v.end(), [](const std::unique_ptr<TimerBase>& timer){
+	v.erase(std::remove_if(v.begin(), v.end(), [](TimerBase *timer){
 		return timer->readyForDelete() && timer->usedTheEvent();
-	});
+	}), v.end());
 }
 
 void TimerManager::RemoveTimer(TimerBase *toDelete)

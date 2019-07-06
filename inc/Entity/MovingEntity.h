@@ -19,11 +19,14 @@ public:
     Animation const& getAnimation() const;
 	void		debug();
 
-
 	static void	debugMovement();
 
 	/** Tickable interface */
 	void		tick(float DeltaTime = 0) override;
+
+public:
+	bool		isDead() const;
+	void		kill();
 
 private:
     void animate(float DeltaTime);
