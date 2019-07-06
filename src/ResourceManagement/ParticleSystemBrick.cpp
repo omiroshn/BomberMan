@@ -51,7 +51,6 @@ void 				ParticleSystemBrick::setInstanceBuffer()
 	glBindVertexArray(m_VAO);
     glGenBuffers(1, &m_IBO);
 
-
     glBindBuffer(GL_ARRAY_BUFFER, m_IBO);
 	glEnableVertexAttribArray(3);
     glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * 4, (GLvoid*)(0 * sizeof(glm::vec4)));
@@ -110,11 +109,6 @@ void 			ParticleSystemBrick::drawGLContent(glm::mat4 const & projection, glm::ma
 	m_shader->use();
 	m_shader->setMat4("projection", projection);
 	m_shader->setMat4("view", view);
-	glEnable(GL_BLEND);
-	glDisable(GL_DEPTH_TEST);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDepthMask(GL_FALSE);
-
 	glActiveTexture(GL_TEXTURE0);
 	m_texture->bind();
 	glBindBuffer(GL_ARRAY_BUFFER, m_IBO);
@@ -122,7 +116,4 @@ void 			ParticleSystemBrick::drawGLContent(glm::mat4 const & projection, glm::ma
 
     glBindVertexArray(m_VAO);
     glDrawArraysInstanced(GL_TRIANGLES, 0, m_particleCount * 36, transforms.size());
-	glDisable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_TRUE);
 }

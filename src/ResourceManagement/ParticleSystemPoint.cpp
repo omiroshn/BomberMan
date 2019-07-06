@@ -4,7 +4,7 @@
 ParticleSystemPoint::ParticleSystemPoint()
 {
 	glEnable(GL_PROGRAM_POINT_SIZE);
-	setParticleCount(30);
+	setParticleCount(12);
 }
 
 ParticleSystemPoint::~ParticleSystemPoint()
@@ -99,7 +99,7 @@ void 			ParticleSystemPoint::drawGLContent(glm::mat4 const & projection, glm::ma
 	m_shader->setMat4("view", view);
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
-	glBlendFunc(GL_ONE, GL_ONE);
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	glBindBuffer(GL_ARRAY_BUFFER, m_IBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
 
