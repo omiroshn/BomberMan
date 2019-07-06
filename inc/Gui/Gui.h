@@ -15,12 +15,12 @@ public:
 	void ShowMainMenu();
 	void ShowInGameMenu();
     void ShowBetweenStageScreen();
+	void ShowLoadingScreen(const char* screen);
 	bool IsGameRunning();
 	void StartTheGame(bool start);
 	void GamePaused(bool state);
 	void SetBackground(const char* texture);
 	void ChangeMenuSize(int w, int h);
-	void ShowLoadingScreen(const char* screen);
 
 private:
 	void ShowHardnessRadioButtons();
