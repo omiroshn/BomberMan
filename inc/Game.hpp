@@ -4,6 +4,7 @@
 #include "GameWindow.hpp"
 #include "GraphicCore/Renderer.hpp"
 #include "InputManagement/InputManager.hpp"
+#include "InputManagement/KeyboardHandler.hpp"
 #include "LogicCore/MapForRendering.h"
 #include "Configure.hpp"
 
@@ -34,6 +35,7 @@ private:
     std::shared_ptr<GameWindow>      mWindow;
     std::unique_ptr<Renderer>        mRenderer;
     std::unique_ptr<InputManager>    mIManager;
+    std::unique_ptr<KeyboardHandler> mKeyHandler;
 
     static Uint64                    mTimeNow;
     static Uint64                    mTimeLast;
