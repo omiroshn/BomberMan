@@ -14,6 +14,7 @@ public:
 	~Gui();
 	void ShowMainMenu();
 	void ShowInGameMenu();
+    void ShowBetweenStageScreen();
 	bool IsGameRunning();
 	void StartTheGame(bool start);
 	void GamePaused(bool state);

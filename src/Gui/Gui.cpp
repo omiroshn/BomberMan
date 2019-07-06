@@ -86,6 +86,26 @@ void Gui::ShowInGameMenu()
 	}
 }
 
+void Gui::ShowBetweenStageScreen()
+{
+
+
+
+	ImGuiWindowFlags window_flags = 0;
+	window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar ;
+	ImGui::SetNextWindowPos({0, 0},0);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(mWidth / 2 - 100, mHeight / 2 - 79));
+	ImGui::SetNextWindowCollapsed(0);
+
+	ImGui::Begin("Great job", NULL,window_flags);
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
+	ImGui::Text("Welcome to next stage!");
+
+
+
+
+}
+
 void Gui::ShowStartNewGameMenu()
 {
 	if (ImGui::BeginPopup("Select stage"))
