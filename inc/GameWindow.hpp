@@ -20,6 +20,7 @@ public:
     bool IsGameRunning();
     void ShowStartingMenu();
     void ShowInGameMenu();
+    void ShowBetweenStageScreen();
     void PauseGame(bool state);
 	void setSize(int const w, int const h);
 	void setFullScreen(bool isFullScreen);

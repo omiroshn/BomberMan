@@ -19,6 +19,7 @@ public:
 	void 		saveCurrentState(std::string fileName  = "ConfigureFile");
 	void 		loadStateFromFile(std::string fileName  = "ConfigureFile");
 	void 		applyWindowChange();
+    void        stageFinished();
 
     static bool    mReloadStage;
     static Uint64  mStageTimer;
