@@ -86,7 +86,7 @@ void Game::start()
                         SDL_Delay(ms * 1000);
                 }
                 mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
-                mWindow->ShowInGameMenu();git status
+                mWindow->ShowInGameMenu();
             }
             else
             {
@@ -95,20 +95,27 @@ void Game::start()
                 mMap.cleanMapForRendering();
                 mCollisionInfo.Squares.clear();
                 std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
-                mMap.ParseMapBySquareInstances();
-                mMap.GetEnemies().reserve(10);
-                for (int i = 1; i <= 4; i++)
+                //mMap.ParseMapBySquareInstances();
+                //mMap.GetEnemies().reserve(10);
+                // for (int i = 1; i <= 4; i++)
+                // {
+                //     auto& Balloon = mMap.GetEnemies().emplace_back(glm::vec2(7 + i, 1));
+                //     AIController::addBalloon(Balloon);
+                // }
+                if (mReloadStage && mStageTimer > 0)
                 {
-                    auto& Balloon = mMap.GetEnemies().emplace_back(glm::vec2(7 + i, 1));
-                    AIController::addBalloon(Balloon);
+                    //mWindow->update();
+                    mWindow->ShowBetweenStageScreen();
+                    mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
+                    //SDL_Delay(3000);
                 }
-                if (mReloadStage)
+                else if (mStageTimer < 1)
                 {
-                    mWindow->update();
-                    SDL_Delay(3000);
-                }
+                    mReloadStage = 0;
+
                 mStageStartedTimer = getCurrentTime();
-                mReloadStage = 0;
+                }
+
             }
         }
         doAction(mIManager->processEvents(mWindow->getEvent()));
@@ -210,7 +217,7 @@ void Game::doAction(Action const& a)
         case Action::Pause:
             pause();
             break;
-        case Action::StageFinished:
+            case Action::StageFinished:
             stageFinished();
             break;
         case Action::CameraRotate:
@@ -446,6 +453,8 @@ void       Game::stageFinished()
     int current_stage = CONFIGURATION.getChosenStage();
     CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
     Game::mReloadStage = true;
+    if (mStageTimer > 5)
+        mStageStartedTimer = getCurrentTime();
+    mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
+    //mWindow->ShowBetweenStageScreen();
 }
-
-float Game::sInputAcceleration = 6000;

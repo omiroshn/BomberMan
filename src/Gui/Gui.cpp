@@ -89,17 +89,17 @@ void Gui::ShowInGameMenu()
 void Gui::ShowBetweenStageScreen()
 {
 
+ShowLoadingScreen("face");
 
+	// ImGuiWindowFlags window_flags = 0;
+	// window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar ;
+	// ImGui::SetNextWindowPos({0, 0},0);
+	// ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(mWidth / 2 - 100, mHeight / 2 - 79));
+	// ImGui::SetNextWindowCollapsed(0);
 
-	ImGuiWindowFlags window_flags = 0;
-	window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar ;
-	ImGui::SetNextWindowPos({0, 0},0);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(mWidth / 2 - 100, mHeight / 2 - 79));
-	ImGui::SetNextWindowCollapsed(0);
-
-	ImGui::Begin("Great job", NULL,window_flags);
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	ImGui::Text("Welcome to next stage!");
+	// ImGui::Begin("Great job", NULL,window_flags);
+	// ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
+	// ImGui::Text("Welcome to next stage!");
 
 
 
@@ -145,7 +145,7 @@ void Gui::ShowLoadSavedGamesMenu()
 			CONFIGURATION.setChosenStage(1);
 			GamePaused(false);
 			StartTheGame(true);
-			Game::mReloadStage = true;
+			//Game::mReloadStage = true;
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 1");
@@ -154,8 +154,8 @@ void Gui::ShowLoadSavedGamesMenu()
 			CONFIGURATION.setChosenStage(2);
 			GamePaused(false);
 			StartTheGame(true);
-			ShowLoadingScreen("face");
-			Game::mReloadStage = true;
+			//ShowLoadingScreen("face");
+			//Game::mReloadStage = true;
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 2");
@@ -164,8 +164,8 @@ void Gui::ShowLoadSavedGamesMenu()
 			CONFIGURATION.setChosenStage(3);
 			GamePaused(false);
 			StartTheGame(true);
-			ShowLoadingScreen("flame-fire");
-			Game::mReloadStage = true;
+			//ShowLoadingScreen("flame-fire");
+			//Game::mReloadStage = true;
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 3");
@@ -174,7 +174,7 @@ void Gui::ShowLoadSavedGamesMenu()
 			CONFIGURATION.setChosenStage(0);
 			GamePaused(false);
 			StartTheGame(true);
-			Game::mReloadStage = true;
+			//Game::mReloadStage = true;
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nBonus level");
