@@ -1,4 +1,3 @@
-
 #include <Gui/Gui.h>
 #include "ResourceManagement/ResourceManager.hpp"
 #include "ResourceManagement/Texture.hpp"
@@ -68,11 +67,14 @@ void Gui::ShowInGameMenu()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
+		ImGui::Text("Stage: ");
+		ImGui::Text("%s", std::to_string(CONFIGURATION.getChosenStage()).c_str());
+
 		ImGui::Text("Score: ");
 		ImGui::Text("%s", std::to_string(CONFIGURATION.getScore()).c_str());
 
 		ImGui::Text("   Time: ");
-		ImGui::Text("%s", std::to_string(Game::mStageTimer).c_str());
+		ImGui::Text("%s", std::to_string(static_cast<int>(Game::mStageTimer)).c_str());
 
 		ImGui::Text("   Lives: ");
 		ImGui::Text("%s", std::to_string(CONFIGURATION.getLives()).c_str());
