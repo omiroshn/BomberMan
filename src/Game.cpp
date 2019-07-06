@@ -36,6 +36,7 @@ Game::Game()
 
 	mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
+    mKeyHandler = std::make_unique<KeyboardHandler>();
     // timerManager = TimerManager::Instance();
     loadResources();
 
@@ -109,7 +110,7 @@ void Game::start()
 
             }
         }
-        doAction(mIManager->processEvents(mWindow->getEvent()));
+        doAction(mIManager->processEvents(mWindow->getEvent(), *mKeyHandler.get()));
 		mRenderer->getParticleManager()->update();
         mWindow->update();
     }
@@ -216,24 +217,24 @@ void Game::doAction(Action const& a)
             mIManager->getMouseOffset(x, y);
             mRenderer->getCamera().processMouseMovement(x, y);
             break;
-        case Action::Forward:
+        default:
+            break;
+    }
+    { // keyboard
+        if (mKeyHandler->isPressed(SDL_SCANCODE_W))
             Hero.AddAcceleration(glm::vec2(0, -offset));
-            //mRenderer->getCamera().movaCamera(CameraDirection::FORWARD, mDeltaTime * 100);
-            break;
-        case Action::Backward:
-            Hero.AddAcceleration(glm::vec2(0, offset));
-            //mRenderer->getCamera().movaCamera(CameraDirection::BACKWARD, mDeltaTime * 100);
-            break;
-        case Action::Right:
+        if (mKeyHandler->isPressed(SDL_SCANCODE_D))
             Hero.AddAcceleration(glm::vec2(offset, 0));
-            //mRenderer->getCamera().movaCamera(CameraDirection::RIGHT, mDeltaTime * 100);
-            break;
-        case Action::Left:
+        if (mKeyHandler->isPressed(SDL_SCANCODE_A))
             Hero.AddAcceleration(glm::vec2(-offset, 0));
-            //mRenderer->getCamera().movaCamera(CameraDirection::LEFT, mDeltaTime * 100);
-            break;
-        case Action::Joystick: {
-            auto *joystick = mWindow->getJoystick();
+        if (mKeyHandler->isPressed(SDL_SCANCODE_S))
+            Hero.AddAcceleration(glm::vec2(0, offset));
+        if (mKeyHandler->isPressed(SDL_SCANCODE_0))
+            explosion(Hero.getPosition(), 10);
+    }
+    { // joystick
+        if (mKeyHandler->LeftJoystickIsActive()) {
+            auto *joystick = mIManager->getJoystick();
             short x_move = SDL_JoystickGetAxis(joystick, 0);
             short y_move = SDL_JoystickGetAxis(joystick, 1);
             glm::vec2 normalizedJoystick(
@@ -241,16 +242,11 @@ void Game::doAction(Action const& a)
                 y_move / (float)MAX_JOYSTICK_VALUE
             );
             Hero.AddAcceleration(normalizedJoystick * offset);
-            break;
         }
-        case Action::Explosion:
-        case Action::JoystickButtonX:
+        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
             explosion(Hero.getPosition(), 10);
-            break;
-        case Action::Up:
-        case Action::Down:
-        default:
-            break;
+        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_A))
+            pause();
     }
 }
 

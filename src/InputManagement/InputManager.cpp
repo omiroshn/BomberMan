@@ -5,19 +5,31 @@
 #include "InputManagement/InputManager.hpp"
 #include <imgui.h>
 #include "Gui/imgui_impl_sdl_gl3.h"
-
-int xDir = 0;
-int yDir = 0;
+#include "InputManagement/KeyboardHandler.hpp"
 
 InputManager::InputManager()
 {
+    if (SDL_NumJoysticks() < 1)
+        std::cout << "Warning: No joysticks connected!" << std::endl;
+
+    mJoystick = SDL_JoystickOpen(0);
+    if (mJoystick == NULL)
+        printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
+    else
+    {
+        std::cout << "Connected joysticks: " << SDL_NumJoysticks() << std::endl;
+        std::cout << "Controller name: " << SDL_JoystickName(mJoystick) << std::endl;
+        std::cout << "Num axes: " << SDL_JoystickNumAxes(mJoystick) << std::endl;
+        std::cout << "Num buttons: " << SDL_JoystickNumButtons(mJoystick) << std::endl;
+    }
 }
 
 InputManager::~InputManager()
 {
+    SDL_JoystickClose(mJoystick);
 }
 
-Action InputManager::processEvents(SDL_Event &e)
+Action InputManager::processEvents(SDL_Event &e, KeyboardHandler &keyHandler)
 {
     if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
         return Action::Finish;
@@ -26,6 +38,9 @@ Action InputManager::processEvents(SDL_Event &e)
 
     switch (e.type)
     {
+        case SDL_KEYUP:
+            keyHandler.handleKeyboardEvent(e);
+            break;
         case SDL_KEYDOWN:
             return processKeyDown(e.key.keysym.sym);
         case SDL_MOUSEMOTION:
@@ -37,9 +52,14 @@ Action InputManager::processEvents(SDL_Event &e)
             processMouseButton(e.button, false);
             break;
         case SDL_JOYAXISMOTION:
+            keyHandler.handleJoystickEvent(e.jaxis);
             return processJoystickMotion(e.jaxis);
         case SDL_JOYBUTTONDOWN:
+            keyHandler.handleJoystickButtonDownEvent(e.jball);
             return processJoystickButtonDown(e.jbutton);
+        case SDL_JOYBUTTONUP:
+            keyHandler.handleJoystickButtonUpEvent(e.jball);
+            break;
         case SDL_QUIT:
             return Action::Finish;
         default:
@@ -138,4 +158,9 @@ void InputManager::processMouseButton(SDL_MouseButtonEvent const &e, bool isPres
         default:
             break;
     }
+}
+
+SDL_Joystick *InputManager::getJoystick()
+{
+    return mJoystick;
 }
