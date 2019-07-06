@@ -20,7 +20,6 @@ public:
 	void StartTheGame(bool start);
 	void GamePaused(bool state);
 	void SetBackground(const char* texture);
-	void ChangeMenuSize(int w, int h);
 
 private:
 	void ShowHardnessRadioButtons();

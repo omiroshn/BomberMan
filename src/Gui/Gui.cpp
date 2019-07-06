@@ -88,30 +88,30 @@ void Gui::ShowInGameMenu()
 
 void Gui::ShowBetweenStageScreen()
 {
-
-ShowLoadingScreen("face");
-
-	// ImGuiWindowFlags window_flags = 0;
-	// window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar ;
-	// ImGui::SetNextWindowPos({0, 0},0);
-	// ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(mWidth / 2 - 100, mHeight / 2 - 79));
-	// ImGui::SetNextWindowCollapsed(0);
-
-	// ImGui::Begin("Great job", NULL,window_flags);
-	// ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	// ImGui::Text("Welcome to next stage!");
-
-
-
-
+	int stage = CONFIGURATION.getChosenStage();
+	switch (stage)
+	{
+		case 0:
+			ShowLoadingScreen("face");
+			break;
+		case 1:
+			ShowLoadingScreen("flame-fire");
+			break;
+		case 2:
+			ShowLoadingScreen("cloud_trans");
+			break;
+		case 3:
+			ShowLoadingScreen("explosion_tmap_2");
+			break;
+		default:
+			break;
+	}
 }
 
 void Gui::ShowStartNewGameMenu()
 {
 	if (ImGui::BeginPopup("Select stage"))
 	{
-		//ShowHardnessRadioButtons();
-
 		ImGui::BeginChildFrame(2, {200, 204}, 4);
 		ImGui::Text("     Enter your name");
 		 static char str0[128] = "Your name";
@@ -128,6 +128,19 @@ void Gui::ShowStartNewGameMenu()
 	}
 }
 
+void Gui::ChangeStage(int next_stage)
+{
+	CONFIGURATION.setChosenStage(next_stage + 1);
+	GamePaused(false);
+	StartTheGame(true);
+	Game::mReloadStage = true;
+	if (Game::mStageTimer > 4)
+		Game::mStageStartedTimer = Game::getCurrentTime();
+	Game::mStageTimer = 3 - (Game::getCurrentTime() - Game::mStageStartedTimer);
+	ShowLoadingScreen("face");
+}
+
+
 void Gui::ShowLoadSavedGamesMenu()
 {
 	if (ImGui::BeginPopup("Saved Games"))
@@ -142,39 +155,25 @@ void Gui::ShowLoadSavedGamesMenu()
 		ImGui::Text("Choose stage of the campaign");
 		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 0 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
-			CONFIGURATION.setChosenStage(1);
-			GamePaused(false);
-			StartTheGame(true);
-			//Game::mReloadStage = true;
+			ChangeStage(0);
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 1");
 		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 1 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
-			CONFIGURATION.setChosenStage(2);
-			GamePaused(false);
-			StartTheGame(true);
-			//ShowLoadingScreen("face");
-			//Game::mReloadStage = true;
+			ChangeStage(1);
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 2");
 		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 2 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
-			CONFIGURATION.setChosenStage(3);
-			GamePaused(false);
-			StartTheGame(true);
-			//ShowLoadingScreen("flame-fire");
-			//Game::mReloadStage = true;
+			ChangeStage(2);
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 3");
 		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() == 0 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
-			CONFIGURATION.setChosenStage(0);
-			GamePaused(false);
-			StartTheGame(true);
-			//Game::mReloadStage = true;
+			ChangeStage(3);
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nBonus level");
@@ -216,8 +215,7 @@ void Gui::ShowSettingsMenu()
 		}
 
 		ImGui::Text("\nSet screen resolution\n");
-         const char* items[] = {"360", "480", "720", "1400"};
-		//ImGui::Combo("combo", &CONFIGURATION.getScreenResolution(), "360\0res480\0res720\0res1000\0res1200\0\0");
+        const char* items[] = {"360", "480", "720", "1400"};
 		ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
 
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -308,12 +306,6 @@ void Gui::ShowHardnessRadioButtons()
 
 	if (ImGui::IsItemHovered())
 		ImGui::SetTooltip("Super hard map");
-}
-
-void Gui::ChangeMenuSize(int w, int h)
-{
-	mWidth = w;
-	mHeight = h;
 }
 
 void Gui::ShowLoadingScreen(const char* screen)
