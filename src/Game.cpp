@@ -12,10 +12,10 @@ Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
 float			Game::mDeltaTime;
 CollisionInfo	Game::mCollisionInfo;
-bool            Game::mReloadStage = false;
+bool            Game::mReloadStage = true;
 bool            Game::mIsRunning = true;
-Uint64          Game::mStageTimer = 200;
-Uint64          Game::mStageStartedTimer = 0;
+float           Game::mStageTimer = 200;
+float           Game::mStageStartedTimer = 0;
 float           Game::sInputAcceleration = 6000;
 
 namespace
@@ -50,7 +50,7 @@ void Game::start()
 {
     MapLoader mapLoader;
     int width, height;
-
+    mStageStartedTimer = getCurrentTime();
     // auto lambda1 = []() { std::cout << ":)" << std::endl; };
     // timerManager->AddTimer(1, false, lambda1);
     while (mIsRunning)
@@ -92,28 +92,19 @@ void Game::start()
             {
                 if (CONFIGURATION.getLives() == 0)
                     CONFIGURATION.setChosenStage(1);
-                mMap.cleanMapForRendering();
-                mCollisionInfo.Squares.clear();
-                std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
-                //mMap.ParseMapBySquareInstances();
-                //mMap.GetEnemies().reserve(10);
-                // for (int i = 1; i <= 4; i++)
-                // {
-                //     auto& Balloon = mMap.GetEnemies().emplace_back(glm::vec2(7 + i, 1));
-                //     AIController::addBalloon(Balloon);
-                // }
-                if (mReloadStage && mStageTimer > 0)
+                if (mReloadStage && mStageTimer > 1)
                 {
-                    //mWindow->update();
                     mWindow->ShowBetweenStageScreen();
-                    mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
-                    //SDL_Delay(3000);
+                    mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
                 }
-                else if (mStageTimer < 1)
+                else if (mStageTimer < 2)
                 {
+                    mapLoader.cleanMapForRendering();
+                    mCollisionInfo.Squares.clear();
+                    std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
+                    mStageStartedTimer = getCurrentTime();
                     mReloadStage = 0;
-
-                mStageStartedTimer = getCurrentTime();
+                    mIsPaused = false;
                 }
 
             }
@@ -217,7 +208,7 @@ void Game::doAction(Action const& a)
         case Action::Pause:
             pause();
             break;
-            case Action::StageFinished:
+        case Action::StageFinished:
             stageFinished();
             break;
         case Action::CameraRotate:
@@ -453,8 +444,7 @@ void       Game::stageFinished()
     int current_stage = CONFIGURATION.getChosenStage();
     CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
     Game::mReloadStage = true;
-    if (mStageTimer > 5)
+    if (mStageTimer > 4)
         mStageStartedTimer = getCurrentTime();
-    mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
-    //mWindow->ShowBetweenStageScreen();
+    mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
 }

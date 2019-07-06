@@ -26,6 +26,7 @@ private:
 	void ShowStartNewGameMenu();
 	void ShowLoadSavedGamesMenu();
 	void ShowSettingsMenu();
+	void ChangeStage(int next_stage);
 	bool mGameStarted = false;
 	bool mGamePaused = false; //make static in Game
 	bool mShowMenu = true;

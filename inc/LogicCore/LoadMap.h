@@ -20,6 +20,7 @@ public:
 	std::tuple<std::vector<SquareInstance*>, CollisionInfo> GetMap(const int index);
 	void UpdateMap();
 	bool MapIsLoaded();
+	void cleanMapForRendering();
 
 private:
 	std::vector<SquareInstance*> mMapOfInstances;

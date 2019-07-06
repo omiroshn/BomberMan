@@ -22,8 +22,8 @@ public:
     void        stageFinished();
 
     static bool    mReloadStage;
-    static Uint64  mStageTimer;
-    static Uint64  mStageStartedTimer;
+    static float   mStageTimer;
+    static float   mStageStartedTimer;
     static bool    mIsRunning;
 
     void        explosion(glm::ivec2 position, uint32_t span);
