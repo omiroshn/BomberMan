@@ -217,7 +217,7 @@ void Game::doAction(Action const& a)
         case Action::Pause:
             pause();
             break;
-            case Action::StageFinished:
+        case Action::StageFinished:
             stageFinished();
             break;
         case Action::CameraRotate:
