@@ -318,6 +318,11 @@ void Gui::ShowLoadingScreen(const char* screen)
 	mHeight = CONFIGURATION.getHeight();
 	ImGui::SetNextWindowSize({mWidth,mHeight});
 	ImGui::Begin("Screeeeeen", NULL, window_flags);
-	ImGui::Image(im,{400,400}, {1,1}, {0,0});
+	ImGui::Image(im,{mWidth,mHeight}, {1,1}, {0,0});
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
+	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth/2 - 40,mHeight/2), ImColor(1.0f,1.0f,1.0f,1.0f), "Welcome to next stage!" );
+	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth/2,mHeight/2 + 20), ImColor(1.0f,1.0f,1.0f,1.0f),"Stage: ");
+	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth/2,mHeight/2 + 40), ImColor(1.0f,1.0f,1.0f,1.0f),("%s", std::to_string(CONFIGURATION.getChosenStage()).c_str()));
+	ImGui::PopStyleVar();
 	ImGui::End();
 }
