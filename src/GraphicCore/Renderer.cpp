@@ -56,8 +56,10 @@ void Renderer::normalPass(MapForRendering& aMap)
         RESOURCES.getSkybox("blue")
     };
 
+    static auto heroModel = RESOURCES.getModel("hero");
+
+
     static auto wall = RESOURCES.getModel("wall");
-    static auto heroModel = RESOURCES.getModel("bot");
     static auto balloon = RESOURCES.getModel("balloon");
     static auto ground = RESOURCES.getModel("ground");
     static auto modelShader = RESOURCES.getShader("modelShader");

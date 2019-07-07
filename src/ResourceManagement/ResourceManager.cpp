@@ -90,9 +90,9 @@ std::shared_ptr<Texture> ResourceManager::getTexture(std::string const &name)
 };
 
 
-std::shared_ptr<Model> ResourceManager::loadModel(const GLchar *file, std::string const &name)
+std::shared_ptr<Model> ResourceManager::loadModel(const GLchar *file, std::string const &name, glm::vec3 scale, glm::vec3 offset)
 {
-	mModels.emplace(name, std::make_shared<Model>(mBinFolder + "models/" + file));
+	mModels.emplace(name, std::make_shared<Model>(mBinFolder + "models/" + file, scale, offset));
 	return mModels[name];
 };
 

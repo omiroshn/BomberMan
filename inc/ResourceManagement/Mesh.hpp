@@ -26,8 +26,8 @@ struct Vertex
     glm::vec2   TexCoords;
     glm::vec3   Tangent;
     glm::vec3   Bitangent;
-    glm::ivec3  BonesID;
-    glm::vec3   Weighs;
+    glm::ivec4  BonesID;
+    glm::vec4   Weighs;
 };
 
 class Mesh

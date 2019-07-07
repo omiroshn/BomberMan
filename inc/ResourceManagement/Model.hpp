@@ -28,13 +28,14 @@ class AABB;
 class Model 
 {
 public:
-    Model(std::string const &path);
+    Model(std::string const &path, glm::vec3 scale, glm::vec3 offset);
     ~Model();
     void draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> & transforms);
     AABB getAABB() const;
     void transform(glm::mat4 const & aTransform);
     void setAnimation(Animation const& anim);
 private:
+    void makeUnitModel();
     void loadModel(std::string const& path);
     void processNode(aiNode const* node,  aiScene const* scene);
     void processMesh(aiMesh const* mesh,  aiScene const* scene);

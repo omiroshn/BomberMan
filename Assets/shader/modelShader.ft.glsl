@@ -46,7 +46,7 @@ void main()
     vec3 diffuse = diff * objectcolor;
     vec3 specular = vec3(0.2) * spec;
 
-    FragColor = vec4(ambient + diffuse + specular, 1.0);
+    FragColor = vec4(ambient + diffuse, 1.0);
 }
 
 vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
