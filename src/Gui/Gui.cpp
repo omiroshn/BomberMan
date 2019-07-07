@@ -5,8 +5,6 @@
 #include "Game.hpp"
 #include  "Configure.hpp"
 
-//bool isWindowed = CONFIGURATION.getWindowed();
-
 Gui::Gui()
 {
 
@@ -20,17 +18,17 @@ Gui::~Gui()
 void Gui::ShowMainMenu()
 {
 	ImGuiWindowFlags window_flags = 0;
-	window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar ;
+	window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar;
 	mWidth = CONFIGURATION.getWidth();
 	mHeight = CONFIGURATION.getHeight();
-	
+
 	ImGui::SetNextWindowPos({0, 0},0);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(mWidth / 2 - 100, mHeight / 2 - 79));
 	ImGui::SetNextWindowCollapsed(0);
 
-	ImGui::Begin("Main Menu", NULL,window_flags);
+	ImGui::Begin("Main Menu", NULL, window_flags);
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	ImGui::Text("Welcome to BomberMan game!");
+	ImGui::Text("Welcome to BomberMan game");
 
 	/////////////////////////////////START GAME////////////////////////////////////
 
@@ -100,7 +98,7 @@ void Gui::ShowBetweenStageScreen()
 			ShowLoadingScreen("flame-fire");
 			break;
 		case 2:
-			ShowLoadingScreen("cloud_trans");
+			ShowLoadingScreen("block");
 			break;
 		case 3:
 			ShowLoadingScreen("explosion_tmap_2");
@@ -319,12 +317,13 @@ void Gui::ShowLoadingScreen(const char* screen)
 	mWidth = CONFIGURATION.getWidth();
 	mHeight = CONFIGURATION.getHeight();
 	ImGui::SetNextWindowSize({mWidth,mHeight});
-	ImGui::Begin("Screeeeeen", NULL, window_flags);
+	ImGui::Begin("Next Stage", NULL, window_flags);
 	ImGui::Image(im,{mWidth,mHeight}, {1,1}, {0,0});
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth/2 - 40,mHeight/2), ImColor(1.0f,1.0f,1.0f,1.0f), "Welcome to next stage!" );
-	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth/2,mHeight/2 + 20), ImColor(1.0f,1.0f,1.0f,1.0f),"Stage: ");
-	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth/2,mHeight/2 + 40), ImColor(1.0f,1.0f,1.0f,1.0f),("%s", std::to_string(CONFIGURATION.getChosenStage()).c_str()));
+	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 50, mHeight / 2), ImColor(1.0f,1.0f,1.0f,1.0f), "Welcome to next stage" );
+	char stage[] = "Stage:  ";
+	stage[7] = CONFIGURATION.getChosenStage() + '0';
+	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 20, mHeight / 2 + 30), ImColor(1.0f,1.0f,1.0f,1.0f), stage);
 	ImGui::PopStyleVar();
 	ImGui::End();
 }
