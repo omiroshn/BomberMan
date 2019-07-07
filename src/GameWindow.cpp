@@ -82,15 +82,16 @@ void GameWindow::initGui() {
     IMGUI_CHECKVERSION();
 
     ImGui::CreateContext();
+
     ImGuiIO &io = ImGui::GetIO();
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+
+	io.Fonts->AddFontFromFileTTF("../Assets/font/Blox2.TTF", 16.0f);
+
     ImGui_ImplSdlGL3_Init(mWindow);
 
     ImGui::StyleColorsDark();
 
 	mMainMenu = new Gui();
-    // io.Fonts->AddFontFromFileTTF("Assets/font/Roboto-Medium.ttf", 16.0f);
-
 }
 
 void GameWindow::initOpenGL()
