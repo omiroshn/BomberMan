@@ -30,8 +30,8 @@ Game::Game()
 	mTimeNow = SDL_GetPerformanceCounter();
     
 	loadStateFromFile();
-    mWindow = std::make_shared<GameWindow>(1024, 960, cWindowName);
-	mWindow->setFullScreen(false);
+    mWindow = std::make_shared<GameWindow>(CONFIGURATION.getWidth(), CONFIGURATION.getHeight(), cWindowName);
+	mWindow->setFullScreen(CONFIGURATION.getWindowed());
 	CONFIGURATION.setObservableWindow(mWindow);
 
 	mRenderer = std::make_unique<Renderer>();
@@ -300,9 +300,10 @@ void Game::loadResources()
 void Game::loadModels()
 {
     RESOURCES.loadModel("general/hero/model.fbx", "hero");
-    RESOURCES.loadModel("brick/brick.obj", "brick");
-    RESOURCES.loadModel("map/forest/ground/model.fbx", "ground");
-    RESOURCES.loadModel("map/forest/perimeterWall/model.fbx", "wall");
+    RESOURCES.loadModel("map/first/ground/model.fbx", "ground");
+    RESOURCES.loadModel("map/first/perimeterWall/model.fbx", "perimeterWall");
+    RESOURCES.loadModel("map/first/unbreakableWall/model.fbx", "unbreakableWall", glm::vec3(1), glm::vec3(0),  glm::normalize(glm::vec3(1,0,0)), -90);
+    RESOURCES.loadModel("map/first/breakableWall/model.fbx", "breakableWall", glm::vec3(0.9f));
     RESOURCES.loadModel("balloon/balloon.obj", "balloon");
 }
 

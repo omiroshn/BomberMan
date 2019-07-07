@@ -28,7 +28,7 @@ class AABB;
 class Model 
 {
 public:
-    Model(std::string const &path, glm::vec3 scale, glm::vec3 offset);
+    Model(std::string const &path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle);
     ~Model();
     void draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> & transforms);
     AABB getAABB() const;

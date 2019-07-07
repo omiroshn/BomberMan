@@ -4,13 +4,14 @@
 #include "Utilities/AnimationUtils.h"
 #include "ResourceManagement/Animation.h"
 
-Model::Model(std::string const &path, glm::vec3 scale, glm::vec3 offset) : mTransFormMatrix(glm::mat4(1.0f)), mImporter(new Assimp::Importer())
+Model::Model(std::string const &path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle) : mTransFormMatrix(glm::mat4(1.0f)), mImporter(new Assimp::Importer())
 {
     loadModel(path);
     makeUnitModel();
     glm::mat4 basicTransform = glm::mat4(1.0f);
     basicTransform = glm::scale(basicTransform, scale);
     basicTransform = glm::translate(basicTransform, offset);
+    basicTransform = glm::rotate(basicTransform, glm::radians(angle), axis);
     transform(basicTransform);
 }
 
@@ -100,13 +101,16 @@ std::vector<Vertex> Model::loadVertices(aiMesh const* mesh)
 
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
-        Vertex vertex{};
+        Vertex vertex = Vertex();
         vertex.Position.x = mesh->mVertices[i].x;
         vertex.Position.y = mesh->mVertices[i].y;
         vertex.Position.z = mesh->mVertices[i].z;
-        vertex.Normal.x = mesh->mNormals[i].x;
-        vertex.Normal.y = mesh->mNormals[i].y;
-        vertex.Normal.z = mesh->mNormals[i].z;
+        if (mesh->HasNormals())
+        {
+            vertex.Normal.x = mesh->mNormals[i].x;
+            vertex.Normal.y = mesh->mNormals[i].y;
+            vertex.Normal.z = mesh->mNormals[i].z;
+        }
         if (mesh->HasTangentsAndBitangents())
         {
             vertex.Tangent.x = mesh->mTangents[i].x;
