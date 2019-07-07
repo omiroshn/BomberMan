@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include <imgui.h>
 #include <algorithm>
+#include "Entity/MovingEntity.h"
 
 std::vector<glm::mat4> Game::Filter(SquareType type)
 {

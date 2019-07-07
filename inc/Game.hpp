@@ -1,12 +1,13 @@
 #ifndef BOMBERMAN_Game_HPP
 #define BOMBERMAN_Game_HPP
 #include <memory>
+#include "LogicCore/LoadMap.h"
 #include "GameWindow.hpp"
 #include "GraphicCore/Renderer.hpp"
 #include "InputManagement/InputManager.hpp"
 #include "InputManagement/KeyboardHandler.hpp"
-#include "LogicCore/MapForRendering.h"
 #include "Configure.hpp"
+#include "AI/Agent.h"
 
 class Game
 {

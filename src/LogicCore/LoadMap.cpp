@@ -49,13 +49,6 @@ CollisionInfo MapLoader::GetMap(const int index)
 
 void MapLoader::cleanMapForRendering()
 {
-	for (int i = 0; i < mMapOfInstances.size(); i++)
-	{
-		if (mMapOfInstances[i])
-			delete mMapOfInstances[i];
-
-	}
-	mMapOfInstances.clear();
 	mMapOfDigits.clear();
 	mLoaded = false;
 }

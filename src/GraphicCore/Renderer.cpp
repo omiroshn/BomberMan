@@ -1,12 +1,13 @@
 #include "GraphicCore/Renderer.hpp"
 #include "Game.hpp"
-#include "LogicCore/MapForRendering.h"
 #include "ResourceManagement/Texture.hpp"
 #include "ResourceManagement/Shader.hpp"
 #include "ResourceManagement/Model.hpp"
 #include "ResourceManagement/Skybox.hpp"
 #include "imgui.h"
 #include <iostream>
+#include "Entity/MovingEntity.h"
+
 Renderer::Renderer() : mCamera(glm::vec3(0.0f, 10.0f, -3.0f))
 {
 	mParticleManager = std::make_unique<ParticleManager>();

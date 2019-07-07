@@ -2,8 +2,7 @@
 #define BOMBERMAN_GUI_H
 
 #include <imgui.h>
-#include "Gui/imgui_impl_sdl_gl3.h"
-#include "StateMachine/StateMachine.h"
+#include <vector>
 
 #define  STANDARD_MENU_BUTTON {200, 30}
 

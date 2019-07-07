@@ -17,6 +17,7 @@ bool            Game::mIsRunning = true;
 float           Game::mStageTimer = 200;
 float           Game::mStageStartedTimer = 0;
 float           Game::sInputAcceleration = 6000;
+Game			*Game::sInstance = nullptr;
 
 namespace
 {
@@ -87,7 +88,7 @@ void Game::start()
                     const float TargetDelta = 0.0167f * (float)index;
 					float ms = TargetDelta - mDeltaTime;
                     if (mDeltaTime < TargetDelta)
-                        _sleep(ms * 1000);
+                        SDL_Delay(ms * 1000);
                 }
                 mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
                 mWindow->ShowInGameMenu();
@@ -199,7 +200,7 @@ void Game::resolveCollisions()
 
 void Game::doAction(Action const& a)
 {
-    auto& Hero = mMap.GetHero();
+    auto& Hero = GetHero();
     ImGui::SliderFloat("Input Hero acceleration", &sInputAcceleration, 0, 10000);
 	const float offset  = mDeltaTime * sInputAcceleration;
     
@@ -426,5 +427,3 @@ void	Game::tickAI(float deltaTime)
 	for (auto& It : mBalloons)
 		It.controller.tick(*It, deltaTime);
 }
-float Game::sInputAcceleration = 6000;
-Game *Game::sInstance = nullptr;

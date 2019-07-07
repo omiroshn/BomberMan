@@ -1,6 +1,6 @@
 #pragma once
-#include "Core.hpp"
 #include <tuple>
+#include <stdint.h>
 
 struct Event
 {

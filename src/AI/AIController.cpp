@@ -1,5 +1,7 @@
 #include "AI/AIController.h"
 #include "Game.hpp"
+#include "Entity/MovingEntity.h"
+#include "glm/common.hpp"
 
 /** AI utility functions - start */
 namespace
@@ -156,8 +158,8 @@ namespace
 			return true;
 		if (positionA.x == positionB.x)
 		{
-			int min = glm::min(positionA.y, positionB.y);
-			int max = glm::max(positionA.y, positionB.y);
+			int min = min(positionA.y, positionB.y);
+			int max = max(positionA.y, positionB.y);
 
 			for (int i = min; i < max; i++)
 				if (info[glm::ivec2{positionA.x, i}] != SquareType::EmptySquare)
@@ -167,8 +169,8 @@ namespace
 		}
 		else if (positionA.y == positionB.y)
 		{
-			int min = glm::min(positionA.x, positionB.x);
-			int max = glm::max(positionA.x, positionB.x);
+			int min = min(positionA.x, positionB.x);
+			int max = max(positionA.x, positionB.x);
 
 			for (int i = min; i < max; i++)
 				if (info[glm::ivec2{i, positionA.y}] != SquareType::EmptySquare)

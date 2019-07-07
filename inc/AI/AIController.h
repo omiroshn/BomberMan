@@ -1,6 +1,5 @@
 #pragma once
 #include "StateMachine/StateMachine.h"
-#include "Core.hpp"
 #include "glm/vec2.hpp"
 
 class MovingEntity;

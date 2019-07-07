@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "AI/AIController.h"
 
 template <class Pawn, class Controller>
 struct Agent

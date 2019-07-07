@@ -4,6 +4,7 @@
 #include <GameWindow.hpp>
 #include "Core.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
+#include "Gui/imgui_impl_sdl_gl3.h"
 
 GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
     mWidth(aWidth), mHeight(aHeight), mName(aWinName)
