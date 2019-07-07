@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <vector>
 #include "GL/glew.h"
 #include <iostream>
 #include <fstream>
@@ -34,12 +35,12 @@ public:
     std::shared_ptr<Texture>	loadTextureFromFile(const GLchar*, std::string const &, bool isModelTexture = false);
     std::shared_ptr<Skybox>		loadSkybox(std::string const &);
     std::shared_ptr<Skybox>		getSkybox(std::string const &);
-
     void						clear();
 	ResourceManager(ResourceManager const &) = delete;
 	ResourceManager &operator=(ResourceManager const &) = delete;
 
 	std::fstream getMap(std::string const & aName);
+    std::vector<char> loadFont(std::string const &path);
 
 private:
 	ResourceManager();
