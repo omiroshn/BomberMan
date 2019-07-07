@@ -1,33 +1,22 @@
-#include "LogicCore/MapForRendering.h"
+#include "Game.hpp"
 #include <imgui.h>
+#include <algorithm>
 
-
-MapForRendering::MapForRendering(const std::vector<SquareInstance*>& map) :
-	mRawMap(map),
-	mHero(new MovingEntity(glm::vec2(1.5,1.5)))
+std::vector<glm::mat4> Game::Filter(SquareType type)
 {
-
-}
-
-MapForRendering::MapForRendering()
-{
-
-}
-
-MapForRendering::~MapForRendering() {
-
-}
-
-std::vector<SquareInstance *> MapForRendering::Filter(SquareType type)
-{
-	std::vector<SquareInstance *> Result;
-	for (auto It : mRawMap)
-		if (It->GetType() == type)
-			Result.push_back(It);
+	std::vector<glm::mat4> Result;
+	auto& squares = mCollisionInfo.Squares;
+	for (int i = 0; i < squares.size(); i++)
+	{
+		glm::vec2 Position {i % mCollisionInfo.width, i / mCollisionInfo.width};
+		auto value = squares[i];
+		if (value == type)
+			Result.push_back(glm::translate(glm::mat4(1), glm::vec3{ Position.x + 0.5, 0, Position.y + 0.5}));
+	}
 	return Result;
 }
 
-void MapForRendering::recacheEnemies()
+void Game::recacheEnemies()
 {
 	mEnemies.clear();
 	mBalloons.erase(std::remove_if(mBalloons.begin(), mBalloons.end(), [](const MovingEntity *balloon){
@@ -38,65 +27,33 @@ void MapForRendering::recacheEnemies()
 		mEnemies.push_back(It);
 }
 
-std::vector<SquareInstance *> MapForRendering::GetWalls() {
+std::vector<glm::mat4> Game::GetWallTransforms() {
 	return Filter(SquareType::Wall);
 }
 
-std::vector<SquareInstance *> MapForRendering::GetBricks() {
+std::vector<glm::mat4> Game::GetBrickTransforms() {
 	return Filter(SquareType::Brick);
 }
 
-std::vector<SquareInstance *> MapForRendering::GetBombs() {
+std::vector<glm::mat4> Game::GetBombTransforms() {
 	return Filter(SquareType::Bomb);
 }
 
-std::vector<SquareInstance *> MapForRendering::GetBonuses() {
+std::vector<glm::mat4> Game::GetBonusTransforms() {
 	return Filter(SquareType::Bonus);
 }
 
-unsigned MapForRendering::getWitdh()
-{
-	return mWidth;
-}
-
-unsigned MapForRendering::getHeight()
-{
-	return mHeight;
-}
-
-bool   MapForRendering::cleanMapForRendering()
-{
-	mRawMap.clear();
-	return true;
-}
-
-MovingEntity& MapForRendering::GetHero()
+MovingEntity& Game::GetHero()
 {
 	return *mHero;
 }
 
-std::vector<MovingEntity*>& MapForRendering::GetEnemies()
+std::vector<MovingEntity*>& Game::GetEnemies()
 {
 	return mEnemies;
 }
 
-std::vector<SquareInstance *> &MapForRendering::GetRawMap()
-{
-	return mRawMap;
-}
-
-std::vector<MapForRendering::Balloon>& MapForRendering::GetBalloons()
+std::vector<Game::Balloon>& Game::GetBalloons()
 {
 	return mBalloons;
-}
-
-void							MapForRendering::tick(float deltaTime)
-{
-	if (ImGui::Button("Add balloon"))
-	{
-		GetBalloons().emplace_back(glm::vec2{9.5, 9.5});
-	}
-	recacheEnemies();
-	for (auto& It : mBalloons)
-		It.controller.tick(*It, deltaTime);
 }

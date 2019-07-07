@@ -32,7 +32,7 @@ void Renderer::updateSize(int aWidth, int aHeight)
     mHeight = aHeight;
 }
 
-void Renderer::draw(MapForRendering& aMap)
+void Renderer::draw(Game& aMap)
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -49,11 +49,9 @@ void Renderer::drawPicture(const std::string& pic)
 {
     auto block = RESOURCES.getTexture("block");
     block->bind();
-    std::cout << "textture showed" << std::endl;
-
 }
 
-void Renderer::normalPass(MapForRendering& aMap)
+void Renderer::normalPass(Game& aMap)
 {
     glViewport(0, 0, mWidth, mHeight);
     
@@ -123,35 +121,15 @@ void Renderer::normalPass(MapForRendering& aMap)
 
     // render the walls
     {
-        auto walls = aMap.GetWalls();
-        if (!walls.empty())
-        {
-            for (auto w : walls)
-            {
-                glm::mat4 modelTransform = glm::mat4(1.0f);
-                modelTransform = glm::translate(modelTransform, glm::vec3(w->getX() + 0.5, 0.f, w->getY() + 0.5));
-                transforms.push_back(modelTransform);
-            }
-            unbreakableWall->draw(modelShader, transforms);
-        }
+        auto wallTransforms = aMap.GetWallTransforms();
+		unbreakableWall->draw(modelShader, wallTransforms);
     }
 
-    transforms.clear();
     // render the bricks
     {
-        auto bricks = aMap.GetBricks();
-        if (!bricks.empty())
-        {
-            for (auto b : bricks)
-            {
-                glm::mat4 modelTransform = glm::mat4(1.0f);
-                modelTransform = glm::translate(modelTransform, glm::vec3(b->getX() + 0.5, 0.f, b->getY() + 0.5));
-                transforms.push_back(modelTransform);
-            }
-            brick->draw(modelShader, transforms);
-        }
+        auto brickTransforms = aMap.GetBrickTransforms();
+        brick->draw(modelShader, brickTransforms);
     }
-    transforms.clear();
 
     // render the ground
     {

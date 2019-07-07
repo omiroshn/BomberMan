@@ -12,6 +12,11 @@ namespace
 		LEFT	= 1 << 3
 	};
 
+	glm::vec2 closestCenter(glm::vec2 position)
+	{
+		return (glm::floor(position) + glm::ceil(position)) / 2.f;
+	}
+
 	glm::vec2 directionToVector(EDirection dir)
 	{
 		switch (dir)
@@ -86,16 +91,29 @@ namespace
 	void	recenter(MovingEntity& pawn)
 	{
 		glm::vec2 position = pawn.getPosition();
-		glm::vec2 closestCenter = (glm::floor(position) + glm::ceil(position)) / 2.f;
-		pawn.AddVelocity(closestCenter - position);
+		glm::vec2 center = closestCenter(position);
+		pawn.AddVelocity(center - position);
 	}
 
-	bool	moveAI(MovingEntity& pawn, glm::vec2 destination, float deltaTime)
+	bool	moveAI(MovingEntity& pawn, glm::vec2 destination)
 	{
-		auto& info = Game::getCollisionInfo();
 		glm::vec2 position = pawn.getPosition();
+
+		glm::vec2 offRails = closestCenter(position) - position;
+		glm::vec2 absOffset = glm::abs(offRails);
+		if (absOffset.x > 0.02f && absOffset.y > 0.02f)
+		{
+			glm::vec2 correctionDirection;
+			if (absOffset.x < absOffset.y)
+				correctionDirection = glm::vec2{ offRails.x, 0 };
+			else
+				correctionDirection = glm::vec2{ 0, offRails.y };
+			pawn.AddAcceleration(glm::normalize(correctionDirection) * 10.f);
+		}
+		
 		glm::vec2 direction = destination - position;
 		float length = glm::length(direction);
+		
 
 		if (length < 0.02)
 		{
@@ -113,24 +131,29 @@ namespace
 	{
 		auto& info = Game::getCollisionInfo();
 		
-		for (int i = 1; i <= distance; i++)
+		for (int i = 0; i < distance; i++)
 		{
-			if (info[start + direction] == SquareType::EmptySquare)
-				start += direction;
+			if (info[start + direction] != SquareType::EmptySquare)
+				break;
+			start += direction;
 		}
-		return (glm::floor(start) + glm::ceil(start)) / 2.f;
+		return closestCenter(start);
 	}
 
-	bool checkVisibility(MovingEntity& a, MovingEntity& b)
+	bool checkVisibility(MovingEntity& pawn, glm::vec2 point)
 	{
+		glm::vec2 direction = glm::normalize(point - pawn.getPosition());
+		float angle = pawn.getAngle();
+		glm::vec2 visionDirection {glm::sin(angle), glm::cos(angle)};
+
+		if (glm::dot(direction, visionDirection) <= -0.1f)
+			return false;
+
 		auto& info = Game::getCollisionInfo();
-
-		glm::ivec2 positionA = a.getPosition();
-		glm::ivec2 positionB = b.getPosition();
-
+		glm::ivec2 positionA = pawn.getPosition();
+		glm::ivec2 positionB = point;
 		if (positionA == positionB)
 			return true;
-
 		if (positionA.x == positionB.x)
 		{
 			int min = glm::min(positionA.y, positionB.y);
@@ -148,12 +171,18 @@ namespace
 			int max = glm::max(positionA.x, positionB.x);
 
 			for (int i = min; i < max; i++)
-				if (info[glm::ivec2{i, positionA.x}] != SquareType::EmptySquare)
+				if (info[glm::ivec2{i, positionA.y}] != SquareType::EmptySquare)
 					return false;
 
 			return true;
 		}
 		return false;
+	}
+
+	bool atCrossroad(MovingEntity& pawn)
+	{
+		glm::vec2 position = pawn.getPosition();
+		return glm::length(closestCenter(position) - position) < 0.02;
 	}
 }
 /** AI utility functions - end */
@@ -163,21 +192,22 @@ void IdleState::onEntry(MovingEntity&)		   { m_TransitionToPatrol = Game::getCur
 bool IdleState::transition(const PatrolState&) { return m_TransitionToPatrol <= Game::getCurrentTime(); }
 /* Idle state -  end */
 
+
 /* Patrol state - start */
 void PatrolState::onTick(MovingEntity& pawn, float deltaTime)
 {
 	const glm::bvec2 NotZeroVec = glm::notEqual(mCurrentDirection, glm::vec2(0));
 	const bool HasDirection = NotZeroVec.x || NotZeroVec.y;
 
-	if (!moveAI(pawn, mShortTermGoal, deltaTime))
+	if (!moveAI(pawn, mShortTermGoal))
 	{
 		mShouldIdle = true;
 		return;
 	}
 
-	MapForRendering *map = Game::getMap();
+	auto *map = Game::get();
 	auto& Hero = map->GetHero();
-	mPawnSeesPlayer = checkVisibility(pawn, Hero);
+	mPawnSeesPlayer = checkVisibility(pawn, Hero.getPosition());
 }
 bool PatrolState::transition(const IdleState&)
 {
@@ -193,6 +223,7 @@ void PatrolState::onEntry(MovingEntity& Pawn, float DeltaTime /*= 0*/)
 {
 	auto& info = Game::getCollisionInfo();
 
+	mPawnSeesPlayer = false;
 	mCurrentDirection = pickRandomDirection(Pawn);
 	glm::vec2 start = Pawn.getPosition();
 	int distance = rand() % info.width;
@@ -201,35 +232,62 @@ void PatrolState::onEntry(MovingEntity& Pawn, float DeltaTime /*= 0*/)
 }
 /* Patrol state -  end */
 
-
 /* Chase state - start */
 void ChaseState::onTick(MovingEntity& pawn, float deltaTime)
 {
-	MapForRendering *map = Game::getMap();
+	auto* map = Game::get();
 	auto& Hero = map->GetHero();
-	mPawnSeesPlayer = checkVisibility(pawn, Hero);
+	auto heroPosition = Hero.getPosition();
+	mPawnSeesPlayer = checkVisibility(pawn, heroPosition);
 	if (mPawnSeesPlayer)
-		mLastSeenPlayer = (glm::floor(Hero.getPosition()) + glm::ceil(Hero.getPosition())) / 2.f;
-	if (!moveAI(pawn, mLastSeenPlayer, deltaTime))
-	{
+		mLastSeenPlayer = closestCenter(Hero.getPosition());
+	if (mLastSeenPlayer == glm::vec2(0.f))
 		mIsConfused = true;
-		return;
+	else
+	{
+		bool atDestination = !moveAI(pawn, mLastSeenPlayer);
+		mIsConfused = !mPawnSeesPlayer && atDestination;
 	}
-}
-
-bool ChaseState::transition(const IdleState&)
-{
-	return mIsConfused;
 }
 
 bool ChaseState::transition(const ConfusedState&)
 {
-	return mPawnSeesPlayer;
+	return mIsConfused;
 }
 
 void ChaseState::onEntry(MovingEntity& Pawn, float DeltaTime /*= 0*/)
 {
 	mPawnSeesPlayer = true;
 	mIsConfused = false;
+	mLastSeenPlayer = glm::vec3(0);
 }
 /* Chase state -  end */
+
+/* Chase state - start */
+bool ConfusedState::transition(const PatrolState&)
+{
+	return (Game::getCurrentTime() - mConfusionStarted) >= M_PI;
+}
+
+bool ConfusedState::transition(const ChaseState&)
+{
+	return mPawnSeesPlayer;
+}
+
+void ConfusedState::onTick(MovingEntity& pawn, float DeltaTime /*= 0*/)
+{
+	float timePassed = Game::getCurrentTime() - mConfusionStarted;
+	pawn.setAngle(initialAngle + glm::sin(timePassed * 2));
+
+	auto* map = Game::get();
+	auto& Hero = map->GetHero();
+	auto heroPosition = Hero.getPosition();
+	mPawnSeesPlayer = checkVisibility(pawn, heroPosition);
+}
+
+void ConfusedState::onEntry(MovingEntity& pawn, float DeltaTime /*= 0*/)
+{
+	mConfusionStarted = Game::getCurrentTime();
+	initialAngle = pawn.getAngle();
+}
+/* Confused state -  end */

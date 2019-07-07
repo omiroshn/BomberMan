@@ -17,7 +17,7 @@ class MapLoader
 public:
 	MapLoader();
 	~MapLoader();
-	std::tuple<std::vector<SquareInstance*>, CollisionInfo> GetMap(const int index);
+	CollisionInfo GetMap(const int index);
 	void UpdateMap();
 	bool MapIsLoaded();
 	void cleanMapForRendering();
@@ -29,9 +29,6 @@ private:
 	unsigned                     mWidth;
 	unsigned                     mHeight;
 	Serialization                mReaderWriter;
-
-private:
-	void ConvertDigitsToInstances();
 };
 
 #endif

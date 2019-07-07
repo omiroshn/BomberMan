@@ -30,7 +30,7 @@ struct Instance
 };
 
 
-class MapForRendering;
+class Game;
 class Renderer
 {
 	struct Vert
@@ -55,7 +55,7 @@ public:
     Renderer();
     ~Renderer();
 
-    void draw(MapForRendering&);
+    void draw(Game&);
     void drawQuad(Quad);
     void drawPicture(const std::string& pic);
 
@@ -66,7 +66,7 @@ public:
     void updateSize(int x, int y);
 
 private:
-    void normalPass(MapForRendering&);
+    void normalPass(Game&);
     void drawShadow(glm::vec3 position);
     void drawQuadsDeferred(glm::mat4 view, glm::mat4 projection);
     Camera mCamera;

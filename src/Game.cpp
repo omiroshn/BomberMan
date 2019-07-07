@@ -26,6 +26,7 @@ namespace
 }
 
 Game::Game()
+	: mHero(std::make_unique<MovingEntity>(glm::vec2{1.5, 1.5}))
 {
 	mTimeNow = SDL_GetPerformanceCounter();
     
@@ -72,21 +73,21 @@ void Game::start()
         {
             if (mapLoader.MapIsLoaded() && !mReloadStage)
             {
-                mMap.tick(mDeltaTime);
+                tickAI(mDeltaTime);
                 MovingEntity::debugMovement();
                 Tickable::tickTickables(mDeltaTime);
                 resolveCollisions();
-                mRenderer->draw(mMap);
+                mRenderer->draw(*this);
                 static int index = 0;
                 ImGui::RadioButton("NO VSync", &index, 0);
                 ImGui::RadioButton("60", &index, 1);
                 ImGui::RadioButton("30", &index, 2);
                 if (index)
                 {
-                    const float TargetDelta = 0.0167f * index;
-					unsigned ms = TargetDelta - mDeltaTime;
+                    const float TargetDelta = 0.0167f * (float)index;
+					float ms = TargetDelta - mDeltaTime;
                     if (mDeltaTime < TargetDelta)
-                        SDL_Delay(ms * 1000);
+                        _sleep(ms * 1000);
                 }
                 mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
                 mWindow->ShowInGameMenu();
@@ -104,7 +105,7 @@ void Game::start()
                 {
                     mapLoader.cleanMapForRendering();
                     mCollisionInfo.Squares.clear();
-                    std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
+                    mCollisionInfo = mapLoader.GetMap(CONFIGURATION.getChosenStage());
                     mStageStartedTimer = getCurrentTime();
                     mReloadStage = 0;
                     mIsPaused = false;
@@ -173,7 +174,7 @@ void Game::resolveCollisions()
 		{0, -1}
     };
 
-	auto& Hero = mMap.GetHero();
+	auto& Hero = GetHero();
     glm::vec2 CollisionOffset(0);
 	const glm::vec2 Position = Hero.getPosition();
 	static float radius = 0.24;
@@ -193,7 +194,7 @@ void Game::resolveCollisions()
     static float CollisionResolveMultiplier = 350.f;
     ImGui::SliderFloat("CollisionResolveMultiplier", &CollisionResolveMultiplier, 100, 1000);
     Hero.AddAcceleration(CollisionOffset * CollisionResolveMultiplier);
-	mRenderer->getCamera().followEntity(mMap.GetHero(), 10.f);
+	mRenderer->getCamera().followEntity(GetHero(), 10.f, mDeltaTime);
 }
 
 void Game::doAction(Action const& a)
@@ -363,14 +364,7 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
     auto vMin = minMax[2];
     auto vMax = minMax[3];
 
-    auto &rawMap = mMap.GetRawMap();
-    rawMap.erase(std::remove_if(rawMap.begin(), rawMap.end(), [this, hMin, hMax, vMin, vMax](SquareInstance *instance) {
-        return instance->GetType() == SquareType::Brick
-        && (circle_box_collision(instance->getPosition() + glm::vec2(0.5), 0.001, hMin, hMax)
-        ||  circle_box_collision(instance->getPosition() + glm::vec2(0.5), 0.001, vMin, vMax));
-    }), rawMap.end());
-
-    auto &enemies = mMap.GetEnemies();
+    auto &enemies = GetEnemies();
     std::for_each(enemies.begin(), enemies.end(), [this, hMin, hMax, vMin, vMax](MovingEntity *entity) {
         if (circle_box_collision(entity->getPosition() + glm::vec2(0.5), .3, hMin, hMax)
         || circle_box_collision(entity->getPosition() + glm::vec2(0.5), .3, vMin, vMax))
@@ -380,6 +374,7 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
     mRenderer->getParticleManager()->startDrawPS(brickPool[which], brickTransforms);
     mRenderer->getParticleManager()->startDrawPS(bombPool[which], fireTransforms);
 	which = !which;
+	mRenderer->getCamera().addShake(0.2);
 }
 
 void 		Game::saveCurrentState(std::string fileName)
@@ -415,3 +410,21 @@ void       Game::stageFinished()
         mStageStartedTimer = getCurrentTime();
     mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
 }
+
+Game *Game::get()
+{
+	return sInstance;
+}
+
+void	Game::tickAI(float deltaTime)
+{
+	if (ImGui::Button("Add balloon"))
+	{
+		GetBalloons().emplace_back(glm::vec2{9.5, 9.5});
+	}
+	recacheEnemies();
+	for (auto& It : mBalloons)
+		It.controller.tick(*It, deltaTime);
+}
+float Game::sInputAcceleration = 6000;
+Game *Game::sInstance = nullptr;

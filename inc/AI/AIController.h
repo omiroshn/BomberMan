@@ -53,7 +53,6 @@ struct PatrolState : public State {
 struct ChaseState : public State {
 	using State::transition;
 	bool transition(const ConfusedState&);
-	bool transition(const IdleState&);
 	void onTick(MovingEntity&, float DeltaTime = 0);
 	void onEntry(MovingEntity&, float DeltaTime = 0);
 
@@ -64,9 +63,15 @@ struct ChaseState : public State {
 
 struct ConfusedState : public State {
 	using State::transition;
-	bool transition(const IdleState&);
+	bool transition(const PatrolState&);
+	bool transition(const ChaseState&);
 	void onTick(MovingEntity&, float DeltaTime = 0);
 	void onEntry(MovingEntity&, float DeltaTime = 0);
+
+	float	mConfusionStarted;
+	float	initialAngle;
+	bool	mShouldMoveOn;
+	bool	mPawnSeesPlayer;
 };
 
-typedef SM<MovingEntity, IdleState, PatrolState, ChaseState> BalloonController;
+typedef SM<MovingEntity, IdleState, PatrolState, ChaseState, ConfusedState> BalloonController;
