@@ -3,6 +3,7 @@
 #include <iostream>
 #include <GameWindow.hpp>
 #include "Core.hpp"
+#include "ResourceManagement/ResourceManager.hpp"
 
 GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
     mWidth(aWidth), mHeight(aHeight), mName(aWinName)
@@ -84,9 +85,11 @@ void GameWindow::initGui() {
     ImGui::CreateContext();
 
     ImGuiIO &io = ImGui::GetIO();
-
-	io.Fonts->AddFontFromFileTTF("../Assets/font/Blox2.TTF", 16.0f);
-
+    auto fontData = RESOURCES.loadFont("Blox2.TTF");
+    // need to cope data, because AddFontFromMemoryTTF seems to take control of it, and will try to delete on exit
+    char* data = new char[fontData.size()];
+    std::memcpy(data, fontData.data(), fontData.size());
+	io.Fonts->AddFontFromMemoryTTF(std::move(data), fontData.size(), 16);
     ImGui_ImplSdlGL3_Init(mWindow);
 
     ImGui::StyleColorsDark();
