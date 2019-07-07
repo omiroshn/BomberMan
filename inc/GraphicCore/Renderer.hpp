@@ -37,7 +37,6 @@ public:
     ~Renderer();
 
     void draw(MapForRendering&);
-    void drawPicture(const std::string& pic);
 
     Renderer(Renderer const &) = delete;
     Renderer &operator=(Renderer const &) = delete;
@@ -47,6 +46,7 @@ public:
 
 private:
     void normalPass(MapForRendering&);
+    
     Camera mCamera;
     int mWidth, mHeight;
 	ptrPM mParticleManager;

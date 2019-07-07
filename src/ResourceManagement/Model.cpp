@@ -4,9 +4,15 @@
 #include "Utilities/AnimationUtils.h"
 #include "ResourceManagement/Animation.h"
 
-Model::Model(std::string const &path) : mTransFormMatrix(glm::mat4(1.0f)), mImporter(new Assimp::Importer())
+Model::Model(std::string const &path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle) : mTransFormMatrix(glm::mat4(1.0f)), mImporter(new Assimp::Importer())
 {
     loadModel(path);
+    makeUnitModel();
+    glm::mat4 basicTransform = glm::mat4(1.0f);
+    basicTransform = glm::scale(basicTransform, scale);
+    basicTransform = glm::translate(basicTransform, offset);
+    basicTransform = glm::rotate(basicTransform, glm::radians(angle), axis);
+    transform(basicTransform);
 }
 
 Model::~Model()
@@ -14,9 +20,19 @@ Model::~Model()
     delete mImporter;
 }
 
+void Model::makeUnitModel()
+{
+    auto size = mAABB.size();
+    auto scale_factor = 1.0f / std::max(std::max(size.x, size.y), size.z);
+    glm::mat4 basicTransform = glm::mat4(1.0f);
+    basicTransform = glm::scale(basicTransform, glm::vec3(scale_factor));
+	basicTransform = glm::translate(basicTransform, -mAABB.getCenter());
+    transform(basicTransform);
+}
+
 void Model::loadModel(std::string const &path)
 {
-    auto const* scene = mImporter->ReadFile(path, aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_FlipUVs);
+    auto const* scene = mImporter->ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         throw CustomException(std::string("ASSIMP::") + mImporter->GetErrorString());
     mDirectory = path.substr(0, path.find_last_of('/'));
@@ -52,8 +68,9 @@ std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std:
 {
     std::map<std::string, unsigned int> bones;
     unsigned int        totalBones{0};
-    for(unsigned int i = 0; i < mesh->mNumBones; i++)
+	for (unsigned int i = 0; i < mesh->mNumBones; i++)
     {
+		auto *bone = mesh->mBones[i];
         unsigned int boneIndex;
         std::string boneName(mesh->mBones[i]->mName.data);
 
@@ -61,17 +78,20 @@ std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std:
             bones[boneName] = totalBones++;
         boneIndex = bones[boneName];
         aOffsets[boneIndex] = AnimationUtils::aiMatToGlmMat(mesh->mBones[i]->mOffsetMatrix);
-        for(unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
+		for (unsigned int j = 0; j < bone->mNumWeights; j++)
         {
-            unsigned int vertexID = mesh->mBones[i]->mWeights[j].mVertexId;
-            float weight = mesh->mBones[i]->mWeights[j].mWeight;
-            for (unsigned int k = 0; k < 3; ++k)
+			aiVertexWeight weight = bone->mWeights[j];
+			for (unsigned int k = 0; k < 3; k++)
             {
-                vertices[vertexID].BonesID[k] = boneIndex;
-                vertices[vertexID].Weighs[k] = weight;
-            }        
-        }
-    }
+				if (vertices[weight.mVertexId].Weighs[k] == 0)
+                {
+					vertices[weight.mVertexId].Weighs[k] = weight.mWeight;
+					vertices[weight.mVertexId].BonesID[k] = i;
+					break;
+				}
+			}
+		}
+	}
     return std::move(bones);
 }
 
@@ -81,19 +101,25 @@ std::vector<Vertex> Model::loadVertices(aiMesh const* mesh)
 
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
-        Vertex vertex{};
+        Vertex vertex = Vertex();
         vertex.Position.x = mesh->mVertices[i].x;
         vertex.Position.y = mesh->mVertices[i].y;
         vertex.Position.z = mesh->mVertices[i].z;
-        vertex.Normal.x = mesh->mNormals[i].x;
-        vertex.Normal.y = mesh->mNormals[i].y;
-        vertex.Normal.z = mesh->mNormals[i].z;
-        vertex.Tangent.x = mesh->mTangents[i].x;
-        vertex.Tangent.y = mesh->mTangents[i].y;
-        vertex.Tangent.z = mesh->mTangents[i].z;
-        vertex.Bitangent.x = mesh->mBitangents[i].x;
-        vertex.Bitangent.y = mesh->mBitangents[i].y;
-        vertex.Bitangent.z = mesh->mBitangents[i].z;
+        if (mesh->HasNormals())
+        {
+            vertex.Normal.x = mesh->mNormals[i].x;
+            vertex.Normal.y = mesh->mNormals[i].y;
+            vertex.Normal.z = mesh->mNormals[i].z;
+        }
+        if (mesh->HasTangentsAndBitangents())
+        {
+            vertex.Tangent.x = mesh->mTangents[i].x;
+            vertex.Tangent.y = mesh->mTangents[i].y;
+            vertex.Tangent.z = mesh->mTangents[i].z;
+            vertex.Bitangent.x = mesh->mBitangents[i].x;
+            vertex.Bitangent.y = mesh->mBitangents[i].y;
+            vertex.Bitangent.z = mesh->mBitangents[i].z;
+        }
         if(mesh->mTextureCoords[0])
         {
             vertex.TexCoords.x = mesh->mTextureCoords[0][i].x;

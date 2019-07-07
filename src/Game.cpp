@@ -287,50 +287,7 @@ void Game::loadResources()
         RESOURCES.loadSkybox("defaultSkybox");
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
-
-        auto a = RESOURCES.loadModel("y_bot/y_bot.fbx", "bot");
-        {
-            glm::mat4 basicSuite = glm::mat4(1.0f);
-            auto  scale_factorY = (a->getAABB().getMax().y - a->getAABB().getMin().y);
-            basicSuite = glm::scale(basicSuite, glm::vec3(1.0f / scale_factorY, 1.0f / scale_factorY, 1.0f / scale_factorY));
-			basicSuite = glm::translate(basicSuite, -a->getAABB().getCenter());
-            a->transform(basicSuite);
-        }
-        auto b = RESOURCES.loadModel("brick/brick.obj", "brick");
-        {
-            glm::mat4 basicCube = glm::mat4(1.0f);
-            auto scale_factorY = 2.0f;
-            basicCube = glm::scale(basicCube,  glm::vec3(1.f / scale_factorY));
-			basicCube = glm::translate(basicCube, -b->getAABB().getCenter());
-            basicCube = glm::rotate(basicCube, glm::radians(-90.0f), glm::vec3(0,0,1));
-            b->transform(basicCube);
-        }
-        auto c = RESOURCES.loadModel("ground/ground.obj", "ground");
-        {
-            glm::mat4 basicCube = glm::mat4(1.0f);
-            auto scale_factorY = 2.0f;
-            basicCube = glm::scale(basicCube,  glm::vec3(1.f / scale_factorY));
-            basicCube = glm::translate(basicCube, -c->getAABB().getCenter());
-            c->transform(basicCube);
-        }
-        auto d = RESOURCES.loadModel("wall/wall.obj", "wall");
-        {
-
-            glm::mat4 basicCube = glm::mat4(1.0f);
-            auto scale_factorY = 2.0f;
-            basicCube = glm::scale(basicCube,  glm::vec3(1.f / scale_factorY));
-			basicCube = glm::translate(basicCube, -c->getAABB().getCenter());
-            d->transform(basicCube);
-        }
-        {
-            auto Model = RESOURCES.loadModel("balloon/balloon.obj", "balloon");
-            glm::mat4 modelMatrix = glm::mat4(1.0f);
-            auto scale_factorY = 200;
-            modelMatrix = glm::scale(modelMatrix,  glm::vec3(1.f / scale_factorY));
-			modelMatrix = glm::translate(modelMatrix, glm::vec3(0,-280,0));
-			modelMatrix = glm::translate(modelMatrix, -c->getAABB().getCenter());
-            Model->transform(modelMatrix);
-        }
+        loadModels();
 		mRenderer->getParticleManager()->init();
     }
     catch (CustomException &e)
@@ -338,6 +295,16 @@ void Game::loadResources()
         std::cout << e.what() << std::endl;
         exit(42);
     }
+}
+
+void Game::loadModels()
+{
+    RESOURCES.loadModel("general/hero/model.fbx", "hero");
+    RESOURCES.loadModel("map/first/ground/model.fbx", "ground");
+    RESOURCES.loadModel("map/first/perimeterWall/model.fbx", "perimeterWall");
+    RESOURCES.loadModel("map/first/unbreakableWall/model.fbx", "unbreakableWall", glm::vec3(1), glm::vec3(0),  glm::normalize(glm::vec3(1,0,0)), -90);
+    RESOURCES.loadModel("map/first/breakableWall/model.fbx", "breakableWall", glm::vec3(0.9f));
+    RESOURCES.loadModel("balloon/balloon.obj", "balloon");
 }
 
 void Game::explosion(glm::ivec2 position, uint32_t span)

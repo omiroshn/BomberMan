@@ -32,6 +32,7 @@ private:
     void		doAction(Action const&);
     void		calcDeltaTime();
     void		loadResources();
+    void        loadModels();
     std::shared_ptr<GameWindow>      mWindow;
     std::unique_ptr<Renderer>        mRenderer;
     std::unique_ptr<InputManager>    mIManager;

@@ -30,24 +30,16 @@ void Renderer::draw(MapForRendering& aMap)
     normalPass(aMap);
 }
 
-void Renderer::drawPicture(const std::string& pic)
-{
-    auto block = RESOURCES.getTexture("block");
-    block->bind();
-    std::cout << "textture showed" << std::endl;
-
-}
-
 void Renderer::normalPass(MapForRendering& aMap)
 {
     glViewport(0, 0, mWidth, mHeight);
     
     int stage = CONFIGURATION.getChosenStage();
     static std::shared_ptr<Model> bricks[] = {
-        RESOURCES.getModel("wall"),
-        RESOURCES.getModel("brick"),
-        RESOURCES.getModel("brick"),
-        RESOURCES.getModel("brick")
+        RESOURCES.getModel("unbreakableWall"),
+        RESOURCES.getModel("breakableWall"),
+        RESOURCES.getModel("breakableWall"),
+        RESOURCES.getModel("breakableWall")
     };
     static std::shared_ptr<Skybox> skyboxes[] = {
         RESOURCES.getSkybox("defaultSkybox"),
@@ -56,8 +48,12 @@ void Renderer::normalPass(MapForRendering& aMap)
         RESOURCES.getSkybox("blue")
     };
 
-    static auto wall = RESOURCES.getModel("wall");
-    static auto heroModel = RESOURCES.getModel("bot");
+    static auto heroModel = RESOURCES.getModel("hero");
+
+
+    static auto perimeterWall = RESOURCES.getModel("perimeterWall");
+    static auto unbreakableWall = RESOURCES.getModel("unbreakableWall");
+
     static auto balloon = RESOURCES.getModel("balloon");
     static auto ground = RESOURCES.getModel("ground");
     static auto modelShader = RESOURCES.getShader("modelShader");
@@ -105,7 +101,7 @@ void Renderer::normalPass(MapForRendering& aMap)
                 modelTransform = glm::translate(modelTransform, glm::vec3(w->getX() + 0.5, 0.f, w->getY() + 0.5));
                 transforms.push_back(modelTransform);
             }
-            wall->draw(modelShader, transforms);
+            unbreakableWall->draw(modelShader, transforms);
         }
     }
 

@@ -156,3 +156,13 @@ AABB AABB::transform(glm::mat4 const & aTransform)
 
     return retVal;
 }
+
+glm::vec3 AABB::size() const
+{
+    glm::vec3 s;
+
+    s.x = mMax.x - mMin.x;
+    s.y = mMax.y - mMin.y;
+    s.z = mMax.z - mMin.z;
+    return s;
+}
