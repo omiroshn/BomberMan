@@ -39,7 +39,6 @@ Game::Game()
 	mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
     mKeyHandler = std::make_unique<KeyboardHandler>();
-    // timerManager = TimerManager::Instance();
     loadResources();
 
     sInstance = this;
@@ -55,11 +54,8 @@ void Game::start()
     MapLoader mapLoader;
     int width, height;
     mStageStartedTimer = getCurrentTime();
-    // auto lambda1 = []() { std::cout << ":)" << std::endl; };
-    // timerManager->AddTimer(1, false, lambda1);
     while (mIsRunning)
     {
-        // timerManager->Update();
         mWindow->tickGui();
         mWindow->getSize(width, height);
         calcDeltaTime();
@@ -76,8 +72,8 @@ void Game::start()
             {
                 tickAI(mDeltaTime);
                 MovingEntity::debugMovement();
-                Tickable::tickTickables(mDeltaTime);
                 resolveCollisions();
+                Tickable::tickTickables(mDeltaTime);
                 mRenderer->draw(*this);
                 static int index = 0;
                 ImGui::RadioButton("NO VSync", &index, 0);

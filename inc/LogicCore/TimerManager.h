@@ -19,15 +19,15 @@
 
 #include <iostream>
 #include <memory>
+#include "Core.hpp"
 
-class TimerManager
+class TimerManager : public Tickable
 {
 private:
-	static TimerManager* sInstance;
 	std::vector<std::unique_ptr<TimerBase>> v;
+
 public:
 	static TimerManager *Instance();
-	static void Release();
 	void Update();
 
 	template<typename funcType>
@@ -40,6 +40,7 @@ public:
 
 	void RemoveTimer(TimerBase *timer);
 
+	virtual void tick(float DeltaTime) override;
 private:
 	TimerManager();
 	~TimerManager();
