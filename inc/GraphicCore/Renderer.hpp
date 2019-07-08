@@ -57,7 +57,6 @@ public:
 
     void draw(Game&);
     void drawQuad(Quad);
-    void drawPicture(const std::string& pic);
 
     Renderer(Renderer const &) = delete;
     Renderer &operator=(Renderer const &) = delete;

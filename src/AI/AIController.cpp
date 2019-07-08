@@ -158,10 +158,10 @@ namespace
 			return true;
 		if (positionA.x == positionB.x)
 		{
-			int min = min(positionA.y, positionB.y);
-			int max = max(positionA.y, positionB.y);
+			int minY = glm::min(positionA.y, positionB.y);
+			int maxY = glm::max(positionA.y, positionB.y);
 
-			for (int i = min; i < max; i++)
+			for (int i = minY; i < maxY; i++)
 				if (info[glm::ivec2{positionA.x, i}] != SquareType::EmptySquare)
 					return false;
 
@@ -169,10 +169,10 @@ namespace
 		}
 		else if (positionA.y == positionB.y)
 		{
-			int min = min(positionA.x, positionB.x);
-			int max = max(positionA.x, positionB.x);
+			int minX = glm::min(positionA.x, positionB.x);
+			int maxX = glm::max(positionA.x, positionB.x);
 
-			for (int i = min; i < max; i++)
+			for (int i = minX; i < maxX; i++)
 				if (info[glm::ivec2{i, positionA.y}] != SquareType::EmptySquare)
 					return false;
 

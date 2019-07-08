@@ -46,12 +46,6 @@ void Renderer::drawQuad(Quad quad)
 	mShadowQuads.push_back(quad);
 }
 
-void Renderer::drawPicture(const std::string& pic)
-{
-    auto block = RESOURCES.getTexture("block");
-    block->bind();
-}
-
 void Renderer::normalPass(Game& aMap)
 {
     glViewport(0, 0, mWidth, mHeight);
