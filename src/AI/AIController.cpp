@@ -6,6 +6,8 @@
 /** AI utility functions - start */
 namespace
 {
+    #undef min
+    #undef max
 	enum class EDirection : uint8_t {
 		NONE	= 0,
 		DOWN	= 1,
