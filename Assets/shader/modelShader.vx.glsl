@@ -20,6 +20,7 @@ out VS_OUT {
     vec3 TangentLightPos;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
+    vec4 FragPosLightSpace;
     vec3 Normal;
 } vs_out;
 
@@ -29,8 +30,9 @@ uniform mat4 projection;
 uniform mat4 boneTransforms[MAX_BONES];
 uniform bool isAnimated;
 
-uniform bool hasNormalMap;
 uniform vec3 lightPos;
+uniform vec3 viewPos;
+uniform mat4 lightSpaceMatrix;
 
 void main()
 {
@@ -50,25 +52,20 @@ void main()
         transformModelMat = modelsMatrix;
     }
 
-
     gl_Position = projection * view * transformModelMat * vec4(aPos, 1.0);
     vs_out.TexCoords = aTexCoords;
     vs_out.FragPos = vec3(transformModelMat * vec4(aPos, 1.0));
 
-    if (hasNormalMap)
-    {
-        vec3 T   = normalize(mat3(transformModelMat) * aTangent);
-        vec3 B   = normalize(mat3(transformModelMat) * aBitangent);
-        vec3 N   = normalize(mat3(transformModelMat) * aNormal);
-        mat3 TBN = transpose(mat3(T, B, N));
+    mat3 normalMatrix = transpose(inverse(mat3(transformModelMat)));
+    vec3 T = normalize(normalMatrix * aTangent);
+    vec3 N = normalize(normalMatrix * aNormal);
+    T = normalize(T - dot(T, N) * N);
+    vec3 B = cross(N, T);
+    mat3 TBN = transpose(mat3(T, B, N));
 
-        vs_out.TangentLightPos = TBN * lightPos;
-        vs_out.TangentViewPos  = TBN * lightPos;
-        vs_out.TangentFragPos  = TBN * vs_out.FragPos;
-    }
-    else
-    {
-        vs_out.Normal =  mat3(transpose(inverse(transformModelMat))) * aNormal;
-    }
-
+    vs_out.TangentLightPos = TBN * lightPos;
+    vs_out.TangentViewPos  = TBN * viewPos;
+    vs_out.TangentFragPos  = TBN * vs_out.FragPos;
+    vs_out.FragPosLightSpace = lightSpaceMatrix * vec4(vs_out.FragPos, 1.0);
+    vs_out.Normal = transpose(inverse(mat3(transformModelMat))) * aNormal;;
 }
