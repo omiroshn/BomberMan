@@ -170,6 +170,12 @@ std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *ma
         aiString str;
         mat->GetTexture(type, i, &str);
         std::string texFullPath(mDirectory + "/" + std::string(str.C_Str()));
+        size_t pos = texFullPath.find("\\");
+        while (pos != std::string::npos)
+        {
+            texFullPath.replace(pos, 1, "/");
+            pos = texFullPath.find("\\", pos + 1);
+        }
         auto texture = RESOURCES.loadTextureFromFile(texFullPath.c_str(), typeName, true);
         textures.push_back(texture);
     }
