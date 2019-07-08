@@ -97,6 +97,8 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
             return Action::Finish;
         case SDLK_SPACE:
             return Action::Pause;
+        case SDLK_1:
+            return Action::StageFinished;
         case SDLK_UP:
             //fallthrough
         case SDLK_w:

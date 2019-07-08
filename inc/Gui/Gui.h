@@ -14,17 +14,19 @@ public:
 	~Gui();
 	void ShowMainMenu();
 	void ShowInGameMenu();
+    void ShowBetweenStageScreen();
+	void ShowLoadingScreen(const char* screen);
 	bool IsGameRunning();
 	void StartTheGame(bool start);
 	void GamePaused(bool state);
 	void SetBackground(const char* texture);
-	void ChangeMenuSize(int w, int h);
 
 private:
 	void ShowHardnessRadioButtons();
 	void ShowStartNewGameMenu();
 	void ShowLoadSavedGamesMenu();
 	void ShowSettingsMenu();
+	void ChangeStage(int next_stage);
 	bool mGameStarted = false;
 	bool mGamePaused = false; //make static in Game
 	bool mShowMenu = true;

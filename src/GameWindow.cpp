@@ -3,6 +3,7 @@
 #include <iostream>
 #include <GameWindow.hpp>
 #include "Core.hpp"
+#include "ResourceManagement/ResourceManager.hpp"
 
 GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
     mWidth(aWidth), mHeight(aHeight), mName(aWinName)
@@ -67,15 +68,18 @@ void GameWindow::initGui() {
     IMGUI_CHECKVERSION();
 
     ImGui::CreateContext();
+
     ImGuiIO &io = ImGui::GetIO();
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    auto fontData = RESOURCES.loadFont("Blox2.TTF");
+    // need to cope data, because AddFontFromMemoryTTF seems to take control of it, and will try to delete on exit
+    char* data = new char[fontData.size()];
+    std::memcpy(data, fontData.data(), fontData.size());
+	io.Fonts->AddFontFromMemoryTTF(std::move(data), fontData.size(), 16);
     ImGui_ImplSdlGL3_Init(mWindow);
 
     ImGui::StyleColorsDark();
 
 	mMainMenu = new Gui();
-    // io.Fonts->AddFontFromFileTTF("Assets/font/Roboto-Medium.ttf", 16.0f);
-
 }
 
 void GameWindow::initOpenGL()
@@ -132,6 +136,11 @@ void GameWindow::ShowStartingMenu()
 void GameWindow::ShowInGameMenu()
 {
     mMainMenu->ShowInGameMenu();
+}
+
+void GameWindow::ShowBetweenStageScreen()
+{
+    mMainMenu->ShowBetweenStageScreen();
 }
 
 void GameWindow::PauseGame(bool state)

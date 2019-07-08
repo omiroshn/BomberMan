@@ -20,10 +20,11 @@ public:
 	void 		saveCurrentState(std::string fileName  = "ConfigureFile");
 	void 		loadStateFromFile(std::string fileName  = "ConfigureFile");
 	void 		applyWindowChange();
+    void        stageFinished();
 
     static bool    mReloadStage;
-    static Uint64  mStageTimer;
-    static Uint64  mStageStartedTimer;
+    static float   mStageTimer;
+    static float   mStageStartedTimer;
     static bool    mIsRunning;
 
     void        explosion(glm::ivec2 position, uint32_t span);
@@ -32,6 +33,7 @@ private:
     void		doAction(Action const&);
     void		calcDeltaTime();
     void		loadResources();
+    void        loadModels();
     std::shared_ptr<GameWindow>      mWindow;
     std::unique_ptr<Renderer>        mRenderer;
     std::unique_ptr<InputManager>    mIManager;

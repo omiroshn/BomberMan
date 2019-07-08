@@ -8,9 +8,11 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <vector>
 #include "GL/glew.h"
 #include <iostream>
 #include <fstream>
+#include <glm/glm.hpp>
 
 #define RESOURCES ResourceManager::getInstance()
 
@@ -28,17 +30,17 @@ public:
 	std::shared_ptr<Shader>		getShader(std::string const &);
 	std::shared_ptr<Texture>	loadTexture(const GLchar *, std::string const &, std::string const &texType = "texture_diffuse");
 	std::shared_ptr<Texture>	getTexture(std::string const &name);
-	std::shared_ptr<Model>		loadModel(const GLchar *, std::string const &);
+	void                		loadModel(const GLchar *, std::string const &, glm::vec3 scale = glm::vec3(1.0f), glm::vec3 offset = glm::vec3(.0f), glm::vec3 rotate = glm::vec3(.0f, 1.0f, .0f), float angle = .0f);
     std::shared_ptr<Model>		getModel(std::string const &name);
     std::shared_ptr<Texture>	loadTextureFromFile(const GLchar*, std::string const &, bool isModelTexture = false);
     std::shared_ptr<Skybox>		loadSkybox(std::string const &);
     std::shared_ptr<Skybox>		getSkybox(std::string const &);
-
     void						clear();
 	ResourceManager(ResourceManager const &) = delete;
 	ResourceManager &operator=(ResourceManager const &) = delete;
 
 	std::fstream getMap(std::string const & aName);
+    std::vector<char> loadFont(std::string const &path);
 
 private:
 	ResourceManager();

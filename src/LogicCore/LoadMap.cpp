@@ -1,4 +1,3 @@
-
 #include "LogicCore/LoadMap.h"
 #include <tuple>
 #include <iostream>
@@ -48,6 +47,19 @@ std::tuple<std::vector<SquareInstance*>, CollisionInfo> MapLoader::GetMap(const 
 		mLoaded = true;
 	}
 	return std::make_tuple(mMapOfInstances, CollisionInfo{ mMapOfDigits, mWidth });
+}
+
+void MapLoader::cleanMapForRendering()
+{
+	for (int i = 0; i < mMapOfInstances.size(); i++)
+	{
+		if (mMapOfInstances[i])
+			delete mMapOfInstances[i];
+
+	}
+	mMapOfInstances.clear();
+	mMapOfDigits.clear();
+	mLoaded = false;
 }
 
 void MapLoader::UpdateMap()

@@ -24,8 +24,7 @@ class AABB
         void operator+=(AABB const & aabb);
         void operator+=(float val);
         void operator+=(glm::vec3 const& p);
-
-
+        glm::vec3 size() const;
         /// Retrieves the center of the AABB.
         glm::vec3 getCenter() const;
         glm::vec3 getDiagonal() const;

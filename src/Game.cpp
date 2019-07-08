@@ -12,10 +12,10 @@ Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
 float			Game::mDeltaTime;
 CollisionInfo	Game::mCollisionInfo;
-bool            Game::mReloadStage = false;
+bool            Game::mReloadStage = true;
 bool            Game::mIsRunning = true;
-Uint64          Game::mStageTimer = 200;
-Uint64          Game::mStageStartedTimer = 0;
+float           Game::mStageTimer = 200;
+float           Game::mStageStartedTimer = 0;
 float           Game::sInputAcceleration = 6000;
 
 namespace
@@ -51,7 +51,7 @@ void Game::start()
 {
     MapLoader mapLoader;
     int width, height;
-
+    mStageStartedTimer = getCurrentTime();
     // auto lambda1 = []() { std::cout << ":)" << std::endl; };
     // timerManager->AddTimer(1, false, lambda1);
     while (mIsRunning)
@@ -93,11 +93,21 @@ void Game::start()
             {
                 if (CONFIGURATION.getLives() == 0)
                     CONFIGURATION.setChosenStage(1);
-                mMap.cleanMapForRendering();
-                mCollisionInfo.Squares.clear();
-                std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
-                mStageStartedTimer = getCurrentTime();
-                mReloadStage = 0;
+                if (mReloadStage && mStageTimer > 1)
+                {
+                    mWindow->ShowBetweenStageScreen();
+                    mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
+                }
+                else if (mStageTimer < 2)
+                {
+                    mapLoader.cleanMapForRendering();
+                    mCollisionInfo.Squares.clear();
+                    std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
+                    mStageStartedTimer = getCurrentTime();
+                    mReloadStage = 0;
+                    mIsPaused = false;
+                }
+
             }
         }
         doAction(mIManager->processEvents(mWindow->getEvent(), *mKeyHandler.get()));
@@ -199,6 +209,9 @@ void Game::doAction(Action const& a)
         case Action::Pause:
             pause();
             break;
+        case Action::StageFinished:
+            stageFinished();
+            break;
         case Action::CameraRotate:
             float x,y;
             mIManager->getMouseOffset(x, y);
@@ -270,50 +283,7 @@ void Game::loadResources()
         RESOURCES.loadSkybox("defaultSkybox");
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
-
-        auto a = RESOURCES.loadModel("y_bot/y_bot.fbx", "bot");
-        {
-            glm::mat4 basicSuite = glm::mat4(1.0f);
-            auto  scale_factorY = (a->getAABB().getMax().y - a->getAABB().getMin().y);
-            basicSuite = glm::scale(basicSuite, glm::vec3(1.0f / scale_factorY, 1.0f / scale_factorY, 1.0f / scale_factorY));
-			basicSuite = glm::translate(basicSuite, -a->getAABB().getCenter());
-            a->transform(basicSuite);
-        }
-        auto b = RESOURCES.loadModel("brick/brick.obj", "brick");
-        {
-            glm::mat4 basicCube = glm::mat4(1.0f);
-            auto scale_factorY = 2.0f;
-            basicCube = glm::scale(basicCube,  glm::vec3(1.f / scale_factorY));
-			basicCube = glm::translate(basicCube, -b->getAABB().getCenter());
-            basicCube = glm::rotate(basicCube, glm::radians(-90.0f), glm::vec3(0,0,1));
-            b->transform(basicCube);
-        }
-        auto c = RESOURCES.loadModel("ground/ground.obj", "ground");
-        {
-            glm::mat4 basicCube = glm::mat4(1.0f);
-            auto scale_factorY = 2.0f;
-            basicCube = glm::scale(basicCube,  glm::vec3(1.f / scale_factorY));
-            basicCube = glm::translate(basicCube, -c->getAABB().getCenter());
-            c->transform(basicCube);
-        }
-        auto d = RESOURCES.loadModel("wall/wall.obj", "wall");
-        {
-
-            glm::mat4 basicCube = glm::mat4(1.0f);
-            auto scale_factorY = 2.0f;
-            basicCube = glm::scale(basicCube,  glm::vec3(1.f / scale_factorY));
-			basicCube = glm::translate(basicCube, -c->getAABB().getCenter());
-            d->transform(basicCube);
-        }
-        {
-            auto Model = RESOURCES.loadModel("balloon/balloon.obj", "balloon");
-            glm::mat4 modelMatrix = glm::mat4(1.0f);
-            auto scale_factorY = 200;
-            modelMatrix = glm::scale(modelMatrix,  glm::vec3(1.f / scale_factorY));
-			modelMatrix = glm::translate(modelMatrix, glm::vec3(0,-280,0));
-			modelMatrix = glm::translate(modelMatrix, -c->getAABB().getCenter());
-            Model->transform(modelMatrix);
-        }
+        loadModels();
 		mRenderer->getParticleManager()->init();
     }
     catch (CustomException &e)
@@ -321,6 +291,16 @@ void Game::loadResources()
         std::cout << e.what() << std::endl;
         exit(42);
     }
+}
+
+void Game::loadModels()
+{
+    RESOURCES.loadModel("general/hero/model.fbx", "hero");
+    RESOURCES.loadModel("map/first/ground/model.fbx", "ground");
+    RESOURCES.loadModel("map/first/perimeterWall/model.fbx", "perimeterWall");
+    RESOURCES.loadModel("map/first/unbreakableWall/model.fbx", "unbreakableWall", glm::vec3(1), glm::vec3(0),  glm::normalize(glm::vec3(1,0,0)), -90);
+    RESOURCES.loadModel("map/first/breakableWall/model.fbx", "breakableWall", glm::vec3(0.9f));
+    RESOURCES.loadModel("balloon/balloon.obj", "balloon");
 }
 
 void Game::explosion(glm::ivec2 position, uint32_t span)
@@ -419,4 +399,15 @@ void 		Game::applyWindowChange()
 		mWindow->setSize(CONFIGURATION.getWidth(), CONFIGURATION.getHeight());
 		mWindow->setFullScreen(CONFIGURATION.getWindowed());
 	}
+}
+
+
+void       Game::stageFinished()
+{
+    int current_stage = CONFIGURATION.getChosenStage();
+    CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
+    Game::mReloadStage = true;
+    if (mStageTimer > 4)
+        mStageStartedTimer = getCurrentTime();
+    mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
 }

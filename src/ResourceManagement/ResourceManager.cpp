@@ -90,10 +90,9 @@ std::shared_ptr<Texture> ResourceManager::getTexture(std::string const &name)
 };
 
 
-std::shared_ptr<Model> ResourceManager::loadModel(const GLchar *file, std::string const &name)
+void ResourceManager::loadModel(const GLchar *file, std::string const &name, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle)
 {
-	mModels.emplace(name, std::make_shared<Model>(mBinFolder + "models/" + file));
-	return mModels[name];
+	mModels.emplace(name, std::make_shared<Model>(mBinFolder + "models/" + file, scale, offset, axis, angle));
 };
 
 std::shared_ptr<Model> ResourceManager::getModel(std::string const &name)
@@ -158,32 +157,10 @@ std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file
 
 std::shared_ptr<Skybox>		ResourceManager::loadSkybox(std::string const &aSkyboxName)
 {
-    //std::vector<unsigned char *> facesData;
-    //std::vector<std::pair<int, int>> textureSizes;
-    //int width, height, nrChannels;
-    //stbi_set_flip_vertically_on_load(true);
-    //for (unsigned int i = 0; i < cSkyboxFaces.size(); i++)
-    //{
-    //    std::string facePath(mBinFolder + "img/" + aSkyboxName + "/" + cSkyboxFaces[i]);
-    //    unsigned char *data = stbi_load(facePath.c_str(), &width, &height, &nrChannels, 0);
-    //    if (data)
-    //    {
-    //        facesData.push_back(data);
-    //        textureSizes.push_back(std::make_pair(width, height));
-    //        stbi_image_free(data);
-    //    }
-    //    else
-    //    {
-    //        throw CustomException("Skybox texture failed to load at path[" + std::string(facePath) + "]");
-    //        stbi_image_free(data);
-    //    }
-    //}
-
     std::shared_ptr<Skybox> skybox;
     try
     {
         skybox = std::make_shared<Skybox>();
-        //skybox->generate(facesData, textureSizes);
         skybox->mCubeMap = loadCubemap(aSkyboxName);
         mSkyboxes.emplace(aSkyboxName, skybox);
     }
@@ -226,4 +203,16 @@ std::fstream ResourceManager::getMap(std::string const & aName)
 {
     std::fstream f(mBinFolder + "maps/" + aName);
     return f;
+}
+
+std::vector<char> ResourceManager::loadFont(std::string const &path)
+{
+    std::ifstream infile(mBinFolder + "font/" + path, std::ios::binary);
+    infile.seekg(0, std::ios::end);
+    size_t file_size_in_byte = infile.tellg();
+    std::vector<char> data;
+    data.resize(file_size_in_byte);
+    infile.seekg(0, std::ios::beg);
+    infile.read(&data[0], file_size_in_byte);
+    return data;
 }
