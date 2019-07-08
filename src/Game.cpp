@@ -270,14 +270,15 @@ void Game::loadResources()
 {
     try
     {
-        RESOURCES.loadShader("sprite.vx.glsl", "sprite.ft.glsl", "sprite");
+        //RESOURCES.loadShader("sprite.vx.glsl", "sprite.ft.glsl", "sprite");
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
         RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");
 		RESOURCES.loadShader("sprite_p.vx.glsl", "sprite_p.ft.glsl", "sprite_p");
 		RESOURCES.loadShader("sprite_quad.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad");
 		RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
 		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
-		RESOURCES.loadShader("quad.vx.glsl", "quad_shadow.ft.glsl", "shadow");
+		RESOURCES.loadShader("shadowShader.vx.glsl", "shadowShader.ft.glsl", "shadow");
+        //RESOURCES.loadShader("quad.vx.glsl", "quad_shadow.ft.glsl", "shadow");
         RESOURCES.loadTexture("block.png", "block");
         RESOURCES.loadTexture("unlocked.png", "unlocked");
         RESOURCES.loadTexture("container.jpg", "container");
