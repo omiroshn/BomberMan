@@ -17,6 +17,7 @@ bool            Game::mIsRunning = true;
 float           Game::mStageTimer = 200;
 float           Game::mStageStartedTimer = 0;
 float           Game::sInputAcceleration = 6000;
+Game			*Game::sInstance = nullptr;
 
 namespace
 {
@@ -26,6 +27,7 @@ namespace
 }
 
 Game::Game()
+	: mHero(std::make_unique<MovingEntity>(glm::vec2{1.5, 1.5}))
 {
 	mTimeNow = SDL_GetPerformanceCounter();
     
@@ -40,6 +42,7 @@ Game::Game()
     // timerManager = TimerManager::Instance();
     loadResources();
 
+    sInstance = this;
 }
 
 Game::~Game()
@@ -71,18 +74,19 @@ void Game::start()
         {
             if (mapLoader.MapIsLoaded() && !mReloadStage)
             {
+                tickAI(mDeltaTime);
                 MovingEntity::debugMovement();
                 Tickable::tickTickables(mDeltaTime);
                 resolveCollisions();
-                mRenderer->draw(mMap);
+                mRenderer->draw(*this);
                 static int index = 0;
                 ImGui::RadioButton("NO VSync", &index, 0);
                 ImGui::RadioButton("60", &index, 1);
                 ImGui::RadioButton("30", &index, 2);
                 if (index)
                 {
-                    const float TargetDelta = 0.0167f * index;
-					unsigned ms = TargetDelta - mDeltaTime;
+                    const float TargetDelta = 0.0167f * (float)index;
+					float ms = TargetDelta - mDeltaTime;
                     if (mDeltaTime < TargetDelta)
                         SDL_Delay(ms * 1000);
                 }
@@ -102,7 +106,7 @@ void Game::start()
                 {
                     mapLoader.cleanMapForRendering();
                     mCollisionInfo.Squares.clear();
-                    std::tie(mMap, mCollisionInfo) = mapLoader.GetMap(CONFIGURATION.getChosenStage());
+                    mCollisionInfo = mapLoader.GetMap(CONFIGURATION.getChosenStage());
                     mStageStartedTimer = getCurrentTime();
                     mReloadStage = 0;
                     mIsPaused = false;
@@ -171,7 +175,7 @@ void Game::resolveCollisions()
 		{0, -1}
     };
 
-	auto& Hero = mMap.GetHero();
+	auto& Hero = GetHero();
     glm::vec2 CollisionOffset(0);
 	const glm::vec2 Position = Hero.getPosition();
 	static float radius = 0.24;
@@ -191,12 +195,12 @@ void Game::resolveCollisions()
     static float CollisionResolveMultiplier = 350.f;
     ImGui::SliderFloat("CollisionResolveMultiplier", &CollisionResolveMultiplier, 100, 1000);
     Hero.AddAcceleration(CollisionOffset * CollisionResolveMultiplier);
-	mRenderer->getCamera().followEntity(mMap.GetHero(), 10.f);
+	mRenderer->getCamera().followEntity(GetHero(), 10.f, mDeltaTime);
 }
 
 void Game::doAction(Action const& a)
 {
-    auto& Hero = mMap.GetHero();
+    auto& Hero = GetHero();
     ImGui::SliderFloat("Input Hero acceleration", &sInputAcceleration, 0, 10000);
 	const float offset  = mDeltaTime * sInputAcceleration;
     
@@ -273,6 +277,7 @@ void Game::loadResources()
 		RESOURCES.loadShader("sprite_quad.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad");
 		RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
 		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
+		RESOURCES.loadShader("quad.vx.glsl", "quad_shadow.ft.glsl", "shadow");
         RESOURCES.loadTexture("block.png", "block");
         RESOURCES.loadTexture("unlocked.png", "unlocked");
         RESOURCES.loadTexture("container.jpg", "container");
@@ -360,22 +365,17 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
     auto vMin = minMax[2];
     auto vMax = minMax[3];
 
-    auto &rawMap = mMap.GetRawMap();
-    std::remove_if(rawMap.begin(), rawMap.end(), [this, hMin, hMax, vMin, vMax](SquareInstance *instance) {
-        return instance->GetType() == SquareType::Brick
-        && (circle_box_collision(instance->getPosition() + glm::vec2(0.5), 0.001, hMin, hMax)
-        || circle_box_collision(instance->getPosition() + glm::vec2(0.5), 0.001, vMin, vMax));
-    });
-
-    auto &enemies = mMap.GetEnemies();
-    std::remove_if(enemies.begin(), enemies.end(), [this, hMin, hMax, vMin, vMax](MovingEntity *entity) {
-        return (circle_box_collision(entity->getPosition() + glm::vec2(0.5), 0.1, hMin, hMax)
-        || circle_box_collision(entity->getPosition() + glm::vec2(0.5), 0.1, vMin, vMax));
+    auto &enemies = GetEnemies();
+    std::for_each(enemies.begin(), enemies.end(), [this, hMin, hMax, vMin, vMax](MovingEntity *entity) {
+        if (circle_box_collision(entity->getPosition() + glm::vec2(0.5), .3, hMin, hMax)
+        || circle_box_collision(entity->getPosition() + glm::vec2(0.5), .3, vMin, vMax))
+            entity->kill();
     });
 
     mRenderer->getParticleManager()->startDrawPS(brickPool[which], brickTransforms);
     mRenderer->getParticleManager()->startDrawPS(bombPool[which], fireTransforms);
 	which = !which;
+	mRenderer->getCamera().addShake(0.2);
 }
 
 void 		Game::saveCurrentState(std::string fileName)
@@ -410,4 +410,76 @@ void       Game::stageFinished()
     if (mStageTimer > 4)
         mStageStartedTimer = getCurrentTime();
     mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
+}
+
+Game *Game::get()
+{
+	return sInstance;
+}
+
+void	Game::tickAI(float deltaTime)
+{
+	if (ImGui::Button("Add balloon"))
+	{
+		GetBalloons().emplace_back(glm::vec2{9.5, 9.5});
+	}
+	recacheEnemies();
+	for (auto& It : mBalloons)
+		It.controller.tick(*It, deltaTime);
+}
+
+std::vector<glm::mat4> Game::Filter(SquareType type)
+{
+	std::vector<glm::mat4> Result;
+	auto& squares = mCollisionInfo.Squares;
+	for (int i = 0; i < squares.size(); i++)
+	{
+		glm::vec2 Position {i % mCollisionInfo.width, i / mCollisionInfo.width};
+		auto value = squares[i];
+		if (value == type)
+			Result.push_back(glm::translate(glm::mat4(1), glm::vec3{ Position.x + 0.5, 0, Position.y + 0.5}));
+	}
+	return Result;
+}
+
+void Game::recacheEnemies()
+{
+	mEnemies.clear();
+	mBalloons.erase(std::remove_if(mBalloons.begin(), mBalloons.end(), [](const MovingEntity *balloon){
+		return balloon->isDead();
+	}), mBalloons.end());
+
+	for (auto& It : mBalloons)
+		mEnemies.push_back(It);
+}
+
+std::vector<glm::mat4> Game::GetWallTransforms() {
+	return Filter(SquareType::Wall);
+}
+
+std::vector<glm::mat4> Game::GetBrickTransforms() {
+	return Filter(SquareType::Brick);
+}
+
+std::vector<glm::mat4> Game::GetBombTransforms() {
+	return Filter(SquareType::Bomb);
+}
+
+std::vector<glm::mat4> Game::GetBonusTransforms() {
+	return Filter(SquareType::Bonus);
+}
+
+MovingEntity& Game::GetHero()
+{
+	return *mHero;
+}
+
+std::vector<MovingEntity*>& Game::GetEnemies()
+{
+	return mEnemies;
+}
+
+std::vector<Game::Balloon>& Game::GetBalloons()
+{
+	return mBalloons;
 }

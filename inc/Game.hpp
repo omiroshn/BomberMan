@@ -1,12 +1,13 @@
 #ifndef BOMBERMAN_Game_HPP
 #define BOMBERMAN_Game_HPP
 #include <memory>
+#include "LogicCore/LoadMap.h"
 #include "GameWindow.hpp"
 #include "GraphicCore/Renderer.hpp"
 #include "InputManagement/InputManager.hpp"
 #include "InputManagement/KeyboardHandler.hpp"
-#include "LogicCore/MapForRendering.h"
 #include "Configure.hpp"
+#include "AI/Agent.h"
 
 class Game
 {
@@ -28,6 +29,8 @@ public:
     static bool    mIsRunning;
 
     void        explosion(glm::ivec2 position, uint32_t span);
+
+    static Game             *get();
 private:
 	void		resolveCollisions();
     void		doAction(Action const&);
@@ -42,10 +45,33 @@ private:
     static Uint64                    mTimeNow;
     static Uint64                    mTimeLast;
     static float                     mDeltaTime;
-	MapForRendering                  mMap;
 	static CollisionInfo			 mCollisionInfo;
     bool                             mIsPaused;
 	static float					 sInputAcceleration;
+	static Game					    *sInstance;
+
+	// Map for rendering
+	typedef Agent<MovingEntity, BalloonController> Balloon;
+public:
+	std::vector<glm::mat4>		GetWallTransforms();
+	std::vector<glm::mat4>		GetBrickTransforms();
+	std::vector<glm::mat4>		GetBombTransforms();
+	std::vector<glm::mat4>		GetBonusTransforms();
+	std::vector<MovingEntity*>&	GetEnemies();
+	std::vector<Balloon>&		GetBalloons();
+	MovingEntity&				GetHero();
+
+	void						tickAI(float deltaTime);
+
+private:
+
+	std::vector<Balloon>			mBalloons;
+
+	std::unique_ptr<MovingEntity>	mHero;
+	std::vector<MovingEntity*>		mEnemies;
+
+	std::vector<glm::mat4>		Filter(SquareType type);
+	void						recacheEnemies();
 };
 
 #endif //BOMBERMAN_Renderer_HPP

@@ -29,14 +29,34 @@ struct Instance
     glm::vec3 position;
 };
 
-class MapForRendering;
+
+class Game;
 class Renderer
 {
+	struct Vert
+	{
+		glm::vec3 pos;
+		glm::vec2 uv;
+	};
+	struct Quad {
+		Vert v[6];
+		Quad(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d)
+			:
+			v{
+				{a,{0,0}},
+				{b,{0,1}},
+				{c,{1,0}},
+				{c,{1,0}},
+				{b,{0,1}},
+				{d,{1,1}}
+			} {}
+	};
 public:
     Renderer();
     ~Renderer();
 
-    void draw(MapForRendering&);
+    void draw(Game&);
+    void drawQuad(Quad);
 
     Renderer(Renderer const &) = delete;
     Renderer &operator=(Renderer const &) = delete;
@@ -45,13 +65,16 @@ public:
     void updateSize(int x, int y);
 
 private:
-    void normalPass(MapForRendering&);
-    
+    void normalPass(Game&);
+    void drawShadow(glm::vec3 position);
+    void drawQuadsDeferred(glm::mat4 view, glm::mat4 projection);
     Camera mCamera;
     int mWidth, mHeight;
 	ptrPM mParticleManager;
-
-
+	
+	std::vector<Quad> mShadowQuads;
+	GLuint	mQuadsBuffer;
+	GLuint	mQuadsArray;
 
 };
 

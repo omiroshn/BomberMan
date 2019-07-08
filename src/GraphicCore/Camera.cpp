@@ -6,6 +6,8 @@
 #include "Entity/Entity.h"
 #include <iostream>
 #include "imgui.h"
+#include "Game.hpp"
+
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :
 mFront(glm::vec3(0.0f, 0.0f, -1.0f)), mMovementSpeed(SPEED), mMouseSensitivity(SENSITIVITY), mZoom(ZOOM),
 mPosition(position), mWorldUp(up), mYaw(yaw), mPitch(pitch)
@@ -19,14 +21,21 @@ glm::mat4 Camera::getViewMatrix()
     return mViewMatrix;
 }
 
-void Camera::followEntity(Entity &aTarget, float d)
+void Camera::followEntity(Entity &aTarget, float d, float deltaTime)
 {
 	static float zoom = 1;
-	ImGui::SliderFloat("Zoom", &zoom, 0.2f, 4.f);
+	static float cameraSpeed = 1;
+	ImGui::SliderFloat("Zoom", &zoom, 0.05f, 20.f);
+	ImGui::SliderFloat("CameraSpeed", &cameraSpeed, 0.05f, 20.f);
 	d *= zoom;
-    mPosition.x = aTarget.getPosition().x;
-	mPosition.y = d * 1.4f;
-    mPosition.z = aTarget.getPosition().y + d;
+	glm::vec3 desiredPosition{
+		 aTarget.getPosition().x,
+		 d * 1.4f,
+		 aTarget.getPosition().y + d
+	};
+	mPosition = glm::mix(mPosition, desiredPosition, deltaTime * cameraSpeed);
+	mPosition += mShakeAmount * glm::vec3{ glm::sin(Game::getCurrentTime() * 20),  glm::cos(Game::getCurrentTime() * 10), 0.4f };
+	mShakeAmount = glm::mix(mShakeAmount, 0.f, deltaTime * 3.5f);
     mViewMatrix = glm::lookAt(mPosition, aTarget.getPosition3D(), mUp);
 }
 void Camera::applyTransform()
@@ -34,7 +43,12 @@ void Camera::applyTransform()
     mViewMatrix = glm::lookAt(mPosition, mPosition + mFront, mUp);
 }
 
-void Camera::movaCamera(CameraDirection dir, float deltaTime)
+void Camera::addShake(float amount)
+{
+	mShakeAmount += amount;
+}
+
+void Camera::moveCamera(CameraDirection dir, float deltaTime)
 {
     float velocity = mMovementSpeed * deltaTime;
     if (dir == CameraDirection::FORWARD)

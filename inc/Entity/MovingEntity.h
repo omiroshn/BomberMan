@@ -19,20 +19,25 @@ public:
     Animation const& getAnimation() const;
 	void		debug();
 
-
 	static void	debugMovement();
 
 	/** Tickable interface */
 	void		tick(float DeltaTime = 0) override;
 
+public:
+	bool		isDead() const;
+	void		kill();
+
 private:
     void animate(float DeltaTime);
     void rotate(float DeltaTime);
 private:
-	glm::vec2 mVelocity;
-	glm::vec2 mAcceleration;
+	glm::vec2	mVelocity;
+	glm::vec2	mAcceleration;
+    Animation   mAnimation;
+	bool		mShouldDie;
+
 	static float _Friction;
 	static float _MaxVelocity;
 	static float _MaxAcceleration;
-    Animation    mAnimation;
 };

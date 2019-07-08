@@ -104,7 +104,6 @@ bool 			ParticleSystem::chekLiveTime() {
 		m_deltaTime = std::chrono::duration<float, std::milli>(currentTime - m_stepTime).count() / 1000;
 		m_stepTime = currentTime;
 		m_totalTime = std::chrono::duration<float, std::milli>(currentTime - m_startTime).count() / 1000 ;
-		//printf("m_deltaTime = %f, m_totalTime = %f", m_deltaTime, m_totalTime);
 	}
 	if (m_totalTime > m_liveTime && m_isRunning) {
 		m_totalTime = 0.0;

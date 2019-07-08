@@ -34,7 +34,7 @@ namespace bm {
 	Tickable::~Tickable()
 	{
 		const auto Predicate = [this](Tickable *element) { return element == this; };
-		auto It = std::remove_if(sTickables.begin(), sTickables.end(), Predicate);
+		auto It = sTickables.erase(std::remove_if(sTickables.begin(), sTickables.end(), Predicate), sTickables.end());
 		sTickables.erase(It, sTickables.end());
 	}
 

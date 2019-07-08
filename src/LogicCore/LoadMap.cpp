@@ -26,7 +26,7 @@ SquareType& CollisionInfo::operator[](glm::vec2 coords)
 	return operator[](glm::ivec2(coords.x, coords.y));
 }
 
-std::tuple<std::vector<SquareInstance*>, CollisionInfo> MapLoader::GetMap(const int index)
+CollisionInfo MapLoader::GetMap(const int index)
 {
 	if (index == -1)
 	{
@@ -34,7 +34,6 @@ std::tuple<std::vector<SquareInstance*>, CollisionInfo> MapLoader::GetMap(const 
 		mMapOfDigits = mapGenerator.GenerateNewMap();
 		mWidth = mapGenerator.GetWidth();
 		mHeight = mapGenerator.GetHeight();
-		ConvertDigitsToInstances();
 		mLoaded = true;
 	}
 	else if (index >= 0)
@@ -43,21 +42,13 @@ std::tuple<std::vector<SquareInstance*>, CollisionInfo> MapLoader::GetMap(const 
 		mMapOfDigits = mReaderWriter.LoadCampaignMap(index);
 		mWidth = mMapOfDigits.size() / 20;
 		mHeight = mMapOfDigits.size() / mWidth;
-		ConvertDigitsToInstances();
 		mLoaded = true;
 	}
-	return std::make_tuple(mMapOfInstances, CollisionInfo{ mMapOfDigits, mWidth });
+	return CollisionInfo{ mMapOfDigits, mWidth };
 }
 
 void MapLoader::cleanMapForRendering()
 {
-	for (int i = 0; i < mMapOfInstances.size(); i++)
-	{
-		if (mMapOfInstances[i])
-			delete mMapOfInstances[i];
-
-	}
-	mMapOfInstances.clear();
 	mMapOfDigits.clear();
 	mLoaded = false;
 }
@@ -72,27 +63,3 @@ bool MapLoader::MapIsLoaded()
 	return mLoaded;
 }
 
-void MapLoader::ConvertDigitsToInstances()
-{
-	unsigned size = mMapOfDigits.size();
-	mMapOfInstances.reserve(size);
-
-	for (unsigned i = 0; i < size; ++i)
-	{
-
-		unsigned y = i / mWidth;
-		unsigned x = i % mWidth;
-
-		//std::cout << "x = " << x << "     y = " << y << std::endl;
-		if ((unsigned)mMapOfDigits.at(i) == 1)
-		{
-			mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), SquareType::Wall));
-		}
-		else if ((unsigned)mMapOfDigits.at(i) == 2)
-		{
-			mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), SquareType::Brick));
-		}
-
-		mMapOfInstances.push_back(new SquareInstance(static_cast<float>(x), static_cast<float>(y), mMapOfDigits[i]));
-	}
-}

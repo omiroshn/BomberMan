@@ -4,7 +4,7 @@
 
 #include "Entity/Entity.h"
 
-enum class SquareType : unsigned char
+enum class SquareType : uint_fast8_t
 {
 	EmptySquare = 0,
 	Wall,
@@ -13,20 +13,6 @@ enum class SquareType : unsigned char
 	Bonus,
 	Hero,
 	Enemy
-};
-
-
-class SquareInstance : public Entity
-{
-public:
-	SquareInstance(float x, float y, SquareType type);
-	~SquareInstance();
-
-	SquareType GetType() const;
-	void       ChangeType(SquareType type);
-
-private:
-	SquareType mType = SquareType::EmptySquare;
 };
 
 #endif

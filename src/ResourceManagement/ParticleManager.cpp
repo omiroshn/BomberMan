@@ -139,7 +139,8 @@ void 			ParticleManager::draw(glm::mat4 const & projection, glm::mat4 const & vi
 {
 	for (auto & element : m_particleSystemMap) {
 		auto & ps = element.second;
-		if (ps->chekLiveTime()){
+		if (ps->isRunning())
+		{
 			auto trans = m_transformsMap.find(element.first);
 			if (trans != m_transformsMap.end()){
 				ps->drawGLContent(projection, view, trans->second);

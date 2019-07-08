@@ -27,16 +27,16 @@ class Entity;
 class Camera
 {
 public:
-
     Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = 0.f, float pitch = 0.f);
     glm::mat4 getViewMatrix();
-    void movaCamera(CameraDirection dir, float deltaTime);
+    void moveCamera(CameraDirection dir, float deltaTime);
     void processMouseMovement(float xoffset, float yoffset);
     void processMouseScroll(float zoomFactor);
+    void addShake(float amount);
 
     float zoom() const;
     glm::vec3 position() const;
-    void followEntity(Entity &, float d);
+    void followEntity(Entity &, float d, float deltaTime);
 private:
     void updateCameraVectors();
     void applyTransform();
@@ -50,6 +50,7 @@ private:
     glm::mat4 mViewMatrix;
     float mYaw;
     float mPitch;
+    float mShakeAmount;
 
     float mMovementSpeed;
     float mMouseSensitivity;

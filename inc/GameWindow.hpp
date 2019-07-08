@@ -3,8 +3,6 @@
 #include <GL/glew.h>
 #include <SDL.h>
 #include <Gui/Gui.h>
-#include "Core.hpp"
-#include "LogicCore/LoadMap.h"
 
 class GameWindow
 {
@@ -15,7 +13,6 @@ public:
     SDL_Event & getEvent();
 	void tickGui();
     void getSize(int &w, int &h);
-    std::vector<int> getSize();
     bool IsGameRunning();
     void ShowStartingMenu();
     void ShowInGameMenu();
