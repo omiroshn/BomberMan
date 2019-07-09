@@ -7,7 +7,7 @@
 
 struct CollisionInfo {
 	std::vector<SquareType> Squares;
-	unsigned				width;
+    unsigned				width{0};
 	SquareType& operator[](glm::ivec2);
 	SquareType& operator[](glm::vec2);
 };
@@ -24,9 +24,9 @@ public:
 
 private:
 	std::vector<SquareType>      mMapOfDigits;
-	bool                         mLoaded = false;
-	unsigned                     mWidth;
-	unsigned                     mHeight;
+    bool                         mLoaded{false};
+    unsigned                     mWidth;
+    unsigned                     mHeight;
 	Serialization                mReaderWriter;
 };
 
