@@ -301,10 +301,13 @@ void Game::loadResources()
 void Game::loadModels()
 {
     RESOURCES.loadModel("general/hero/model.fbx", "hero");
+    RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(.6f));
+
     RESOURCES.loadModel("map/first/ground/model.fbx", "ground");
     RESOURCES.loadModel("map/first/perimeterWall/model.fbx", "perimeterWall");
     RESOURCES.loadModel("map/first/unbreakableWall/model.fbx", "unbreakableWall", glm::vec3(1), glm::vec3(0),  glm::normalize(glm::vec3(1,0,0)), -90);
     RESOURCES.loadModel("map/first/breakableWall/model.fbx", "breakableWall", glm::vec3(0.9f));
+
     RESOURCES.loadModel("balloon/balloon.obj", "balloon");
 }
 
@@ -422,6 +425,10 @@ void	Game::tickAI(float deltaTime)
 	if (ImGui::Button("Add balloon"))
 	{
 		GetBalloons().emplace_back(glm::vec2{9.5, 9.5});
+	}
+    if (ImGui::Button("Add bomb"))
+	{
+		GetBombTransforms().emplace_back(GetHero().getModelMatrix());
 	}
 	recacheEnemies();
 	for (auto& It : mBalloons)

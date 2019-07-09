@@ -50,7 +50,7 @@ private:
     glm::mat4 mViewMatrix;
     float mYaw;
     float mPitch;
-    float mShakeAmount;
+    float mShakeAmount{.0f};
 
     float mMovementSpeed;
     float mMouseSensitivity;

@@ -69,6 +69,7 @@ void Renderer::normalPass(Game& aMap)
 
     static auto perimeterWall = RESOURCES.getModel("perimeterWall");
     static auto unbreakableWall = RESOURCES.getModel("unbreakableWall");
+    static auto bomb = RESOURCES.getModel("bomb");
 
     static auto balloon = RESOURCES.getModel("balloon");
     static auto ground = RESOURCES.getModel("ground");
@@ -88,9 +89,18 @@ void Renderer::normalPass(Game& aMap)
 
 
     std::vector<glm::mat4> transforms;
+    static float fake_timer = 0;
+    // render bombs
+    {
+        Animation a;
+        a.setTime(fake_timer);
+        auto bombTransforms = aMap.GetBrickTransforms();
+        bomb->setAnimation(a);
+		bomb->draw(modelShader, bombTransforms);
+        fake_timer += 0.01f;
+    }
 
     {
-
 	    auto& Hero = aMap.GetHero();
 	    Hero.debug();
 
@@ -120,11 +130,11 @@ void Renderer::normalPass(Game& aMap)
 		unbreakableWall->draw(modelShader, wallTransforms);
     }
 
-    // render the bricks
-    {
-        auto brickTransforms = aMap.GetBrickTransforms();
-        brick->draw(modelShader, brickTransforms);
-    }
+    //// render the bricks
+    //{
+    //    auto brickTransforms = aMap.GetBrickTransforms();
+    //    brick->draw(modelShader, brickTransforms);
+    //}
 
     // render the ground
     {
