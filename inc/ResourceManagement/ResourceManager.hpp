@@ -26,14 +26,14 @@ public:
 	static ResourceManager   &getInstance();
 	void setBinFolder(std::string const& aPath);
 	std::string const &getBinFolder() const;
-	std::shared_ptr<Shader>		loadShader(const GLchar *, const GLchar *, std::string const &);
+	void		loadShader(const GLchar *, const GLchar *, std::string const &);
 	std::shared_ptr<Shader>		getShader(std::string const &);
-	std::shared_ptr<Texture>	loadTexture(const GLchar *, std::string const &, std::string const &texType = "texture_diffuse");
+	void	loadTexture(const GLchar *, std::string const &, std::string const &texType = "texture_diffuse");
 	std::shared_ptr<Texture>	getTexture(std::string const &name);
 	void                		loadModel(const GLchar *, std::string const &, glm::vec3 scale = glm::vec3(1.0f), glm::vec3 offset = glm::vec3(.0f), glm::vec3 rotate = glm::vec3(.0f, 1.0f, .0f), float angle = .0f);
     std::shared_ptr<Model>		getModel(std::string const &name);
     std::shared_ptr<Texture>	loadTextureFromFile(const GLchar*, std::string const &, bool isModelTexture = false);
-    std::shared_ptr<Skybox>		loadSkybox(std::string const &);
+    void		loadSkybox(std::string const &);
     std::shared_ptr<Skybox>		getSkybox(std::string const &);
     void						clear();
 	ResourceManager(ResourceManager const &) = delete;

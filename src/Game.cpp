@@ -88,7 +88,7 @@ void Game::start()
                     const float TargetDelta = 0.0167f * (float)index;
 					float ms = TargetDelta - mDeltaTime;
                     if (mDeltaTime < TargetDelta)
-                        SDL_Delay(ms * 1000);
+                        SDL_Delay(static_cast<Uint32>(ms * 1000));
                 }
                 mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
                 mWindow->ShowInGameMenu();
@@ -178,8 +178,8 @@ void Game::resolveCollisions()
 	auto& Hero = GetHero();
     glm::vec2 CollisionOffset(0);
 	const glm::vec2 Position = Hero.getPosition();
-	static float radius = 0.24;
-    ImGui::SliderFloat("Collision radius", &radius, 0.05, 1);
+	static float radius = 0.24f;
+    ImGui::SliderFloat("Collision radius", &radius, 0.05f, 1.f);
     for (int i = 0; i < ARRAY_COUNT(offsets); i++)
     {
         glm::vec2 ProbePoint = Position + offsets[i];
@@ -270,7 +270,6 @@ void Game::loadResources()
 {
     try
     {
-        //RESOURCES.loadShader("sprite.vx.glsl", "sprite.ft.glsl", "sprite");
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
         RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");
 		RESOURCES.loadShader("sprite_p.vx.glsl", "sprite_p.ft.glsl", "sprite_p");
@@ -278,7 +277,6 @@ void Game::loadResources()
 		RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
 		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
 		RESOURCES.loadShader("shadowShader.vx.glsl", "shadowShader.ft.glsl", "shadow");
-        //RESOURCES.loadShader("quad.vx.glsl", "quad_shadow.ft.glsl", "shadow");
         RESOURCES.loadTexture("block.png", "block");
         RESOURCES.loadTexture("unlocked.png", "unlocked");
         RESOURCES.loadTexture("container.jpg", "container");
@@ -344,25 +342,24 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
     std::vector<glm::mat4> fireTransforms;
     std::vector<glm::mat4> brickTransforms;
     fireTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(centerPosition.x, 0, centerPosition.y)));
-
-    for (int i = 0; i < ARRAY_COUNT(directions); i++)
-    for (int j = 1; j <= span; ++j)
-    {
-        glm::vec2 testPosition = centerPosition + (float)j * directions[i];
-        auto& type = mCollisionInfo[testPosition];
-        if (type == SquareType::Wall)
-            break;
-
-        fireTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
-        minMax[i] += directions[i];
-
-        if (type == SquareType::Brick)
+    for (uint32_t i = 0; i < ARRAY_COUNT(directions); ++i)
+        for (uint32_t j = 1; j <= span; ++j)
         {
-            brickTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
-            type = SquareType::EmptySquare;
-            break;
+            glm::vec2 testPosition = centerPosition + (float)j * directions[i];
+            auto& type = mCollisionInfo[testPosition];
+            if (type == SquareType::Wall)
+                break;
+
+            fireTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
+            minMax[i] += directions[i];
+
+            if (type == SquareType::Brick)
+            {
+                brickTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
+                type = SquareType::EmptySquare;
+                break;
+            }
         }
-    }
 
     auto hMin = minMax[0];
     auto hMax = minMax[1];
@@ -371,15 +368,15 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 
     auto &enemies = GetEnemies();
     std::for_each(enemies.begin(), enemies.end(), [this, hMin, hMax, vMin, vMax](MovingEntity *entity) {
-        if (circle_box_collision(entity->getPosition() + glm::vec2(0.5), .3, hMin, hMax)
-        || circle_box_collision(entity->getPosition() + glm::vec2(0.5), .3, vMin, vMax))
+        if (circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, hMin, hMax)
+        || circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
             entity->kill();
     });
 
     mRenderer->getParticleManager()->startDrawPS(brickPool[which], brickTransforms);
     mRenderer->getParticleManager()->startDrawPS(bombPool[which], fireTransforms);
 	which = !which;
-	mRenderer->getCamera().addShake(0.2);
+	mRenderer->getCamera().addShake(0.2f);
 }
 
 void 		Game::saveCurrentState(std::string fileName)

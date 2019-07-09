@@ -2,7 +2,7 @@
 #include <tuple>
 #include <iostream>
 
-MapLoader::MapLoader()
+MapLoader::MapLoader() : mWidth{0}, mHeight{0}
 {
 
 }

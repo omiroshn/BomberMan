@@ -61,10 +61,9 @@ ResourceManager &ResourceManager::getInstance()
 	return manager;
 }
 
-std::shared_ptr<Shader> ResourceManager::loadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, std::string const &name)
+void ResourceManager::loadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, std::string const &name)
 {
     mShaders.emplace(name, loadShaderFromFile(std::string(mBinFolder + "shader/" + vShaderFile).c_str(), std::string(mBinFolder + "shader/" + fShaderFile).c_str()));
-	return mShaders[name];
 }
 
 std::shared_ptr<Shader> ResourceManager::getShader(std::string const &name)
@@ -75,10 +74,9 @@ std::shared_ptr<Shader> ResourceManager::getShader(std::string const &name)
 		throw CustomException("No such shader: \""  + name + "\"");
 }
 
-std::shared_ptr<Texture> ResourceManager::loadTexture(const GLchar *file, std::string const &name, std::string const &texType)
+void ResourceManager::loadTexture(const GLchar *file, std::string const &name, std::string const &texType)
 {
 	mTextures.emplace(name, loadTextureFromFile(std::string(mBinFolder + "img/" + file).c_str(), texType));
-	return mTextures[name];
 };
 
 std::shared_ptr<Texture> ResourceManager::getTexture(std::string const &name)
@@ -138,7 +136,7 @@ std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file
             format = GL_RED;
         else if (nrChannels == 3)
             format = GL_RGB;
-        else if (nrChannels == 4)
+        else
             format = GL_RGBA;
 
 		texture = std::make_shared<Texture>(Texture::getTextureTypeFromString(texType));
@@ -155,7 +153,7 @@ std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file
 	return texture;
 };
 
-std::shared_ptr<Skybox>		ResourceManager::loadSkybox(std::string const &aSkyboxName)
+void    ResourceManager::loadSkybox(std::string const &aSkyboxName)
 {
     std::shared_ptr<Skybox> skybox;
     try
@@ -168,7 +166,6 @@ std::shared_ptr<Skybox>		ResourceManager::loadSkybox(std::string const &aSkyboxN
     {
         throw CustomException("Something happened when loading skybox [" + std::string(aSkyboxName) + "]");
     }
-    return skybox;
 }
 
 std::shared_ptr<Skybox>		ResourceManager::getSkybox(std::string const &name)
