@@ -10,7 +10,9 @@ struct Exploding;
 class Bomb : public Entity
 {
 public:
-	Bomb(glm::vec2 pos) :Entity(pos){}
+	Bomb(glm::vec2 pos, int explosionStrength);
+	~Bomb();
+	int mExplosionStrength;
 	static const float FUSE_TIME;
 	static const float SPAWN_TIME;
 };
@@ -28,18 +30,10 @@ struct Spawning : public State {
 struct Counting : public State {
 	using State::transition;
 
-	bool transition(const Exploding&);
 	void onTick(Bomb& bomb, float DeltaTime);
 	void onEntry(Bomb& bomb);
 
 	float mTimeToExplode;
 };
 
-struct Exploding : public State {
-	void onTick(Bomb& bomb, float DeltaTime);
-	void onEntry(Bomb& bomb);
-
-	float mExplosionTime;
-};
-
-typedef SM<Bomb, Spawning, Counting, Exploding> BombSM;
+typedef SM<Bomb, Spawning, Counting> BombSM;

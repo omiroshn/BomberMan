@@ -10,7 +10,8 @@ Entity::Entity(glm::vec2 position, float angle) :
 	mPosition(position),
 	mScale(1),
 	mAngle(angle),
-	mUid(sEntity_counter++)
+	mUid(sEntity_counter++),
+	mShouldDie(false)
 {}
 
 
@@ -39,7 +40,7 @@ void Entity::move(glm::vec2 offset)
 /** calculates ModelMatrix with correct rotation end translation on the fly.(Doesn't store it, but we may add this later) */
 glm::mat4 Entity::getModelMatrix() const
 {
-	return glm::rotate(glm::translate(glm::mat4(mScale), glm::vec3(mPosition.x, 0, mPosition.y)), mAngle, glm::vec3(0,1,0));
+	return glm::scale(glm::rotate(glm::translate(glm::mat4(1), glm::vec3(mPosition.x, 0, mPosition.y)), mAngle, glm::vec3(0,1,0)), glm::vec3(mScale));
 }
 
 /** call it from anywhere in game loop, and you will have accessors for all major variables */

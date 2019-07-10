@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include <iostream>
 #include "Entity/MovingEntity.h"
+#include "Configure.hpp"
 
 Renderer::Renderer() :
     mCamera(glm::vec3(0.0f, 10.0f, -3.0f)),
@@ -127,12 +128,12 @@ void Renderer::normalPass(Game& aMap)
     static float fake_timer = 0;
     // render bombs
     {
-        //Animation a;
-        //a.setTime(fake_timer);
+        Animation a;
+        a.setTime(fake_timer);
         auto bombTransforms = aMap.GetBombTransforms();
-        //bomb->setAnimation(a);
+        bomb->setAnimation(a);
 		bomb->draw(modelShader, bombTransforms);
-        //fake_timer += 0.01f;
+        fake_timer += 0.01f;
     }
 
     {
