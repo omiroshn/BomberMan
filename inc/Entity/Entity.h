@@ -18,9 +18,11 @@ public:
 	glm::vec3	getPosition3D() const;
 	glm::mat4	getModelMatrix()const;
 	float		getAngle() const;
+	float		getScale() const;
 
 	void		setPosition(glm::vec2 position);
 	void		setAngle(float radians);
+	void		setScale(float value);
 
 	void		debug();
 
@@ -29,6 +31,9 @@ public:
 	float getY() const;
 	void  setX(float x);
 	void  setY(float y);
+
+protected:
+	float		mScale;
 
 private:
 	glm::vec2	mPosition;
