@@ -8,6 +8,7 @@
 #include "InputManagement/KeyboardHandler.hpp"
 #include "Configure.hpp"
 #include "AI/Agent.h"
+#include "Entity/Bomb.h"
 
 class Game
 {
@@ -51,7 +52,8 @@ private:
 	static Game					    *sInstance;
 
 	// Map for rendering
-	typedef Agent<MovingEntity, BalloonController> Balloon;
+	typedef Agent<MovingEntity, BalloonController>	Balloon;
+	typedef Agent<Bomb, BombSM>						BombAgent;
 public:
 	std::vector<glm::mat4>		GetWallTransforms();
 	std::vector<glm::mat4>		GetBrickTransforms();
@@ -66,6 +68,7 @@ public:
 private:
 
 	std::vector<Balloon>			mBalloons;
+	std::vector<BombAgent>			mBombs;
 
 	std::unique_ptr<MovingEntity>	mHero;
 	std::vector<MovingEntity*>		mEnemies;

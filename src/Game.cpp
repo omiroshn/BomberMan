@@ -230,7 +230,7 @@ void Game::doAction(Action const& a)
         if (mKeyHandler->isPressed(SDL_SCANCODE_S))
             Hero.AddAcceleration(glm::vec2(0, offset));
         if (mKeyHandler->isPressed(SDL_SCANCODE_0))
-            explosion(Hero.getPosition(), 10);
+			mBombs.emplace_back(Hero.getPosition());
     }
     { // joystick
         if (mKeyHandler->LeftJoystickIsActive()) {
@@ -422,7 +422,7 @@ void	Game::tickAI(float deltaTime)
 	}
     if (ImGui::Button("Add bomb"))
 	{
-		GetBombTransforms().emplace_back(GetHero().getModelMatrix());
+		mBombs.emplace_back(GetHero().getPosition());
 	}
 	recacheEnemies();
 	for (auto& It : mBalloons)
@@ -463,7 +463,12 @@ std::vector<glm::mat4> Game::GetBrickTransforms() {
 }
 
 std::vector<glm::mat4> Game::GetBombTransforms() {
-	return Filter(SquareType::Bomb);
+	std::vector<glm::mat4> Result;
+	for (Bomb* It : mBombs)
+	{
+		Result.push_back(It->getModelMatrix);
+	}
+	return Result;
 }
 
 std::vector<glm::mat4> Game::GetBonusTransforms() {

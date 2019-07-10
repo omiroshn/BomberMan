@@ -21,11 +21,13 @@ glm::vec2	Entity::getPosition() const				{ return mPosition; }
 glm::vec3   Entity::getPosition3D() const           { return glm::vec3(mPosition.x, 0, mPosition.y); }
 float		Entity::getAngle() const				{ return mAngle; }
 float		Entity::getScale() const				{ return mScale; }
+bool		Entity::isDead() const					{ return mShouldDie; }
 
 
 void		Entity::setPosition(glm::vec2 position)	{ mPosition = position; }
 void		Entity::setAngle(float radians)			{ mAngle = radians; }
 void		Entity::setScale(float value)			{ mScale = value; }
+void		Entity::kill()							{ mShouldDie = true; }
 
 
 /** changes the position of Entity by offset */

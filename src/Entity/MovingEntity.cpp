@@ -19,8 +19,7 @@ float angleBetween(glm::vec2 vec, glm::vec2 target)
 MovingEntity::MovingEntity(glm::vec2 position, float angle, glm::vec2 velocity, glm::vec2 acceleration) :
 	Entity(position, angle),
 	mVelocity(velocity),
-	mAcceleration(acceleration),
-	mShouldDie(false)
+	mAcceleration(acceleration)
 {}
 
 float MovingEntity::GetSpeed() const
@@ -123,12 +122,3 @@ Animation const& MovingEntity::getAnimation() const
     return mAnimation;
 }
 
-bool MovingEntity::isDead() const
-{
-	return mShouldDie;
-}
-
-void MovingEntity::kill()
-{
-	mShouldDie = true;
-}

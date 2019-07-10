@@ -19,10 +19,12 @@ public:
 	glm::mat4	getModelMatrix()const;
 	float		getAngle() const;
 	float		getScale() const;
+	bool		isDead() const;
 
 	void		setPosition(glm::vec2 position);
 	void		setAngle(float radians);
 	void		setScale(float value);
+	void		kill();
 
 	void		debug();
 
@@ -32,13 +34,12 @@ public:
 	void  setX(float x);
 	void  setY(float y);
 
-protected:
-	float		mScale;
-
 private:
 	glm::vec2	mPosition;
 	float		mAngle;
 	unsigned	mUid;
+	float		mScale;
+	bool		mShouldDie;
 
 	static unsigned sEntity_counter;
 };

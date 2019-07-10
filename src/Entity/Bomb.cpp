@@ -1,5 +1,6 @@
 #include "Entity/Bomb.h"
 #include "Game.hpp"
+//#include <glm/glm.hpp>
 
 const float Bomb::FUSE_TIME = 2.0f;
 const float Bomb::SPAWN_TIME = 0.5f;
@@ -41,11 +42,14 @@ void Counting::onEntry(Bomb& bomb)
 // EXPLODING
 void Exploding::onTick(Bomb& bomb, float DeltaTime)
 {
-
+	bomb.setScale(glm::mix(bomb.getScale(), 0.f, DeltaTime));
+	if ((Game::getCurrentTime() - mExplosionTime) > 0.5f)
+		bomb.kill();
 }
 
 void Exploding::onEntry(Bomb& bomb)
 {
-
+	mExplosionTime = Game::getCurrentTime();
+	Game::get()->explosion(bomb.getPosition(), 2);
 }
 
