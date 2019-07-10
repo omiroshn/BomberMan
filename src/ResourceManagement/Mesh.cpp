@@ -93,7 +93,7 @@ void	Mesh::setInstanceBuffer()
     glBindVertexArray(0);
 }
 
-void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> const & transforms)
+void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> const & transforms, glm::mat4 const & parentTransform)
 {
 	if (transforms.size() == 0)
 		return;
@@ -117,6 +117,7 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     shader->setBool("isAnimated", mIsAnimated);
+    shader->setMat4("parentTransform", parentTransform);
     if(mIsAnimated)
     {
         for (unsigned int i = 0; i < mBoneTransforms.size(); ++i)

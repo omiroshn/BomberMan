@@ -179,18 +179,13 @@ std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *ma
 }
 
 
-void Model::draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> & transforms)
+void Model::draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> const& transforms)
 {
-    for (auto &transform : transforms)
-    {
-        transform *= mTransFormMatrix;
-    }
-
     for(auto &mesh : mMeshes)
     {
         if (mAnimated)
             mesh->doAnimation();
-        mesh->draw(shader, transforms);
+        mesh->draw(shader, transforms, mTransFormMatrix);
     }
 }
 

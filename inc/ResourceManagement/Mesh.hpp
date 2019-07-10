@@ -39,7 +39,7 @@ public:
         std::map<std::string, unsigned int> bones,
         std::vector<glm::mat4> aOffsets,
         aiScene const *scene);
-    void                    draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> const& transforms);
+    void                    draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> const& transforms, glm::mat4 const & parentTransform);
     void                    doAnimation();
     void	                setAnimation(Animation const& anim);
     ~Mesh();
