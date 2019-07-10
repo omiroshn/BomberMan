@@ -21,7 +21,6 @@ out VS_OUT {
     vec3 TangentViewPos;
     vec3 TangentFragPos;
     vec4 FragPosLightSpace;
-    vec3 Normal;
 } vs_out;
 
 uniform mat4 view;
@@ -34,10 +33,11 @@ uniform vec3 lightPos;
 uniform vec3 viewPos;
 uniform mat4 lightSpaceMatrix;
 
+uniform mat4 parentTransform;
+
 void main()
 {
     mat4 transformModelMat;
-
     if (isAnimated)
     {
         mat4 boneTransform = boneTransforms[bonesID[0]] * weights[0];
@@ -45,11 +45,11 @@ void main()
         {
             boneTransform += boneTransforms[bonesID[i]] * weights[i];
         }
-        transformModelMat = modelsMatrix * boneTransform;
+        transformModelMat = modelsMatrix * parentTransform * boneTransform;
     }
     else
     {
-        transformModelMat = modelsMatrix;
+        transformModelMat = modelsMatrix * parentTransform;
     }
 
     gl_Position = projection * view * transformModelMat * vec4(aPos, 1.0);
@@ -67,5 +67,4 @@ void main()
     vs_out.TangentViewPos  = TBN * viewPos;
     vs_out.TangentFragPos  = TBN * vs_out.FragPos;
     vs_out.FragPosLightSpace = lightSpaceMatrix * vec4(vs_out.FragPos, 1.0);
-    vs_out.Normal = transpose(inverse(mat3(transformModelMat))) * aNormal;;
 }

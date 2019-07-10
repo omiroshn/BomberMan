@@ -14,6 +14,8 @@ uniform mat4 lightSpaceMatrix;
 uniform mat4 boneTransforms[MAX_BONES];
 uniform bool isAnimated;
 
+uniform mat4 parentTransform;
+
 void main()
 {
     mat4 transformModelMat;
@@ -22,9 +24,9 @@ void main()
         mat4 boneTransform = boneTransforms[bonesID[0]] * weights[0];
         for (int i = 1; i < MAX_WEIGHTS; ++i)
             boneTransform += boneTransforms[bonesID[i]] * weights[i];
-        transformModelMat = modelsMatrix * boneTransform;
+        transformModelMat = modelsMatrix * parentTransform * boneTransform;
     }
     else
-        transformModelMat = modelsMatrix;
+        transformModelMat = modelsMatrix * parentTransform;
     gl_Position = lightSpaceMatrix * transformModelMat * vec4(aPos, 1.0);
 }
