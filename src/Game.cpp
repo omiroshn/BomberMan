@@ -22,13 +22,10 @@ Game			*Game::sInstance = nullptr;
 
 namespace
 {
-    int const cDefaultScreenWidth = 2048;
-    int const cDefaultScreenHeight = 1024;
     std::string const cWindowName = "Bomberman";
 }
 
 Game::Game()
-	: mHero(std::make_unique<Hero>(Hero::SaveInfo()))
 {
 	mTimeNow = SDL_GetPerformanceCounter();
     
@@ -104,9 +101,13 @@ void Game::start()
                     mapLoader.cleanMapForRendering();
                     mCollisionInfo.Squares.clear();
                     mCollisionInfo = mapLoader.GetMap(CONFIGURATION.getChosenStage());
-					// we should store it somewhere! TODO: LIUDOK
-					Hero::SaveInfo info;
-					mHero = std::make_unique<Hero>(info);
+                    if (mHero)
+                    {
+    					Hero::SaveInfo info = mHero->getSaveInfo();
+					    mHero = std::make_unique<Hero>(info);
+                    }
+                    else
+                        mHero = std::make_unique<Hero>(Hero::SaveInfo(CONFIGURATION.getBombMax(), CONFIGURATION.getBombStrength()));
                     mStageStartedTimer = getCurrentTime();
                     mReloadStage = 0;
                     mIsPaused = false;
@@ -215,6 +216,9 @@ void Game::doAction(Action const& a)
             break;
         case Action::StageFinished:
             stageFinished();
+            break;
+        case Action::HeroDied:
+            onHeroDied();
             break;
         case Action::CameraRotate:
             float x,y;
@@ -411,6 +415,35 @@ void       Game::stageFinished()
     if (mStageTimer > 4)
         mStageStartedTimer = getCurrentTime();
     mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
+    cleanupOnStageChange();
+}
+
+void Game::onHeroDied()
+{
+    if (mReloadStage)
+        return;
+    if (CONFIGURATION.getLives() == 1)
+        gameOver();
+    else
+        CONFIGURATION.setLives(CONFIGURATION.getLives() - 1);
+    if (mStageTimer > 4)
+        mStageStartedTimer = getCurrentTime();
+    mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
+    Game::mReloadStage = true;
+    cleanupOnStageChange();
+}
+
+void Game::gameOver()
+{
+    CONFIGURATION.setLives(DefaultLives);
+    CONFIGURATION.setScore(DefaultScore);
+    CONFIGURATION.setChosenStage(DefaultChosenStage);
+}
+
+void  Game::cleanupOnStageChange()
+{
+    mBalloons.clear();
+    mBombs.clear();
 }
 
 Game *Game::get()

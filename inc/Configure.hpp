@@ -21,12 +21,14 @@
 int const DefaultScreenWidth = 960;
 int const DefaultScreenHeight = 640;
 int const DefaultChosenStage = 1;
-int const DefaultScore = 100;
+int const DefaultScore = 42;
 int const DefaultLives = 3;
 int const DefaultMusicVolume = 5;
 int const DefaultmSoundsVolume = 2;
 int const DefaultKeyBindVolume = 0;
 int const DefaultScreenResolution = 3;
+int const DefaultBombMax = 1;
+int const DefaultBombStrength = 1;
 bool const DefaultWindowed = false;
 
 class Configure
@@ -44,6 +46,8 @@ public:
 	int 			&getSoundVolume();
 	int 			&getKeyBindVolume();
 	int 			&getScreenResolution();
+	int             &getBombMax();
+	int             &getBombStrength();
 
 	void 			setWidth(int const w) ;
 	void 			setHeight(int const h);
@@ -56,6 +60,8 @@ public:
 	void 			setSoundsVolume(int const soundsVolume);
 	void 			setKeyBindVolume(int const keyBinding);
 	void 			setScreenResolution(int const screenResolution);
+	void            setBombMax(int const bombMax);
+	void            setBombStrength(int const bombStrength);
 
 	void 			serialise(std::string fileName  = "ConfigureFile");
 	void 			deserialise(std::string fileName  = "ConfigureFile");
@@ -82,7 +88,9 @@ public:
 		mMusicVolume,
 		mSoundsVolume,
 		mKeyBindVolume,
-		mScreenResolution);
+		mScreenResolution,
+		mBombMax,
+		mBombStrength);
 	}
 
 private:
@@ -91,11 +99,13 @@ private:
 	bool  			mWindowed;
 	int   			mChosenStage;
 	int   			mScore;
-	int  	 		mLives;
+	unsigned int  	mLives;
 	int   			mMusicVolume;
 	int   			mSoundsVolume;
 	int   			mKeyBindVolume;
 	int   			mScreenResolution;
+	int             mBombMax;
+	int             mBombStrength;
 
 	std::shared_ptr<GameWindow>      observableWindow;
 };

@@ -27,3 +27,8 @@ void Hero::tryPlaceBomb()
 	mLastTimePlacedBomb = time;
 	Game::get()->plantBomb(getPosition(), mBombStrength);
 }
+
+Hero::SaveInfo Hero::getSaveInfo()
+{
+	return SaveInfo(mBombMax, mBombStrength);
+}

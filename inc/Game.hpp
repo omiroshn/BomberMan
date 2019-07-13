@@ -23,6 +23,9 @@ public:
 	void 		loadStateFromFile(std::string fileName  = "ConfigureFile");
 	void 		applyWindowChange();
     void        stageFinished();
+	void        onHeroDied();
+	void        gameOver();
+	void        cleanupOnStageChange();
 
     static bool    mReloadStage;
     static float   mStageTimer;
