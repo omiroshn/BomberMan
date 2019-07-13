@@ -48,11 +48,12 @@ void Renderer::draw(Game& aMap)
 
 void Renderer::prepareTransforms(Game &g)
 {
-    mTransforms.clear();
-    std::vector<glm::mat4> transforms;
     mTransforms[ModelType::Brick] = g.GetBrickTransforms();
     mTransforms[ModelType::Wall] = g.GetWallTransforms();
+    mTransforms[ModelType::Bomb] = g.GetBombTransforms();
     mTransforms[ModelType::Player] = std::vector<glm::mat4>{g.GetHero().getModelMatrix()};
+
+    std::vector<glm::mat4> transforms;
     auto& Enemies = g.GetEnemies();
     for (auto It : Enemies)
         transforms.push_back(It->getModelMatrix());
@@ -68,12 +69,18 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
         RESOURCES.getModel("breakableWall"),
         RESOURCES.getModel("breakableWall")
     };
+    auto brick = bricks[mStage];
+
     static auto perimeterWall = RESOURCES.getModel("perimeterWall");
     static auto unbreakableWall = RESOURCES.getModel("unbreakableWall");
-    auto brick = bricks[mStage];
+    static auto bomb = RESOURCES.getModel("bomb");
 
     unbreakableWall->draw(s, mTransforms[ModelType::Wall]);
     brick->draw(s, mTransforms[ModelType::Brick]);
+    Animation a;
+    a.setTime(0);
+    bomb->setAnimation(a);
+    bomb->draw(s, mTransforms[ModelType::Bomb]);
 }
 
 void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
@@ -125,55 +132,8 @@ void Renderer::normalPass(Game& aMap)
 
     // render the ground
     std::vector<glm::mat4> transforms;
-    static float fake_timer = 0;
-    // render bombs
-    {
-        Animation a;
-        a.setTime(fake_timer);
-        auto bombTransforms = aMap.GetBombTransforms();
-        bomb->setAnimation(a);
-		bomb->draw(modelShader, bombTransforms);
-        fake_timer += 0.01f;
-    }
-
-    {
-        Animation a;
-        a.setTime(fake_timer);
-        auto brickTransforms = aMap.GetBrickTransforms();
-        brick->setAnimation(a);
-		brick->draw(modelShader, brickTransforms);
-        fake_timer += 0.01f;
-    }
-
-    {
-	    auto& Hero = aMap.GetHero();
-	    Hero.debug();
-
-	    transforms.push_back(Hero.getModelMatrix());
-	    heroModel->setAnimation(Hero.getAnimation());
-	    heroModel->draw(modelShader, transforms);
-	    glm::vec3 heroPosition = Hero.getPosition3D();
-	    drawShadow(heroPosition);
-    }
-    transforms.clear();
-
-    // render balloons aka enemies
-    {
-		auto& Enemies = aMap.GetEnemies();
-		for (auto It : Enemies)
-		{
-			transforms.push_back(It->getModelMatrix());
-			drawShadow(It->getPosition3D());
-		}
-		balloon->draw(modelShader, transforms);
-    }
-    transforms.clear();
-
-    // render the walls
-    {
-        auto wallTransforms = aMap.GetWallTransforms();
-		unbreakableWall->draw(modelShader, wallTransforms);
-    }
+    glm::mat4 groundModel = glm::mat4(1.0f);
+    groundModel = glm::translate(groundModel, glm::vec3(.0f, -1.f, .0f));
 
     CollisionInfo &info = Game::getCollisionInfo();
     for (int i = 0; i < info.Squares.size(); i++)

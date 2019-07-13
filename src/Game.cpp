@@ -300,7 +300,7 @@ void Game::loadResources()
 void Game::loadModels()
 {
     RESOURCES.loadModel("general/hero/model.fbx", "hero");
-    RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(.6f));
+    RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(1.3f), glm::vec3{0,-0.4f,0});
 
     RESOURCES.loadModel("map/first/ground/model.fbx", "ground");
     RESOURCES.loadModel("map/first/perimeterWall/model.fbx", "perimeterWall");
@@ -470,9 +470,9 @@ std::vector<glm::mat4> Game::GetBrickTransforms() {
 std::vector<glm::mat4> Game::GetBombTransforms() {
 	std::vector<glm::mat4> Result;
 	for (Bomb* It : mBombs)
-	{
+    {
 		Result.push_back(It->getModelMatrix());
-	}
+    }
 	return Result;
 }
 
