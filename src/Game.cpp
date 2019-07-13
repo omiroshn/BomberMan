@@ -11,6 +11,7 @@
 
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
+float			Game::mTimeCorrection;
 float			Game::mDeltaTime;
 CollisionInfo	Game::mCollisionInfo;
 bool            Game::mReloadStage = true;
@@ -129,12 +130,19 @@ void Game::pause()
 
 float Game::getCurrentTime()
 {
-	return mTimeNow / static_cast<float>(SDL_GetPerformanceFrequency());
+	return mTimeNow / static_cast<float>(SDL_GetPerformanceFrequency()) - mTimeCorrection;
 }
 
 CollisionInfo& Game::getCollisionInfo()
 {
 	return mCollisionInfo;
+}
+
+bool circle_circle_collision(glm::vec2 a, float radiusA, glm::vec2 b, float radiusB)
+{
+    glm::vec2 CollisionDirection = a - b;
+    float distance = glm::length(CollisionDirection);
+    return distance < (radiusA + radiusB);
 }
 
 bool circle_box_collision(glm::vec2 position, float radius, glm::vec2 min, glm::vec2 max, glm::vec2 *resolutionOffset = NULL)
@@ -165,6 +173,9 @@ bool circle_box_collision(glm::vec2 position, float radius, glm::vec2 min, glm::
 
 void Game::resolveCollisions()
 {
+    static float CollisionResolveMultiplier = 350.f;
+    ImGui::SliderFloat("CollisionResolveMultiplier", &CollisionResolveMultiplier, 100, 1000);
+
 	glm::vec2 offsets[] = {
 		{-1, -1},
 		{1, -1},
@@ -192,9 +203,18 @@ void Game::resolveCollisions()
             CollisionOffset += ResolutionOffset;
     }
 
-    // Hero.move(CollisionOffset);
-    static float CollisionResolveMultiplier = 350.f;
-    ImGui::SliderFloat("CollisionResolveMultiplier", &CollisionResolveMultiplier, 100, 1000);
+    for (MovingEntity* It : mBalloons)
+    {
+        if (circle_circle_collision(Hero.getPosition(), radius, It->getPosition(), radius))
+            stageFinished();
+        glm::vec2 ProbePoint = Position;
+        if (mCollisionInfo[ProbePoint] == SquareType::Bomb)
+        {
+            glm::vec2 center = glm::floor(ProbePoint) + glm::vec2(0.5f);
+            It->AddAcceleration(glm::normalize(ProbePoint - center) * CollisionResolveMultiplier);
+        }
+    }
+    Hero.move(CollisionOffset / 4.f);
     Hero.AddAcceleration(CollisionOffset * CollisionResolveMultiplier);
 	mRenderer->getCamera().followEntity(GetHero(), 10.f, mDeltaTime);
 }
@@ -204,7 +224,7 @@ void Game::doAction(Action const& a)
     auto& Hero = GetHero();
     ImGui::SliderFloat("Input Hero acceleration", &sInputAcceleration, 0, 10000);
 	const float offset  = mDeltaTime * sInputAcceleration;
-    
+
     switch (a)
     {
         case Action::Finish:
@@ -260,12 +280,20 @@ void Game::doAction(Action const& a)
 
 void Game::calcDeltaTime()
 {
+    static float SpeedOfTime = 1.f;
+    ImGui::SliderFloat("Spee of time", &SpeedOfTime, 0.0001f, 2.f);
     mTimeLast = mTimeNow;
     mTimeNow = SDL_GetPerformanceCounter();
 
 	mDeltaTime = (mTimeNow - mTimeLast) / static_cast<float>(SDL_GetPerformanceFrequency());
 	if (mDeltaTime > 1.f)
 		mDeltaTime = 0.016f;
+    if (SpeedOfTime != 1.f)
+    {
+        float newDelta = mDeltaTime * SpeedOfTime;
+        mTimeCorrection += mDeltaTime - newDelta;
+        mDeltaTime = newDelta;
+    }
 	ImGui::Text("Current time: %f", getCurrentTime());
 	ImGui::Text("Delta time: %f", mDeltaTime);
 }
@@ -334,22 +362,36 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
         {0, 1}
     };
 
-    glm::ivec2 minMax[] = {
-        position,
-        position + glm::ivec2(1),
-        position,
-        position + glm::ivec2(1)
+    struct Overlaper
+    {
+        glm::vec2 point[4];
+        Overlaper(glm::ivec2 position) : point{
+            position,
+            position + glm::ivec2(1),
+            position,
+            position + glm::ivec2(1)
+        } {}
+        glm::ivec2 operator[](int i) {
+            return point[i];
+        };
     };
+
+    std::vector<Overlaper> overlaps;
 
     glm::vec2 centerPosition = glm::vec2(position) + glm::vec2(0.5f);
 
     std::vector<glm::mat4> fireTransforms;
     std::vector<glm::mat4> brickTransforms;
     fireTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(centerPosition.x, 0, centerPosition.y)));
+
+    std::vector<SquareType*> deferedBricks;
+
+std::function<void (uint32_t, glm::vec2)> chainReaction = [&] (uint32_t skipped, glm::vec2 center) {
+    Overlaper minMax(center);
     for (uint32_t i = 0; i < ARRAY_COUNT(directions); ++i)
         for (uint32_t j = 1; j <= span; ++j)
         {
-            glm::vec2 testPosition = centerPosition + (float)j * directions[i];
+            glm::vec2 testPosition = center + (float)j * directions[i];
             auto& type = mCollisionInfo[testPosition];
             if (type == SquareType::Wall)
                 break;
@@ -360,21 +402,36 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
             if (type == SquareType::Brick)
             {
                 brickTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
-                type = SquareType::EmptySquare;
+                deferedBricks.push_back(&type);
                 break;
             }
-        }
 
-    auto hMin = minMax[0];
-    auto hMax = minMax[1];
-    auto vMin = minMax[2];
-    auto vMax = minMax[3];
+            if (type == SquareType::Bomb)
+            {
+                type = SquareType::EmptySquare;
+                chainReaction(i, testPosition);
+                for (Entity* It : mBombs)
+                    if (testPosition == It->getPosition())
+                        It->kill();
+            }
+        }
+    overlaps.push_back(minMax);
+};
+    chainReaction(-1, centerPosition);
+    for (auto It : deferedBricks)
+        *It = SquareType::EmptySquare;
 
     auto &enemies = GetEnemies();
-    std::for_each(enemies.begin(), enemies.end(), [this, hMin, hMax, vMin, vMax](MovingEntity *entity) {
-        if (circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, hMin, hMax)
-        || circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
-            entity->kill();
+    std::for_each(overlaps.begin(), overlaps.end(), [&enemies](Overlaper &overlap) {
+        auto hMin = overlap[0];
+        auto hMax = overlap[1];
+        auto vMin = overlap[2];
+        auto vMax = overlap[3];
+
+        std::for_each(enemies.begin(), enemies.end(), [hMin, hMax, vMin, vMax](MovingEntity *entity) {
+            if (circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, hMin, hMax) || circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
+                entity->kill();
+        });
     });
 
     mRenderer->getParticleManager()->startDrawPS(brickPool[which], brickTransforms);

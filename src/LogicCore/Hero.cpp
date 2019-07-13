@@ -32,3 +32,8 @@ Hero::SaveInfo Hero::getSaveInfo()
 {
 	return SaveInfo(mBombMax, mBombStrength);
 }
+
+void Hero::kill()
+{
+	Game::get()->stageFinished();
+}

@@ -49,6 +49,7 @@ private:
     static Uint64                    mTimeNow;
     static Uint64                    mTimeLast;
     static float                     mDeltaTime;
+    static float                     mTimeCorrection;
 	static CollisionInfo			 mCollisionInfo;
     bool                             mIsPaused;
 	static float					 sInputAcceleration;
