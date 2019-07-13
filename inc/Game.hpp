@@ -6,8 +6,9 @@
 #include "GraphicCore/Renderer.hpp"
 #include "InputManagement/InputManager.hpp"
 #include "InputManagement/KeyboardHandler.hpp"
-#include "Configure.hpp"
 #include "AI/Agent.h"
+#include "Entity/Bomb.h"
+#include "LogicCore/Hero.h"
 
 class Game
 {
@@ -51,7 +52,8 @@ private:
 	static Game					    *sInstance;
 
 	// Map for rendering
-	typedef Agent<MovingEntity, BalloonController> Balloon;
+	typedef Agent<MovingEntity, BalloonController>	Balloon;
+	typedef Agent<Bomb, BombSM>						BombAgent;
 public:
 	std::vector<glm::mat4>		GetWallTransforms();
 	std::vector<glm::mat4>		GetBrickTransforms();
@@ -59,15 +61,18 @@ public:
 	std::vector<glm::mat4>		GetBonusTransforms();
 	std::vector<MovingEntity*>&	GetEnemies();
 	std::vector<Balloon>&		GetBalloons();
-	MovingEntity&				GetHero();
+	Hero&						GetHero();
+
+	void						plantBomb(glm::vec2 position, int strength);
 
 	void						tickAI(float deltaTime);
 
 private:
 
 	std::vector<Balloon>			mBalloons;
+	std::vector<BombAgent>			mBombs;
 
-	std::unique_ptr<MovingEntity>	mHero;
+	std::unique_ptr<Hero>			mHero;
 	std::vector<MovingEntity*>		mEnemies;
 
 	std::vector<glm::mat4>		Filter(SquareType type);

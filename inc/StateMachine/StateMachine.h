@@ -42,12 +42,6 @@ public:
 		dispatchTransitions(owner);
 	}
 
-	template <typename T>
-	void setState()
-	{
-		setStateImpl<T, 0, Ts...>();
-	}
-
 private:
 	std::tuple<Ts...>	m_States;
 	unsigned char		m_CurrentState;
@@ -81,20 +75,6 @@ private:
 		std::get<N>(m_States).uid = N;
 		if constexpr (sizeof...(Args) > 0)
 			setStateIds<N + 1, Args...>();
-	}
-
-	template <typename T, unsigned char N, typename A, typename... Args>
-	void setStateImpl()
-	{
-		if (std::is_same<T, A>())
-		{
-			m_CurrentState = N;
-			return;
-		}
-		if constexpr (sizeof...(Args) > 0)
-			return setStateImpl<T, N + 1, Args...>();
-		else
-			BM_CRITICAL("setState<>() used with inapropriate state.");
 	}
 
 	template <unsigned char N, typename T, typename... Args>

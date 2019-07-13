@@ -12,24 +12,19 @@
 
 #include "LogicCore/TimerManager.h"
 
-TimerManager *TimerManager::sInstance = nullptr;
+void TimerManager::tick(float DeltaTime)
+{
+	Update();
+}
 
-TimerManager *TimerManager::Instance() {
-
-	if (sInstance == nullptr)
-		sInstance = new TimerManager();
-
-	return sInstance;
+TimerManager *TimerManager::Instance()
+{
+	static TimerManager sInstance;
+	return &sInstance;
 }
 
 TimerManager::TimerManager() {}
 TimerManager::~TimerManager() {}
-
-void TimerManager::Release()
-{
-	delete sInstance;
-	sInstance = nullptr;
-}
 
 void TimerManager::Update() {
 	for (auto& it : v)

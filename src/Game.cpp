@@ -7,6 +7,7 @@
 #include "AI/AIController.h"
 #include "LogicCore/Timer.h"
 #include "LogicCore/TimerManager.h"
+#include "Configure.hpp"
 
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
@@ -27,7 +28,7 @@ namespace
 }
 
 Game::Game()
-	: mHero(std::make_unique<MovingEntity>(glm::vec2{1.5, 1.5}))
+	: mHero(std::make_unique<Hero>(Hero::SaveInfo()))
 {
 	mTimeNow = SDL_GetPerformanceCounter();
     
@@ -39,7 +40,6 @@ Game::Game()
 	mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
     mKeyHandler = std::make_unique<KeyboardHandler>();
-    // timerManager = TimerManager::Instance();
     loadResources();
 
     sInstance = this;
@@ -55,11 +55,8 @@ void Game::start()
     MapLoader mapLoader;
     int width, height;
     mStageStartedTimer = getCurrentTime();
-    // auto lambda1 = []() { std::cout << ":)" << std::endl; };
-    // timerManager->AddTimer(1, false, lambda1);
     while (mIsRunning)
     {
-        // timerManager->Update();
         mWindow->tickGui();
         mWindow->getSize(width, height);
         calcDeltaTime();
@@ -76,8 +73,8 @@ void Game::start()
             {
                 tickAI(mDeltaTime);
                 MovingEntity::debugMovement();
-                Tickable::tickTickables(mDeltaTime);
                 resolveCollisions();
+                Tickable::tickTickables(mDeltaTime);
                 mRenderer->draw(*this);
                 static int index = 0;
                 ImGui::RadioButton("NO VSync", &index, 0);
@@ -107,6 +104,9 @@ void Game::start()
                     mapLoader.cleanMapForRendering();
                     mCollisionInfo.Squares.clear();
                     mCollisionInfo = mapLoader.GetMap(CONFIGURATION.getChosenStage());
+					// we should store it somewhere! TODO: LIUDOK
+					Hero::SaveInfo info;
+					mHero = std::make_unique<Hero>(info);
                     mStageStartedTimer = getCurrentTime();
                     mReloadStage = 0;
                     mIsPaused = false;
@@ -233,8 +233,8 @@ void Game::doAction(Action const& a)
             Hero.AddAcceleration(glm::vec2(-offset, 0));
         if (mKeyHandler->isPressed(SDL_SCANCODE_S))
             Hero.AddAcceleration(glm::vec2(0, offset));
-        if (mKeyHandler->isPressed(SDL_SCANCODE_0))
-            explosion(Hero.getPosition(), 10);
+		if (mKeyHandler->isPressed(SDL_SCANCODE_0))
+			Hero.tryPlaceBomb();
     }
     { // joystick
         if (mKeyHandler->LeftJoystickIsActive()) {
@@ -247,10 +247,10 @@ void Game::doAction(Action const& a)
             );
             Hero.AddAcceleration(normalizedJoystick * offset);
         }
-        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
-            explosion(Hero.getPosition(), 10);
         if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_A))
             pause();
+        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
+			Hero.tryPlaceBomb();
     }
 }
 
@@ -300,7 +300,7 @@ void Game::loadResources()
 void Game::loadModels()
 {
     RESOURCES.loadModel("general/hero/model.fbx", "hero");
-    RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(.6f));
+    RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(1.3f), glm::vec3{0,-0.4f,0});
 
     RESOURCES.loadModel("map/first/ground/model.fbx", "ground");
     RESOURCES.loadModel("map/first/perimeterWall/model.fbx", "perimeterWall");
@@ -424,12 +424,10 @@ void	Game::tickAI(float deltaTime)
 	{
 		GetBalloons().emplace_back(glm::vec2{9.5, 9.5});
 	}
-    if (ImGui::Button("Add bomb"))
-	{
-		GetBombTransforms().emplace_back(GetHero().getModelMatrix());
-	}
 	recacheEnemies();
 	for (auto& It : mBalloons)
+		It.controller.tick(*It, deltaTime);
+	for (auto& It : mBombs)
 		It.controller.tick(*It, deltaTime);
 }
 
@@ -453,6 +451,9 @@ void Game::recacheEnemies()
 	mBalloons.erase(std::remove_if(mBalloons.begin(), mBalloons.end(), [](const MovingEntity *balloon){
 		return balloon->isDead();
 	}), mBalloons.end());
+	mBombs.erase(std::remove_if(mBombs.begin(), mBombs.end(), [](const Bomb *bomb){
+		return bomb->isDead();
+	}), mBombs.end());
 
 	for (auto& It : mBalloons)
 		mEnemies.push_back(It);
@@ -467,16 +468,26 @@ std::vector<glm::mat4> Game::GetBrickTransforms() {
 }
 
 std::vector<glm::mat4> Game::GetBombTransforms() {
-	return Filter(SquareType::Bomb);
+	std::vector<glm::mat4> Result;
+	for (Bomb* It : mBombs)
+    {
+		Result.push_back(It->getModelMatrix());
+    }
+	return Result;
 }
 
 std::vector<glm::mat4> Game::GetBonusTransforms() {
 	return Filter(SquareType::Bonus);
 }
 
-MovingEntity& Game::GetHero()
+Hero& Game::GetHero()
 {
 	return *mHero;
+}
+
+void Game::plantBomb(glm::vec2 position, int strength)
+{
+	mBombs.emplace_back(position, strength);
 }
 
 std::vector<MovingEntity*>& Game::GetEnemies()

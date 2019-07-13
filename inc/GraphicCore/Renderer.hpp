@@ -15,24 +15,21 @@
 #include "GraphicCore/LightManager.hpp"
 
 typedef std::unique_ptr<ParticleManager> ptrPM;
-enum class ModelType
-{
-    Wall = 0,
-    Brick,
-    Player,
-    EnemyType1,
-    EnemyType2,
-    EnemyType3,
-    Bonus,
-    Bomb,
-    Perimeter
-};
-
-struct Instance
-{
-    ModelType t;
-    glm::vec3 position;
-};
+namespace ModelType{
+    enum 
+    {
+        Wall = 0,
+        Brick,
+        Player,
+        EnemyType1,
+        EnemyType2,
+        EnemyType3,
+        Bonus,
+        Bomb,
+        Perimeter,
+        MAX
+    };
+}
 
 class Game;
 class LightManager;
@@ -70,7 +67,7 @@ public:
     void updateSize(int x, int y);
 
 private:
-    std::unordered_map<ModelType, std::vector<glm::mat4>> mTransforms;
+    std::vector<glm::mat4> mTransforms[ModelType::MAX];
     void normalPass(Game&);
     void shadowPass(Game&);
     void drawShadow(glm::vec3 position);

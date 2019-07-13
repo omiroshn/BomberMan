@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include <iostream>
 #include "Entity/MovingEntity.h"
+#include "Configure.hpp"
 
 Renderer::Renderer() :
     mCamera(glm::vec3(0.0f, 10.0f, -3.0f)),
@@ -47,11 +48,12 @@ void Renderer::draw(Game& aMap)
 
 void Renderer::prepareTransforms(Game &g)
 {
-    mTransforms.clear();
-    std::vector<glm::mat4> transforms;
     mTransforms[ModelType::Brick] = g.GetBrickTransforms();
     mTransforms[ModelType::Wall] = g.GetWallTransforms();
+    mTransforms[ModelType::Bomb] = g.GetBombTransforms();
     mTransforms[ModelType::Player] = std::vector<glm::mat4>{g.GetHero().getModelMatrix()};
+
+    std::vector<glm::mat4> transforms;
     auto& Enemies = g.GetEnemies();
     for (auto It : Enemies)
         transforms.push_back(It->getModelMatrix());
@@ -67,12 +69,18 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
         RESOURCES.getModel("breakableWall"),
         RESOURCES.getModel("breakableWall")
     };
+    auto brick = bricks[mStage];
+
     static auto perimeterWall = RESOURCES.getModel("perimeterWall");
     static auto unbreakableWall = RESOURCES.getModel("unbreakableWall");
-    auto brick = bricks[mStage];
+    static auto bomb = RESOURCES.getModel("bomb");
 
     unbreakableWall->draw(s, mTransforms[ModelType::Wall]);
     brick->draw(s, mTransforms[ModelType::Brick]);
+    Animation a;
+    a.setTime(0);
+    bomb->setAnimation(a);
+    bomb->draw(s, mTransforms[ModelType::Bomb]);
 }
 
 void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)

@@ -18,9 +18,13 @@ public:
 	glm::vec3	getPosition3D() const;
 	glm::mat4	getModelMatrix()const;
 	float		getAngle() const;
+	float		getScale() const;
+	bool		isDead() const;
 
 	void		setPosition(glm::vec2 position);
 	void		setAngle(float radians);
+	void		setScale(float value);
+	void		kill();
 
 	void		debug();
 
@@ -34,6 +38,8 @@ private:
 	glm::vec2	mPosition;
 	float		mAngle;
 	unsigned	mUid;
+	float		mScale;
+	bool		mShouldDie;
 
 	static unsigned sEntity_counter;
 };
