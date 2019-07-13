@@ -5,12 +5,14 @@ Bomb::Bomb(glm::vec2 pos, int explosionStrength)
 	: Entity(glm::floor(pos) + glm::vec2{0.5f})
 	, mExplosionStrength(explosionStrength)
 {
-	
+	Game::getCollisionInfo()[getPosition()] = SquareType::Bomb;
 }
 
 Bomb::~Bomb()
 {
-	Game::get()->GetHero().increaseBombCount();
+	if (auto *hero = &Game::get()->GetHero())
+		hero->increaseBombCount();
+	Game::getCollisionInfo()[getPosition()] = SquareType::EmptySquare;
 }
 
 const float Bomb::FUSE_TIME = 3.0f;

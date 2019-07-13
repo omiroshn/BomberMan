@@ -18,7 +18,7 @@ namespace
 
 	glm::vec2 closestCenter(glm::vec2 position)
 	{
-		return (glm::floor(position) + glm::ceil(position)) / 2.f;
+		return glm::floor(position) + glm::vec2(0.5f);
 	}
 
 	glm::vec2 directionToVector(EDirection dir)

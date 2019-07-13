@@ -32,4 +32,5 @@ public:
 	void tryPlaceBomb();
 
 	SaveInfo getSaveInfo();
+	void kill();
 };
