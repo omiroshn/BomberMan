@@ -30,7 +30,9 @@ Configure::Configure():mWindowWidth(DefaultScreenWidth),
 						mMusicVolume(DefaultMusicVolume),
 						mSoundsVolume(DefaultmSoundsVolume),
 						mKeyBindVolume(DefaultKeyBindVolume),
-						mScreenResolution(DefaultScreenResolution)
+						mScreenResolution(DefaultScreenResolution),
+						mBombMax(DefaultBombMax),
+						mBombStrength(DefaultBombStrength)
 {
 
 }
@@ -91,6 +93,16 @@ int 			&Configure::getScreenResolution()
 	return mScreenResolution;
 }
 
+int             &Configure::getBombMax()
+{
+	return mBombMax;
+}
+
+int             &Configure::getBombStrength()
+{
+	return mBombStrength;
+}
+
 void 			Configure::setSize(int const w, int const h)
 {
 	setWidth(w);
@@ -146,6 +158,16 @@ void 			Configure::setKeyBindVolume(int const keyBindVolume)
 void 			Configure::setScreenResolution(int const screenResolution)
 {
 	mScreenResolution = screenResolution;
+}
+
+void            Configure::setBombMax(int const bombMax)
+{
+	mBombMax = bombMax;
+}
+
+void            Configure::setBombStrength(int const bombStrength)
+{
+	mBombStrength = bombStrength;
 }
 
 void 			Configure::serialise(std::string fileName)

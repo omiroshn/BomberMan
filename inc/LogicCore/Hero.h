@@ -5,15 +5,20 @@
 
 class Hero : public MovingEntity
 {
-	int mCurrentBombCount;
+	int mCurrentBombCount = 1;
 
-	int mBombMax;
-	int mBombStrength;
+	int mBombMax = 1;
+	int mBombStrength = 1;
 
 	float mLastTimePlacedBomb;
 public:
 	struct SaveInfo
 	{
+		SaveInfo(int i_bombMax, int i_bombStrength)
+		: bombMax(i_bombMax)
+		, bombStrength(i_bombStrength)
+		{}
+		
 		int bombMax = 1;
 		int bombStrength = 1;
 	};
@@ -25,4 +30,6 @@ public:
 	void increaseBombCount();
 
 	void tryPlaceBomb();
+
+	SaveInfo getSaveInfo();
 };

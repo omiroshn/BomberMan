@@ -13,6 +13,7 @@ enum class Action
     Finish,
     Pause,
     StageFinished,
+    HeroDied,
     Forward,
     Backward,
     Up,
