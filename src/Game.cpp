@@ -206,7 +206,7 @@ void Game::resolveCollisions()
     for (MovingEntity* It : mBalloons)
     {
         if (circle_circle_collision(Hero.getPosition(), radius, It->getPosition(), radius))
-            stageFinished();
+            Hero.kill();
         glm::vec2 ProbePoint = Position;
         if (mCollisionInfo[ProbePoint] == SquareType::Bomb)
         {

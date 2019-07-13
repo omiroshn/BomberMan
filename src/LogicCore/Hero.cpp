@@ -35,5 +35,5 @@ Hero::SaveInfo Hero::getSaveInfo()
 
 void Hero::kill()
 {
-	Game::get()->stageFinished();
+	Game::get()->onHeroDied();
 }
