@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
+#include "ResourceManagement/MusicPlayer.hpp"
 #include "ResourceManagement/Model.hpp"
 #include "Core.hpp"
 #include "Entity/MovingEntity.h"
@@ -28,7 +29,7 @@ namespace
 Game::Game()
 {
 	mTimeNow = SDL_GetPerformanceCounter();
-    
+
 	loadStateFromFile();
     mWindow = std::make_shared<GameWindow>(CONFIGURATION.getWidth(), CONFIGURATION.getHeight(), cWindowName);
 	mWindow->setFullScreen(CONFIGURATION.getWindowed());
@@ -38,6 +39,7 @@ Game::Game()
     mIManager = std::make_unique<InputManager>();
     mKeyHandler = std::make_unique<KeyboardHandler>();
     loadResources();
+	MUSIC_PLAYER.initLoad();
 
     sInstance = this;
 }
@@ -63,6 +65,7 @@ void Game::start()
         if (!mWindow.get()->IsGameRunning())
         {
             mWindow.get()->ShowStartingMenu();
+			MUSIC_PLAYER.playMusicInfinity("tango");
         }
         else
         {
@@ -204,7 +207,7 @@ void Game::doAction(Action const& a)
     auto& Hero = GetHero();
     ImGui::SliderFloat("Input Hero acceleration", &sInputAcceleration, 0, 10000);
 	const float offset  = mDeltaTime * sInputAcceleration;
-    
+
     switch (a)
     {
         case Action::Finish:
@@ -239,6 +242,15 @@ void Game::doAction(Action const& a)
             Hero.AddAcceleration(glm::vec2(0, offset));
 		if (mKeyHandler->isPressed(SDL_SCANCODE_0))
 			Hero.tryPlaceBomb();
+		//MusicPlayer testing
+		if (mKeyHandler->isPressed(SDL_SCANCODE_5))
+			MUSIC_PLAYER.playMusicInfinity("candyman");
+		if (mKeyHandler->isPressed(SDL_SCANCODE_2))
+			MUSIC_PLAYER.playMusicInfinity("tango");
+		if (mKeyHandler->isPressed(SDL_SCANCODE_3))
+			MUSIC_PLAYER.pauseMusic();
+		if (mKeyHandler->isPressed(SDL_SCANCODE_4))
+			MUSIC_PLAYER.unPauseMusic();
     }
     { // joystick
         if (mKeyHandler->LeftJoystickIsActive()) {
@@ -318,14 +330,14 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 {
 	static int which;
 	static std::string brickPool[] {
-		"BrickBlock", 
-		"BrickBlock2", 
+		"BrickBlock",
+		"BrickBlock2",
 	};
 	static std::string bombPool[] {
 		"pointSphereBomb",
 		"pointSphereBomb2",
 	};
-	
+
 
     glm::vec2 directions[] = {
         {-1, 0},
@@ -381,6 +393,7 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
     mRenderer->getParticleManager()->startDrawPS(bombPool[which], fireTransforms);
 	which = !which;
 	mRenderer->getCamera().addShake(0.2f);
+	MUSIC_PLAYER.playSound("explosion");
 }
 
 void 		Game::saveCurrentState(std::string fileName)
