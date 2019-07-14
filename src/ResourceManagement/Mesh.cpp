@@ -118,6 +118,8 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     shader->setBool("isAnimated", mIsAnimated);
     shader->setMat4("parentTransform", parentTransform);
+    shader->setFloat("shininess", 0);
+    shader->setFloat("glossiness", 0);
     if(mIsAnimated)
     {
         for (unsigned int i = 0; i < mBoneTransforms.size(); ++i)

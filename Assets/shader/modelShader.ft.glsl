@@ -8,6 +8,8 @@ uniform sampler2D shadowMap;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
+uniform float shininess;
+uniform float glossiness;
 in VS_OUT {
     vec3 FragPos;
     vec2 TexCoords;
@@ -42,17 +44,25 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
 
 void main()
 {
-    vec3 objectcolor = texture(texture_diffuse1, fs_in.TexCoords).rgb;
-    vec3 normal = GetNormal();
-    vec3 lightColor = vec3(0.4);
-    vec3 lightDir = GetLightDir();
+    vec3 lightAmbient = vec3(.2f);
+    vec3 lightDiffuse = vec3(.5f);
+    vec3 lightSpecular = vec3(1.f);
+
     // ambient
-    vec3 ambient = 0.3 * objectcolor;
+    vec3 ambient = lightAmbient * texture(texture_diffuse1, fs_in.TexCoords).rgb;
     // diffuse
-    float diff = max(dot(lightDir, normal), 0.0);
-    vec3 diffuse = diff * lightColor; 
+    vec3 normal = GetNormal();
+    vec3 lightDir = GetLightDir();
+    float diff = max(dot(normal, lightDir), 0.0);
+    vec3 diffuse = lightDiffuse * diff * texture(texture_diffuse1, fs_in.TexCoords).rgb;
     //shadow
-    float shadow = ShadowCalculation(fs_in.FragPosLightSpace, normal, lightDir);                      
-    vec3 lighting = (ambient + (1.0 - shadow) * diffuse) * objectcolor;    
-    FragColor = vec4(lighting, 1.0);
+    float shadow = ShadowCalculation(fs_in.FragPosLightSpace, normal, lightDir);
+    // specular
+    vec3 viewDir = normalize(viewPos - fs_in.FragPos);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+    vec3 specular = spec * glossiness * lightSpecular;
+
+    vec3 result = min(ambient + (diffuse + specular) * (1.0 - shadow), 1.0);
+    FragColor = vec4(result, 1.0);
 }
