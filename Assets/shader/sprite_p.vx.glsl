@@ -11,6 +11,6 @@ void main()
 {
     float time = vertex.w;
     gl_Position = projection * view * model * vec4(vertex.xyz, 1.0);
-    gl_PointSize = (800 + 1000 * time) / gl_Position.z;
-	vtime = time * 25;
+    gl_PointSize = (2000 + 800 * time) / gl_Position.z;
+	vtime = time * 20;
 }

@@ -4,7 +4,7 @@
 ParticleSystemPoint::ParticleSystemPoint()
 {
 	glEnable(GL_PROGRAM_POINT_SIZE);
-	setParticleCount(12);
+	setParticleCount(6);
 }
 
 ParticleSystemPoint::~ParticleSystemPoint()
