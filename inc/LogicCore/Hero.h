@@ -5,9 +5,9 @@
 
 class Hero : public MovingEntity
 {
-	int mCurrentBombCount = 1;
 
 	int mBombMax = 1;
+	int mCurrentBombCount = 1;
 	int mBombStrength = 1;
 
 	float mLastTimePlacedBomb;
@@ -19,8 +19,8 @@ public:
 		, bombStrength(i_bombStrength)
 		{}
 		
-		int bombMax = 1;
-		int bombStrength = 1;
+		int bombMax = 20;
+		int bombStrength = 20;
 	};
 
 	Hero(SaveInfo info, glm::vec2 position = {1.5f, 1.5f});

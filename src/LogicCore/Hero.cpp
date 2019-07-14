@@ -17,13 +17,13 @@ void Hero::increaseBombCount()		{ mCurrentBombCount++; }
 void Hero::tryPlaceBomb()
 {
 	float time = Game::getCurrentTime();
-	if (mLastTimePlacedBomb + 1 > time)
+
+	if (mLastTimePlacedBomb + 0.5f > time
+	|| Game::getCollisionInfo()[getPosition()] == SquareType::Bomb
+	|| mCurrentBombCount < 1)
 		return;
 
-	// if (mCurrentBombCount < 1)
-	// 	return;
-	// mCurrentBombCount--;
-
+	mCurrentBombCount--;
 	mLastTimePlacedBomb = time;
 	Game::get()->plantBomb(getPosition(), mBombStrength);
 }
