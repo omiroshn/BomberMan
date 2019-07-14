@@ -103,6 +103,11 @@ int             &Configure::getBombStrength()
 	return mBombStrength;
 }
 
+int             &Configure::getBestLevelAchieved()
+{
+	return mBestLevelAchieved;
+}
+
 void 			Configure::setSize(int const w, int const h)
 {
 	setWidth(w);
@@ -168,6 +173,11 @@ void            Configure::setBombMax(int const bombMax)
 void            Configure::setBombStrength(int const bombStrength)
 {
 	mBombStrength = bombStrength;
+}
+
+void            Configure::setBestLevelAchieved(int const BestLevelAchieved)
+{
+	mBestLevelAchieved = BestLevelAchieved;
 }
 
 void 			Configure::serialise(std::string fileName)

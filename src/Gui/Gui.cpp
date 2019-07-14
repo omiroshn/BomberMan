@@ -28,7 +28,7 @@ void Gui::ShowMainMenu()
 
 	ImGui::Begin("Main Menu", NULL, window_flags);
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	ImGui::Text("Welcome to BomberMan game");
+	ImGui::Text("   BomberMan game menu");
 
 	/////////////////////////////////START GAME////////////////////////////////////
 
@@ -66,7 +66,9 @@ void Gui::ShowInGameMenu()
 	if (ImGui::BeginMainMenuBar())
 	{
 		ImGui::Text("Stage: ");
-		ImGui::Text("%s", std::to_string(CONFIGURATION.getChosenStage()).c_str());
+		std::string stage_to_show = std::to_string(CONFIGURATION.getChosenStage());
+		stage_to_show = stage_to_show == "0" ? "BONUS" : stage_to_show;
+		ImGui::Text("%s", stage_to_show.c_str());
 
 		ImGui::Text("Score: ");
 		ImGui::Text("%s", std::to_string(CONFIGURATION.getScore()).c_str());
@@ -122,7 +124,10 @@ void Gui::ShowStartNewGameMenu()
 	if (ImGui::Button("Start new Campaign", STANDARD_MENU_BUTTON))
 	{
 		//ImGui::OpenPopup("Select stage");
-		CONFIGURATION.setChosenStage(1);
+		CONFIGURATION.setChosenStage(DefaultChosenStage);
+		CONFIGURATION.setLives(DefaultLives);
+		CONFIGURATION.setBestLevelAchieved(DefaultBestLevelAchieved);
+		CONFIGURATION.setScore(DefaultScore);
 		GamePaused(false);
 		StartTheGame(true);
 	}
@@ -130,6 +135,12 @@ void Gui::ShowStartNewGameMenu()
 
 void Gui::ChangeStage(int next_stage)
 {
+	int ach = CONFIGURATION.getBestLevelAchieved();
+	if (CONFIGURATION.getBestLevelAchieved() < next_stage)	
+		{
+			std::cout << "best = " << CONFIGURATION.getBestLevelAchieved() << std::endl;
+			return;
+		}
 	CONFIGURATION.setChosenStage(next_stage + 1);
 	GamePaused(false);
 	StartTheGame(true);
@@ -137,7 +148,6 @@ void Gui::ChangeStage(int next_stage)
 	if (Game::mStageTimer > 4)
 		Game::mStageStartedTimer = Game::getCurrentTime();
 	Game::mStageTimer = 3 - (Game::getCurrentTime() - Game::mStageStartedTimer);
-	ShowLoadingScreen("face");
 }
 
 
@@ -153,25 +163,25 @@ void Gui::ShowLoadSavedGamesMenu()
 
 		ImGui::BeginChildFrame(2, {201, 204}, 4);
 		ImGui::Text("Choose stage of the campaign");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 0 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		if (ImGui::ImageButton(mButtonsTextures.at(0), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(0);
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 1");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 1 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 1 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(1);
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 2");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 2 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 2 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(2);
 		}
 		ImGui::SameLine();
 		ImGui::Text("\nStage 3");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() == 0 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 3 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(3);
 		}
@@ -321,9 +331,17 @@ void Gui::ShowLoadingScreen(const char* screen)
 	ImGui::Image(im,{mWidth,mHeight}, {1,1}, {0,0});
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
 	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 50, mHeight / 2), ImColor(1.0f,1.0f,1.0f,1.0f), "Welcome to next stage" );
-	char stage[] = "Stage:  ";
-	stage[7] = CONFIGURATION.getChosenStage() + '0';
-	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 20, mHeight / 2 + 30), ImColor(1.0f,1.0f,1.0f,1.0f), stage);
+	if (CONFIGURATION.getChosenStage() > 0)
+	{
+		char stage[] = "Stage:  ";
+		stage[7] = CONFIGURATION.getChosenStage() + '0';
+		ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 20, mHeight / 2 + 30), ImColor(1.0f,1.0f,1.0f,1.0f), stage);
+	}
+	else
+	{
+		char stage[] = "Stage:  Bonus Level";
+		ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 20, mHeight / 2 + 30), ImColor(1.0f,1.0f,1.0f,1.0f), stage);
+	}
 	ImGui::PopStyleVar();
 	ImGui::End();
 }

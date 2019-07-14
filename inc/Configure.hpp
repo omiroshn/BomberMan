@@ -29,6 +29,7 @@ int const DefaultKeyBindVolume = 0;
 int const DefaultScreenResolution = 3;
 int const DefaultBombMax = 1;
 int const DefaultBombStrength = 1;
+int const DefaultBestLevelAchieved = 0;
 bool const DefaultWindowed = false;
 
 class Configure
@@ -48,6 +49,7 @@ public:
 	int 			&getScreenResolution();
 	int             &getBombMax();
 	int             &getBombStrength();
+	int             &getBestLevelAchieved();
 
 	void 			setWidth(int const w) ;
 	void 			setHeight(int const h);
@@ -62,6 +64,7 @@ public:
 	void 			setScreenResolution(int const screenResolution);
 	void            setBombMax(int const bombMax);
 	void            setBombStrength(int const bombStrength);
+	void            setBestLevelAchieved(int const BestLevelAchieved);
 
 	void 			serialise(std::string fileName  = "ConfigureFile");
 	void 			deserialise(std::string fileName  = "ConfigureFile");
@@ -90,7 +93,8 @@ public:
 		mKeyBindVolume,
 		mScreenResolution,
 		mBombMax,
-		mBombStrength);
+		mBombStrength,
+		mBestLevelAchieved);
 	}
 
 private:
@@ -106,6 +110,7 @@ private:
 	int   			mScreenResolution;
 	int             mBombMax;
 	int             mBombStrength;
+	int             mBestLevelAchieved;
 
 	std::shared_ptr<GameWindow>      observableWindow;
 };

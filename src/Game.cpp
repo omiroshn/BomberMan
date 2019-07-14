@@ -467,6 +467,7 @@ void 		Game::applyWindowChange()
 void       Game::stageFinished()
 {
     int current_stage = CONFIGURATION.getChosenStage();
+    CONFIGURATION.setBestLevelAchieved(current_stage);
     CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
     Game::mReloadStage = true;
     if (mStageTimer > 4)
@@ -495,6 +496,7 @@ void Game::gameOver()
     CONFIGURATION.setLives(DefaultLives);
     CONFIGURATION.setScore(DefaultScore);
     CONFIGURATION.setChosenStage(DefaultChosenStage);
+    pause();
 }
 
 void  Game::cleanupOnStageChange()
