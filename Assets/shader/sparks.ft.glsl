@@ -4,23 +4,27 @@
 // out vec4 color;
 
 // uniform vec4 u_Color;
-// uniform sampler2D u_Texture;
+// uniform sampler2D image;
 
 // void main()
 // {
-//     color = texture(u_Texture, v_TexCoord);
+//     color = texture(image, v_TexCoord);
 // }
 
 #version 330 core
-in float 	vtime;
-out vec4 	color;
+
+// in vec2  v_TexCoord;
+out vec4 color;
+
+in float outX;
+in float outY;
+
+float scale = 1.0 / 8.0;
 
 uniform sampler2D image;
 
 void main()
 {
-    vec4 tex = texture(image, gl_PointCoord) / vtime;
-    // if (tex.a < 0.01)
-    //     discard;
-    color = tex;
+    color = texture(image, gl_PointCoord * scale + vec2(outX, outY));
+    // color = texture(image, v_TexCoord);
 }
