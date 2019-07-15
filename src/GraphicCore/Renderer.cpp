@@ -27,8 +27,6 @@ Renderer::Renderer() :
 
     glGenVertexArrays(1, &mSparksArray);
     glGenBuffers(1, &mSparksBuffer);
-    glBindVertexArray(mSparksArray);
-    glBindBuffer(GL_ARRAY_BUFFER, mSparksBuffer);
 
     glEnableVertexAttribArray(0); 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
@@ -218,15 +216,36 @@ void Renderer::drawSparks(glm::vec3 position)
 // 	drawQuad(shadow);
 // }
 
+
 void Renderer::drawSparksQuadsDeferred(glm::mat4 view, glm::mat4 projection)
 {
-	static auto SparksShader = RESOURCES.getShader("sparks");
-	if (mSparksQuads.empty())
+    if (mSparksQuads.empty())
 		return;
+	static auto SparksShader = RESOURCES.getShader("sparks");
+	
+    static float offsetX = 0.0f;
+    static float offsetY = 0.0f;
+
+    offsetX += 1.0f / 8.0f;
+    if (offsetX > 1.0f)
+    {
+        offsetY += 1.0f / 8.0f;
+        offsetX = 0.0f;
+    }
+    if (offsetY > 1.0f)
+    {
+        offsetY = 0.0f;
+    }
+
+    glBindVertexArray(mSparksArray);
+    glBindBuffer(GL_ARRAY_BUFFER, mSparksBuffer);
+    glBufferData(GL_ARRAY_BUFFER, mSparksQuads.size() * sizeof(glm::vec3), mSparksQuads.data(), GL_DYNAMIC_DRAW);
 
 	SparksShader->use();
 	SparksShader->setMat4("view", view);
 	SparksShader->setMat4("projection", projection);
+    SparksShader->setFloat("offsetX", offsetX);
+    SparksShader->setFloat("offsetY", offsetY);
 
 	//glEnable(GL_BLEND);
     //glDisable(GL_DEPTH_TEST);
