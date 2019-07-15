@@ -24,6 +24,14 @@ Renderer::Renderer() :
     //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vert), (void*)0);
     //glEnableVertexAttribArray(1);	
     //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vert), (void *)offsetof(Vert, uv));
+
+    glGenVertexArrays(1, &mSparksArray);
+    glGenBuffers(1, &mSparksBuffer);
+    glBindVertexArray(mSparksArray);
+    glBindBuffer(GL_ARRAY_BUFFER, mSparksBuffer);
+
+    glEnableVertexAttribArray(0); 
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
 };
 
 Renderer::~Renderer()
@@ -155,6 +163,10 @@ void Renderer::normalPass(Game& aMap)
 		std::cout << ex.what() << std::endl;
 		exit(42);
 	}
+    auto& Hero = aMap.GetHero();
+    drawSparks(glm::vec3(Hero.getPosition3D()));
+    drawSparksQuadsDeferred(view, projection);
+
     // render skybox
     view = glm::mat4(glm::mat3(mCamera.getViewMatrix()));
     skyboxShader->use();
@@ -188,44 +200,45 @@ ParticleManager *Renderer::getParticleManager()
 	return mParticleManager.get();
 }
 
-//void Renderer::drawQuad(Quad quad)
-//{
-//	mShadowQuads.push_back(quad);
-//}
+void Renderer::drawSparks(glm::vec3 position)
+{
+	mSparksQuads.push_back(position);
+}
 
-//void Renderer::drawShadow(glm::vec3 position)
-//{
-//	float shadowYOffset = -0.445;
-//	float shadowSize = 0.241f;
-//	Renderer::Quad shadow(
-//	    position + glm::vec3{ shadowSize,shadowYOffset, shadowSize},
-//	    position + glm::vec3{ shadowSize,shadowYOffset,-shadowSize},
-//	    position + glm::vec3{-shadowSize,shadowYOffset, shadowSize},
-//	    position + glm::vec3{-shadowSize,shadowYOffset,-shadowSize}
-//	);
-//	drawQuad(shadow);
-//}
+// void Renderer::drawShadow(glm::vec3 position)
+// {
+// 	float shadowYOffset = -0.445;
+// 	float shadowSize = 0.241f;
+// 	Renderer::Quad shadow(
+// 	    position + glm::vec3{ shadowSize,shadowYOffset, shadowSize},
+// 	    position + glm::vec3{ shadowSize,shadowYOffset,-shadowSize},
+// 	    position + glm::vec3{-shadowSize,shadowYOffset, shadowSize},
+// 	    position + glm::vec3{-shadowSize,shadowYOffset,-shadowSize}
+// 	);
+// 	drawQuad(shadow);
+// }
 
-//void Renderer::drawQuadsDeferred(glm::mat4 view, glm::mat4 projection)
-//{
-//	static auto ShadowShader = RESOURCES.getShader("shadow");
-//	if (mShadowQuads.empty())
-//		return;
-//
-//	glBindBuffer(GL_ARRAY_BUFFER, mQuadsBuffer);
-//	glBufferData(GL_ARRAY_BUFFER, mShadowQuads.size() * sizeof(Renderer::Quad), mShadowQuads.data(), GL_DYNAMIC_DRAW);
-//	glBindVertexArray(mQuadsArray);
-//
-//	ShadowShader->use();
-//	ShadowShader->setMat4("view", view);
-//	ShadowShader->setMat4("projection", projection);
-//
-//	glEnable(GL_BLEND);
-//	glDepthMask(false);
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//
-//	glDrawArrays(GL_TRIANGLES, 0, mShadowQuads.size() * 6);
-//	mShadowQuads.clear();
-//	glDisable(GL_BLEND);
-//	glDepthMask(true);
-//}
+void Renderer::drawSparksQuadsDeferred(glm::mat4 view, glm::mat4 projection)
+{
+	static auto SparksShader = RESOURCES.getShader("sparks");
+	if (mSparksQuads.empty())
+		return;
+
+	SparksShader->use();
+	SparksShader->setMat4("view", view);
+	SparksShader->setMat4("projection", projection);
+
+	//glEnable(GL_BLEND);
+    //glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glActiveTexture(GL_TEXTURE0);
+    auto texture = RESOURCES.getTexture("sparks");
+    texture->bind();
+
+	glDrawArrays(GL_POINTS, 0, mSparksQuads.size());
+	mSparksQuads.clear();
+
+	//glDisable(GL_BLEND);
+    //glEnable(GL_DEPTH_TEST);
+}
