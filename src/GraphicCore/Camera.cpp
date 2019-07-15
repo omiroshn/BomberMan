@@ -23,9 +23,9 @@ glm::mat4 Camera::getViewMatrix()
 
 void Camera::followEntity(Entity &aTarget, float d, float deltaTime)
 {
-	static float zoom = 1;
+	static float zoom = 0.4;
 	static float cameraSpeed = 1;
-	ImGui::SliderFloat("Zoom", &zoom, 0.05f, 20.f);
+	ImGui::SliderFloat("Zoom", &zoom, 0.05f, 4.f);
 	ImGui::SliderFloat("CameraSpeed", &cameraSpeed, 0.05f, 20.f);
 	d *= zoom;
 	glm::vec3 desiredPosition{

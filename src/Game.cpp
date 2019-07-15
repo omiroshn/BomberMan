@@ -309,6 +309,7 @@ void Game::loadResources()
 		RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
 		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
 		RESOURCES.loadShader("shadowShader.vx.glsl", "shadowShader.ft.glsl", "shadow");
+		RESOURCES.loadShader("sparks.vx.glsl", "sparks.ft.glsl", "sparks");
         RESOURCES.loadTexture("block.png", "block");
         RESOURCES.loadTexture("unlocked.png", "unlocked");
         RESOURCES.loadTexture("brickwall.png", "brickwall");
@@ -318,6 +319,7 @@ void Game::loadResources()
 		RESOURCES.loadTexture("flame-fire.png", "flame-fire");
 		RESOURCES.loadTexture("cloud_trans.jpg", "cloud_trans");
 		RESOURCES.loadTexture("explode.png", "explosion_tmap_2");
+		RESOURCES.loadTexture("sparks.jpg", "sparks");
         RESOURCES.loadSkybox("defaultSkybox");
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
@@ -439,7 +441,7 @@ std::function<void (uint32_t, glm::vec2)> chainReaction = [&] (uint32_t skipped,
     mRenderer->getParticleManager()->startDrawPS(brickPool[which], brickTransforms);
     mRenderer->getParticleManager()->startDrawPS(bombPool[which], fireTransforms);
 	which = !which;
-	mRenderer->getCamera().addShake(0.2f);
+	mRenderer->getCamera().addShake(0.05f);
 }
 
 void 		Game::saveCurrentState(std::string fileName)

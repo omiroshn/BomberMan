@@ -71,7 +71,9 @@ private:
     void normalPass(Game&);
     void shadowPass(Game&);
     void drawShadow(glm::vec3 position);
+    void drawSparks(glm::vec3 position);
     void drawQuadsDeferred(glm::mat4 view, glm::mat4 projection);
+    void drawSparksQuadsDeferred(glm::mat4 view, glm::mat4 projection);
     Camera mCamera;
     int mWidth, mHeight;
 	ptrPM mParticleManager;
@@ -80,6 +82,10 @@ private:
     void renderMovable(std::shared_ptr<Shader> &, Game &);
     void prepareTransforms(Game &g);
     int mStage;
+    GLuint                      mSparksBuffer;
+    GLuint                      mSparksArray;
+    std::vector<glm::vec3>      mSparksQuads;
+    std::shared_ptr<Texture>  	m_SparksTexture;
 };
 
 #endif //BOMBERMAN_Renderer_HPP
