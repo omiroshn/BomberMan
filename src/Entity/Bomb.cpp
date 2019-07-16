@@ -1,22 +1,84 @@
 #include "Entity/Bomb.h"
+#include "ResourceManagement/Shader.hpp"
 #include "Game.hpp"
+#include "imgui.h"
 
+std::vector<glm::vec3>  Bomb::mSparksQuads;
+GLuint Bomb::mSparksBuffer = 0;
+GLuint Bomb::mSparksArray = 0;
+
+const float Bomb::FUSE_TIME = 3.0f;
+const float Bomb::SPAWN_TIME = .5f;
+
+// BOMB
 Bomb::Bomb(glm::vec2 pos, int explosionStrength)
 	: Entity(glm::floor(pos) + glm::vec2{0.5f})
 	, mExplosionStrength(explosionStrength)
 {
 	Game::getCollisionInfo()[getPosition()] = SquareType::Bomb;
+
+	glGenVertexArrays(1, &mSparksArray);
+    glGenBuffers(1, &mSparksBuffer);
+    glBindVertexArray(mSparksArray);
+    glBindBuffer(GL_ARRAY_BUFFER, mSparksBuffer);
+
+    glEnableVertexAttribArray(0); 
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
 }
 
 Bomb::~Bomb()
 {
+	if (!mSparksQuads.empty() || mSparksQuads.size() > 0)
+		mSparksQuads.erase(mSparksQuads.begin());
 	if (auto *hero = &Game::get()->GetHero())
 		hero->increaseBombCount();
 	Game::getCollisionInfo()[getPosition()] = SquareType::EmptySquare;
 }
 
-const float Bomb::FUSE_TIME = 3.0f;
-const float Bomb::SPAWN_TIME = .5f;
+void Bomb::drawSparks(glm::vec3 position)
+{
+	mSparksQuads.push_back(position);
+}
+
+void Bomb::drawSparksQuadsDeferred(glm::mat4 view, glm::mat4 projection)
+{
+    if (mSparksQuads.empty())
+		return;
+	static auto SparksShader = RESOURCES.getShader("sparks");
+	
+    static float offsetX = 0.0f;
+    static float offsetY = 0.0f;
+
+    offsetX += 1.0f / 8.0f;
+    if (offsetX > 1.0f)
+    {
+        offsetY += 1.0f / 8.0f;
+        offsetX = 0.0f;
+        if (offsetY > 1.0f)
+            offsetY = 0.0f;
+    }
+
+    glBindVertexArray(mSparksArray);
+    glBindBuffer(GL_ARRAY_BUFFER, mSparksBuffer);
+    glBufferData(GL_ARRAY_BUFFER, mSparksQuads.size() * sizeof(glm::vec3), mSparksQuads.data(), GL_DYNAMIC_DRAW);
+
+	SparksShader->use();
+	SparksShader->setMat4("view", view);
+	SparksShader->setMat4("projection", projection);
+    SparksShader->setFloat("offsetX", offsetX);
+    SparksShader->setFloat("offsetY", offsetY);
+
+	glEnable(GL_BLEND);
+    glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_ONE, GL_ONE);
+
+    glActiveTexture(GL_TEXTURE0);
+    RESOURCES.getTexture("sparks")->bind();
+
+	glDrawArrays(GL_POINTS, 0, mSparksQuads.size());
+	glDisable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+}
 
 // SPAWNING
 bool Spawning::transition(const Counting&)
@@ -35,6 +97,7 @@ void Spawning::onEntry(Bomb& bomb)
 	bomb.setScale(0.f);
 }
 
+// COUNTING
 void Counting::onTick(Bomb& bomb, float DeltaTime)
 {
 	if (Game::getCurrentTime() >= mTimeToExplode)
@@ -47,6 +110,7 @@ void Counting::onTick(Bomb& bomb, float DeltaTime)
 void Counting::onEntry(Bomb& bomb)
 {
 	bomb.setScale(1.f);
+	bomb.drawSparks(bomb.getPosition3D() + glm::vec3({-0.1, 0.5, 0.0}));
 	mTimeToExplode = Game::getCurrentTime() + Bomb::FUSE_TIME - Bomb::SPAWN_TIME;
 }
 

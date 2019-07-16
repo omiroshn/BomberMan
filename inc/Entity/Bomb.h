@@ -2,6 +2,8 @@
 
 #include "Entity.h"
 #include "StateMachine/StateMachine.h"
+#include "GL/glew.h"
+#include <iostream>
 
 struct Spawning;
 struct Counting;
@@ -10,9 +12,15 @@ struct Exploding;
 class Bomb : public Entity
 {
 public:
+	static GLuint                      mSparksBuffer;
+    static GLuint                      mSparksArray;
+	int							mExplosionStrength;
+	static std::vector<glm::vec3>  mSparksQuads;
+
 	Bomb(glm::vec2 pos, int explosionStrength);
 	~Bomb();
-	int mExplosionStrength;
+	static void drawSparks(glm::vec3 position);
+	static void drawSparksQuadsDeferred(glm::mat4 view, glm::mat4 projection);
 	static const float FUSE_TIME;
 	static const float SPAWN_TIME;
 };

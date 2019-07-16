@@ -20,9 +20,9 @@ void Hero::tryPlaceBomb()
 	if (mLastTimePlacedBomb + 1 > time)
 		return;
 
-	if (mCurrentBombCount < 1)
-		return;
-	mCurrentBombCount--;
+	// if (mCurrentBombCount < 1)
+	// 	return;
+	// mCurrentBombCount--;
 
 	mLastTimePlacedBomb = time;
 	Game::get()->plantBomb(getPosition(), mBombStrength);
