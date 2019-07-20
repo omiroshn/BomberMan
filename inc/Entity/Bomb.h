@@ -12,14 +12,15 @@ struct Exploding;
 class Bomb : public Entity
 {
 public:
-	static GLuint                      mSparksBuffer;
-    static GLuint                      mSparksArray;
-	int							mExplosionStrength;
-	static std::vector<glm::vec3>  mSparksQuads;
+	static GLuint						mSparksBuffer;
+    static GLuint						mSparksArray;
+	int									mExplosionStrength;
+	static std::vector<glm::vec4>		mSparksQuads;
 
 	Bomb(glm::vec2 pos, int explosionStrength);
 	~Bomb();
-	static void drawSparks(glm::vec3 position);
+	static void bindArrays();
+	static void drawSparks(glm::vec4 position);
 	static void drawSparksQuadsDeferred(glm::mat4 view, glm::mat4 projection);
 	static const float FUSE_TIME;
 	static const float SPAWN_TIME;
@@ -42,6 +43,7 @@ struct Counting : public State {
 	void onEntry(Bomb& bomb);
 
 	float mTimeToExplode;
+	float mCountdown;
 };
 
 typedef SM<Bomb, Spawning, Counting> BombSM;

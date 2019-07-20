@@ -13,7 +13,7 @@ void main()
 {
     float time = vertex.w;
     gl_Position = projection * view * vec4(vertex.xyz, 1.0);
-    gl_PointSize = (800 + 1000 * time) / gl_Position.z / 2;
+    gl_PointSize = (800 + 500 * time) / gl_Position.z / 2;
     outX = offsetX;
     outY = offsetY;
 }

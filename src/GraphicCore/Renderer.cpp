@@ -15,6 +15,7 @@ Renderer::Renderer() :
     mLightManager(std::make_unique<LightManager>()),
     mStage(CONFIGURATION.getChosenStage())
 {
+    Bomb::bindArrays();
 };
 
 Renderer::~Renderer()
@@ -146,6 +147,7 @@ void Renderer::normalPass(Game& aMap)
 		exit(42);
 	}
 
+    // render sparks
     Bomb::drawSparksQuadsDeferred(view, projection);
 
     // render skybox
