@@ -71,7 +71,7 @@ void GameWindow::initGui() {
     ImGui::CreateContext();
 
     ImGuiIO &io = ImGui::GetIO();
-    auto fontData = RESOURCES.loadFont("Blox2.TTF");
+    auto fontData = RESOURCES.loadFont("future.ttf");
     // need to cope data, because AddFontFromMemoryTTF seems to take control of it, and will try to delete on exit
     char* data = new char[fontData.size()];
     std::memcpy(data, fontData.data(), fontData.size());
