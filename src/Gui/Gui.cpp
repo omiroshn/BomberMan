@@ -19,25 +19,31 @@ void Gui::ShowMainMenu()
 {
 	mWidth = CONFIGURATION.getWidth();
 	mHeight = CONFIGURATION.getHeight();
+	if (!mBackground)
+		mBackground = (ImTextureID)RESOURCES.getTexture("sky")->getTextureID();
 
 	ImGui::SetNextWindowPos({0, 0},0);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(mWidth / 2 - 100, mHeight / 2 - 79));
-	//ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 20.f);ImGuiStyleVar_WindowRounding
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(mWidth, mHeight));
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 
 	ImGui::Begin("Main Menu", NULL, mWindow_flags);
-	mBackground = (ImTextureID)RESOURCES.getTexture("sky")->getTextureID();
 	ImGui::GetWindowDrawList()->AddImage(mBackground, ImVec2(0, 0), ImVec2(mWidth, mHeight));
+	//bool show_app_metrics = true;
+	//ImGui::ShowMetricsWindow(&show_app_metrics);
 	//ImGui::GetWindowDrawList()->AddImage(mBackground, ImVec2(ImGui::GetCursorScreenPos()), ImVec2(mWidth, mHeight));
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(mWidth / 2 - 112, mHeight / 2 - 122));
+	ImGui::BeginChildFrame(5, ImVec2(mWidth, mHeight), ImGuiWindowFlags_AlwaysAutoResize);
+
 
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	ImGui::Text("    BomberMan game menu");
+	ImGui::Text("     BomberMan game menu");
 
 	/////////////////////////////////START GAME////////////////////////////////////
-
-	const ImVec2 menu_frame = {224, 204};
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
+	//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(mWidth / 2 - 100, mHeight / 2 - 79));
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2,2));
+	const ImVec2 menu_frame = {224, 204};
 	ImGui::BeginChildFrame(1, menu_frame, ImGuiWindowFlags_AlwaysAutoResize);
 
 	ShowStartNewGameMenu();
@@ -59,6 +65,9 @@ void Gui::ShowMainMenu()
 
 	ImGui::EndChildFrame();
 	ImGui::PopStyleVar();
+	ImGui::PopStyleVar();
+	ImGui::PopStyleVar();
+	ImGui::EndChildFrame();
 	ImGui::PopStyleVar();
 	ImGui::End();
 	ImGui::PopStyleVar();
@@ -279,6 +288,7 @@ void Gui::ShowSettingsMenu()
 	if (ImGui::Button("Settings", STANDARD_MENU_BUTTON))
 	{
 		GamePaused(true);
+		//mShowSettingsMenu = true;
 		ImGui::OpenPopup("Settings of the Games");
 	}
 }
