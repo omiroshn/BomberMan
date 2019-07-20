@@ -6,6 +6,15 @@
 
 #define  STANDARD_MENU_BUTTON {220, 48}
 
+enum class CurrentMenu
+{
+	mainMenu,
+	settingsMenu,
+	changeStageMenu,
+	exitMenu,
+	inGameMenu
+};
+
 class Gui
 {
 public:
@@ -29,7 +38,7 @@ private:
 	bool mGameStarted = false;
 	bool mGamePaused = false; //make static in Game
 	ImGuiWindowFlags mWindow_flags = 0;
-	bool mShowMenu = true;
+	CurrentMenu mCurrentMenu = CurrentMenu::mainMenu;
 	bool mShowScore = false;
 	int  mMapIndex = -1;
 	ImTextureID mBackground = nullptr;

@@ -10,11 +10,6 @@ Gui::Gui()
 	mWindow_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar;	
 }
 
-Gui::~Gui()
-{
-
-}
-
 void Gui::ShowMainMenu()
 {
 	mWidth = CONFIGURATION.getWidth();
@@ -29,43 +24,56 @@ void Gui::ShowMainMenu()
 
 	ImGui::Begin("Main Menu", NULL, mWindow_flags);
 	ImGui::GetWindowDrawList()->AddImage(mBackground, ImVec2(0, 0), ImVec2(mWidth, mHeight));
-	//bool show_app_metrics = true;
-	//ImGui::ShowMetricsWindow(&show_app_metrics);
-	//ImGui::GetWindowDrawList()->AddImage(mBackground, ImVec2(ImGui::GetCursorScreenPos()), ImVec2(mWidth, mHeight));
-	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(mWidth / 2 - 112, mHeight / 2 - 122));
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(mWidth / 2 - 112, mHeight / 2 - 200));
 	ImGui::BeginChildFrame(5, ImVec2(mWidth, mHeight), ImGuiWindowFlags_AlwaysAutoResize);
 
-
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	ImGui::Text("     BomberMan game menu");
-
-	/////////////////////////////////START GAME////////////////////////////////////
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
-	//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(mWidth / 2 - 100, mHeight / 2 - 79));
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2,2));
-	const ImVec2 menu_frame = {224, 204};
-	ImGui::BeginChildFrame(1, menu_frame, ImGuiWindowFlags_AlwaysAutoResize);
 
-	ShowStartNewGameMenu();
-
-	/////////////////////////////////LOAD GAME////////////////////////////////////
-
-	ShowLoadSavedGamesMenu();
-
-	/////////////////////////////////SETTINGS OF GAME////////////////////////////////////
-
-	ShowSettingsMenu();
-
-	/////////////////////////////////EXIT////////////////////////////////////
-
-	if (ImGui::Button("EXIT", STANDARD_MENU_BUTTON))
+	if (mCurrentMenu == CurrentMenu::mainMenu)
 	{
-		Game::mIsRunning = false;
-	}
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(40, 20));
+		ImGui::Text("BomberMan game menu");
 
-	ImGui::EndChildFrame();
-	ImGui::PopStyleVar();
-	ImGui::PopStyleVar();
+		/////////////////////////////////START GAME////////////////////////////////////
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
+		ImGui::BeginChildFrame(1, {224, 204}, ImGuiWindowFlags_AlwaysAutoResize);
+
+		ShowStartNewGameMenu();
+
+		/////////////////////////////////LOAD GAME////////////////////////////////////
+
+		
+		if (ImGui::Button("Continue", STANDARD_MENU_BUTTON))
+		{
+			mCurrentMenu = CurrentMenu::changeStageMenu;
+			ShowLoadSavedGamesMenu();
+		}
+
+		/////////////////////////////////SETTINGS////////////////////////////////////
+
+		if (ImGui::Button("Settings", STANDARD_MENU_BUTTON))
+		{
+			GamePaused(true);
+			mCurrentMenu = CurrentMenu::settingsMenu;
+			ShowSettingsMenu();
+		}
+
+		/////////////////////////////////EXIT////////////////////////////////////
+
+		if (ImGui::Button("EXIT", STANDARD_MENU_BUTTON))
+		{
+			Game::mIsRunning = false;
+		}
+
+		ImGui::EndChildFrame();		
+		ImGui::PopStyleVar();
+		ImGui::PopStyleVar();
+	}
+	else if (mCurrentMenu == CurrentMenu::settingsMenu)
+		ShowSettingsMenu();
+	else if (mCurrentMenu == CurrentMenu::changeStageMenu)
+		ShowLoadSavedGamesMenu();
+
 	ImGui::PopStyleVar();
 	ImGui::EndChildFrame();
 	ImGui::PopStyleVar();
@@ -138,6 +146,7 @@ void Gui::ShowStartNewGameMenu()
 	if (ImGui::Button("Start new Campaign", STANDARD_MENU_BUTTON))
 	{
 		//ImGui::OpenPopup("Select stage");
+		mCurrentMenu = CurrentMenu::inGameMenu;
 		CONFIGURATION.setChosenStage(DefaultChosenStage);
 		CONFIGURATION.setLives(DefaultLives);
 		CONFIGURATION.setBestLevelAchieved(DefaultBestLevelAchieved);
@@ -167,8 +176,6 @@ void Gui::ChangeStage(int next_stage)
 
 void Gui::ShowLoadSavedGamesMenu()
 {
-	if (ImGui::BeginPopup("Saved Games"))
-	{
 		if (mButtonsTextures.empty())
 		{
 			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("brickwall")->getTextureID());
@@ -202,38 +209,30 @@ void Gui::ShowLoadSavedGamesMenu()
 		ImGui::SameLine();
 		ImGui::Text("\nBonus level");
 		ImGui::EndChildFrame();
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::Button("Continue", STANDARD_MENU_BUTTON))
-	{
-		ImGui::OpenPopup("Saved Games");
-	}
 }
 
 void Gui::ShowSettingsMenu()
 {
-	if (ImGui::BeginPopup("Settings of the Games"))
-	{
-		const ImVec2 saved_frame = {224, 320};
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(40, 4));
+		const ImVec2 saved_frame = {234, 330};
 		ImGui::BeginChildFrame(3, saved_frame, 4);
 
-		ImGui::Text("\nSet music volume\n");
+		ImGui::Text("\n    Set music volume\n");
 		ImGui::SliderInt("10", &CONFIGURATION.getMusicVolume(), 0, 10, "Music");
 		ImGui::Separator();
 
-		ImGui::Text("\nSet sounds volume\n");
+		ImGui::Text("\n   Set sounds volume\n");
 		ImGui::SliderInt("9", &CONFIGURATION.getSoundVolume(), 0, 9, "Sounds");
 		ImGui::Separator();
 
-		ImGui::Text("\nSet keybinding\n");
+		ImGui::Text("\n    Set keybinding\n");
 		ImGui::RadioButton("Arrows", &CONFIGURATION.getKeyBindVolume(), 0);ImGui::SameLine();
-		ImGui::RadioButton("ASWD", &CONFIGURATION.getKeyBindVolume(), 1);ImGui::SameLine();
+		ImGui::RadioButton("ASWD", &CONFIGURATION.getKeyBindVolume(), 1);
 		ImGui::RadioButton("🎮", &CONFIGURATION.getKeyBindVolume(), 2);ImGui::SameLine();
 		ImGui::RadioButton("HJKL", &CONFIGURATION.getKeyBindVolume(), 3);
 		ImGui::Separator();
 
-		if (ImGui::Checkbox("FullScreen", &CONFIGURATION.getWindowed()))
+		if (ImGui::Checkbox("     FullScreen", &CONFIGURATION.getWindowed()))
 		{
 			CONFIGURATION.setWindowed(CONFIGURATION.getWindowed());
 		}
@@ -273,24 +272,17 @@ void Gui::ShowSettingsMenu()
 			if (CONFIGURATION.getScreenResolution() < 4)
 				CONFIGURATION.getScreenResolution()++;
 		}
-
 		ImGui::EndChildFrame();
-		if (ImGui::Button("CONTINUE", STANDARD_MENU_BUTTON))
+		ImGui::PopStyleVar();
+
+		if (ImGui::Button("CONTINUE", {234, 48}))
 		{
+			mCurrentMenu = CurrentMenu::mainMenu;
 			GamePaused(false);
-			ImGui::EndPopup();
 			StartTheGame(true);
 			return;
 		}
-		ImGui::EndPopup();
 
-	}
-	if (ImGui::Button("Settings", STANDARD_MENU_BUTTON))
-	{
-		GamePaused(true);
-		//mShowSettingsMenu = true;
-		ImGui::OpenPopup("Settings of the Games");
-	}
 }
 
 bool Gui::IsGameRunning()
@@ -306,6 +298,8 @@ void Gui::StartTheGame(bool start)
 void Gui::GamePaused(bool state)
 {
 	mGamePaused = state;
+	if (!state)
+		mCurrentMenu = CurrentMenu::mainMenu;
 }
 
 void Gui::SetBackground(const char* texture)
@@ -357,4 +351,9 @@ void Gui::ShowLoadingScreen(const char* screen)
 	}
 	ImGui::PopStyleVar();
 	ImGui::End();
+}
+
+Gui::~Gui()
+{
+
 }
