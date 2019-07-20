@@ -7,7 +7,7 @@
 
 Gui::Gui()
 {
-
+	mWindow_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar;	
 }
 
 Gui::~Gui()
@@ -17,25 +17,28 @@ Gui::~Gui()
 
 void Gui::ShowMainMenu()
 {
-	ImGuiWindowFlags window_flags = 0;
-	window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar;
 	mWidth = CONFIGURATION.getWidth();
 	mHeight = CONFIGURATION.getHeight();
 
 	ImGui::SetNextWindowPos({0, 0},0);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(mWidth / 2 - 100, mHeight / 2 - 79));
-	ImGui::SetNextWindowCollapsed(0);
+	//ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 20.f);ImGuiStyleVar_WindowRounding
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(mWidth, mHeight));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 
-	ImGui::Begin("Main Menu", NULL, window_flags);
+	ImGui::Begin("Main Menu", NULL, mWindow_flags);
+	mBackground = (ImTextureID)RESOURCES.getTexture("sky")->getTextureID();
+	ImGui::GetWindowDrawList()->AddImage(mBackground, ImVec2(0, 0), ImVec2(mWidth, mHeight));
+	//ImGui::GetWindowDrawList()->AddImage(mBackground, ImVec2(ImGui::GetCursorScreenPos()), ImVec2(mWidth, mHeight));
+
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	ImGui::Text("   BomberMan game menu");
+	ImGui::Text("    BomberMan game menu");
 
 	/////////////////////////////////START GAME////////////////////////////////////
 
-	const ImVec2 menu_frame = {200, 158};
-	const float spacing = 10;
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, spacing));
-	ImGui::BeginChildFrame(1, menu_frame, 4);
+	const ImVec2 menu_frame = {224, 204};
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
+	ImGui::BeginChildFrame(1, menu_frame, ImGuiWindowFlags_AlwaysAutoResize);
 
 	ShowStartNewGameMenu();
 
@@ -58,6 +61,8 @@ void Gui::ShowMainMenu()
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 	ImGui::End();
+	ImGui::PopStyleVar();
+	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 }
 
@@ -100,7 +105,7 @@ void Gui::ShowBetweenStageScreen()
 			ShowLoadingScreen("flame-fire");
 			break;
 		case 2:
-			ShowLoadingScreen("block");
+			ShowLoadingScreen("brickwall");
 			break;
 		case 3:
 			ShowLoadingScreen("explosion_tmap_2");
@@ -114,7 +119,7 @@ void Gui::ShowStartNewGameMenu()
 {
 	if (ImGui::BeginPopup("Select stage"))
 	{
-		ImGui::BeginChildFrame(2, {200, 204}, 4);
+		ImGui::BeginChildFrame(4, {200, 204}, 4);
 		ImGui::Text("     Enter your name");
 		 static char str0[128] = "Your name";
 		 ImGui::InputText("", str0, IM_ARRAYSIZE(str0));
@@ -157,7 +162,7 @@ void Gui::ShowLoadSavedGamesMenu()
 	{
 		if (mButtonsTextures.empty())
 		{
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("brickwall")->getTextureID());
 			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("cloud_trans")->getTextureID());
 		}
 
@@ -201,7 +206,7 @@ void Gui::ShowSettingsMenu()
 {
 	if (ImGui::BeginPopup("Settings of the Games"))
 	{
-		const ImVec2 saved_frame = {200, 320};
+		const ImVec2 saved_frame = {224, 320};
 		ImGui::BeginChildFrame(3, saved_frame, 4);
 
 		ImGui::Text("\nSet music volume\n");
@@ -321,13 +326,11 @@ void Gui::ShowHardnessRadioButtons()
 void Gui::ShowLoadingScreen(const char* screen)
 {
 	ImTextureID im = (ImTextureID)RESOURCES.getTexture(screen)->getTextureID();
-	ImGuiWindowFlags window_flags = 0;
-	window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar ;
 	ImGui::SetNextWindowPos({0, 0},0);
 	mWidth = CONFIGURATION.getWidth();
 	mHeight = CONFIGURATION.getHeight();
 	ImGui::SetNextWindowSize({mWidth,mHeight});
-	ImGui::Begin("Next Stage", NULL, window_flags);
+	ImGui::Begin("Next Stage", NULL, mWindow_flags);
 	ImGui::Image(im,{mWidth,mHeight}, {1,1}, {0,0});
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
 	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 50, mHeight / 2), ImColor(1.0f,1.0f,1.0f,1.0f), "Welcome to next stage" );
