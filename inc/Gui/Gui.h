@@ -4,7 +4,7 @@
 #include <imgui.h>
 #include <vector>
 
-#define  STANDARD_MENU_BUTTON {200, 30}
+#define  STANDARD_MENU_BUTTON {220, 48}
 
 class Gui
 {
@@ -28,6 +28,7 @@ private:
 	void ChangeStage(int next_stage);
 	bool mGameStarted = false;
 	bool mGamePaused = false; //make static in Game
+	ImGuiWindowFlags mWindow_flags = 0;
 	bool mShowMenu = true;
 	bool mShowScore = false;
 	int  mMapIndex = -1;
