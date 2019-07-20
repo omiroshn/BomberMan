@@ -3,7 +3,7 @@
 #include "Game.hpp"
 #include "imgui.h"
 
-std::vector<glm::vec3>  Bomb::mSparksQuads;
+std::vector<glm::vec4>  Bomb::mSparksQuads;
 GLuint Bomb::mSparksBuffer = 0;
 GLuint Bomb::mSparksArray = 0;
 
@@ -16,14 +16,17 @@ Bomb::Bomb(glm::vec2 pos, int explosionStrength)
 	, mExplosionStrength(explosionStrength)
 {
 	Game::getCollisionInfo()[getPosition()] = SquareType::Bomb;
+}
 
-	glGenVertexArrays(1, &mSparksArray);
-    glGenBuffers(1, &mSparksBuffer);
-    glBindVertexArray(mSparksArray);
-    glBindBuffer(GL_ARRAY_BUFFER, mSparksBuffer);
+void Bomb::bindArrays()
+{
+	glGenVertexArrays(1, &Bomb::mSparksArray);
+    glGenBuffers(1, &Bomb::mSparksBuffer);
+    glBindVertexArray(Bomb::mSparksArray);
+    glBindBuffer(GL_ARRAY_BUFFER, Bomb::mSparksBuffer);
 
     glEnableVertexAttribArray(0); 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)0);
 }
 
 Bomb::~Bomb()
@@ -35,7 +38,7 @@ Bomb::~Bomb()
 	Game::getCollisionInfo()[getPosition()] = SquareType::EmptySquare;
 }
 
-void Bomb::drawSparks(glm::vec3 position)
+void Bomb::drawSparks(glm::vec4 position)
 {
 	mSparksQuads.push_back(position);
 }
@@ -49,18 +52,18 @@ void Bomb::drawSparksQuadsDeferred(glm::mat4 view, glm::mat4 projection)
     static float offsetX = 0.0f;
     static float offsetY = 0.0f;
 
-    offsetX += 1.0f / 8.0f;
-    if (offsetX > 1.0f)
-    {
-        offsetY += 1.0f / 8.0f;
-        offsetX = 0.0f;
-        if (offsetY > 1.0f)
-            offsetY = 0.0f;
-    }
-
+	offsetX += 1.0f / 8.0f;
+	if (offsetX > 1.0f)
+	{
+		offsetX = 0.0f;
+		offsetY += 1.0f / 8.0f;
+		if (offsetY > 0.75f)
+			offsetY = 0.25f;
+	}
+	
     glBindVertexArray(mSparksArray);
     glBindBuffer(GL_ARRAY_BUFFER, mSparksBuffer);
-    glBufferData(GL_ARRAY_BUFFER, mSparksQuads.size() * sizeof(glm::vec3), mSparksQuads.data(), GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, mSparksQuads.size() * sizeof(glm::vec4), mSparksQuads.data(), GL_DYNAMIC_DRAW);
 
 	SparksShader->use();
 	SparksShader->setMat4("view", view);
@@ -110,7 +113,9 @@ void Counting::onTick(Bomb& bomb, float DeltaTime)
 void Counting::onEntry(Bomb& bomb)
 {
 	bomb.setScale(1.f);
-	bomb.drawSparks(bomb.getPosition3D() + glm::vec3({-0.1, 0.5, 0.0}));
 	mTimeToExplode = Game::getCurrentTime() + Bomb::FUSE_TIME - Bomb::SPAWN_TIME;
+	mCountdown = mTimeToExplode - Game::getCurrentTime();
+	glm::vec3 SparkPos = bomb.getPosition3D() + glm::vec3({-0.1, 0.5, 0.0});
+	bomb.drawSparks(glm::vec4(SparkPos, mCountdown));
 }
 
