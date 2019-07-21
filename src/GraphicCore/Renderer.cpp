@@ -40,13 +40,13 @@ void Renderer::draw(Game& aMap)
 
 void Renderer::prepareTransforms(Game &g)
 {
-    mTransforms[ModelType::Brick] = g.GetBrickTransforms();
-    mTransforms[ModelType::Wall] = g.GetWallTransforms();
-    mTransforms[ModelType::Bomb] = g.GetBombTransforms();
-    mTransforms[ModelType::Player] = std::vector<glm::mat4>{g.GetHero().getModelMatrix()};
+    mTransforms[ModelType::Brick] = g.getBrickTransforms();
+    mTransforms[ModelType::Wall] = g.getWallTransforms();
+    mTransforms[ModelType::Bomb] = g.getBombTransforms();
+    mTransforms[ModelType::Player] = std::vector<glm::mat4>{g.getHero().getModelMatrix()};
 
     std::vector<glm::mat4> transforms;
-    auto& Enemies = g.GetEnemies();
+    auto& Enemies = g.getEnemies();
     for (auto It : Enemies)
         transforms.push_back(It->getModelMatrix());
     mTransforms[ModelType::EnemyType1] = transforms;
@@ -81,13 +81,29 @@ void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
     static auto balloon = RESOURCES.getModel("balloon");
 
     //render hero
-    auto& Hero = g.GetHero();
+    auto& Hero = g.getHero();
     Hero.debug();
     heroModel->setAnimation(Hero.getAnimation());
     heroModel->draw(s, mTransforms[ModelType::Player]);
 
     //render enemies
     balloon->draw(s, mTransforms[ModelType::EnemyType1]);
+
+    auto type = g.powerupTypeOnMap();
+    if (type != Hero::PowerupType::PT_NONE)
+    {
+        static std::shared_ptr<Model> bonusModels[Hero::PowerupType::PT_NONE] = {
+            RESOURCES.getModel("bonus_bombs"),
+            RESOURCES.getModel("bonus_flames"),
+            RESOURCES.getModel("bonus_speed"),
+            RESOURCES.getModel("bonus_wallpass"),
+            RESOURCES.getModel("bonus_detonator"),
+            RESOURCES.getModel("bonus_bombpass"),
+            RESOURCES.getModel("bonus_flamepass"),
+            RESOURCES.getModel("bonus_mystery")
+        };
+        bonusModels[type]->draw(s, std::vector<glm::mat4>{g.getPowerupTransform()});
+    }
 }
 
 void Renderer::normalPass(Game& aMap)

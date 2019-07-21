@@ -31,9 +31,7 @@ void Bomb::bindArrays()
 
 Bomb::~Bomb()
 {
-	if (!mSparksQuads.empty() || mSparksQuads.size() > 0)
-		mSparksQuads.erase(mSparksQuads.begin());
-	if (auto *hero = &Game::get()->GetHero())
+	if (auto *hero = &Game::get()->getHero())
 		hero->increaseBombCount();
 	Game::getCollisionInfo()[getPosition()] = SquareType::EmptySquare;
 }
@@ -81,6 +79,7 @@ void Bomb::drawSparksQuadsDeferred(glm::mat4 view, glm::mat4 projection)
 	glDrawArrays(GL_POINTS, 0, mSparksQuads.size());
 	glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
+	mSparksQuads.erase(mSparksQuads.begin());
 }
 
 // SPAWNING

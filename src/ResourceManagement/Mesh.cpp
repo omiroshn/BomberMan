@@ -143,7 +143,6 @@ const aiNodeAnim *Mesh::findNodeAnimation(const aiAnimation *animation, const st
     return nullptr;
 }
 
-
 void	Mesh::readNodeHierarchy(float animationTime, aiNode const* node, const glm::mat4 parentTransform)
 {
 

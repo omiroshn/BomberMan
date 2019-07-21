@@ -24,7 +24,6 @@ namespace ModelType{
         EnemyType1,
         EnemyType2,
         EnemyType3,
-        Bonus,
         Bomb,
         Perimeter,
         MAX
@@ -33,9 +32,10 @@ namespace ModelType{
 
 class Game;
 class LightManager;
+
 class Renderer
 {
-		struct Vert
+    struct Vert
 	{
 		glm::vec3 pos;
 		glm::vec2 uv;

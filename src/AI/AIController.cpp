@@ -210,7 +210,7 @@ void PatrolState::onTick(MovingEntity& pawn, float deltaTime)
 	}
 
 	auto *map = Game::get();
-	auto& Hero = map->GetHero();
+	auto& Hero = map->getHero();
 	mPawnSeesPlayer = checkVisibility(pawn, Hero.getPosition());
 }
 bool PatrolState::transition(const IdleState&)
@@ -240,7 +240,7 @@ void PatrolState::onEntry(MovingEntity& Pawn, float DeltaTime /*= 0*/)
 void ChaseState::onTick(MovingEntity& pawn, float deltaTime)
 {
 	auto* map = Game::get();
-	auto& Hero = map->GetHero();
+	auto& Hero = map->getHero();
 	auto heroPosition = Hero.getPosition();
 	mPawnSeesPlayer = checkVisibility(pawn, heroPosition);
 	if (mPawnSeesPlayer)
@@ -284,7 +284,7 @@ void ConfusedState::onTick(MovingEntity& pawn, float DeltaTime /*= 0*/)
 	pawn.setAngle(initialAngle + glm::sin(timePassed * 2));
 
 	auto* map = Game::get();
-	auto& Hero = map->GetHero();
+	auto& Hero = map->getHero();
 	auto heroPosition = Hero.getPosition();
 	mPawnSeesPlayer = checkVisibility(pawn, heroPosition);
 }

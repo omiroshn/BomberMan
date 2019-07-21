@@ -14,6 +14,7 @@
 #include <fstream>
 #include <iostream>
 #include "GameWindow.hpp"
+#include "LogicCore/Hero.h"
 #include "Game.hpp"
 
 #define CONFIGURATION Configure::getInstance()
@@ -27,8 +28,6 @@ int const DefaultMusicVolume = 5;
 int const DefaultmSoundsVolume = 2;
 int const DefaultKeyBindVolume = 0;
 int const DefaultScreenResolution = 3;
-int const DefaultBombMax = 1;
-int const DefaultBombStrength = 1;
 int const DefaultBestLevelAchieved = 0;
 bool const DefaultWindowed = false;
 
@@ -47,8 +46,7 @@ public:
 	int 			&getSoundVolume();
 	int 			&getKeyBindVolume();
 	int 			&getScreenResolution();
-	int             &getBombMax();
-	int             &getBombStrength();
+	Hero::Stats     &getStats();
 	int             &getBestLevelAchieved();
 
 	void 			setWidth(int const w) ;
@@ -62,8 +60,7 @@ public:
 	void 			setSoundsVolume(int const soundsVolume);
 	void 			setKeyBindVolume(int const keyBinding);
 	void 			setScreenResolution(int const screenResolution);
-	void            setBombMax(int const bombMax);
-	void            setBombStrength(int const bombStrength);
+	void            setStats(Hero::Stats stats);
 	void            setBestLevelAchieved(int const BestLevelAchieved);
 
 	void 			serialise(std::string fileName  = "ConfigureFile");
@@ -92,8 +89,7 @@ public:
 		mSoundsVolume,
 		mKeyBindVolume,
 		mScreenResolution,
-		mBombMax,
-		mBombStrength,
+		mStats,
 		mBestLevelAchieved);
 	}
 
@@ -108,8 +104,7 @@ private:
 	int   			mSoundsVolume;
 	int   			mKeyBindVolume;
 	int   			mScreenResolution;
-	int             mBombMax;
-	int             mBombStrength;
+	Hero::Stats		mStats;
 	int             mBestLevelAchieved;
 
 	std::shared_ptr<GameWindow>      observableWindow;

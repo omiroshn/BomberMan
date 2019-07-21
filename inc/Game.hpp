@@ -51,21 +51,29 @@ private:
     static float                     mDeltaTime;
     static float                     mTimeCorrection;
 	static CollisionInfo			 mCollisionInfo;
-    bool                             mIsPaused;
 	static float					 sInputAcceleration;
 	static Game					    *sInstance;
+
+    bool                             mIsPaused;
 
 	// Map for rendering
 	typedef Agent<MovingEntity, BalloonController>	Balloon;
 	typedef Agent<Bomb, BombSM>						BombAgent;
 public:
-	std::vector<glm::mat4>		GetWallTransforms();
-	std::vector<glm::mat4>		GetBrickTransforms();
-	std::vector<glm::mat4>		GetBombTransforms();
-	std::vector<glm::mat4>		GetBonusTransforms();
-	std::vector<MovingEntity*>&	GetEnemies();
-	std::vector<Balloon>&		GetBalloons();
-	Hero&						GetHero();
+	std::vector<glm::mat4>		getWallTransforms();
+	std::vector<glm::mat4>		getBrickTransforms();
+	std::vector<glm::mat4>		getBombTransforms();
+	glm::mat4					getPowerupTransform();
+	glm::mat4					getExitTransform();
+
+	std::vector<MovingEntity*>&	getEnemies();
+	std::vector<Balloon>&		getBalloons();
+
+	Hero&						getHero();
+	Hero::PowerupType			powerupTypeOnMap();
+	bool						isExitActive();
+
+	void						extractInfo();
 
 	void						plantBomb(glm::vec2 position, int strength);
 
@@ -78,6 +86,11 @@ private:
 
 	std::unique_ptr<Hero>			mHero;
 	std::vector<MovingEntity*>		mEnemies;
+
+	glm::vec2						mPowerup;
+	Hero::PowerupType				mPowerupType { Hero::PowerupType::PT_NONE };
+
+	glm::vec2						mExit;
 
 	std::vector<glm::mat4>		Filter(SquareType type);
 	void						recacheEnemies();

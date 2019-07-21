@@ -3,7 +3,7 @@
 #include "GL/glew.h"
 #include "glm/glm.hpp"
 
-const unsigned int SHADOW_WIDTH = 6144, SHADOW_HEIGHT = 6144;
+const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 class LightManager
 {
 public:

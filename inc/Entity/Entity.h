@@ -39,7 +39,7 @@ private:
 	float		mAngle;
 	unsigned	mUid;
 	float		mScale;
-	bool		mShouldDie;
+	bool		mDead;
 
 	static unsigned sEntity_counter;
 };

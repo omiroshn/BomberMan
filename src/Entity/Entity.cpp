@@ -11,7 +11,7 @@ Entity::Entity(glm::vec2 position, float angle) :
 	mScale(1),
 	mAngle(angle),
 	mUid(sEntity_counter++),
-	mShouldDie(false)
+	mDead(false)
 {}
 
 
@@ -22,13 +22,13 @@ glm::vec2	Entity::getPosition() const				{ return mPosition; }
 glm::vec3   Entity::getPosition3D() const           { return glm::vec3(mPosition.x, 0, mPosition.y); }
 float		Entity::getAngle() const				{ return mAngle; }
 float		Entity::getScale() const				{ return mScale; }
-bool		Entity::isDead() const					{ return mShouldDie; }
+bool		Entity::isDead() const					{ return mDead; }
 
 
 void		Entity::setPosition(glm::vec2 position)	{ mPosition = position; }
 void		Entity::setAngle(float radians)			{ mAngle = radians; }
 void		Entity::setScale(float value)			{ mScale = value; }
-void		Entity::kill()							{ mShouldDie = true; }
+void		Entity::kill()							{ mDead = true; }
 
 
 /** changes the position of Entity by offset */
