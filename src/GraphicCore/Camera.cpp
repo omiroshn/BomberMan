@@ -9,8 +9,8 @@
 #include "Game.hpp"
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :
-mFront(glm::vec3(0.0f, 0.0f, -1.0f)), mMovementSpeed(SPEED), mMouseSensitivity(SENSITIVITY), mZoom(ZOOM),
-mPosition(position), mWorldUp(up), mYaw(yaw), mPitch(pitch)
+mPosition(position), mFront(glm::vec3(0.0f, 0.0f, -1.0f)), mWorldUp(up),
+mYaw(yaw), mPitch(pitch), mMovementSpeed(SPEED), mMouseSensitivity(SENSITIVITY), mZoom(ZOOM)
 {
     updateCameraVectors();
 }

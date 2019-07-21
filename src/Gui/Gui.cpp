@@ -15,7 +15,7 @@ void Gui::ShowMainMenu()
 	mWidth = CONFIGURATION.getWidth();
 	mHeight = CONFIGURATION.getHeight();
 	if (!mBackground)
-		mBackground = (ImTextureID)RESOURCES.getTexture("sky")->getTextureID();
+		mBackground = (ImTextureID)(size_t)RESOURCES.getTexture("sky")->getTextureID();
 
 	ImGui::SetNextWindowPos({0, 0},0);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
@@ -245,7 +245,6 @@ void Gui::ShowSettingsMenu()
 
 		ImGui::Text("\nSet screen resolution\n");
         const char* items[] = {"360", "480", "720", "1400"};
-		ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		float w = ImGui::CalcItemWidth();
@@ -308,12 +307,12 @@ void Gui::GamePaused(bool state)
 
 void Gui::SetBackground(const char* texture)
 {
-	mBackground = (ImTextureID)RESOURCES.getTexture(texture)->getTextureID();
+	mBackground = (ImTextureID)(size_t)RESOURCES.getTexture(texture)->getTextureID();
 }
 
 void Gui::ShowLoadingScreen(const char* screen)
 {
-	ImTextureID im = (ImTextureID)RESOURCES.getTexture(screen)->getTextureID();
+	ImTextureID im = (ImTextureID)(size_t)RESOURCES.getTexture(screen)->getTextureID();
 	ImGui::SetNextWindowPos({0, 0},0);
 	mWidth = CONFIGURATION.getWidth();
 	mHeight = CONFIGURATION.getHeight();

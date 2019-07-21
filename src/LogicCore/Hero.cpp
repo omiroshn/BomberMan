@@ -1,17 +1,15 @@
 #include "LogicCore/Hero.h"
 #include "Game.hpp"
 
-Hero::Hero(SaveInfo info, glm::vec2 position /*= {1.5f, 1.5f}*/)
+Hero::Hero(Stats info, glm::vec2 position /*= {1.5f, 1.5f}*/)
 	: MovingEntity(position)
 	, mCurrentBombCount(info.bombMax)
-	, mBombMax(info.bombMax)
-	, mBombStrength(info.bombStrength)
-	, mLastTimePlacedBomb(0)
+	, mStats(info)
 {
 }
 
-void Hero::increaseBombStrength()	{ mBombStrength++; }
-void Hero::increaseBombMax()		{ mBombMax++; } 
+void Hero::increaseBombStrength()	{ mStats.bombStrength++; }
+void Hero::increaseBombMax()		{ mStats.bombMax++; } 
 void Hero::increaseBombCount()		{ mCurrentBombCount++; }
 
 void Hero::tryPlaceBomb()
@@ -25,15 +23,59 @@ void Hero::tryPlaceBomb()
 
 	mCurrentBombCount--;
 	mLastTimePlacedBomb = time;
-	Game::get()->plantBomb(getPosition(), mBombStrength);
+	Game::get()->plantBomb(getPosition(), mStats.bombStrength);
 }
 
-Hero::SaveInfo Hero::getSaveInfo()
+Hero::Stats Hero::getStats()
 {
-	return SaveInfo(mBombMax, mBombStrength);
+	return mStats;
 }
 
 void Hero::kill()
 {
 	Game::get()->onHeroDied();
+}
+
+void Hero::applyPowerup(PowerupType type)
+{
+	switch (type)
+	{
+		case PowerupType::PT_Bombs:
+		{
+			increaseBombMax();
+			increaseBombCount();
+			break;
+		}
+		case PowerupType::PT_Flames:
+		{
+			increaseBombStrength();
+			break;
+		}
+		case PowerupType::PT_Speed:
+		{
+			mStats.movementSpeed += 0.5f;
+			break;
+		}
+		case PowerupType::PT_Wallpass:
+		{
+			mStats.wallpass = 1;
+			break;
+		}
+		case PowerupType::PT_Detonator:
+		{
+			mStats.detonator = 1;
+			break;
+		}
+		case PowerupType::PT_Bombpass:
+		{
+			mStats.bombpass = 1;
+			break;
+		}
+		case PowerupType::PT_Flamepass:
+		{
+			mStats.flamepass = 1;
+			break;
+		}
+		default: break;
+	}
 }

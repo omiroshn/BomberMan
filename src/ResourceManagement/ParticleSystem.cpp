@@ -12,13 +12,14 @@
 
 #include "ResourceManagement/ParticleSystem.hpp"
 
-ParticleSystem::ParticleSystem():m_particleCount(particleCount),
-									m_startTime(std::chrono::high_resolution_clock::now()),
-									m_stepTime(std::chrono::high_resolution_clock::now()),
- 									m_deltaTime(0.0f),
-									m_liveTime(LIVE_TIME),
-									m_isRunning(false),
-									m_initKernelName("")
+ParticleSystem::ParticleSystem():
+						m_initKernelName(""),
+						m_particleCount(particleCount),
+						m_startTime(std::chrono::high_resolution_clock::now()),
+						m_stepTime(std::chrono::high_resolution_clock::now()),
+						m_deltaTime(0.0f),
+						m_liveTime(LIVE_TIME),
+						m_isRunning(false)
 {
 
 }
@@ -28,7 +29,7 @@ ParticleSystem::ParticleSystem(ParticleSystem const & rhs)
 	*this = rhs;
 }
 
-ParticleSystem & ParticleSystem::operator=(ParticleSystem const & rhs)
+ParticleSystem & ParticleSystem::operator=(ParticleSystem const &)
 {
 	return *this;
 }

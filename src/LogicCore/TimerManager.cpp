@@ -12,7 +12,7 @@
 
 #include "LogicCore/TimerManager.h"
 
-void TimerManager::tick(float DeltaTime)
+void TimerManager::tick(float)
 {
 	Update();
 }

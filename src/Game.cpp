@@ -4,6 +4,7 @@
 #include "Core.hpp"
 #include "Entity/MovingEntity.h"
 #include <tuple>
+#include <functional>
 #include "AI/AIController.h"
 #include "LogicCore/Timer.h"
 #include "LogicCore/TimerManager.h"
@@ -61,6 +62,7 @@ void Game::start()
         mRenderer->updateSize(width, height);
         CONFIGURATION.setHeight(height);
         CONFIGURATION.setWidth(width);
+        doAction(mIManager->processEvents(mWindow->getEvent(), *mKeyHandler.get()));
         if (!mWindow.get()->IsGameRunning())
         {
             mWindow.get()->ShowStartingMenu();
@@ -78,6 +80,9 @@ void Game::start()
                 ImGui::RadioButton("NO VSync", &index, 0);
                 ImGui::RadioButton("60", &index, 1);
                 ImGui::RadioButton("30", &index, 2);
+                mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
+                mWindow->ShowInGameMenu();
+                mRenderer->getParticleManager()->update();
                 if (index)
                 {
                     const float TargetDelta = 0.0167f * (float)index;
@@ -85,8 +90,6 @@ void Game::start()
                     if (mDeltaTime < TargetDelta)
                         SDL_Delay(static_cast<Uint32>(ms * 1000));
                 }
-                mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
-                mWindow->ShowInGameMenu();
             }
             else
             {
@@ -102,13 +105,14 @@ void Game::start()
                     mapLoader.cleanMapForRendering();
                     mCollisionInfo.Squares.clear();
                     mCollisionInfo = mapLoader.GetMap(CONFIGURATION.getChosenStage());
+                    extractInfo();
                     if (mHero)
                     {
-    					Hero::SaveInfo info = mHero->getSaveInfo();
+    					Hero::Stats info = mHero->getStats();
 					    mHero = std::make_unique<Hero>(info);
                     }
                     else
-                        mHero = std::make_unique<Hero>(Hero::SaveInfo(CONFIGURATION.getBombMax(), CONFIGURATION.getBombStrength()));
+                        mHero = std::make_unique<Hero>(CONFIGURATION.getStats());
                     mStageStartedTimer = getCurrentTime();
                     mReloadStage = 0;
                     mIsPaused = false;
@@ -116,8 +120,6 @@ void Game::start()
 
             }
         }
-        doAction(mIManager->processEvents(mWindow->getEvent(), *mKeyHandler.get()));
-		mRenderer->getParticleManager()->update();
         mWindow->update();
     }
 }
@@ -187,12 +189,19 @@ void Game::resolveCollisions()
 		{0, -1}
     };
 
-	auto& Hero = GetHero();
+	auto& Hero = getHero();
     glm::vec2 CollisionOffset(0);
-	const glm::vec2 Position = Hero.getPosition();
-	static float radius = 0.24f;
+    const glm::vec2 Position = Hero.getPosition();
+    static float radius = 0.24f;
     ImGui::SliderFloat("Collision radius", &radius, 0.05f, 1.f);
-    for (int i = 0; i < ARRAY_COUNT(offsets); i++)
+    if (mPowerupType != Hero::PowerupType::PT_NONE
+    && circle_circle_collision(Position, radius, mPowerup, radius))
+    {
+        Hero.applyPowerup(mPowerupType);
+        mPowerupType = Hero::PowerupType::PT_NONE;
+    }
+
+    for (size_t i = 0; i < ARRAY_COUNT(offsets); i++)
     {
         glm::vec2 ProbePoint = Position + offsets[i];
         bool inObstacle = mCollisionInfo[ProbePoint] != SquareType::EmptySquare;
@@ -214,14 +223,15 @@ void Game::resolveCollisions()
             It->AddAcceleration(glm::normalize(ProbePoint - center) * CollisionResolveMultiplier);
         }
     }
+
     Hero.move(CollisionOffset / 4.f);
     Hero.AddAcceleration(CollisionOffset * CollisionResolveMultiplier);
-	mRenderer->getCamera().followEntity(GetHero(), 10.f, mDeltaTime);
+	mRenderer->getCamera().followEntity(getHero(), 10.f, mDeltaTime);
 }
 
 void Game::doAction(Action const& a)
 {
-    auto& Hero = GetHero();
+    auto& Hero = getHero();
     ImGui::SliderFloat("Input Hero acceleration", &sInputAcceleration, 0, 10000);
 	const float offset  = mDeltaTime * sInputAcceleration;
 
@@ -342,6 +352,17 @@ void Game::loadModels()
     RESOURCES.loadModel("general/hero/model.fbx", "hero");
     RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(1.3f), glm::vec3{0,-0.4f,0});
 
+    // powerups placeholder, please do something about this!!!!!!!!!!!!!!!!!!!!!
+    RESOURCES.loadModel("general/powerup/model.dae", "bonus_bombs", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
+    RESOURCES.loadModel("general/powerup/model.dae", "bonus_flames", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
+    RESOURCES.loadModel("general/powerup/model.dae", "bonus_speed", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
+    RESOURCES.loadModel("general/powerup/model.dae", "bonus_wallpass", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
+    RESOURCES.loadModel("general/powerup/model.dae", "bonus_detonator", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
+    RESOURCES.loadModel("general/powerup/model.dae", "bonus_bombpass", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
+    RESOURCES.loadModel("general/powerup/model.dae", "bonus_flamepass", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
+    RESOURCES.loadModel("general/powerup/model.dae", "bonus_mystery", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     RESOURCES.loadModel("map/first/ground/model.fbx", "ground");
     RESOURCES.loadModel("map/first/perimeterWall/model.fbx", "perimeterWall");
     RESOURCES.loadModel("map/first/unbreakableWall/model.fbx", "unbreakableWall", glm::vec3(1), glm::vec3(0),  glm::normalize(glm::vec3(1,0,0)), -90);
@@ -394,7 +415,7 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 
     std::vector<SquareType*> deferedBricks;
 
-std::function<void (uint32_t, glm::vec2)> chainReaction = [&] (uint32_t skipped, glm::vec2 center) {
+std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
     Overlaper minMax(center);
     for (uint32_t i = 0; i < ARRAY_COUNT(directions); ++i)
         for (uint32_t j = 1; j <= span; ++j)
@@ -417,7 +438,7 @@ std::function<void (uint32_t, glm::vec2)> chainReaction = [&] (uint32_t skipped,
             if (type == SquareType::Bomb)
             {
                 type = SquareType::EmptySquare;
-                chainReaction(i, testPosition);
+                chainReaction(testPosition);
                 for (Entity* It : mBombs)
                     if (testPosition == It->getPosition())
                         It->kill();
@@ -425,11 +446,11 @@ std::function<void (uint32_t, glm::vec2)> chainReaction = [&] (uint32_t skipped,
         }
     overlaps.push_back(minMax);
 };
-    chainReaction(-1, centerPosition);
+    chainReaction(centerPosition);
     for (auto It : deferedBricks)
         *It = SquareType::EmptySquare;
 
-    auto &enemies = GetEnemies();
+    auto &enemies = getEnemies();
     std::for_each(overlaps.begin(), overlaps.end(), [&enemies](Overlaper &overlap) {
         auto hMin = overlap[0];
         auto hMax = overlap[1];
@@ -522,7 +543,7 @@ void	Game::tickAI(float deltaTime)
 {
 	if (ImGui::Button("Add balloon"))
 	{
-		GetBalloons().emplace_back(glm::vec2{9.5, 9.5});
+		getBalloons().emplace_back(glm::vec2{9.5, 9.5});
 	}
 	recacheEnemies();
 	for (auto& It : mBalloons)
@@ -535,7 +556,7 @@ std::vector<glm::mat4> Game::Filter(SquareType type)
 {
 	std::vector<glm::mat4> Result;
 	auto& squares = mCollisionInfo.Squares;
-	for (int i = 0; i < squares.size(); i++)
+	for (size_t i = 0; i < squares.size(); i++)
 	{
 		glm::vec2 Position {i % mCollisionInfo.width, i / mCollisionInfo.width};
 		auto value = squares[i];
@@ -559,15 +580,15 @@ void Game::recacheEnemies()
 		mEnemies.push_back(It);
 }
 
-std::vector<glm::mat4> Game::GetWallTransforms() {
+std::vector<glm::mat4> Game::getWallTransforms() {
 	return Filter(SquareType::Wall);
 }
 
-std::vector<glm::mat4> Game::GetBrickTransforms() {
+std::vector<glm::mat4> Game::getBrickTransforms() {
 	return Filter(SquareType::Brick);
 }
 
-std::vector<glm::mat4> Game::GetBombTransforms() {
+std::vector<glm::mat4> Game::getBombTransforms() {
 	std::vector<glm::mat4> Result;
 	for (Bomb* It : mBombs)
     {
@@ -576,11 +597,15 @@ std::vector<glm::mat4> Game::GetBombTransforms() {
 	return Result;
 }
 
-std::vector<glm::mat4> Game::GetBonusTransforms() {
-	return Filter(SquareType::Bonus);
+glm::mat4 Game::getPowerupTransform() {
+    return glm::translate(glm::mat4(1.f), glm::vec3{mPowerup.x, 0, mPowerup.y});
 }
 
-Hero& Game::GetHero()
+Hero::PowerupType Game::powerupTypeOnMap() {
+    return mPowerupType;
+}
+
+Hero& Game::getHero()
 {
 	return *mHero;
 }
@@ -590,12 +615,33 @@ void Game::plantBomb(glm::vec2 position, int strength)
 	mBombs.emplace_back(position, strength);
 }
 
-std::vector<MovingEntity*>& Game::GetEnemies()
+std::vector<MovingEntity*>& Game::getEnemies()
 {
 	return mEnemies;
 }
 
-std::vector<Game::Balloon>& Game::GetBalloons()
+std::vector<Game::Balloon>& Game::getBalloons()
 {
 	return mBalloons;
+}
+
+void Game::extractInfo()
+{
+    for (size_t i = 0; i < mCollisionInfo.Squares.size(); i++)
+    {
+        auto& It = mCollisionInfo.Squares[i];
+        if (It >= SquareType::Powerup_Bombs && It <= SquareType::Powerup_Mystery)
+        {
+            mPowerupType = (Hero::PowerupType)((int)It - (int)SquareType::Powerup_Bombs);
+            mPowerup = glm::vec2 { i % mCollisionInfo.width, i / mCollisionInfo.width };
+            mPowerup += glm::vec2(0.5f);
+            It = SquareType::Brick;
+        }
+        if (It == SquareType::Exit)
+        {
+            mExit = glm::vec2 { i % mCollisionInfo.width, i / mCollisionInfo.width };
+            mExit += glm::vec2(0.5f);
+            It = SquareType::Brick;
+        }
+    }
 }

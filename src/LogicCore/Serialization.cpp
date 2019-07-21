@@ -33,25 +33,20 @@ std::vector<SquareType> Serialization::LoadCampaignMap(int stage)
     std::fstream f{RESOURCES.getMap(map_name)};
     if(std::getline(f, line))
     {
-        for (int i = 0; i < line.size(); i++)
+        for (size_t i = 0; i < line.size(); i++)
         {
-            if (line[i] == '0')
-                map.push_back(SquareType::EmptySquare);
-            else if (line[i] == '1')
-                map.push_back(SquareType::Wall);
-            else if (line[i] == '2')
-                map.push_back(SquareType::Brick);
-            else
+            if (line[i] >= '0' && line[i] <= '9')
+                map.push_back((SquareType)(line[i] - '0'));
+            else if(line[i] >= 'a' && line[i] <= 'z')
+                map.push_back((SquareType)(line[i] - 'a' + 10));
+            else 
                 map.push_back(SquareType::EmptySquare);
         };
         map.push_back(SquareType::Wall);
-        
-            std::cout << "map size = " << map.size() << std::endl;
     }
-    else{
-            std::cout << "Not opened file" << stage << std::endl;
-            map = LoadCampaignMap(1);
-
+    else
+    {
+        map = LoadCampaignMap(1);
     }
 
     return map;

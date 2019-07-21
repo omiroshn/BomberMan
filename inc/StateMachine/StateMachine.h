@@ -11,14 +11,12 @@ struct State
 	unsigned char uid;
 
 	template<typename T>
-	void onTick(T& Owner, float DeltaTime) {};
+	void onTick(T&, float) {};
 	template<typename T>
-	void onEntry(T& Owner) {}
+	void onEntry(T&) {}
 
 	template<typename T>
 	bool transition(const T&) { return false; }
-
-	void onEvent(const Event&) {}
 };
 
 template <typename OwnerType, typename... Ts>

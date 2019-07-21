@@ -2,7 +2,7 @@
 #include <tuple>
 #include <iostream>
 
-MapLoader::MapLoader() : mWidth{0}, mHeight{0}
+MapLoader::MapLoader() : mWidth{0}
 {
 
 }
@@ -33,7 +33,6 @@ CollisionInfo MapLoader::GetMap(const int index)
 		MapGenerator mapGenerator(0);
 		mMapOfDigits = mapGenerator.GenerateNewMap();
 		mWidth = mapGenerator.GetWidth();
-		mHeight = mapGenerator.GetHeight();
 		mLoaded = true;
 	}
 	else if (index >= 0)
@@ -41,7 +40,6 @@ CollisionInfo MapLoader::GetMap(const int index)
 		//load from disk
 		mMapOfDigits = mReaderWriter.LoadCampaignMap(index);
 		mWidth = mMapOfDigits.size() / 20;
-		mHeight = mMapOfDigits.size() / mWidth;
 		mLoaded = true;
 	}
 	return CollisionInfo{ mMapOfDigits, mWidth };
