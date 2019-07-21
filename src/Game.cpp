@@ -122,6 +122,7 @@ void Game::start()
         }
         mWindow->update();
     }
+    CONFIGURATION.serialise();
 }
 
 void Game::pause()
