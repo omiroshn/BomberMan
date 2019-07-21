@@ -34,6 +34,10 @@ public:
 		usedEvent = false;
 	}
 
+	Timer() = delete;
+	Timer(Timer const&) = delete;
+    Timer& operator=(Timer const&) = delete;
+
 	void Tick() {
 		if (Game::getCurrentTime() >= endTime)
 		{

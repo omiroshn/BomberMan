@@ -7,7 +7,11 @@ class MovingEntity : public Entity, public Tickable
 {
 public:
 	MovingEntity(glm::vec2 position = { 0,0 }, float angle = 0, glm::vec2 velocity = { 0,0 }, glm::vec2 acceleration = {0,0});
-
+	
+	MovingEntity() = delete;
+	MovingEntity(MovingEntity const&) = delete;
+    MovingEntity& operator=(MovingEntity const&) = delete;
+	
 	float		GetSpeed()const;
 	glm::vec2	GetVelocity()const;
 	void		SetVelocity(glm::vec2);

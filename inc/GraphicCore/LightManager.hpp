@@ -9,7 +9,8 @@ class LightManager
 public:
     explicit LightManager();
     ~LightManager();
-
+	LightManager(LightManager const&) = delete;
+    LightManager& operator=(LightManager const&) = delete;
     glm::mat4 const& getLightSpaceMatrix() const;
     glm::vec3 const& getCurrentLightPos() const;
     int bindDepthMap();

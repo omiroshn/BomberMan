@@ -20,6 +20,8 @@ class Gui
 public:
 	Gui();
 	~Gui();
+	Gui(Gui const&) = delete;
+    Gui& operator=(Gui const&) = delete;
 	void ShowMainMenu();
 	void ShowInGameMenu();
     void ShowBetweenStageScreen();

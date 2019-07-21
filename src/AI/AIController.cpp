@@ -190,7 +190,10 @@ namespace
 	}
 }
 /** AI utility functions - end */
+IdleState::IdleState()
+{
 
+}
 /* Idle state -  start */
 void IdleState::onEntry(MovingEntity&)		   { m_TransitionToPatrol = Game::getCurrentTime() + .3f; }
 bool IdleState::transition(const PatrolState&) { return m_TransitionToPatrol <= Game::getCurrentTime(); }
@@ -295,3 +298,7 @@ void ConfusedState::onEntry(MovingEntity& pawn, float DeltaTime /*= 0*/)
 	initialAngle = pawn.getAngle();
 }
 /* Confused state -  end */
+IdleState::~IdleState()
+{
+
+}

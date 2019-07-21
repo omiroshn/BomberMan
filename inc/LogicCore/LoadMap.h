@@ -17,6 +17,10 @@ class MapLoader
 public:
 	MapLoader();
 	~MapLoader();
+
+	MapLoader(MapLoader const&) = delete;
+    MapLoader& operator=(MapLoader const&) = delete;
+
 	CollisionInfo GetMap(const int index);
 	void UpdateMap();
 	bool MapIsLoaded();

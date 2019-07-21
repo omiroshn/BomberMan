@@ -19,6 +19,9 @@ public:
 
 	Bomb(glm::vec2 pos, int explosionStrength);
 	~Bomb();
+	Bomb(Bomb const&) = delete;
+    Bomb& operator=(Bomb const&) = delete;
+	
 	static void bindArrays();
 	static void drawSparks(glm::vec4 position);
 	static void drawSparksQuadsDeferred(glm::mat4 view, glm::mat4 projection);

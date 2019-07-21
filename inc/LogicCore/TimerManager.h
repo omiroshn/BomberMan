@@ -44,6 +44,8 @@ public:
 private:
 	TimerManager();
 	~TimerManager();
+	TimerManager(TimerManager const&) = delete;
+    TimerManager& operator=(TimerManager const&) = delete;
 };
 
 #endif

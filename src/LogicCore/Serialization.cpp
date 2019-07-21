@@ -13,6 +13,16 @@
 #include "LogicCore/Serialization.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
 
+Serialization::Serialization()
+{
+
+}
+
+Serialization::~Serialization()
+{
+
+}
+
 std::vector<SquareType> Serialization::LoadCampaignMap(int stage)
 {
     std::string map_name = "map" + std::to_string(stage) + ".txt";
@@ -25,7 +35,6 @@ std::vector<SquareType> Serialization::LoadCampaignMap(int stage)
     {
         for (int i = 0; i < line.size(); i++)
         {
-            //std::cout << "line[" <<i << "]" << line[i] << std::endl;
             if (line[i] == '0')
                 map.push_back(SquareType::EmptySquare);
             else if (line[i] == '1')
