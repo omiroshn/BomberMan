@@ -100,24 +100,7 @@ void Renderer::normalPass(Game& aMap)
     static auto skyboxShader = RESOURCES.getShader("skybox");
 
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
-    glm::mat4 view = glm::mat4(glm::mat3(mCamera.getViewMatrix()));
-
-    // render skybox
-    static std::shared_ptr<Skybox> skyboxes[] =
-    {
-        RESOURCES.getSkybox("defaultSkybox"),
-        RESOURCES.getSkybox("lightblue"),
-        RESOURCES.getSkybox("defaultSkybox"),
-        RESOURCES.getSkybox("blue")
-    };
-    auto skybox = skyboxes[mStage];
-
-    skyboxShader->use();
-    skyboxShader->setMat4("view", view);
-    skyboxShader->setMat4("projection", projection);
-    skybox->draw(skyboxShader);
-
-    view = mCamera.getViewMatrix();
+    glm::mat4 view = mCamera.getViewMatrix();
 
     //render the model
     modelShader->use();
@@ -145,6 +128,23 @@ void Renderer::normalPass(Game& aMap)
     }
     ground->draw(modelShader, transforms);
 
+    // render skybox
+    static std::shared_ptr<Skybox> skyboxes[] =
+    {
+        RESOURCES.getSkybox("defaultSkybox"),
+        RESOURCES.getSkybox("lightblue"),
+        RESOURCES.getSkybox("defaultSkybox"),
+        RESOURCES.getSkybox("blue")
+    };
+    auto skybox = skyboxes[mStage];
+
+    view = glm::mat4(glm::mat3(mCamera.getViewMatrix()));
+    skyboxShader->use();
+    skyboxShader->setMat4("view", view);
+    skyboxShader->setMat4("projection", projection);
+    skybox->draw(skyboxShader);
+
+    view = mCamera.getViewMatrix();
 	// render running particle system
 	try {
 		mParticleManager->draw(projection, view);
