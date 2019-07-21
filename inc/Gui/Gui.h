@@ -8,7 +8,9 @@
 #include "SDL.h"
 #include "GL/glew.h"
 
+
 #define  STANDARD_MENU_BUTTON {220, 48}
+
 
 enum class CurrentMenu
 {
@@ -56,6 +58,7 @@ private:
 	static char*        sClipboardTextData;
 	static const char*	GetClipboardText(void*);
 	static void 		SetClipboardText(void*, const char *text);
+
 
 	bool mGameStarted = false;
 	bool mGamePaused = false; //make static in Game
