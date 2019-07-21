@@ -37,6 +37,9 @@ public:
     float zoom() const;
     glm::vec3 position() const;
     void followEntity(Entity &, float d, float deltaTime);
+	Camera(Camera const&) = delete;
+    Camera& operator=(Camera const&) = delete;
+    ~Camera();
 private:
     void updateCameraVectors();
     void applyTransform();

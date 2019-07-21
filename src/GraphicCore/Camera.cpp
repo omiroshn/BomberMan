@@ -118,3 +118,8 @@ glm::vec3 Camera::position() const
 {
     return mPosition;
 }
+
+Camera::~Camera()
+{
+
+}

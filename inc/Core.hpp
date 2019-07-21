@@ -36,10 +36,14 @@ class Tickable
 {
 public:
 	static void tickTickables(float DeltaTime);
+
 protected:
 	Tickable();
 	Tickable(Tickable&& Other);
-	~Tickable();
+	Tickable(Tickable const&) = delete;
+    Tickable& operator=(Tickable const&) = delete;
+	virtual ~Tickable();
+	
 private:
 	static std::vector<Tickable *> sTickables;
 	virtual void tick(float DeltaTime) = 0;

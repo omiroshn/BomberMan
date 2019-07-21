@@ -39,6 +39,8 @@ private:
 public:
     InputManager();
     ~InputManager();
+    InputManager(InputManager const&) = delete;
+    InputManager& operator=(InputManager const&) = delete;
     Action processEvents(SDL_Event &e, KeyboardHandler &keyHandler);
     Action processKeyDown(SDL_Keycode keyPressed);
     Action processMouseMotion(SDL_Event const &e);

@@ -182,7 +182,7 @@ void Gui::ShowLoadSavedGamesMenu()
 			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("cloud_trans")->getTextureID());
 		}
 
-		ImGui::BeginChildFrame(2, {201, 204}, 4);
+		ImGui::BeginChildFrame(2, {234, 204}, 4);
 		ImGui::Text("Choose stage of the campaign");
 		if (ImGui::ImageButton(mButtonsTextures.at(0), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
 		{
@@ -209,6 +209,11 @@ void Gui::ShowLoadSavedGamesMenu()
 		ImGui::SameLine();
 		ImGui::Text("\nBonus level");
 		ImGui::EndChildFrame();
+		if (ImGui::Button("BACK", {234, 48}))
+		{
+			mCurrentMenu = CurrentMenu::mainMenu;
+			return;
+		}
 }
 
 void Gui::ShowSettingsMenu()

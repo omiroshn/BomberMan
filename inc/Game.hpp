@@ -35,6 +35,10 @@ public:
     void        explosion(glm::ivec2 position, uint32_t span);
 
     static Game             *get();
+
+	Game(Game const&) = delete;
+    Game& operator=(Game const&) = delete;
+
 private:
 	void		resolveCollisions();
     void		doAction(Action const&);
