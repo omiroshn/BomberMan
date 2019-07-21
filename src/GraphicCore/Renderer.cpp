@@ -95,6 +95,14 @@ void Renderer::normalPass(Game& aMap)
     glViewport(0, 0, mWidth, mHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  
+    static auto ground = RESOURCES.getModel("ground");
+    static auto modelShader = RESOURCES.getShader("modelShader");
+    static auto skyboxShader = RESOURCES.getShader("skybox");
+
+    glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
+    glm::mat4 view = glm::mat4(glm::mat3(mCamera.getViewMatrix()));
+
+    // render skybox
     static std::shared_ptr<Skybox> skyboxes[] =
     {
         RESOURCES.getSkybox("defaultSkybox"),
@@ -102,17 +110,17 @@ void Renderer::normalPass(Game& aMap)
         RESOURCES.getSkybox("defaultSkybox"),
         RESOURCES.getSkybox("blue")
     };
-
-    static auto ground = RESOURCES.getModel("ground");
-    static auto modelShader = RESOURCES.getShader("modelShader");
-    static auto skyboxShader = RESOURCES.getShader("skybox");
-
     auto skybox = skyboxes[mStage];
 
-    modelShader->use();
-    glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
-    glm::mat4 view = mCamera.getViewMatrix();
+    skyboxShader->use();
+    skyboxShader->setMat4("view", view);
+    skyboxShader->setMat4("projection", projection);
+    skybox->draw(skyboxShader);
 
+    view = mCamera.getViewMatrix();
+
+    //render the model
+    modelShader->use();
     modelShader->setMat4("projection", projection);
     modelShader->setMat4("view", view);
     modelShader->setVec3("viewPos", mCamera.position());
@@ -125,14 +133,12 @@ void Renderer::normalPass(Game& aMap)
 
     // render the ground
     std::vector<glm::mat4> transforms;
-    glm::mat4 groundModel = glm::mat4(1.0f);
-    groundModel = glm::translate(groundModel, glm::vec3(.0f, -1.f, .0f));
+    glm::mat4 groundModel = glm::translate(glm::mat4(1.0f), glm::vec3(.0f, -1.f, .0f));
 
     CollisionInfo &info = Game::getCollisionInfo();
     for (int i = 0; i < info.Squares.size(); i++)
     {
-        glm::mat4 groundTransform = groundModel;
-        groundTransform = glm::translate(groundTransform,
+        glm::mat4 groundTransform = glm::translate(groundModel,
             glm::vec3(i % info.width + .5f, 0, i / info.width + .5f)
         );
         transforms.push_back(groundTransform);
@@ -149,13 +155,6 @@ void Renderer::normalPass(Game& aMap)
 
     // render sparks
     Bomb::drawSparksQuadsDeferred(view, projection);
-
-    // render skybox
-    view = glm::mat4(glm::mat3(mCamera.getViewMatrix()));
-    skyboxShader->use();
-    skyboxShader->setMat4("view", view);
-    skyboxShader->setMat4("projection", projection);
-    skybox->draw(skyboxShader);
 }
 
 void Renderer::shadowPass(Game& aMap)
