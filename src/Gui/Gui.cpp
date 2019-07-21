@@ -158,7 +158,6 @@ void Gui::ShowStartNewGameMenu()
 
 void Gui::ChangeStage(int next_stage)
 {
-	int ach = CONFIGURATION.getBestLevelAchieved();
 	if (next_stage > CONFIGURATION.getBestLevelAchieved())
 			return;
 	CONFIGURATION.setChosenStage(next_stage + 1);
@@ -175,11 +174,11 @@ void Gui::ShowLoadSavedGamesMenu()
 {
 		if (mButtonsTextures.empty())
 		{
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked0")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked1")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked2")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked3")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("locked")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked0")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked1")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked2")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked3")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("locked")->getTextureID());
 		}
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(28, 4));
 		ImGui::BeginChildFrame(2, {234, 204}, 4);
