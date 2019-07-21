@@ -31,8 +31,8 @@ void Gui::ShowMainMenu()
 
 	if (mCurrentMenu == CurrentMenu::mainMenu)
 	{
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(40, 20));
-		ImGui::Text("BomberMan game menu");
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
+		ImGui::Text("       BomberMan game menu");
 
 		/////////////////////////////////START GAME////////////////////////////////////
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
@@ -275,11 +275,9 @@ void Gui::ShowSettingsMenu()
 		ImGui::EndChildFrame();
 		ImGui::PopStyleVar();
 
-		if (ImGui::Button("CONTINUE", {234, 48}))
+		if (ImGui::Button("BACK", {234, 48}))
 		{
 			mCurrentMenu = CurrentMenu::mainMenu;
-			GamePaused(false);
-			StartTheGame(true);
 			return;
 		}
 
