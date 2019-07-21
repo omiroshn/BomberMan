@@ -32,7 +32,6 @@ public:
 	void SetBackground(const char* texture);
 
 private:
-	void ShowHardnessRadioButtons();
 	void ShowStartNewGameMenu();
 	void ShowLoadSavedGamesMenu();
 	void ShowSettingsMenu();

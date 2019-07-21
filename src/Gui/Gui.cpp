@@ -159,11 +159,8 @@ void Gui::ShowStartNewGameMenu()
 void Gui::ChangeStage(int next_stage)
 {
 	int ach = CONFIGURATION.getBestLevelAchieved();
-	if (CONFIGURATION.getBestLevelAchieved() < next_stage)	
-		{
-			std::cout << "best = " << CONFIGURATION.getBestLevelAchieved() << std::endl;
+	if (next_stage > CONFIGURATION.getBestLevelAchieved())
 			return;
-		}
 	CONFIGURATION.setChosenStage(next_stage + 1);
 	GamePaused(false);
 	StartTheGame(true);
@@ -178,37 +175,41 @@ void Gui::ShowLoadSavedGamesMenu()
 {
 		if (mButtonsTextures.empty())
 		{
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("brickwall")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("cloud_trans")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked0")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked1")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked2")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked3")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("locked")->getTextureID());
 		}
-
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(28, 4));
 		ImGui::BeginChildFrame(2, {234, 204}, 4);
-		ImGui::Text("Choose stage of the campaign");
-		if (ImGui::ImageButton(mButtonsTextures.at(0), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		ImGui::Text("\nStages of the campaign");
+		if (ImGui::ImageButton(mButtonsTextures.at(0), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(0);
 		}
 		ImGui::SameLine();
-		ImGui::Text("\nStage 1");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 1 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		ImGui::Text("\n   Stage 1");
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 0 ? 1 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(1);
 		}
 		ImGui::SameLine();
-		ImGui::Text("\nStage 2");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 2 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		ImGui::Text("\n   Stage 2");
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 1 ? 2 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(2);
 		}
 		ImGui::SameLine();
-		ImGui::Text("\nStage 3");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 3 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		ImGui::Text("\n   Stage 3");
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 2 ? 3 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(3);
 		}
 		ImGui::SameLine();
-		ImGui::Text("\nBonus level");
+		ImGui::Text("\n   Bonus level");
 		ImGui::EndChildFrame();
+		ImGui::PopStyleVar();
 		if (ImGui::Button("BACK", {234, 48}))
 		{
 			mCurrentMenu = CurrentMenu::mainMenu;
@@ -223,11 +224,11 @@ void Gui::ShowSettingsMenu()
 		ImGui::BeginChildFrame(3, saved_frame, 4);
 
 		ImGui::Text("\n    Set music volume\n");
-		ImGui::SliderInt("10", &CONFIGURATION.getMusicVolume(), 0, 10, "Music");
+		ImGui::SliderInt("1O", &CONFIGURATION.getMusicVolume(), 0, 10, "Music");
 		ImGui::Separator();
 
 		ImGui::Text("\n   Set sounds volume\n");
-		ImGui::SliderInt("9", &CONFIGURATION.getSoundVolume(), 0, 9, "Sounds");
+		ImGui::SliderInt("10", &CONFIGURATION.getSoundVolume(), 0, 10, "Sounds");
 		ImGui::Separator();
 
 		ImGui::Text("\n    Set keybinding\n");
@@ -308,26 +309,6 @@ void Gui::GamePaused(bool state)
 void Gui::SetBackground(const char* texture)
 {
 	mBackground = (ImTextureID)RESOURCES.getTexture(texture)->getTextureID();
-}
-
-
-void Gui::ShowHardnessRadioButtons()
-{
-	static int hardness = 0;
-	ImGui::RadioButton("Easy", &hardness, 0);ImGui::SameLine();
-
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip("For beginners");
-
-	ImGui::RadioButton("Middle", &hardness,1);ImGui::SameLine();
-
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip("Recommended");
-
-	ImGui::RadioButton("Hard", &hardness, 2);
-
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip("Super hard map");
 }
 
 void Gui::ShowLoadingScreen(const char* screen)

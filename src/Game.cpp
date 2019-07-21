@@ -311,9 +311,13 @@ void Game::loadResources()
 		RESOURCES.loadShader("shadowShader.vx.glsl", "shadowShader.ft.glsl", "shadow");
 		RESOURCES.loadShader("sparks.vx.glsl", "sparks.ft.glsl", "sparks");
         RESOURCES.loadTexture("block.png", "block");
-        RESOURCES.loadTexture("unlocked.png", "unlocked");
         RESOURCES.loadTexture("brickwall.png", "brickwall");
         RESOURCES.loadTexture("sky.png", "sky");
+        RESOURCES.loadTexture("locked.png", "locked");
+        RESOURCES.loadTexture("unlocked0.png", "unlocked0");
+        RESOURCES.loadTexture("unlocked0.png", "unlocked1");
+        RESOURCES.loadTexture("unlocked0.png", "unlocked2");
+        RESOURCES.loadTexture("unlocked0.png", "unlocked3");
         RESOURCES.loadTexture("container.jpg", "container");
         RESOURCES.loadTexture("awesomeface.png", "face");
 		RESOURCES.loadTexture("flame-fire.png", "flame-fire");
