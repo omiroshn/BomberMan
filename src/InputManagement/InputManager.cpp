@@ -154,7 +154,7 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
         case SDLK_e:
             return Action::Down;
         case SDLK_0:
-            return Action::Pause;
+            return Action::Explosion;
         default:
             return Action::Nothing;
     }
