@@ -4,6 +4,7 @@
 #include <GameWindow.hpp>
 #include "Core.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
+#include "Gui/Gui.h"
 
 GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
     mWidth(aWidth), mHeight(aHeight), mName(aWinName)
