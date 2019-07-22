@@ -12,8 +12,8 @@ Gui::Gui()
 
 void Gui::ShowMainMenu()
 {
-	mWidth = CONFIGURATION.getWidth();
-	mHeight = CONFIGURATION.getHeight();
+	mWidth = (float)CONFIGURATION.getWidth();
+	mHeight = (float)CONFIGURATION.getHeight();
 	if (!mBackground)
 		mBackground = (ImTextureID)(size_t)RESOURCES.getTexture("sky")->getTextureID();
 
@@ -313,8 +313,8 @@ void Gui::ShowLoadingScreen(const char* screen)
 {
 	ImTextureID im = (ImTextureID)(size_t)RESOURCES.getTexture(screen)->getTextureID();
 	ImGui::SetNextWindowPos({0, 0},0);
-	mWidth = CONFIGURATION.getWidth();
-	mHeight = CONFIGURATION.getHeight();
+	mWidth = (float)CONFIGURATION.getWidth();
+	mHeight = (float)CONFIGURATION.getHeight();
 	ImGui::SetNextWindowSize({mWidth,mHeight});
 	ImGui::Begin("Next Stage", NULL, mWindow_flags);
 	ImGui::Image(im,{mWidth,mHeight}, {1,1}, {0,0});
