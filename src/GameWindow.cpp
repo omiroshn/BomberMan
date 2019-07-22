@@ -4,7 +4,7 @@
 #include <GameWindow.hpp>
 #include "Core.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
-#include "Gui/imgui_impl_sdl_gl3.h"
+#include "Gui/Gui.h"
 
 GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
     mWidth(aWidth), mHeight(aHeight), mName(aWinName)
@@ -15,7 +15,7 @@ GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
 
 GameWindow::~GameWindow()
 {
-    ImGui_ImplSdlGL3_Shutdown();
+    mMainMenu->ImGui_Shutdown();
     ImGui::DestroyContext();
 
     SDL_GL_DeleteContext(mContext);
@@ -76,7 +76,7 @@ void GameWindow::initGui() {
     char* data = new char[fontData.size()];
     std::memcpy(data, fontData.data(), fontData.size());
 	io.Fonts->AddFontFromMemoryTTF(std::move(data), static_cast<int>(fontData.size()), 16);
-    ImGui_ImplSdlGL3_Init(mWindow);
+    mMainMenu->ImGui_Init(mWindow);
 
     ImGui::StyleColorsDark();
 
@@ -104,7 +104,7 @@ void GameWindow::update()
     //         mMainMenu->ShowMainMenu();
     //     }
     ImGui::Render();
-    ImGui_ImplSdlGL3_RenderDrawData(ImGui::GetDrawData());
+    mMainMenu->ImGui_RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(mWindow);
 
     SDL_PollEvent(&mEvent);
@@ -117,7 +117,7 @@ SDL_Event & GameWindow::getEvent()
 
 void GameWindow::tickGui()
 {
-    ImGui_ImplSdlGL3_NewFrame(mWindow);
+    mMainMenu->ImGui_NewFrame(mWindow);
 }
 
 void GameWindow::getSize(int &w, int &h)
