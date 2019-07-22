@@ -76,7 +76,7 @@ void Bomb::drawSparksQuadsDeferred(glm::mat4 view, glm::mat4 projection)
     glActiveTexture(GL_TEXTURE0);
     RESOURCES.getTexture("sparks")->bind();
 
-	glDrawArrays(GL_POINTS, 0, mSparksQuads.size());
+	glDrawArrays(GL_POINTS, 0, (GLsizei)mSparksQuads.size());
 	glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 }

@@ -130,11 +130,11 @@ Action InputManager::processMouseMotion(SDL_Event const &e)
 {
     if (mRightButtonPressed)
     {
-        mouseOffsetX = e.motion.x - prevMousePosX;
-        mouseOffsetY = prevMousePosY - e.motion.y;
+        mouseOffsetX = float(e.motion.x - prevMousePosX);
+        mouseOffsetY = float(prevMousePosY - e.motion.y);
 
-        prevMousePosX = e.motion.x;
-        prevMousePosY = e.motion.y;
+        prevMousePosX = float(e.motion.x);
+        prevMousePosY = float(e.motion.y);
         return Action::CameraRotate;
     }
     return Action::Nothing;
@@ -152,8 +152,8 @@ void InputManager::processMouseButton(SDL_MouseButtonEvent const &e, bool isPres
     {
         case SDL_BUTTON_RIGHT:
             mRightButtonPressed = isPressed;
-            prevMousePosX = e.x;
-            prevMousePosY = e.y;
+            prevMousePosX = float(e.x);
+            prevMousePosY = float(e.y);
         break;
         default:
             break;
