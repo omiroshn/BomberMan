@@ -40,13 +40,13 @@ void Renderer::draw(Game& aMap)
 
 void Renderer::prepareTransforms(Game &g)
 {
-    mTransforms[ModelType::Brick] = g.GetBrickTransforms();
-    mTransforms[ModelType::Wall] = g.GetWallTransforms();
-    mTransforms[ModelType::Bomb] = g.GetBombTransforms();
-    mTransforms[ModelType::Player] = std::vector<glm::mat4>{g.GetHero().getModelMatrix()};
+    mTransforms[ModelType::Brick] = g.getBrickTransforms();
+    mTransforms[ModelType::Wall] = g.getWallTransforms();
+    mTransforms[ModelType::Bomb] = g.getBombTransforms();
+    mTransforms[ModelType::Player] = std::vector<glm::mat4>{g.getHero().getModelMatrix()};
 
     std::vector<glm::mat4> transforms;
-    auto& Enemies = g.GetEnemies();
+    auto& Enemies = g.getEnemies();
     for (auto It : Enemies)
         transforms.push_back(It->getModelMatrix());
     mTransforms[ModelType::EnemyType1] = transforms;
@@ -73,6 +73,21 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
     a.setTime(0);
     bomb->setAnimation(a);
     bomb->draw(s, mTransforms[ModelType::Bomb]);
+
+    auto type = Game::get()->powerupTypeOnMap();
+    if (type != Hero::PowerupType::PT_NONE)
+    {
+        static std::shared_ptr<Model> bonusModels[Hero::PowerupType::PT_NONE] = {
+            RESOURCES.getModel("bonus_bombs"),
+            RESOURCES.getModel("bonus_flames"),
+            RESOURCES.getModel("bonus_speed"),
+            RESOURCES.getModel("bonus_wallpass"),
+            RESOURCES.getModel("bonus_detonator"),
+            RESOURCES.getModel("bonus_bombpass"),
+            RESOURCES.getModel("bonus_flamepass")
+        };
+        bonusModels[type]->draw(s, std::vector<glm::mat4>{Game::get()->getPowerupTransform()});
+    }
 }
 
 void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
@@ -81,7 +96,7 @@ void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
     static auto balloon = RESOURCES.getModel("balloon");
 
     //render hero
-    auto& Hero = g.GetHero();
+    auto& Hero = g.getHero();
     Hero.debug();
     heroModel->setAnimation(Hero.getAnimation());
     heroModel->draw(s, mTransforms[ModelType::Player]);
@@ -119,7 +134,7 @@ void Renderer::normalPass(Game& aMap)
     glm::mat4 groundModel = glm::translate(glm::mat4(1.0f), glm::vec3(.0f, -1.f, .0f));
 
     CollisionInfo &info = Game::getCollisionInfo();
-    for (int i = 0; i < info.Squares.size(); i++)
+    for (size_t i = 0; i < info.Squares.size(); i++)
     {
         glm::mat4 groundTransform = glm::translate(groundModel,
             glm::vec3(i % info.width + .5f, 0, i / info.width + .5f)

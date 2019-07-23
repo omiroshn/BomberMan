@@ -15,7 +15,7 @@ void Gui::ShowMainMenu()
 	mWidth = CONFIGURATION.getWidth();
 	mHeight = CONFIGURATION.getHeight();
 	if (!mBackground)
-		mBackground = (ImTextureID)RESOURCES.getTexture("sky")->getTextureID();
+		mBackground = (ImTextureID)(size_t)RESOURCES.getTexture("sky")->getTextureID();
 
 	ImGui::SetNextWindowPos({0, 0},0);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
@@ -158,7 +158,6 @@ void Gui::ShowStartNewGameMenu()
 
 void Gui::ChangeStage(int next_stage)
 {
-	int ach = CONFIGURATION.getBestLevelAchieved();
 	if (next_stage > CONFIGURATION.getBestLevelAchieved())
 			return;
 	CONFIGURATION.setChosenStage(next_stage + 1);
@@ -175,11 +174,11 @@ void Gui::ShowLoadSavedGamesMenu()
 {
 		if (mButtonsTextures.empty())
 		{
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked0")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked1")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked2")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked3")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("locked")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked0")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked1")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked2")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked3")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("locked")->getTextureID());
 		}
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(28, 4));
 		ImGui::BeginChildFrame(2, {234, 204}, 4);
@@ -245,7 +244,6 @@ void Gui::ShowSettingsMenu()
 
 		ImGui::Text("\nSet screen resolution\n");
         const char* items[] = {"360", "480", "720", "1400"};
-		ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		float w = ImGui::CalcItemWidth();
@@ -308,12 +306,12 @@ void Gui::GamePaused(bool state)
 
 void Gui::SetBackground(const char* texture)
 {
-	mBackground = (ImTextureID)RESOURCES.getTexture(texture)->getTextureID();
+	mBackground = (ImTextureID)(size_t)RESOURCES.getTexture(texture)->getTextureID();
 }
 
 void Gui::ShowLoadingScreen(const char* screen)
 {
-	ImTextureID im = (ImTextureID)RESOURCES.getTexture(screen)->getTextureID();
+	ImTextureID im = (ImTextureID)(size_t)RESOURCES.getTexture(screen)->getTextureID();
 	ImGui::SetNextWindowPos({0, 0},0);
 	mWidth = CONFIGURATION.getWidth();
 	mHeight = CONFIGURATION.getHeight();

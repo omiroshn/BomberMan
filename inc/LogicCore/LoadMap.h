@@ -30,7 +30,6 @@ private:
 	std::vector<SquareType>      mMapOfDigits;
     bool                         mLoaded{false};
     unsigned                     mWidth;
-    unsigned                     mHeight;
 	Serialization                mReaderWriter;
 };
 

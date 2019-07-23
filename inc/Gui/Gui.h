@@ -40,8 +40,6 @@ private:
 	bool mGamePaused = false; //make static in Game
 	ImGuiWindowFlags mWindow_flags = 0;
 	CurrentMenu mCurrentMenu = CurrentMenu::mainMenu;
-	bool mShowScore = false;
-	int  mMapIndex = -1;
 	ImTextureID mBackground = nullptr;
 	float mWidth = 800.0f;
 	float mHeight = 600.0f;

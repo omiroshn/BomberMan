@@ -92,7 +92,7 @@ std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std:
 			}
 		}
 	}
-    return std::move(bones);
+    return bones;
 }
 
 std::vector<Vertex> Model::loadVertices(aiMesh const* mesh)
@@ -130,7 +130,7 @@ std::vector<Vertex> Model::loadVertices(aiMesh const* mesh)
         vertices.push_back(vertex);
         mAABB += vertex.Position;
     }
-    return std::move(vertices);
+    return vertices;
 }
 
 std::vector<unsigned int> Model::loadIndices(aiMesh const* mesh)
@@ -143,7 +143,7 @@ std::vector<unsigned int> Model::loadIndices(aiMesh const* mesh)
         for(unsigned int j = 0; j < face.mNumIndices; j++)
             indices.push_back(face.mIndices[j]);
     }
-    return std::move(indices);
+    return indices;
 }
 
 std::vector<std::shared_ptr<Texture>> Model::loadTextures(aiMesh const* mesh, aiScene const* scene)
@@ -155,7 +155,7 @@ std::vector<std::shared_ptr<Texture>> Model::loadTextures(aiMesh const* mesh, ai
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
     std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-    return std::move(textures);
+    return textures;
 }
 
 std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)

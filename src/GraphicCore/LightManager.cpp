@@ -1,10 +1,11 @@
 #include "GraphicCore/LightManager.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include <imgui.h>
 
 LightManager::LightManager()
 {
     initShadowFramebuffer();
-    initLightSpaceMatrix();
+    //initLightSpaceMatrix();
 }
 
 LightManager::~LightManager()
@@ -33,13 +34,22 @@ void LightManager::initShadowFramebuffer()
 void LightManager::initLightSpaceMatrix()
 {
     glm::mat4 lightProjection, lightView;
-    lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.f, 100.0f);
-    lightView = glm::lookAt(mLightPos, glm::vec3(11,0,9), glm::vec3(0.0, 1.0, 0.0));
+    static glm::vec2 lr{1.667f, 25.667f};
+    static glm::vec2 tb{-4.f, 17.333f};
+    static glm::vec2 nf{75.f, 120.f};
+    static glm::vec3 lookTarget(-1);
+    ImGui::SliderFloat2("light left/right", &lr.x, -32, 32);
+    ImGui::SliderFloat2("light top/bottom", &tb.x, -32, 32);
+    ImGui::SliderFloat2("light near/far", &nf.x, 0, 120);
+    ImGui::SliderFloat3("lookAtTarget", &lookTarget.x, -32, 32);
+    lightProjection = glm::ortho(lr.x, lr.y, tb.x, tb.y, nf.x, nf.y);
+    lightView = glm::lookAt(mLightPos, lookTarget, glm::vec3(0.0, 1.0, 0.0));
     mLightSpaceMatrix = lightProjection * lightView;
 }
 
-glm::mat4 const& LightManager::getLightSpaceMatrix() const
+glm::mat4 const& LightManager::getLightSpaceMatrix()
 {
+    initLightSpaceMatrix();
     return mLightSpaceMatrix;
 }
 

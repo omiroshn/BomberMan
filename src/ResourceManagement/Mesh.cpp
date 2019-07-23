@@ -11,11 +11,11 @@ Mesh::Mesh(std::vector<Vertex> vertices,
     mVertices{std::move(vertices)}
     , mIndices{std::move(indices)}
     , mTextures{std::move(textures)}
-    , mCurrentAnimation{0}
-    , mScene{scene}
     , mIsAnimated{scene->HasAnimations()}
-    , mOffsetMatrices{std::move(aOffsets)}
+    , mCurrentAnimation{0}
     , mBones{std::move(bones)}
+    , mOffsetMatrices{std::move(aOffsets)}
+    , mScene{scene}
 {
     setupMesh();
     setInstanceBuffer();

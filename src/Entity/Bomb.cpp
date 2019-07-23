@@ -10,7 +10,6 @@ GLuint Bomb::mSparksArray = 0;
 const float Bomb::FUSE_TIME = 3.0f;
 const float Bomb::SPAWN_TIME = .5f;
 
-// BOMB
 Bomb::Bomb(glm::vec2 pos, int explosionStrength)
 	: Entity(glm::floor(pos) + glm::vec2{0.5f})
 	, mExplosionStrength(explosionStrength)
@@ -31,11 +30,10 @@ void Bomb::bindArrays()
 
 Bomb::~Bomb()
 {
-	if (!mSparksQuads.empty() || mSparksQuads.size() > 0)
-		mSparksQuads.erase(mSparksQuads.begin());
-	if (auto *hero = &Game::get()->GetHero())
+	if (auto *hero = &Game::get()->getHero())
 		hero->increaseBombCount();
 	Game::getCollisionInfo()[getPosition()] = SquareType::EmptySquare;
+	mSparksQuads.erase(mSparksQuads.begin());
 }
 
 void Bomb::drawSparks(glm::vec4 position)
@@ -89,7 +87,7 @@ bool Spawning::transition(const Counting&)
 	return (Game::getCurrentTime() - mStartTime) >= Bomb::SPAWN_TIME;
 }
 
-void Spawning::onTick(Bomb& bomb, float DeltaTime)
+void Spawning::onTick(Bomb& bomb, float)
 {
 	bomb.setScale((Game::getCurrentTime() - mStartTime) / Bomb::SPAWN_TIME);
 }
@@ -101,7 +99,7 @@ void Spawning::onEntry(Bomb& bomb)
 }
 
 // COUNTING
-void Counting::onTick(Bomb& bomb, float DeltaTime)
+void Counting::onTick(Bomb& bomb, float)
 {
 	if (Game::getCurrentTime() >= mTimeToExplode)
 	{

@@ -30,9 +30,7 @@ Configure::Configure():mWindowWidth(DefaultScreenWidth),
 						mMusicVolume(DefaultMusicVolume),
 						mSoundsVolume(DefaultmSoundsVolume),
 						mKeyBindVolume(DefaultKeyBindVolume),
-						mScreenResolution(DefaultScreenResolution),
-						mBombMax(DefaultBombMax),
-						mBombStrength(DefaultBombStrength)
+						mScreenResolution(DefaultScreenResolution)
 {
 
 }
@@ -93,14 +91,9 @@ int 			&Configure::getScreenResolution()
 	return mScreenResolution;
 }
 
-int             &Configure::getBombMax()
+Hero::Stats     &Configure::getStats()
 {
-	return mBombMax;
-}
-
-int             &Configure::getBombStrength()
-{
-	return mBombStrength;
+	return mStats;
 }
 
 int             &Configure::getBestLevelAchieved()
@@ -165,14 +158,9 @@ void 			Configure::setScreenResolution(int const screenResolution)
 	mScreenResolution = screenResolution;
 }
 
-void            Configure::setBombMax(int const bombMax)
+void            Configure::setStats(Hero::Stats stats)
 {
-	mBombMax = bombMax;
-}
-
-void            Configure::setBombStrength(int const bombStrength)
-{
-	mBombStrength = bombStrength;
+	mStats = stats;
 }
 
 void            Configure::setBestLevelAchieved(int const BestLevelAchieved)

@@ -31,7 +31,6 @@ public:
 	int GetHeight() const;
 
 private:
-	int mHardness = 0;
 	int mWidth = 30;
 	int mHeight = 20;
 };
