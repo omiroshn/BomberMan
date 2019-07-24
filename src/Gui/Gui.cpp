@@ -343,52 +343,10 @@ Gui::~Gui()
 
 }
 
-// ImGui SDL2 binding with OpenGL3
-// (SDL is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan graphics context creation, etc.)
-// (GL3W is a helper library to access OpenGL functions since there is no standard header to access modern OpenGL functions easily. Alternatives are GLEW, Glad, etc.)
-
-// Implemented features:
-//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-// Missing features:
-//  [ ] SDL2 handling of IME under Windows appears to be broken and it explicitly disable the regular Windows IME. You can restore Windows IME by compiling SDL with SDL_DISABLE_WINDOWS_IME.
-
-// You can copy and use unmodified Gui::ImGui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: Gui::ImGui_ImplXXXX_Init(), Gui::ImGui_ImplXXXX_NewFrame(), ImGui::Render() and Gui::ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-
-// CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2018-05-09: Misc: Fixed clipboard paste memory leak (we didn't call SDL_FreeMemory on the data returned by SDL_GetClipboardText).
-//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors flag + honor ImGuiConfigFlags_NoMouseCursorChange flag.
-//  2018-03-06: OpenGL: Added const char* glsl_version parameter to Gui::ImGui_Init() so user can override the GLSL version e.g. "#version 150".
-//  2018-02-23: OpenGL: Create the VAO in the render function so the setup can more easily be used with multiple shared GL context.
-//  2018-02-16: Inputs: Added support for mouse cursors, honoring ImGui::GetMouseCursor() value.
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed Gui::ImGui_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
-//  2018-02-05: Misc: Using SDL_GetPerformanceCounter() instead of SDL_GetTicks() to be able to handle very high framerate (1000+ FPS).
-//  2018-02-05: Inputs: Keyboard mapping is using scancodes everywhere instead of a confusing mixture of keycodes and scancodes. 
-//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
-//  2018-01-19: Inputs: When available (SDL 2.0.4+) using SDL_CaptureMouse() to retrieve coordinates outside of client area when dragging. Otherwise (SDL 2.0.3 and before) testing for SDL_WINDOW_INPUT_FOCUS instead of SDL_WINDOW_MOUSE_FOCUS.
-//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.
-//  2018-01-07: OpenGL: Changed GLSL shader version from 330 to 150.
-//  2017-09-01: OpenGL: Save and restore current bound sampler. Save and restore current polygon mode.
-//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).
-//  2017-05-01: OpenGL: Fixed save and restore of current blend func state.
-//  2017-05-01: OpenGL: Fixed save and restore of current GL_ACTIVE_TEXTURE.
-//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.
-//  2016-09-05: OpenGL: Fixed save and restore of current scissor rectangle.
-//  2016-07-29: OpenGL: Explicitly setting GL_UNPACK_ROW_LENGTH to reduce issues because SDL changes it. (#752)
-
-#if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
 char *Gui::sClipboardTextData;
 bool Gui::sMousePressed[3];
 
-const char* Gui::ImGui_GetClipboardText(void*)
+const char* Gui::GetClipboardText(void*)
 {
     if (sClipboardTextData) 
         SDL_free(sClipboardTextData);
@@ -396,36 +354,31 @@ const char* Gui::ImGui_GetClipboardText(void*)
     return sClipboardTextData;
 }
 
-void Gui::ImGui_SetClipboardText(void*, const char* text)
+void Gui::SetClipboardText(void*, const char* text)
 {
     SDL_SetClipboardText(text);
 }
 
-// This is the main rendering function that you have to implement and provide to ImGui (via setting up 'RenderDrawListsFn' in the ImGuiIO structure)
-// Note that this implementation is little overcomplicated because we are saving/setting up/restoring every OpenGL state explicitly, in order to be able to run within any OpenGL engine that doesn't do so. 
-// If text or lines are blurry when integrating ImGui in your engine: in your Render function, try translating your projection matrix by (0.5f,0.5f) or (0.375f,0.375f)
-void Gui::ImGui_RenderDrawData(ImDrawData* draw_data)
+void Gui::RenderDrawData(ImDrawData* draw_data)
 {
-    // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
     ImGuiIO& io = ImGui::GetIO();
     int fb_width = (int)(io.DisplaySize.x * io.DisplayFramebufferScale.x);
     int fb_height = (int)(io.DisplaySize.y * io.DisplayFramebufferScale.y);
-    if (fb_width == 0 || fb_height == 0)
-        return;
     draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    glViewport(0, 0, (GLsizei)fb_width, (GLsizei)fb_height);
 
     // Backup GL state
     GLenum last_active_texture; glGetIntegerv(GL_ACTIVE_TEXTURE, (GLint*)&last_active_texture);
     glActiveTexture(GL_TEXTURE0);
-    GLint last_program; glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
-    GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
-    GLint last_sampler; glGetIntegerv(GL_SAMPLER_BINDING, &last_sampler);
-    GLint last_array_buffer; glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &last_array_buffer);
-    GLint last_element_array_buffer; glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &last_element_array_buffer);
-    GLint last_vertex_array; glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &last_vertex_array);
-    GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
-    GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
-    GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box);
+    //GLint last_program; glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
+    //GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    //GLint last_sampler; glGetIntegerv(GL_SAMPLER_BINDING, &last_sampler);
+    //GLint last_array_buffer; glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &last_array_buffer);
+    //GLint last_element_array_buffer; glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &last_element_array_buffer);
+    //GLint last_vertex_array; glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &last_vertex_array);
+    //GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
+    //GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
+    //GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box);
     GLenum last_blend_src_rgb; glGetIntegerv(GL_BLEND_SRC_RGB, (GLint*)&last_blend_src_rgb);
     GLenum last_blend_dst_rgb; glGetIntegerv(GL_BLEND_DST_RGB, (GLint*)&last_blend_dst_rgb);
     GLenum last_blend_src_alpha; glGetIntegerv(GL_BLEND_SRC_ALPHA, (GLint*)&last_blend_src_alpha);
@@ -435,43 +388,24 @@ void Gui::ImGui_RenderDrawData(ImDrawData* draw_data)
     GLboolean last_enable_blend = glIsEnabled(GL_BLEND);
     GLboolean last_enable_cull_face = glIsEnabled(GL_CULL_FACE);
     GLboolean last_enable_depth_test = glIsEnabled(GL_DEPTH_TEST);
-    GLboolean last_enable_scissor_test = glIsEnabled(GL_SCISSOR_TEST);
+    //GLboolean last_enable_scissor_test = glIsEnabled(GL_SCISSOR_TEST);
 
-    // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, polygon fill
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_SCISSOR_TEST);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    // Setup viewport, orthographic projection matrix
-    glViewport(0, 0, (GLsizei)fb_width, (GLsizei)fb_height);
-    const float ortho_projection[4][4] =
-    {
-        { 2.0f/io.DisplaySize.x, 0.0f,                   0.0f, 0.0f },
-        { 0.0f,                  2.0f/-io.DisplaySize.y, 0.0f, 0.0f },
-        { 0.0f,                  0.0f,                  -1.0f, 0.0f },
-        {-1.0f,                  1.0f,                   0.0f, 1.0f },
-    };
-    glUseProgram(mShaderHandle);
-    glUniform1i(mAttribLocationTex, 0);
-    glUniformMatrix4fv(mAttribLocationProjMtx, 1, GL_FALSE, &ortho_projection[0][0]);
-    glBindSampler(0, 0); // Rely on combined texture/sampler state.
+	glm::mat4 orthoProj = glm::ortho(0.f, io.DisplaySize.x, io.DisplaySize.y, 0.f);
 
-    // Recreate the VAO every time 
-    // (This is to easily allow multiple GL contexts. VAO are not shared among GL contexts, and we don't track creation/deletion of windows so we don't have an obvious key to use to cache them.)
-    GLuint vao_handle = 0;
-    glGenVertexArrays(1, &vao_handle);
-    glBindVertexArray(vao_handle);
-    glBindBuffer(GL_ARRAY_BUFFER, mVboHandle);
-    glEnableVertexAttribArray(mAttribLocationPosition);
-    glEnableVertexAttribArray(mAttribLocationUV);
-    glEnableVertexAttribArray(mAttribLocationColor);
-    glVertexAttribPointer(mAttribLocationPosition, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, pos));
-    glVertexAttribPointer(mAttribLocationUV, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, uv));
-    glVertexAttribPointer(mAttribLocationColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, col));
+	static auto guiShader = RESOURCES.getShader("gui");
+	guiShader->use();
+	guiShader->setInt("Texture", 0);
+	guiShader->setMat4("ProjMtx", orthoProj);
+
+    glBindVertexArray(mVaoHandle);
 
     // Draw
     for (int n = 0; n < draw_data->CmdListsCount; n++)
@@ -501,38 +435,33 @@ void Gui::ImGui_RenderDrawData(ImDrawData* draw_data)
             idx_buffer_offset += pcmd->ElemCount;
         }
     }
-    glDeleteVertexArrays(1, &vao_handle);
 
     // Restore modified GL state
-    glUseProgram(last_program);
-    glBindTexture(GL_TEXTURE_2D, last_texture);
-    glBindSampler(0, last_sampler);
-    glActiveTexture(last_active_texture);
-    glBindVertexArray(last_vertex_array);
-    glBindBuffer(GL_ARRAY_BUFFER, last_array_buffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, last_element_array_buffer);
+    //glUseProgram(last_program);
+    //glBindTexture(GL_TEXTURE_2D, last_texture);
+    //glBindSampler(0, last_sampler);
+    //glActiveTexture(last_active_texture);
+    //glBindVertexArray(last_vertex_array);
+    //glBindBuffer(GL_ARRAY_BUFFER, last_array_buffer);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, last_element_array_buffer);
     glBlendEquationSeparate(last_blend_equation_rgb, last_blend_equation_alpha);
     glBlendFuncSeparate(last_blend_src_rgb, last_blend_dst_rgb, last_blend_src_alpha, last_blend_dst_alpha);
     if (last_enable_blend) glEnable(GL_BLEND); else glDisable(GL_BLEND);
     if (last_enable_cull_face) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
     if (last_enable_depth_test) glEnable(GL_DEPTH_TEST); else glDisable(GL_DEPTH_TEST);
-    if (last_enable_scissor_test) glEnable(GL_SCISSOR_TEST); else glDisable(GL_SCISSOR_TEST);
-    glPolygonMode(GL_FRONT_AND_BACK, (GLenum)last_polygon_mode[0]);
-    glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
-    glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
+    glDisable(GL_SCISSOR_TEST);
+    //glPolygonMode(GL_FRONT_AND_BACK, (GLenum)last_polygon_mode[0]);
+    //glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
+    //glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
 }
 
-void Gui::ImGui_CreateFontsTexture()
+void Gui::CreateFontsTexture()
 {
-    // Build texture atlas
     ImGuiIO& io = ImGui::GetIO();
     unsigned char* pixels;
     int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);   // Load as RGBA 32-bits for OpenGL3 demo because it is more likely to be compatible with user's existing shader.
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 
-    // Upload texture to graphics system
-    GLint last_texture;
-    glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
     glGenTextures(1, &mFontTexture);
     glBindTexture(GL_TEXTURE_2D, mFontTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -540,69 +469,36 @@ void Gui::ImGui_CreateFontsTexture()
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
-    // Store our identifier
     io.Fonts->TexID = (void *)(intptr_t)mFontTexture;
-
-    // Restore state
-    glBindTexture(GL_TEXTURE_2D, last_texture);
 }
 
-bool Gui::ImGui_CreateDeviceObjects()
+bool Gui::CreateDeviceObjects()
 {
-    // Backup GL state
+	static auto guiShader = RESOURCES.getShader("gui");
+
     GLint last_texture, last_array_buffer, last_vertex_array;
     glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
     glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &last_array_buffer);
     glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &last_vertex_array);
 
-    const GLchar *vertex_shader =
-        "uniform mat4 ProjMtx;\n"
-        "in vec2 Position;\n"
-        "in vec2 UV;\n"
-        "in vec4 Color;\n"
-        "out vec2 Frag_UV;\n"
-        "out vec4 Frag_Color;\n"
-        "void main()\n"
-        "{\n"
-        "	Frag_UV = UV;\n"
-        "	Frag_Color = Color;\n"
-        "	gl_Position = ProjMtx * vec4(Position.xy,0,1);\n"
-        "}\n";
-
-    const GLchar* fragment_shader =
-        "uniform sampler2D Texture;\n"
-        "in vec2 Frag_UV;\n"
-        "in vec4 Frag_Color;\n"
-        "out vec4 Out_Color;\n"
-        "void main()\n"
-        "{\n"
-        "	Out_Color = Frag_Color * texture( Texture, Frag_UV.st);\n"
-        "}\n";
-
-    const GLchar* vertex_shader_with_version[2] = { mGlslVersion, vertex_shader };
-    const GLchar* fragment_shader_with_version[2] = { mGlslVersion, fragment_shader };
-
-    mShaderHandle = glCreateProgram();
-    mVertHandle = glCreateShader(GL_VERTEX_SHADER);
-    mFragHandle = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(mVertHandle, 2, vertex_shader_with_version, NULL);
-    glShaderSource(mFragHandle, 2, fragment_shader_with_version, NULL);
-    glCompileShader(mVertHandle);
-    glCompileShader(mFragHandle);
-    glAttachShader(mShaderHandle, mVertHandle);
-    glAttachShader(mShaderHandle, mFragHandle);
-    glLinkProgram(mShaderHandle);
-
-    mAttribLocationTex = glGetUniformLocation(mShaderHandle, "Texture");
-    mAttribLocationProjMtx = glGetUniformLocation(mShaderHandle, "ProjMtx");
-    mAttribLocationPosition = glGetAttribLocation(mShaderHandle, "Position");
-    mAttribLocationUV = glGetAttribLocation(mShaderHandle, "UV");
-    mAttribLocationColor = glGetAttribLocation(mShaderHandle, "Color");
+    mAttribLocationPosition = glGetAttribLocation(guiShader->mShaderProgram, "Position");
+    mAttribLocationUV = glGetAttribLocation(guiShader->mShaderProgram, "UV");
+    mAttribLocationColor = glGetAttribLocation(guiShader->mShaderProgram, "Color");
 
     glGenBuffers(1, &mVboHandle);
     glGenBuffers(1, &mElementsHandle);
 
-    ImGui_CreateFontsTexture();
+    glGenVertexArrays(1, &mVaoHandle);
+    glBindVertexArray(mVaoHandle);
+    glBindBuffer(GL_ARRAY_BUFFER, mVboHandle);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, pos));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, uv));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, col));
+
+    CreateFontsTexture();
 
     // Restore modified GL state
     glBindTexture(GL_TEXTURE_2D, last_texture);
@@ -612,22 +508,13 @@ bool Gui::ImGui_CreateDeviceObjects()
     return true;
 }
 
-void    Gui::ImGui_InvalidateDeviceObjects()
+void    Gui::InvalidateDeviceObjects()
 {
-    if (mVboHandle) glDeleteBuffers(1, &mVboHandle);
-    if (mElementsHandle) glDeleteBuffers(1, &mElementsHandle);
+    if (mVboHandle)
+		glDeleteBuffers(1, &mVboHandle);
+    if (mElementsHandle)
+		glDeleteBuffers(1, &mElementsHandle);
     mVboHandle = mElementsHandle = 0;
-
-    if (mShaderHandle && mVertHandle) glDetachShader(mShaderHandle, mVertHandle);
-    if (mVertHandle) glDeleteShader(mVertHandle);
-    mVertHandle = 0;
-
-    if (mShaderHandle && mFragHandle) glDetachShader(mShaderHandle, mFragHandle);
-    if (mFragHandle) glDeleteShader(mFragHandle);
-    mFragHandle = 0;
-
-    if (mShaderHandle) glDeleteProgram(mShaderHandle);
-    mShaderHandle = 0;
 
     if (mFontTexture)
     {
@@ -637,13 +524,11 @@ void    Gui::ImGui_InvalidateDeviceObjects()
     }
 }
 
-bool    Gui::ImGui_Init(SDL_Window* window)
+bool    Gui::Init(SDL_Window* window)
 {
-    // Setup back-end capabilities flags
     ImGuiIO& io = ImGui::GetIO();
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;   // We can honor GetMouseCursor() values (optional)
 
-    // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
     io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;
     io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
     io.KeyMap[ImGuiKey_RightArrow] = SDL_SCANCODE_RIGHT;
@@ -666,49 +551,27 @@ bool    Gui::ImGui_Init(SDL_Window* window)
     io.KeyMap[ImGuiKey_Y] = SDL_SCANCODE_Y;
     io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
 
-    io.SetClipboardTextFn = &Gui::ImGui_SetClipboardText;
-    io.GetClipboardTextFn = &Gui::ImGui_GetClipboardText;
+    io.SetClipboardTextFn = &Gui::SetClipboardText;
+    io.GetClipboardTextFn = &Gui::GetClipboardText;
     io.ClipboardUserData = NULL;
-
-    //mMouseCursors[ImGuiMouseCursor_Arrow] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
-    //mMouseCursors[ImGuiMouseCursor_TextInput] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_IBEAM);
-    //mMouseCursors[ImGuiMouseCursor_ResizeAll] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
-    //mMouseCursors[ImGuiMouseCursor_ResizeNS] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENS);
-    //mMouseCursors[ImGuiMouseCursor_ResizeEW] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEWE);
-    //mMouseCursors[ImGuiMouseCursor_ResizeNESW] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENESW);
-    //mMouseCursors[ImGuiMouseCursor_ResizeNWSE] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENWSE);
-
-#if defined (_WIN32)
-    SDL_SysWMinfo wmInfo;
-    SDL_VERSION(&wmInfo.version);
-    SDL_GetWindowWMInfo(window, &wmInfo);
-    io.ImeWindowHandle = wmInfo.info.win.window;
-#else
-    (void)window;
-#endif
 
     return true;
 }
 
-void Gui::ImGui_Shutdown()
+void Gui::Shutdown()
 {
-    // Destroy SDL mouse cursors
-    for (ImGuiMouseCursor cursor_n = 0; cursor_n < ImGuiMouseCursor_COUNT; cursor_n++)
-        SDL_FreeCursor(mMouseCursors[cursor_n]);
-    memset(mMouseCursors, 0, sizeof(mMouseCursors));
-
     // Destroy last known clipboard data
     if (sClipboardTextData)
         SDL_free(sClipboardTextData);
 
     // Destroy OpenGL objects
-    Gui::ImGui_InvalidateDeviceObjects();
+    Gui::InvalidateDeviceObjects();
 }
 
-void Gui::ImGui_NewFrame(SDL_Window* window)
+void Gui::NewFrame(SDL_Window* window)
 {
     if (!mFontTexture)
-        ImGui_CreateDeviceObjects();
+        CreateDeviceObjects();
 
     ImGuiIO& io = ImGui::GetIO();
 
@@ -719,24 +582,16 @@ void Gui::ImGui_NewFrame(SDL_Window* window)
     SDL_GL_GetDrawableSize(window, &display_w, &display_h);
     io.DisplaySize = ImVec2((float)w, (float)h);
     io.DisplayFramebufferScale = ImVec2(w > 0 ? ((float)display_w / w) : 0, h > 0 ? ((float)display_h / h) : 0);
+	io.DeltaTime = Game::mDeltaTime;
 
-    // Setup time step (we don't use SDL_GetTicks() because it is using millisecond resolution)
-    static Uint64 frequency = SDL_GetPerformanceFrequency();
-    Uint64 current_time = SDL_GetPerformanceCounter();
-    io.DeltaTime = mTime > 0 ? (float)((double)(current_time - mTime) / frequency) : (float)(1.0f / 60.0f);
-    mTime = current_time;
-
-    // Setup mouse inputs (we already got mouse wheel, keyboard keys & characters from our event handler)
     int mx, my;
     Uint32 mouse_buttons = SDL_GetMouseState(&mx, &my);
     io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
-    io.MouseDown[0] = sMousePressed[0] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;  // If a mouse press event came, always pass it as "mouse held this frame", so we don't miss click-release events that are shorter than 1 frame.
+    io.MouseDown[0] = sMousePressed[0] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;
     io.MouseDown[1] = sMousePressed[1] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_RIGHT)) != 0;
     io.MouseDown[2] = sMousePressed[2] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0;
     sMousePressed[0] = sMousePressed[1] = sMousePressed[2] = false;
 
-    // We need to use SDL_CaptureMouse() to easily retrieve mouse coordinates outside of the client area. This is only supported from SDL 2.0.4 (released Jan 2016)
-#if (SDL_MAJOR_VERSION >= 2) && (SDL_MINOR_VERSION >= 0) && (SDL_PATCHLEVEL >= 4)   
     if ((SDL_GetWindowFlags(window) & (SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_MOUSE_CAPTURE)) != 0)
         io.MousePos = ImVec2((float)mx, (float)my);
     bool any_mouse_button_down = false;
@@ -746,26 +601,6 @@ void Gui::ImGui_NewFrame(SDL_Window* window)
         SDL_CaptureMouse(SDL_TRUE);
     if (!any_mouse_button_down && (SDL_GetWindowFlags(window) & SDL_WINDOW_MOUSE_CAPTURE) != 0)
         SDL_CaptureMouse(SDL_FALSE);
-#else
-    if ((SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS) != 0)
-        io.MousePos = ImVec2((float)mx, (float)my);
-#endif
 
-    // Update OS/hardware mouse cursor if imgui isn't drawing a software cursor
-    if ((io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange) == 0)
-    {
-        ImGuiMouseCursor cursor = ImGui::GetMouseCursor();
-        if (io.MouseDrawCursor || cursor == ImGuiMouseCursor_None)
-        {
-            SDL_ShowCursor(0);
-        }
-        else
-        {
-            SDL_SetCursor(mMouseCursors[cursor] ? mMouseCursors[cursor] : mMouseCursors[ImGuiMouseCursor_Arrow]);
-            SDL_ShowCursor(1);
-        }
-    }
-
-    // Start the frame. This call will update the io.WantCaptureMouse, io.WantCaptureKeyboard flag that you can use to dispatch inputs (or not) to your application.
     ImGui::NewFrame();
 }

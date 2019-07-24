@@ -34,13 +34,13 @@ public:
 	void GamePaused(bool state);
 	void SetBackground(const char* texture);
 
-	bool ImGui_Init(SDL_Window* window);
-	void ImGui_Shutdown();
-	void ImGui_NewFrame(SDL_Window* window);
-	void ImGui_RenderDrawData(ImDrawData* draw_data);
+	bool Init(SDL_Window* window);
+	void Shutdown();
+	void NewFrame(SDL_Window* window);
+	void RenderDrawData(ImDrawData* draw_data);
 
-	void ImGui_InvalidateDeviceObjects();
-	bool ImGui_CreateDeviceObjects();
+	void InvalidateDeviceObjects();
+	bool CreateDeviceObjects();
 
 	static bool sMousePressed[3];
 
@@ -50,10 +50,10 @@ private:
 	void ShowSettingsMenu();
 	void ChangeStage(int next_stage);
 
-	void ImGui_CreateFontsTexture();
+	void CreateFontsTexture();
 
-	static const char* ImGui_GetClipboardText(void*);
-	static void 		ImGui_SetClipboardText(void*, const char *text);
+	static const char*	GetClipboardText(void*);
+	static void 		SetClipboardText(void*, const char *text);
 
 	bool mGameStarted = false;
 	bool mGamePaused = false; //make static in Game
@@ -72,12 +72,11 @@ SDL_Cursor*  mMouseCursors[ImGuiMouseCursor_COUNT] = { 0 };
 static char*        sClipboardTextData;
 
 // OpenGL data
-char         mGlslVersion[32] = {"#version 330"};
+char         mGlslVersion[32] = {"#version 330\n"};
 GLuint       mFontTexture = 0;
-int          mShaderHandle = 0, mVertHandle = 0, mFragHandle = 0;
 int          mAttribLocationTex = 0, mAttribLocationProjMtx = 0;
 int          mAttribLocationPosition = 0, mAttribLocationUV = 0, mAttribLocationColor = 0;
-unsigned int mVboHandle = 0,mElementsHandle = 0;
+unsigned int mVaoHandle = 0, mVboHandle = 0,mElementsHandle = 0;
 };
 
 #endif //BOMBERMAN_GUI_H
