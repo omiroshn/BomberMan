@@ -7,8 +7,8 @@ uniform sampler2DShadow shadowMap;
 
 uniform vec3 viewPos;
 
-uniform float shininess;
-uniform float glossiness;
+uniform float shininess = 1;
+uniform float glossiness = 0.01;
 in VS_OUT {
     vec3 FragPos;
     vec2 TexCoords;
@@ -17,11 +17,11 @@ in VS_OUT {
     vec3 TangentViewPos;
     vec3 TangentFragPos;
     vec4 FragPosLightSpace;
-} fs_in;
+} vs_out;
 
 vec3 GetNormal()
 {
-    vec3 normal = texture(texture_normal1, fs_in.TexCoords).rgb;
+    vec3 normal = texture(texture_normal1, vs_out.TexCoords).rgb;
     return normalize(normal * 2.0 - 1.0);
 }
 
@@ -69,12 +69,12 @@ void main()
     vec3 lightSpecular = vec3(1.f);
 
     // ambient
-    vec3 ambient = lightAmbient * texture(texture_diffuse1, fs_in.TexCoords).rgb;
+    vec3 ambient = lightAmbient * texture(texture_diffuse1, vs_out.TexCoords).rgb;
     // diffuse
     vec3 normal = GetNormal();
     vec3 lightDir = GetLightDir();
     float diff = max(dot(normal, lightDir), 0.0);
-    vec3 diffuse = lightDiffuse * diff * texture(texture_diffuse1, fs_in.TexCoords).rgb;
+    vec3 diffuse = lightDiffuse * diff * texture(texture_diffuse1, vs_out.TexCoords).rgb;
     //shadow
     float shadow = ShadowCalculation(fs_in.FragPosLightSpace, fs_in.VertNormal, lightDir);
     // specular
