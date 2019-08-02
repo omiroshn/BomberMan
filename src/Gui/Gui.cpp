@@ -175,48 +175,48 @@ void Gui::ChangeStage(int next_stage)
 
 void Gui::ShowLoadSavedGamesMenu()
 {
-		if (mButtonsTextures.empty())
-		{
-			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked0")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked1")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked2")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked3")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("locked")->getTextureID());
-		}
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(28, 4));
-		ImGui::BeginChildFrame(2, {234, 204}, 4);
-		ImGui::Text("\nStages of the campaign");
-		if (ImGui::ImageButton(mButtonsTextures.at(0), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
-		{
-			ChangeStage(0);
-		}
-		ImGui::SameLine();
-		ImGui::Text("\n   Stage 1");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 0 ? 1 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
-		{
-			ChangeStage(1);
-		}
-		ImGui::SameLine();
-		ImGui::Text("\n   Stage 2");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 1 ? 2 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
-		{
-			ChangeStage(2);
-		}
-		ImGui::SameLine();
-		ImGui::Text("\n   Stage 3");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 2 ? 3 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
-		{
-			ChangeStage(3);
-		}
-		ImGui::SameLine();
-		ImGui::Text("\n   Bonus level");
-		ImGui::EndChildFrame();
-		ImGui::PopStyleVar();
-		if (ImGui::Button("BACK", {234, 48}))
-		{
-			mCurrentMenu = CurrentMenu::mainMenu;
-			return;
-		}
+	std::shared_ptr<Texture> mButtonsTextures[]{
+		RESOURCES.getTexture("unlocked0"),
+		RESOURCES.getTexture("unlocked1"),
+		RESOURCES.getTexture("unlocked2"),
+		RESOURCES.getTexture("unlocked3"),
+		RESOURCES.getTexture("locked")
+	};
+
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(28, 4));
+	ImGui::BeginChildFrame(2, { 234, 204 }, 4);
+	ImGui::Text("\nStages of the campaign");
+	if (ImGui::ImageButton(mButtonsTextures[0].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	{
+		ChangeStage(0);
+	}
+	ImGui::SameLine();
+	ImGui::Text("\n   Stage 1");
+	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 0 ? 1 : 4].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	{
+		ChangeStage(1);
+	}
+	ImGui::SameLine();
+	ImGui::Text("\n   Stage 2");
+	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 1 ? 2 : 4].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	{
+		ChangeStage(2);
+	}
+	ImGui::SameLine();
+	ImGui::Text("\n   Stage 3");
+	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 2 ? 3 : 4].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	{
+		ChangeStage(3);
+	}
+	ImGui::SameLine();
+	ImGui::Text("\n   Bonus level");
+	ImGui::EndChildFrame();
+	ImGui::PopStyleVar();
+	if (ImGui::Button("BACK", { 234, 48 }))
+	{
+		mCurrentMenu = CurrentMenu::mainMenu;
+		return;
+	}
 }
 
 void Gui::ShowSettingsMenu()
@@ -402,7 +402,6 @@ void Gui::RenderDrawData(ImDrawData* draw_data)
 
 	static auto guiShader = RESOURCES.getShader("gui");
 	guiShader->use();
-	guiShader->setInt("Texture", 0);
 	guiShader->setMat4("ProjMtx", orthoProj);
 
     glBindVertexArray(mVaoHandle);
@@ -422,16 +421,9 @@ void Gui::RenderDrawData(ImDrawData* draw_data)
         for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
         {
             const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-            if (pcmd->UserCallback)
-            {
-                pcmd->UserCallback(cmd_list, pcmd);
-            }
-            else
-            {
-                glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->TextureId);
-                glScissor((int)pcmd->ClipRect.x, (int)(fb_height - pcmd->ClipRect.w), (int)(pcmd->ClipRect.z - pcmd->ClipRect.x), (int)(pcmd->ClipRect.w - pcmd->ClipRect.y));
-                glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, idx_buffer_offset);
-            }
+			reinterpret_cast<Texture*>(pcmd->TextureId)->bind();
+			glScissor((int)pcmd->ClipRect.x, (int)(fb_height - pcmd->ClipRect.w), (int)(pcmd->ClipRect.z - pcmd->ClipRect.x), (int)(pcmd->ClipRect.w - pcmd->ClipRect.y));
+			glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, GL_UNSIGNED_SHORT, idx_buffer_offset);
             idx_buffer_offset += pcmd->ElemCount;
         }
     }
@@ -472,18 +464,10 @@ void Gui::CreateFontsTexture()
     io.Fonts->TexID = (void *)(intptr_t)mFontTexture;
 }
 
-bool Gui::CreateDeviceObjects()
+void Gui::CreateDeviceObjects()
 {
 	static auto guiShader = RESOURCES.getShader("gui");
-
-    GLint last_texture, last_array_buffer, last_vertex_array;
-    glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
-    glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &last_array_buffer);
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &last_vertex_array);
-
-    mAttribLocationPosition = glGetAttribLocation(guiShader->mShaderProgram, "Position");
-    mAttribLocationUV = glGetAttribLocation(guiShader->mShaderProgram, "UV");
-    mAttribLocationColor = glGetAttribLocation(guiShader->mShaderProgram, "Color");
+	guiShader->setInt("Texture", 0);
 
     glGenBuffers(1, &mVboHandle);
     glGenBuffers(1, &mElementsHandle);
@@ -499,13 +483,6 @@ bool Gui::CreateDeviceObjects()
     glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, col));
 
     CreateFontsTexture();
-
-    // Restore modified GL state
-    glBindTexture(GL_TEXTURE_2D, last_texture);
-    glBindBuffer(GL_ARRAY_BUFFER, last_array_buffer);
-    glBindVertexArray(last_vertex_array);
-
-    return true;
 }
 
 void    Gui::InvalidateDeviceObjects()

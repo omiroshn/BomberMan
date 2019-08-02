@@ -40,7 +40,7 @@ public:
 	void RenderDrawData(ImDrawData* draw_data);
 
 	void InvalidateDeviceObjects();
-	bool CreateDeviceObjects();
+	void CreateDeviceObjects();
 
 	static bool sMousePressed[3];
 
@@ -62,7 +62,6 @@ private:
 	ImTextureID mBackground = nullptr;
 	float mWidth = 800.0f;
 	float mHeight = 600.0f;
-	std::vector<ImTextureID> mButtonsTextures;
 
 
 // SDL data
