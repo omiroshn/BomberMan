@@ -11,7 +11,6 @@
 
 #define  STANDARD_MENU_BUTTON {220, 48}
 
-
 enum class CurrentMenu
 {
 	mainMenu,
