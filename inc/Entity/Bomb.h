@@ -4,6 +4,7 @@
 #include "StateMachine/StateMachine.h"
 #include "GL/glew.h"
 #include <iostream>
+#include <vector>
 
 struct Spawning;
 struct Counting;

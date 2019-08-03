@@ -37,6 +37,9 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/3rdParty/imgui/imgui.h" AND NOT EXISTS "${P
     message(FATAL_ERROR "imgui submodule was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/3rdParty/ffmpeg/macOs/")
+    message(FATAL_ERROR "ffmpeg submodule was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+endif()
 
 ## SDL2
 set( SDL_STATIC OFF CACHE BOOL "Build the static SDL library" )
