@@ -34,16 +34,9 @@ set ( IMGUI_LIBRARY imgui )
 find_package(OpenGL 3.0 REQUIRED)
 find_package(OpenCL 1.2 REQUIRED)
 
-if (!${OpenCL_FOUND})
-message("OpenCL not found")
-return()
+if (OpenCL_FOUND)
+	message("Found OpenCL: ${OpenCL_LIBRARIES}, ${OpenCL_INCLUDE_DIRS}")
 endif()
-
-message("OPENCL LIB:")
-message( ${OpenCL_LIBRARIES} )
-
-message("OPENCL INCLUDE DIRS:")
-message(${OpenCL_INCLUDE_DIRS})
 
 if ( WIN32 )
   set(FFMPEG_PATH_CUSTOM "${CMAKE_CURRENT_LIST_DIR}/3rdParty/ffmpeg/win64")
@@ -51,11 +44,10 @@ else()
   set(FFMPEG_PATH_CUSTOM "${CMAKE_CURRENT_LIST_DIR}/3rdParty/ffmpeg/macOs")
 endif()
 
-set(_FFMPEG_AVCODEC_INCLUDE_DIRS "${FFMPEG_PATH_CUSTOM}/include")
-set(_FFMPEG_AVCODEC_LIBRARY_DIRS "${FFMPEG_PATH_CUSTOM}/lib")
-set(_FFMPEG_AVFORMAT_LIBRARY_DIRS "${FFMPEG_PATH_CUSTOM}/lib")
-set(_FFMPEG_AVUTIL_LIBRARY_DIRS "${FFMPEG_PATH_CUSTOM}/lib")
-set(_FFMPEG_SWSCALE_LIBRARY_DIRS "${FFMPEG_PATH_CUSTOM}/lib")
+set(FFMPEG_INCLUDE_SEARCH_PATHES "${FFMPEG_PATH_CUSTOM}/include")
+set(FFMPEG_LIB_SEARCH_PATHES "${FFMPEG_PATH_CUSTOM}/lib")
+
+
 
 find_package(FFmpeg REQUIRED)
 
@@ -118,6 +110,12 @@ function(LINK_ASSETS TARGET_ARG SRC_ARG DIST_ARG )
   add_custom_command(TARGET ${TARGET_ARG} POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_ARG}/Assets" "${DIST_ARG}/Assets" DEPENDS "${DIST_ARG}")
 endfunction()
+
+if ( MSVC )
+	add_custom_command(TARGET bomberman PRE_LINK
+		COMMAND ${CMAKE_COMMAND} -E copy_directory ${FFMPEG_PATH_CUSTOM}/libshared $<TARGET_FILE_DIR:bomberman>
+	)
+endif()
 
 if ( MSVC )
   link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>")
