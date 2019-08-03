@@ -4,7 +4,6 @@
 #include "ResourceManagement/ResourceManager.hpp"
 #include "InputManagement/InputManager.hpp"
 #include <imgui.h>
-#include "Gui/imgui_impl_sdl_gl3.h"
 #include "InputManagement/KeyboardHandler.hpp"
 #include "Gui/Gui.h"
 
