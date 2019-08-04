@@ -10,6 +10,8 @@
 #include "LogicCore/TimerManager.h"
 #include "Configure.hpp"
 
+#include "ResourceManagement/FfmpegPlayer.hpp"
+
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
 float			Game::mTimeCorrection;
@@ -30,7 +32,7 @@ namespace
 Game::Game()
 {
 	mTimeNow = SDL_GetPerformanceCounter();
-    
+
 	loadStateFromFile();
     mWindow = std::make_shared<GameWindow>(CONFIGURATION.getWidth(), CONFIGURATION.getHeight(), cWindowName);
 	mWindow->setFullScreen(CONFIGURATION.getWindowed());
@@ -40,7 +42,7 @@ Game::Game()
     mIManager = std::make_unique<InputManager>();
     mKeyHandler = std::make_unique<KeyboardHandler>();
     loadResources();
-
+	FFMPEG.loadVideo("videoName","drop.avi");
     sInstance = this;
 }
 
@@ -54,6 +56,7 @@ void Game::start()
     MapLoader mapLoader;
     int width, height;
     mStageStartedTimer = getCurrentTime();
+
     while (mIsRunning)
     {
         mWindow->tickGui();
@@ -376,14 +379,14 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 {
 	static int which;
 	static std::string brickPool[] {
-		"BrickBlock", 
-		"BrickBlock2", 
+		"BrickBlock",
+		"BrickBlock2",
 	};
 	static std::string bombPool[] {
 		"pointSphereBomb",
 		"pointSphereBomb2",
 	};
-	
+
 
     glm::vec2 directions[] = {
         {-1, 0},
