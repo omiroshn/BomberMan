@@ -10,8 +10,6 @@ if (APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g ")
 endif()
 
-add_subdirectory(3rdParty)
-
 set ( SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2/include )
 set ( SDL2_LIBRARY SDL2 )
 
@@ -30,24 +28,13 @@ set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
 set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
 
-set ( SDL_MIXER_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2_mixer/)
-if (APPLE)
-	set ( SDL_MIXER_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2_mixer/libSDL2_mixer-2.0.0.dylib)
-elseif (WIN32)
-	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		set ( SDL_MIXER_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2_mixer/SDL2_mixer_win64.dll)
-	elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
-		set ( SDL_MIXER_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2_mixer/SDL2_mixer_win32.dll)
-	endif()
-endif()
+set ( SDL_MIXER_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2_mixer/ )
+set ( SDL_MIXER_LIBRARY SDL_mixer )
+
+add_subdirectory(3rdParty)
 
 find_package(OpenGL 3.0 REQUIRED)
 find_package(OpenCL 1.2 REQUIRED)
-
-if (!${OpenCL_FOUND})
-message("OpenCL not found")
-return()
-endif()
 
 message("OPENCL LIB:")
 message( ${OpenCL_LIBRARIES} )
@@ -83,7 +70,7 @@ set(BOMBERMAN_INCLUDES
   ${GLEW_INCLUDE_DIRS}
   ${IMGUI_INCLUDE_DIRS}
   ${OpenCL_INCLUDE_DIRS}
-  ${SDL_MIXER_INCLUDE_DIRS})
+  ${SDL_MIXER_INCLUDE_DIR})
 
 source_group("Source Files" FILES ${BOMBERMAN_LOCAL_SOURCES})
 source_group("Header File" FILES ${BOMBERMAN_LOCAL_INCLUDES})

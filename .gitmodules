@@ -25,3 +25,6 @@
 [submodule "3rdParty/cereal"]
 	path = 3rdParty/cereal
 	url = https://github.com/USCiLab/cereal.git
+[submodule "3rdParty/sdl2_mixer"]
+	path = 3rdParty/sdl2_mixer
+	url = https://Arxcel@bitbucket.org/Arxcel/sdl2_mixer_mirror.git
