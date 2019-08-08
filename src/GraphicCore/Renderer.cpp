@@ -30,9 +30,11 @@ void Renderer::updateSize(int aWidth, int aHeight)
 
 void Renderer::draw(Game& aMap)
 {
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glEnable(GL_CULL_FACE);
+	mLightManager->initLightSpaceMatrix();
     prepareTransforms(aMap);
     shadowPass(aMap);
     normalPass(aMap);
@@ -108,7 +110,7 @@ void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
 void Renderer::normalPass(Game& aMap)
 {
     glViewport(0, 0, mWidth, mHeight);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
  
     static auto ground = RESOURCES.getModel("ground");
     static auto modelShader = RESOURCES.getShader("modelShader");
@@ -117,14 +119,23 @@ void Renderer::normalPass(Game& aMap)
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
     glm::mat4 view = mCamera.getViewMatrix();
 
+
+	static float Shininess = 32.f;
+	static float Glossiness = 0.5f;
+
+	ImGui::SliderFloat("Shininess", &Shininess, 1.f, 32.f);
+	ImGui::SliderFloat("Glossiness", &Glossiness, 0.f, 1.f);
+
     //render the model
     modelShader->use();
     modelShader->setMat4("projection", projection);
     modelShader->setMat4("view", view);
     modelShader->setVec3("viewPos", mCamera.position());
-    modelShader->setVec3("lightPos", mLightManager->getCurrentLightPos());
+    modelShader->setVec3("lightDir", mLightManager->getCurrentLightDir());
     modelShader->setInt("shadowMap", mLightManager->bindDepthMap());
     modelShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
+    modelShader->setFloat("shininess", Shininess);
+    modelShader->setFloat("glossiness", Glossiness);
 
     renderMovable(modelShader, aMap);
     renderObstacles(modelShader);
