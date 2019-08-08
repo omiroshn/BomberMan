@@ -1,13 +1,15 @@
    
 #include "ResourceManagement/Mesh.hpp"
 #include "Utilities/AnimationUtils.h"
+#include <imgui.h>
 
 Mesh::Mesh(std::vector<Vertex> vertices,
             std::vector<unsigned int> indices,
             std::vector<std::shared_ptr<Texture>> textures,
             std::map<std::string, unsigned int> bones,
             std::vector<glm::mat4> aOffsets,
-            aiScene const* scene) :
+            aiScene const* scene,
+			float glossiness) :
     mVertices{std::move(vertices)}
     , mIndices{std::move(indices)}
     , mTextures{std::move(textures)}
@@ -16,6 +18,7 @@ Mesh::Mesh(std::vector<Vertex> vertices,
     , mBones{std::move(bones)}
     , mOffsetMatrices{std::move(aOffsets)}
     , mScene{scene}
+    , mGlossiness{glossiness}
 {
     setupMesh();
     setInstanceBuffer();
@@ -64,7 +67,7 @@ void Mesh::setupMesh()
     glVertexAttribPointer(9, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
 
     glEnableVertexAttribArray(10);
-    glVertexAttribPointer(10, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
+    glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
 
     glBindVertexArray(0);
 }
@@ -117,9 +120,8 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     shader->setBool("isAnimated", mIsAnimated);
+    shader->setFloat("glossiness", mGlossiness);
     shader->setMat4("parentTransform", parentTransform);
-    shader->setFloat("shininess", 0);
-    shader->setFloat("glossiness", 0);
     if(mIsAnimated)
     {
         for (unsigned int i = 0; i < mBoneTransforms.size(); ++i)

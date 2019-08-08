@@ -369,6 +369,7 @@ void Gui::RenderDrawData(ImDrawData* draw_data)
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
     glEnable(GL_SCISSOR_TEST);
 
 	glm::mat4 orthoProj = glm::ortho(0.f, io.DisplaySize.x, io.DisplaySize.y, 0.f);

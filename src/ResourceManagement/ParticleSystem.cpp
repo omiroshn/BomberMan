@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ResourceManagement/ParticleSystem.hpp"
+#include "Game.hpp"
 
 ParticleSystem::ParticleSystem():
 						m_initKernelName(""),
@@ -102,9 +103,9 @@ bool			ParticleSystem::isRunning( ) const
 bool 			ParticleSystem::chekLiveTime() {
 	if (m_isRunning) {
 		auto currentTime = std::chrono::high_resolution_clock::now();
-		m_deltaTime = std::chrono::duration<float, std::milli>(currentTime - m_stepTime).count() / 1000;
+		m_deltaTime = Game::mDeltaTime;
 		m_stepTime = currentTime;
-		m_totalTime = std::chrono::duration<float, std::milli>(currentTime - m_startTime).count() / 1000 ;
+		m_totalTime += m_deltaTime;
 	}
 	if (m_totalTime > m_liveTime && m_isRunning) {
 		m_totalTime = 0.0;

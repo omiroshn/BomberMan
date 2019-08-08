@@ -31,5 +31,5 @@ void kernel initialize_sphere(global Particle * particles, int particleCount)
 	position->x = radius * sin(delta.x * y + offset.x) * sin(delta.y * x + offset.y) / 1.f;
 	position->y = radius * cos(delta.x * y + offset.x)/ 1.f;
 	position->z = radius * sin(delta.x * y + offset.x) * cos(delta.y * x + offset.y)/ 1.f;
-	position->w = 0.0f;
+	position->w = 0.0001f;
 }

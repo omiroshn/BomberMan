@@ -33,29 +33,33 @@ void LightManager::initShadowFramebuffer()
 
 void LightManager::initLightSpaceMatrix()
 {
-    glm::mat4 lightProjection, lightView;
-    static glm::vec2 lr{1.667f, 25.667f};
-    static glm::vec2 tb{-4.f, 17.333f};
-    static glm::vec2 nf{75.f, 120.f};
+    static glm::vec2 lr{-1.882f, 24.941f};
+    static glm::vec2 tb{-2.824f, 14.688f};
+    static glm::vec2 nf{50.294f, 77.647f};
     static glm::vec3 lookTarget(-1);
+	ImGui::Begin("Lights");
     ImGui::SliderFloat2("light left/right", &lr.x, -32, 32);
     ImGui::SliderFloat2("light top/bottom", &tb.x, -32, 32);
     ImGui::SliderFloat2("light near/far", &nf.x, 0, 120);
-    ImGui::SliderFloat3("lookAtTarget", &lookTarget.x, -32, 32);
+    ImGui::SliderFloat3("lookAtTarget", &lookTarget.x, 0, 100);
+    ImGui::SliderFloat3("lightPos", &mLightPos.x, 0, 100);
+	ImGui::End();
+
+    glm::mat4 lightProjection, lightView;
     lightProjection = glm::ortho(lr.x, lr.y, tb.x, tb.y, nf.x, nf.y);
     lightView = glm::lookAt(mLightPos, lookTarget, glm::vec3(0.0, 1.0, 0.0));
+	mLightDir = glm::normalize(mLightPos - lookTarget);
     mLightSpaceMatrix = lightProjection * lightView;
 }
 
 glm::mat4 const& LightManager::getLightSpaceMatrix()
 {
-    initLightSpaceMatrix();
     return mLightSpaceMatrix;
 }
 
-glm::vec3 const& LightManager::getCurrentLightPos() const
+glm::vec3 const& LightManager::getCurrentLightDir() const
 {
-    return mLightPos;
+    return mLightDir;
 }
 
 int LightManager::bindDepthMap()
