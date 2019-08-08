@@ -22,12 +22,15 @@ public:
 	MapGenerator(int hardness);
 	MapGenerator(int width, int height, int hardness);
 	~MapGenerator();
+
+	MapGenerator() = delete;
+	MapGenerator(MapGenerator const&) = delete;
+    MapGenerator& operator=(MapGenerator const&) = delete;
 	std::vector<SquareType> GenerateNewMap();
 	int GetWidth() const;
 	int GetHeight() const;
 
 private:
-	int mHardness = 0;
 	int mWidth = 30;
 	int mHeight = 20;
 };

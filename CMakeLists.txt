@@ -5,9 +5,10 @@ project(bomberman LANGUAGES CXX)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set ( CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules")
 
 if (APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g ")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 endif()
 
 set ( SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2/include )
@@ -36,11 +37,20 @@ add_subdirectory(3rdParty)
 find_package(OpenGL 3.0 REQUIRED)
 find_package(OpenCL 1.2 REQUIRED)
 
-message("OPENCL LIB:")
-message( ${OpenCL_LIBRARIES} )
+if (OpenCL_FOUND)
+	message("Found OpenCL: ${OpenCL_LIBRARIES}, ${OpenCL_INCLUDE_DIRS}")
+endif()
 
-message("OPENCL INCLUDE DIRS:")
-message(${OpenCL_INCLUDE_DIRS})
+if ( WIN32 )
+  set(FFMPEG_PATH_CUSTOM "${CMAKE_CURRENT_LIST_DIR}/3rdParty/ffmpeg/win64")
+else()
+  set(FFMPEG_PATH_CUSTOM "${CMAKE_CURRENT_LIST_DIR}/3rdParty/ffmpeg/macOs")
+endif()
+
+set(FFMPEG_INCLUDE_SEARCH_PATHES "${FFMPEG_PATH_CUSTOM}/include")
+set(FFMPEG_LIB_SEARCH_PATHES "${FFMPEG_PATH_CUSTOM}/lib")
+
+find_package(FFmpeg REQUIRED)
 
 add_subdirectory(src)
 add_subdirectory(inc)
@@ -58,7 +68,9 @@ set(BOMBERMAN_LIBS
   ${GLEW_LIBRARIES}
   ${IMGUI_LIBRARY}
   ${OpenCL_LIBRARIES}
-  ${SDL_MIXER_LIBRARY})
+  ${SDL_MIXER_LIBRARY}
+  ${FFMPEG_LIBRARIES}
+  )
 
 set(BOMBERMAN_INCLUDES
   ${BOMBERMAN_INCLUDE_DIRS}
@@ -70,7 +82,8 @@ set(BOMBERMAN_INCLUDES
   ${GLEW_INCLUDE_DIRS}
   ${IMGUI_INCLUDE_DIRS}
   ${OpenCL_INCLUDE_DIRS}
-  ${SDL_MIXER_INCLUDE_DIR})
+  ${SDL_MIXER_INCLUDE_DIR}
+  ${FFMPEG_INCLUDE_DIR})
 
 source_group("Source Files" FILES ${BOMBERMAN_LOCAL_SOURCES})
 source_group("Header File" FILES ${BOMBERMAN_LOCAL_INCLUDES})
@@ -102,9 +115,19 @@ function(LINK_ASSETS TARGET_ARG SRC_ARG DIST_ARG )
 endfunction()
 
 if ( MSVC )
+	add_custom_command(TARGET bomberman PRE_LINK
+		COMMAND ${CMAKE_COMMAND} -E copy_directory ${FFMPEG_PATH_CUSTOM}/libshared $<TARGET_FILE_DIR:bomberman>
+	)
+endif()
+
+if ( MSVC )
   link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>")
+  add_custom_command(TARGET bomberman PRE_LINK
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${FFMPEG_PATH_CUSTOM}/libshared $<TARGET_FILE_DIR:bomberman>)
 else()
   link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+  add_custom_command(TARGET bomberman PRE_LINK
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${FFMPEG_PATH_CUSTOM}/lib $<TARGET_FILE_DIR:bomberman>)
 endif()
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bomberman)

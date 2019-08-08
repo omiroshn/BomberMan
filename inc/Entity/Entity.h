@@ -11,6 +11,8 @@ public:
 	Entity(glm::vec2 aPosition = {0,0}, float angle = 0);
 	~Entity();
 
+	Entity(Entity const&) = delete;
+    Entity& operator=(Entity const&) = delete;
 	/** Changes position of Entity by offset */
 	void		move(glm::vec2);
 
@@ -39,7 +41,7 @@ private:
 	float		mAngle;
 	unsigned	mUid;
 	float		mScale;
-	bool		mShouldDie;
+	bool		mDead;
 
 	static unsigned sEntity_counter;
 };

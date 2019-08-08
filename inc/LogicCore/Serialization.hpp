@@ -14,15 +14,14 @@
 #define BOMBERMAN_SERIALIZATION_H
 #include "LogicCore/MapGeneration.hpp"
 
-class Serialization{
+class Serialization
+{
     public:
-        Serialization(){};
-        ~Serialization(){};
+        Serialization();
+        ~Serialization();
+        Serialization(Serialization const&) = delete;
+        Serialization& operator=(Serialization const&) = delete;
         std::vector<SquareType> LoadCampaignMap(int stage);
-
-    private:
-        int mHeight = 20;
-        int mWidth = 20;
 };
 
 #endif //BOMBERMAN_SERIALIZATION_H

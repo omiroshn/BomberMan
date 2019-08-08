@@ -4,13 +4,24 @@
 #include <imgui.h>
 #include <vector>
 
-#define  STANDARD_MENU_BUTTON {200, 30}
+#define  STANDARD_MENU_BUTTON {220, 48}
+
+enum class CurrentMenu
+{
+	mainMenu,
+	settingsMenu,
+	changeStageMenu,
+	exitMenu,
+	inGameMenu
+};
 
 class Gui
 {
 public:
 	Gui();
 	~Gui();
+	Gui(Gui const&) = delete;
+    Gui& operator=(Gui const&) = delete;
 	void ShowMainMenu();
 	void ShowInGameMenu();
     void ShowBetweenStageScreen();
@@ -21,16 +32,14 @@ public:
 	void SetBackground(const char* texture);
 
 private:
-	void ShowHardnessRadioButtons();
 	void ShowStartNewGameMenu();
 	void ShowLoadSavedGamesMenu();
 	void ShowSettingsMenu();
 	void ChangeStage(int next_stage);
 	bool mGameStarted = false;
 	bool mGamePaused = false; //make static in Game
-	bool mShowMenu = true;
-	bool mShowScore = false;
-	int  mMapIndex = -1;
+	ImGuiWindowFlags mWindow_flags = 0;
+	CurrentMenu mCurrentMenu = CurrentMenu::mainMenu;
 	ImTextureID mBackground = nullptr;
 	float mWidth = 800.0f;
 	float mHeight = 600.0f;

@@ -15,15 +15,7 @@ Renderer::Renderer() :
     mLightManager(std::make_unique<LightManager>()),
     mStage(CONFIGURATION.getChosenStage())
 {
-	//glGenVertexArrays(1, &mQuadsArray);
-	//glGenBuffers(1, &mQuadsBuffer);
-	//glBindVertexArray(mQuadsArray);
-	//glBindBuffer(GL_ARRAY_BUFFER, mQuadsBuffer);
-
-    //glEnableVertexAttribArray(0);	
-    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vert), (void*)0);
-    //glEnableVertexAttribArray(1);	
-    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vert), (void *)offsetof(Vert, uv));
+    Bomb::bindArrays();
 };
 
 Renderer::~Renderer()
@@ -48,13 +40,13 @@ void Renderer::draw(Game& aMap)
 
 void Renderer::prepareTransforms(Game &g)
 {
-    mTransforms[ModelType::Brick] = g.GetBrickTransforms();
-    mTransforms[ModelType::Wall] = g.GetWallTransforms();
-    mTransforms[ModelType::Bomb] = g.GetBombTransforms();
-    mTransforms[ModelType::Player] = std::vector<glm::mat4>{g.GetHero().getModelMatrix()};
+    mTransforms[ModelType::Brick] = g.getBrickTransforms();
+    mTransforms[ModelType::Wall] = g.getWallTransforms();
+    mTransforms[ModelType::Bomb] = g.getBombTransforms();
+    mTransforms[ModelType::Player] = std::vector<glm::mat4>{g.getHero().getModelMatrix()};
 
     std::vector<glm::mat4> transforms;
-    auto& Enemies = g.GetEnemies();
+    auto& Enemies = g.getEnemies();
     for (auto It : Enemies)
         transforms.push_back(It->getModelMatrix());
     mTransforms[ModelType::EnemyType1] = transforms;
@@ -81,6 +73,21 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
     a.setTime(0);
     bomb->setAnimation(a);
     bomb->draw(s, mTransforms[ModelType::Bomb]);
+
+    auto type = Game::get()->powerupTypeOnMap();
+    if (type != Hero::PowerupType::PT_NONE)
+    {
+        static std::shared_ptr<Model> bonusModels[Hero::PowerupType::PT_NONE] = {
+            RESOURCES.getModel("bonus_bombs"),
+            RESOURCES.getModel("bonus_flames"),
+            RESOURCES.getModel("bonus_speed"),
+            RESOURCES.getModel("bonus_wallpass"),
+            RESOURCES.getModel("bonus_detonator"),
+            RESOURCES.getModel("bonus_bombpass"),
+            RESOURCES.getModel("bonus_flamepass")
+        };
+        bonusModels[type]->draw(s, std::vector<glm::mat4>{Game::get()->getPowerupTransform()});
+    }
 }
 
 void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
@@ -89,10 +96,11 @@ void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
     static auto balloon = RESOURCES.getModel("balloon");
 
     //render hero
-    auto& Hero = g.GetHero();
+    auto& Hero = g.getHero();
     Hero.debug();
     heroModel->setAnimation(Hero.getAnimation());
     heroModel->draw(s, mTransforms[ModelType::Player]);
+
     //render enemies
     balloon->draw(s, mTransforms[ModelType::EnemyType1]);
 }
@@ -102,24 +110,15 @@ void Renderer::normalPass(Game& aMap)
     glViewport(0, 0, mWidth, mHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  
-    static std::shared_ptr<Skybox> skyboxes[] =
-    {
-        RESOURCES.getSkybox("defaultSkybox"),
-        RESOURCES.getSkybox("lightblue"),
-        RESOURCES.getSkybox("defaultSkybox"),
-        RESOURCES.getSkybox("blue")
-    };
-
     static auto ground = RESOURCES.getModel("ground");
     static auto modelShader = RESOURCES.getShader("modelShader");
     static auto skyboxShader = RESOURCES.getShader("skybox");
 
-    auto skybox = skyboxes[mStage];
-
-    modelShader->use();
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
     glm::mat4 view = mCamera.getViewMatrix();
 
+    //render the model
+    modelShader->use();
     modelShader->setMat4("projection", projection);
     modelShader->setMat4("view", view);
     modelShader->setVec3("viewPos", mCamera.position());
@@ -132,35 +131,45 @@ void Renderer::normalPass(Game& aMap)
 
     // render the ground
     std::vector<glm::mat4> transforms;
-    glm::mat4 groundModel = glm::mat4(1.0f);
-    groundModel = glm::translate(groundModel, glm::vec3(.0f, -1.f, .0f));
+    glm::mat4 groundModel = glm::translate(glm::mat4(1.0f), glm::vec3(.0f, -1.f, .0f));
 
     CollisionInfo &info = Game::getCollisionInfo();
-    for (int i = 0; i < info.Squares.size(); i++)
+    for (size_t i = 0; i < info.Squares.size(); i++)
     {
-        glm::mat4 groundTransform = groundModel;
-        groundTransform = glm::translate(groundTransform,
+        glm::mat4 groundTransform = glm::translate(groundModel,
             glm::vec3(i % info.width + .5f, 0, i / info.width + .5f)
         );
         transforms.push_back(groundTransform);
     }
     ground->draw(modelShader, transforms);
-	// render running particle system
-	try
-    {
-		mParticleManager->draw(projection, view);
-	}
-    catch (CustomException &ex)
-    {
-		std::cout << ex.what() << std::endl;
-		exit(42);
-	}
+
     // render skybox
+    static std::shared_ptr<Skybox> skyboxes[] =
+    {
+        RESOURCES.getSkybox("defaultSkybox"),
+        RESOURCES.getSkybox("lightblue"),
+        RESOURCES.getSkybox("defaultSkybox"),
+        RESOURCES.getSkybox("blue")
+    };
+    auto skybox = skyboxes[mStage];
+
     view = glm::mat4(glm::mat3(mCamera.getViewMatrix()));
     skyboxShader->use();
     skyboxShader->setMat4("view", view);
     skyboxShader->setMat4("projection", projection);
     skybox->draw(skyboxShader);
+
+    view = mCamera.getViewMatrix();
+	// render running particle system
+	try {
+		mParticleManager->draw(projection, view);
+	} catch (CustomException &ex) {
+		std::cout << ex.what() << std::endl;
+		exit(42);
+	}
+
+    // render sparks
+    Bomb::drawSparksQuadsDeferred(view, projection);
 }
 
 void Renderer::shadowPass(Game& aMap)
@@ -187,45 +196,3 @@ ParticleManager *Renderer::getParticleManager()
 {
 	return mParticleManager.get();
 }
-
-//void Renderer::drawQuad(Quad quad)
-//{
-//	mShadowQuads.push_back(quad);
-//}
-
-//void Renderer::drawShadow(glm::vec3 position)
-//{
-//	float shadowYOffset = -0.445;
-//	float shadowSize = 0.241f;
-//	Renderer::Quad shadow(
-//	    position + glm::vec3{ shadowSize,shadowYOffset, shadowSize},
-//	    position + glm::vec3{ shadowSize,shadowYOffset,-shadowSize},
-//	    position + glm::vec3{-shadowSize,shadowYOffset, shadowSize},
-//	    position + glm::vec3{-shadowSize,shadowYOffset,-shadowSize}
-//	);
-//	drawQuad(shadow);
-//}
-
-//void Renderer::drawQuadsDeferred(glm::mat4 view, glm::mat4 projection)
-//{
-//	static auto ShadowShader = RESOURCES.getShader("shadow");
-//	if (mShadowQuads.empty())
-//		return;
-//
-//	glBindBuffer(GL_ARRAY_BUFFER, mQuadsBuffer);
-//	glBufferData(GL_ARRAY_BUFFER, mShadowQuads.size() * sizeof(Renderer::Quad), mShadowQuads.data(), GL_DYNAMIC_DRAW);
-//	glBindVertexArray(mQuadsArray);
-//
-//	ShadowShader->use();
-//	ShadowShader->setMat4("view", view);
-//	ShadowShader->setMat4("projection", projection);
-//
-//	glEnable(GL_BLEND);
-//	glDepthMask(false);
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//
-//	glDrawArrays(GL_TRIANGLES, 0, mShadowQuads.size() * 6);
-//	mShadowQuads.clear();
-//	glDisable(GL_BLEND);
-//	glDepthMask(true);
-//}

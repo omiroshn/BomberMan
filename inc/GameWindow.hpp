@@ -20,6 +20,8 @@ public:
     void PauseGame(bool state);
 	void setSize(int const w, int const h);
 	void setFullScreen(bool isFullScreen);
+	GameWindow(GameWindow const&) = delete;
+    GameWindow& operator=(GameWindow const&) = delete;
 
 private:
     void initWindow();

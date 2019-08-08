@@ -17,6 +17,10 @@ struct ConfusedState;
  */
 struct IdleState : public State {
 	using State::transition;
+    IdleState();
+    ~IdleState();
+    //IdleState(IdleState const&) = delete;
+    //IdleState& operator=(IdleState const&) = delete;
 	bool transition(const PatrolState&);
 
 	void onEntry(MovingEntity&);

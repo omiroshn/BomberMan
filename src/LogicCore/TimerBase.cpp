@@ -19,3 +19,7 @@ bool TimerBase::readyForDelete() {
 bool TimerBase::usedTheEvent() {
     return usedEvent;
 }
+
+TimerBase::~TimerBase() {
+
+}

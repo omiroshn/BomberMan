@@ -9,9 +9,12 @@ private:
     bool  left_joystick;
     bool right_joystick;
     bool mJButtons[4];
+    
 public:
     KeyboardHandler();
     ~KeyboardHandler();
+    KeyboardHandler(KeyboardHandler const&) = delete;
+    KeyboardHandler& operator=(KeyboardHandler const&) = delete;
 
     bool isPressed(int keycode);
     bool isReleased(int keycode);

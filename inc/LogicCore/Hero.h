@@ -2,34 +2,58 @@
 
 #include "Entity/MovingEntity.h"
 
-
 class Hero : public MovingEntity
 {
 	int mCurrentBombCount = 1;
+	float mLastTimePlacedBomb = 0.f;
 
-	int mBombMax = 1;
-	int mBombStrength = 1;
-
-	float mLastTimePlacedBomb;
 public:
-	struct SaveInfo
+	enum PowerupType
 	{
-		SaveInfo(int i_bombMax, int i_bombStrength)
-		: bombMax(i_bombMax)
-		, bombStrength(i_bombStrength)
-		{}
-		
-		int bombMax = 1;
-		int bombStrength = 1;
+		PT_Bombs,
+		PT_Flames,
+		PT_Speed,
+		PT_Wallpass,
+		PT_Detonator,
+		PT_Bombpass,
+		PT_Flamepass,
+		PT_NONE
 	};
 
-	Hero(SaveInfo info, glm::vec2 position = {1.5f, 1.5f});
+	struct Stats
+	{
+		int		bombMax = 1;
+		int		bombStrength = 1;
+		float   movementSpeed;
+		uint8_t wallpass = false;
+		uint8_t detonator = false;
+		uint8_t bombpass = false;
+		uint8_t flamepass = false;
+
+		template<class Archive>
+		void serialize(Archive & ar)
+		{
+			ar( bombMax,
+				bombStrength,
+				movementSpeed,
+				wallpass,
+				detonator,
+				bombpass,
+				flamepass);
+		}
+	};
+
+	Stats mStats;
+
+	Hero(Stats info, glm::vec2 position = {1.5f, 1.5f});
 	void increaseBombStrength();
 	void increaseBombMax();
-
 	void increaseBombCount();
 
 	void tryPlaceBomb();
 
-	SaveInfo getSaveInfo();
+	Stats getStats();
+	void kill();
+
+	void applyPowerup(PowerupType type);
 };

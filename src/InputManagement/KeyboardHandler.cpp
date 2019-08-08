@@ -12,7 +12,7 @@ KeyboardHandler::KeyboardHandler()
 }
 KeyboardHandler::~KeyboardHandler(){}
 
-void KeyboardHandler::handleKeyboardEvent(SDL_Event &event)
+void KeyboardHandler::handleKeyboardEvent(SDL_Event &)
 {
     mKeyboardState = SDL_GetKeyboardState(NULL);
 }

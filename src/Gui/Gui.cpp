@@ -7,57 +7,79 @@
 
 Gui::Gui()
 {
-
-}
-
-Gui::~Gui()
-{
-
+	mWindow_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar;	
 }
 
 void Gui::ShowMainMenu()
 {
-	ImGuiWindowFlags window_flags = 0;
-	window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar;
 	mWidth = CONFIGURATION.getWidth();
 	mHeight = CONFIGURATION.getHeight();
+	if (!mBackground)
+		mBackground = (ImTextureID)(size_t)RESOURCES.getTexture("sky")->getTextureID();
 
 	ImGui::SetNextWindowPos({0, 0},0);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(mWidth / 2 - 100, mHeight / 2 - 79));
-	ImGui::SetNextWindowCollapsed(0);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(mWidth, mHeight));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 
-	ImGui::Begin("Main Menu", NULL, window_flags);
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	ImGui::Text("Welcome to BomberMan game");
+	ImGui::Begin("Main Menu", NULL, mWindow_flags);
+	ImGui::GetWindowDrawList()->AddImage(mBackground, ImVec2(0, 0), ImVec2(mWidth, mHeight));
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(mWidth / 2 - 112, mHeight / 2 - 200));
+	ImGui::BeginChildFrame(5, ImVec2(mWidth, mHeight), ImGuiWindowFlags_AlwaysAutoResize);
 
-	/////////////////////////////////START GAME////////////////////////////////////
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2,2));
 
-	const ImVec2 menu_frame = {200, 158};
-	const float spacing = 10;
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, spacing));
-	ImGui::BeginChildFrame(1, menu_frame, 4);
-
-	ShowStartNewGameMenu();
-
-	/////////////////////////////////LOAD GAME////////////////////////////////////
-
-	ShowLoadSavedGamesMenu();
-
-	/////////////////////////////////SETTINGS OF GAME////////////////////////////////////
-
-	ShowSettingsMenu();
-
-	/////////////////////////////////EXIT////////////////////////////////////
-
-	if (ImGui::Button("EXIT", STANDARD_MENU_BUTTON))
+	if (mCurrentMenu == CurrentMenu::mainMenu)
 	{
-		Game::mIsRunning = false;
-	}
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
+		ImGui::Text("       BomberMan game menu");
 
+		/////////////////////////////////START GAME////////////////////////////////////
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
+		ImGui::BeginChildFrame(1, {224, 204}, ImGuiWindowFlags_AlwaysAutoResize);
+
+		ShowStartNewGameMenu();
+
+		/////////////////////////////////LOAD GAME////////////////////////////////////
+
+		
+		if (ImGui::Button("Continue", STANDARD_MENU_BUTTON))
+		{
+			mCurrentMenu = CurrentMenu::changeStageMenu;
+			ShowLoadSavedGamesMenu();
+		}
+
+		/////////////////////////////////SETTINGS////////////////////////////////////
+
+		if (ImGui::Button("Settings", STANDARD_MENU_BUTTON))
+		{
+			GamePaused(true);
+			mCurrentMenu = CurrentMenu::settingsMenu;
+			ShowSettingsMenu();
+		}
+
+		/////////////////////////////////EXIT////////////////////////////////////
+
+		if (ImGui::Button("EXIT", STANDARD_MENU_BUTTON))
+		{
+			Game::mIsRunning = false;
+		}
+
+		ImGui::EndChildFrame();		
+		ImGui::PopStyleVar();
+		ImGui::PopStyleVar();
+	}
+	else if (mCurrentMenu == CurrentMenu::settingsMenu)
+		ShowSettingsMenu();
+	else if (mCurrentMenu == CurrentMenu::changeStageMenu)
+		ShowLoadSavedGamesMenu();
+
+	ImGui::PopStyleVar();
 	ImGui::EndChildFrame();
 	ImGui::PopStyleVar();
-	ImGui::PopStyleVar();
 	ImGui::End();
+	ImGui::PopStyleVar();
+	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 }
 
@@ -66,7 +88,9 @@ void Gui::ShowInGameMenu()
 	if (ImGui::BeginMainMenuBar())
 	{
 		ImGui::Text("Stage: ");
-		ImGui::Text("%s", std::to_string(CONFIGURATION.getChosenStage()).c_str());
+		std::string stage_to_show = std::to_string(CONFIGURATION.getChosenStage());
+		stage_to_show = stage_to_show == "0" ? "BONUS" : stage_to_show;
+		ImGui::Text("%s", stage_to_show.c_str());
 
 		ImGui::Text("Score: ");
 		ImGui::Text("%s", std::to_string(CONFIGURATION.getScore()).c_str());
@@ -98,7 +122,7 @@ void Gui::ShowBetweenStageScreen()
 			ShowLoadingScreen("flame-fire");
 			break;
 		case 2:
-			ShowLoadingScreen("block");
+			ShowLoadingScreen("brickwall");
 			break;
 		case 3:
 			ShowLoadingScreen("explosion_tmap_2");
@@ -112,7 +136,7 @@ void Gui::ShowStartNewGameMenu()
 {
 	if (ImGui::BeginPopup("Select stage"))
 	{
-		ImGui::BeginChildFrame(2, {200, 204}, 4);
+		ImGui::BeginChildFrame(4, {200, 204}, 4);
 		ImGui::Text("     Enter your name");
 		 static char str0[128] = "Your name";
 		 ImGui::InputText("", str0, IM_ARRAYSIZE(str0));
@@ -122,7 +146,11 @@ void Gui::ShowStartNewGameMenu()
 	if (ImGui::Button("Start new Campaign", STANDARD_MENU_BUTTON))
 	{
 		//ImGui::OpenPopup("Select stage");
-		CONFIGURATION.setChosenStage(1);
+		mCurrentMenu = CurrentMenu::inGameMenu;
+		CONFIGURATION.setChosenStage(DefaultChosenStage);
+		CONFIGURATION.setLives(DefaultLives);
+		CONFIGURATION.setBestLevelAchieved(DefaultBestLevelAchieved);
+		CONFIGURATION.setScore(DefaultScore);
 		GamePaused(false);
 		StartTheGame(true);
 	}
@@ -130,6 +158,8 @@ void Gui::ShowStartNewGameMenu()
 
 void Gui::ChangeStage(int next_stage)
 {
+	if (next_stage > CONFIGURATION.getBestLevelAchieved())
+			return;
 	CONFIGURATION.setChosenStage(next_stage + 1);
 	GamePaused(false);
 	StartTheGame(true);
@@ -137,86 +167,83 @@ void Gui::ChangeStage(int next_stage)
 	if (Game::mStageTimer > 4)
 		Game::mStageStartedTimer = Game::getCurrentTime();
 	Game::mStageTimer = 3 - (Game::getCurrentTime() - Game::mStageStartedTimer);
-	ShowLoadingScreen("face");
 }
 
 
 void Gui::ShowLoadSavedGamesMenu()
 {
-	if (ImGui::BeginPopup("Saved Games"))
-	{
 		if (mButtonsTextures.empty())
 		{
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("unlocked")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)RESOURCES.getTexture("cloud_trans")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked0")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked1")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked2")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked3")->getTextureID());
+			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("locked")->getTextureID());
 		}
-
-		ImGui::BeginChildFrame(2, {201, 204}, 4);
-		ImGui::Text("Choose stage of the campaign");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 0 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(28, 4));
+		ImGui::BeginChildFrame(2, {234, 204}, 4);
+		ImGui::Text("\nStages of the campaign");
+		if (ImGui::ImageButton(mButtonsTextures.at(0), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(0);
 		}
 		ImGui::SameLine();
-		ImGui::Text("\nStage 1");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 1 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		ImGui::Text("\n   Stage 1");
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 0 ? 1 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(1);
 		}
 		ImGui::SameLine();
-		ImGui::Text("\nStage 2");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() > 2 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		ImGui::Text("\n   Stage 2");
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 1 ? 2 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(2);
 		}
 		ImGui::SameLine();
-		ImGui::Text("\nStage 3");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getChosenStage() == 0 ? 0 : 1), ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f, 32.0f), 2, ImColor(0, 0, 0, 255)))
+		ImGui::Text("\n   Stage 3");
+		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 2 ? 3 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
 		{
 			ChangeStage(3);
 		}
 		ImGui::SameLine();
-		ImGui::Text("\nBonus level");
+		ImGui::Text("\n   Bonus level");
 		ImGui::EndChildFrame();
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::Button("Continue", STANDARD_MENU_BUTTON))
-	{
-		ImGui::OpenPopup("Saved Games");
-	}
+		ImGui::PopStyleVar();
+		if (ImGui::Button("BACK", {234, 48}))
+		{
+			mCurrentMenu = CurrentMenu::mainMenu;
+			return;
+		}
 }
 
 void Gui::ShowSettingsMenu()
 {
-	if (ImGui::BeginPopup("Settings of the Games"))
-	{
-		const ImVec2 saved_frame = {200, 320};
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(40, 4));
+		const ImVec2 saved_frame = {234, 330};
 		ImGui::BeginChildFrame(3, saved_frame, 4);
 
-		ImGui::Text("\nSet music volume\n");
-		ImGui::SliderInt("10", &CONFIGURATION.getMusicVolume(), 0, 10, "Music");
+		ImGui::Text("\n    Set music volume\n");
+		ImGui::SliderInt("1O", &CONFIGURATION.getMusicVolume(), 0, 10, "Music");
 		ImGui::Separator();
 
-		ImGui::Text("\nSet sounds volume\n");
-		ImGui::SliderInt("9", &CONFIGURATION.getSoundVolume(), 0, 9, "Sounds");
+		ImGui::Text("\n   Set sounds volume\n");
+		ImGui::SliderInt("10", &CONFIGURATION.getSoundVolume(), 0, 10, "Sounds");
 		ImGui::Separator();
 
-		ImGui::Text("\nSet keybinding\n");
+		ImGui::Text("\n    Set keybinding\n");
 		ImGui::RadioButton("Arrows", &CONFIGURATION.getKeyBindVolume(), 0);ImGui::SameLine();
-		ImGui::RadioButton("ASWD", &CONFIGURATION.getKeyBindVolume(), 1);ImGui::SameLine();
+		ImGui::RadioButton("ASWD", &CONFIGURATION.getKeyBindVolume(), 1);
 		ImGui::RadioButton("🎮", &CONFIGURATION.getKeyBindVolume(), 2);ImGui::SameLine();
 		ImGui::RadioButton("HJKL", &CONFIGURATION.getKeyBindVolume(), 3);
 		ImGui::Separator();
 
-		if (ImGui::Checkbox("FullScreen", &CONFIGURATION.getWindowed()))
+		if (ImGui::Checkbox("     FullScreen", &CONFIGURATION.getWindowed()))
 		{
 			CONFIGURATION.setWindowed(CONFIGURATION.getWindowed());
 		}
 
 		ImGui::Text("\nSet screen resolution\n");
         const char* items[] = {"360", "480", "720", "1400"};
-		ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		float w = ImGui::CalcItemWidth();
@@ -249,23 +276,15 @@ void Gui::ShowSettingsMenu()
 			if (CONFIGURATION.getScreenResolution() < 4)
 				CONFIGURATION.getScreenResolution()++;
 		}
-
 		ImGui::EndChildFrame();
-		if (ImGui::Button("CONTINUE", STANDARD_MENU_BUTTON))
+		ImGui::PopStyleVar();
+
+		if (ImGui::Button("BACK", {234, 48}))
 		{
-			GamePaused(false);
-			ImGui::EndPopup();
-			StartTheGame(true);
+			mCurrentMenu = CurrentMenu::mainMenu;
 			return;
 		}
-		ImGui::EndPopup();
 
-	}
-	if (ImGui::Button("Settings", STANDARD_MENU_BUTTON))
-	{
-		GamePaused(true);
-		ImGui::OpenPopup("Settings of the Games");
-	}
 }
 
 bool Gui::IsGameRunning()
@@ -281,49 +300,42 @@ void Gui::StartTheGame(bool start)
 void Gui::GamePaused(bool state)
 {
 	mGamePaused = state;
+	if (!state)
+		mCurrentMenu = CurrentMenu::mainMenu;
 }
 
 void Gui::SetBackground(const char* texture)
 {
-	mBackground = (ImTextureID)RESOURCES.getTexture(texture)->getTextureID();
-}
-
-
-void Gui::ShowHardnessRadioButtons()
-{
-	static int hardness = 0;
-	ImGui::RadioButton("Easy", &hardness, 0);ImGui::SameLine();
-
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip("For beginners");
-
-	ImGui::RadioButton("Middle", &hardness,1);ImGui::SameLine();
-
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip("Recommended");
-
-	ImGui::RadioButton("Hard", &hardness, 2);
-
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip("Super hard map");
+	mBackground = (ImTextureID)(size_t)RESOURCES.getTexture(texture)->getTextureID();
 }
 
 void Gui::ShowLoadingScreen(const char* screen)
 {
-	ImTextureID im = (ImTextureID)RESOURCES.getTexture(screen)->getTextureID();
-	ImGuiWindowFlags window_flags = 0;
-	window_flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar ;
+	ImTextureID im = (ImTextureID)(size_t)RESOURCES.getTexture(screen)->getTextureID();
 	ImGui::SetNextWindowPos({0, 0},0);
 	mWidth = CONFIGURATION.getWidth();
 	mHeight = CONFIGURATION.getHeight();
 	ImGui::SetNextWindowSize({mWidth,mHeight});
-	ImGui::Begin("Next Stage", NULL, window_flags);
+	ImGui::Begin("Next Stage", NULL, mWindow_flags);
 	ImGui::Image(im,{mWidth,mHeight}, {1,1}, {0,0});
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
 	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 50, mHeight / 2), ImColor(1.0f,1.0f,1.0f,1.0f), "Welcome to next stage" );
-	char stage[] = "Stage:  ";
-	stage[7] = CONFIGURATION.getChosenStage() + '0';
-	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 20, mHeight / 2 + 30), ImColor(1.0f,1.0f,1.0f,1.0f), stage);
+	if (CONFIGURATION.getChosenStage() > 0)
+	{
+		char stage[] = "Stage:  ";
+		stage[7] = CONFIGURATION.getChosenStage() + '0';
+		ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 20, mHeight / 2 + 30), ImColor(1.0f,1.0f,1.0f,1.0f), stage);
+	}
+	else
+	{
+		char stage[] = "Stage:  Bonus Level";
+		ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 20, mHeight / 2 + 30), ImColor(1.0f,1.0f,1.0f,1.0f), stage);
+	}
 	ImGui::PopStyleVar();
 	ImGui::End();
+}
+
+Gui::~Gui()
+{
+
 }

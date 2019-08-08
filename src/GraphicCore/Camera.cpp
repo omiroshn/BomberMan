@@ -9,8 +9,8 @@
 #include "Game.hpp"
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :
-mFront(glm::vec3(0.0f, 0.0f, -1.0f)), mMovementSpeed(SPEED), mMouseSensitivity(SENSITIVITY), mZoom(ZOOM),
-mPosition(position), mWorldUp(up), mYaw(yaw), mPitch(pitch)
+mPosition(position), mFront(glm::vec3(0.0f, 0.0f, -1.0f)), mWorldUp(up),
+mYaw(yaw), mPitch(pitch), mMovementSpeed(SPEED), mMouseSensitivity(SENSITIVITY), mZoom(ZOOM)
 {
     updateCameraVectors();
 }
@@ -23,9 +23,9 @@ glm::mat4 Camera::getViewMatrix()
 
 void Camera::followEntity(Entity &aTarget, float d, float deltaTime)
 {
-	static float zoom = 1;
+	static float zoom = 0.4;
 	static float cameraSpeed = 1;
-	ImGui::SliderFloat("Zoom", &zoom, 0.05f, 20.f);
+	ImGui::SliderFloat("Zoom", &zoom, 0.05f, 4.f);
 	ImGui::SliderFloat("CameraSpeed", &cameraSpeed, 0.05f, 20.f);
 	d *= zoom;
 	glm::vec3 desiredPosition{
@@ -117,4 +117,9 @@ float Camera::zoom() const
 glm::vec3 Camera::position() const
 {
     return mPosition;
+}
+
+Camera::~Camera()
+{
+
 }

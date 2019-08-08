@@ -21,7 +21,7 @@ std::map <std::string, TextureType> cStringTextureTypes
         };
 
 Texture::Texture(TextureType aType)
-		: mType(aType), mWidth(0), mHeight(0), mInternalFormat(GL_RGBA), mImageFormat(GL_RGB), mWrapS(GL_REPEAT), mWrapT(GL_REPEAT), mFilterMin(GL_LINEAR), mFilterMax(GL_LINEAR)
+		: mWidth(0), mHeight(0), mInternalFormat(GL_RGBA), mImageFormat(GL_RGB), mWrapS(GL_REPEAT), mWrapT(GL_REPEAT), mFilterMin(GL_LINEAR), mFilterMax(GL_LINEAR), mType(aType)
 {
 	glGenTextures(1, &mID);
 }

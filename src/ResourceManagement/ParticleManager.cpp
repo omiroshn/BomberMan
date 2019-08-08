@@ -46,11 +46,11 @@ void 		ParticleManager::initCLEngine()
 	try {
         auto const& binFolder = RESOURCES.getBinFolder();
 		//set sources prorams and kernels for initialise Sphere by Points
-		m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/init_sphere_by_points.cl", "initSpherePoints");
+		m_CLE->addProgramSource(binFolder + "/kernel/init_sphere_by_points.cl", "initSpherePoints");
 		m_CLE->addProgramFromSource("initSpherePoints", "initSphereProgram");
 		m_CLE->addKernel("initSphereProgram", "initSphereKernel","initialize_sphere");
 		//set sources prorams and kernels for update Sphere by Points
-		m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/update_sphere_by_points.cl", "updateSpherePoints");
+		m_CLE->addProgramSource(binFolder + "/kernel/update_sphere_by_points.cl", "updateSpherePoints");
 		m_CLE->addProgramFromSource("updateSpherePoints", "updateSphereProgram");
 		m_CLE->addKernel("updateSphereProgram", "updateSphereKernel","update_sphere");
 
@@ -73,11 +73,11 @@ void 		ParticleManager::initCLEngine()
 		// m_CLE->addKernel("updateSphereProgramQuadTMap", "updateSphereKernelQuadTMap","update_sphere");
 
 		//set sources prorams and kernels for initialise Brick Block
-		m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/init_brick_block.cl", "initBrickBlock");
+		m_CLE->addProgramSource(binFolder + "/kernel/init_brick_block.cl", "initBrickBlock");
 		m_CLE->addProgramFromSource("initBrickBlock", "initBrickBlockProgram");
 		m_CLE->addKernel("initBrickBlockProgram", "initBrickBlockKernel","initialize_brick_block");
 		//set sources prorams and kernels for update  Brick Block
-		m_CLE->addProgramSource(RESOURCES.getBinFolder() + "/kernel/update_brick_block.cl", "updateBrickBlock");
+		m_CLE->addProgramSource(binFolder + "/kernel/update_brick_block.cl", "updateBrickBlock");
 		m_CLE->addProgramFromSource("updateBrickBlock", "updateBrickBlockProgram");
 		m_CLE->addKernel("updateBrickBlockProgram", "updateBrickBlockKernel","update_brick_block");
 
