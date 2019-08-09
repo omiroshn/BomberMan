@@ -42,8 +42,8 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/3rdParty/ffmpeg/macOs/")
 endif()
 
 ## SDL2
-set( SDL_STATIC OFF CACHE BOOL "Build the static SDL library" )
-set( SDL_SHARED ON CACHE BOOL "Build the shared SDL library" )
+set( SDL_STATIC ON CACHE BOOL "Build the static SDL library" )
+set( SDL_SHARED OFF CACHE BOOL "Build the shared SDL library" )
 add_subdirectory(sdl2)
 
 ## GLEW

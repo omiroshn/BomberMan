@@ -11,9 +11,6 @@ if (APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 endif()
 
-set ( SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2/include )
-set ( SDL2_LIBRARY SDL2 )
-
 set ( GLEW_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glew/include )
 set ( GLEW_LIBRARIES libglew_shared )
 
@@ -28,9 +25,6 @@ set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
 
 set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
-
-set ( SDL_MIXER_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2_mixer/ )
-set ( SDL_MIXER_LIBRARY SDL_mixer )
 
 add_subdirectory(3rdParty)
 
@@ -63,12 +57,10 @@ set(BOMBERMAN_INCLUDE_DIRS inc/)
 
 set(BOMBERMAN_LIBS
   ${OPENGL_LIBRARY}
-  ${SDL2_LIBRARY}
   ${ASSIMP_LIBRARY}
   ${GLEW_LIBRARIES}
   ${IMGUI_LIBRARY}
   ${OpenCL_LIBRARIES}
-  ${SDL_MIXER_LIBRARY}
   ${FFMPEG_LIBRARIES}
   )
 
@@ -76,7 +68,6 @@ set(BOMBERMAN_INCLUDES
   ${BOMBERMAN_INCLUDE_DIRS}
   ${GLM_INCLUDE_DIRS}
   ${CEREAL_INCLUDE_DIRS}
-  ${SDL2_INCLUDE_DIR}
   ${STB_INCLUDE_DIRS}
   ${ASSIMP_INCLUDE_DIR}
   ${GLEW_INCLUDE_DIRS}
@@ -95,7 +86,7 @@ set_target_properties(bomberman PROPERTIES
 	CXX_EXTENSIONS NO
 	USE_FOLDERS ON)
 target_include_directories(bomberman PRIVATE ${BOMBERMAN_INCLUDES})
-target_link_libraries (bomberman PRIVATE ${BOMBERMAN_LIBS})
+target_link_libraries (bomberman PRIVATE ${BOMBERMAN_LIBS} SDL2-static SDL_mixer)
 
 # if ( CMAKE_COMPILER_IS_GNUCC )
 #     target_compile_options(bomberman PRIVATE "-Wall -Wextra -Werror")
