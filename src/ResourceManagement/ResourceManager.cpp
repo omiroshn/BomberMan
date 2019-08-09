@@ -144,6 +144,12 @@ std::shared_ptr<Texture> ResourceManager::loadTextureFromMemory(unsigned char *d
 
 std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file, std::string const &texType, bool isModelTexture)
 {
+	auto It = mTextureCache.find(file);
+	if (It != mTextureCache.end())
+	{
+		return It->second;
+	}
+
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char *data = stbi_load(file, &width, &height, &nrChannels, 0);

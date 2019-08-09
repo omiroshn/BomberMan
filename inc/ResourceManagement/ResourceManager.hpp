@@ -52,6 +52,7 @@ private:
 private:
 	std::map<std::string, std::shared_ptr<Shader>>		mShaders;
 	std::map<std::string, std::shared_ptr<Texture>>		mTextures;
+	std::map<std::string, std::shared_ptr<Texture>>		mTextureCache;
 	std::map<std::string, std::shared_ptr<Model>>		mModels;
     std::map<std::string, std::shared_ptr<Skybox>>		mSkyboxes;
 	//std::string                                         

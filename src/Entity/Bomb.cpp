@@ -33,7 +33,8 @@ Bomb::~Bomb()
 	if (auto *hero = &Game::get()->getHero())
 		hero->increaseBombCount();
 	Game::getCollisionInfo()[getPosition()] = SquareType::EmptySquare;
-	mSparksQuads.erase(mSparksQuads.begin());
+	if (!mSparksQuads.empty())
+		mSparksQuads.erase(mSparksQuads.begin());
 }
 
 void Bomb::drawSparks(glm::vec4 position)
