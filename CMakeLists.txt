@@ -1,92 +1,58 @@
 cmake_minimum_required(VERSION 3.13...3.14)
 
+set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/cpack)
 project(bomberman LANGUAGES CXX)
+set(APP_NAME bomberman)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set ( CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules")
+set(PROJECTNAME_ARCHITECTURE "x64")
 
 if (APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 endif()
 
-set ( GLEW_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glew/include )
-set ( GLEW_LIBRARIES libglew_shared )
-
-set ( ASSIMP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/assimp/include )
-set ( ASSIMP_LIBRARY assimp )
-
-set ( GLM_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glm/ )
-
-set ( CEREAL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/cereal/include )
-
-set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
-
-set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
-set ( IMGUI_LIBRARY imgui )
-
 add_subdirectory(3rdParty)
-
-find_package(OpenGL 3.0 REQUIRED)
-find_package(OpenCL 1.2 REQUIRED)
-
-if (OpenCL_FOUND)
-	message("Found OpenCL: ${OpenCL_LIBRARIES}, ${OpenCL_INCLUDE_DIRS}")
-endif()
 
 if ( WIN32 )
   set(FFMPEG_PATH_CUSTOM "${CMAKE_CURRENT_LIST_DIR}/3rdParty/ffmpeg/win64")
-else()
+elseif( APPLE )
   set(FFMPEG_PATH_CUSTOM "${CMAKE_CURRENT_LIST_DIR}/3rdParty/ffmpeg/macOs")
 endif()
 
-set(FFMPEG_INCLUDE_SEARCH_PATHES "${FFMPEG_PATH_CUSTOM}/include")
-set(FFMPEG_LIB_SEARCH_PATHES "${FFMPEG_PATH_CUSTOM}/lib")
-
 find_package(FFmpeg REQUIRED)
+find_package(OpenGL 3.0 REQUIRED)
+find_package(OpenCL 1.2 REQUIRED)
 
 add_subdirectory(src)
 add_subdirectory(inc)
 
-set(BOMBERMAN_SOURCES
-  ${BOMBERMAN_LOCAL_SOURCES}
-  ${BOMBERMAN_LOCAL_INCLUDES})
-
-set(BOMBERMAN_INCLUDE_DIRS inc/)
-
-set(BOMBERMAN_LIBS
-  ${OPENGL_LIBRARY}
-  ${ASSIMP_LIBRARY}
-  ${GLEW_LIBRARIES}
-  ${IMGUI_LIBRARY}
-  ${OpenCL_LIBRARIES}
-  ${FFMPEG_LIBRARIES}
-  )
-
-set(BOMBERMAN_INCLUDES
-  ${BOMBERMAN_INCLUDE_DIRS}
-  ${GLM_INCLUDE_DIRS}
-  ${CEREAL_INCLUDE_DIRS}
-  ${STB_INCLUDE_DIRS}
-  ${ASSIMP_INCLUDE_DIR}
-  ${GLEW_INCLUDE_DIRS}
-  ${IMGUI_INCLUDE_DIRS}
-  ${OpenCL_INCLUDE_DIRS}
-  ${SDL_MIXER_INCLUDE_DIR}
-  ${FFMPEG_INCLUDE_DIR})
-
 source_group("Source Files" FILES ${BOMBERMAN_LOCAL_SOURCES})
 source_group("Header File" FILES ${BOMBERMAN_LOCAL_INCLUDES})
 
-add_executable(bomberman ${BOMBERMAN_SOURCES})
-set_target_properties(bomberman PROPERTIES
+add_executable(${APP_NAME} MACOSX_BUNDLE ${BOMBERMAN_SOURCES})
+
+set_target_properties(${APP_NAME} PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED YES
 	CXX_EXTENSIONS NO
 	USE_FOLDERS ON)
-target_include_directories(bomberman PRIVATE ${BOMBERMAN_INCLUDES})
-target_link_libraries (bomberman PRIVATE ${BOMBERMAN_LIBS} SDL2-static SDL_mixer)
+
+target_include_directories(${APP_NAME} PRIVATE inc/
+)
+target_link_libraries (${APP_NAME} PRIVATE	OpenGL::GL
+                                            OpenCL::OpenCL
+                                            SDL2::SDL2
+                                            SDL2::SDL_mixer
+                                            glew::glew
+                                            assimp::assimp
+                                            imgui::imgui
+                                            glm::glm
+                                            stb::stb
+                                            cereal::cereal
+                                            ffmpeg::ffmpeg)
 
 # if ( CMAKE_COMPILER_IS_GNUCC )
 #     target_compile_options(bomberman PRIVATE "-Wall -Wextra -Werror")
@@ -95,30 +61,40 @@ target_link_libraries (bomberman PRIVATE ${BOMBERMAN_LIBS} SDL2-static SDL_mixer
 #     target_compile_options(bomberman PRIVATE "/W4")
 # endif()
 
-set (PROJECTNAME_ARCHITECTURE "x64")
-if (APPLE)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g ")
-endif()
-
 function(LINK_ASSETS TARGET_ARG SRC_ARG DIST_ARG )
   add_custom_command(TARGET ${TARGET_ARG} POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_ARG}/Assets" "${DIST_ARG}/Assets" DEPENDS "${DIST_ARG}")
 endfunction()
 
 if ( MSVC )
-	add_custom_command(TARGET bomberman PRE_LINK
-		COMMAND ${CMAKE_COMMAND} -E copy_directory ${FFMPEG_PATH_CUSTOM}/libshared $<TARGET_FILE_DIR:bomberman>
-	)
-endif()
-
-if ( MSVC )
-  link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>")
-  add_custom_command(TARGET bomberman PRE_LINK
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${FFMPEG_PATH_CUSTOM}/libshared $<TARGET_FILE_DIR:bomberman>)
+  link_assets(${APP_NAME} "${CMAKE_CURRENT_SOURCE_DIR}" $<TARGET_FILE_DIR:${APP_NAME}>)
+  add_custom_command(TARGET ${APP_NAME} PRE_LINK
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${FFMPEG_PATH_CUSTOM}/libshared $<TARGET_FILE_DIR:${APP_NAME}>)
 else()
-  link_assets(bomberman "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-  add_custom_command(TARGET bomberman PRE_LINK
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${FFMPEG_PATH_CUSTOM}/lib $<TARGET_FILE_DIR:bomberman>)
+  link_assets(${APP_NAME} "${CMAKE_CURRENT_SOURCE_DIR}" $<TARGET_FILE_DIR:${APP_NAME}>)
+  add_custom_command(TARGET ${APP_NAME} PRE_LINK
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${FFMPEG_PATH_CUSTOM}/lib $<TARGET_FILE_DIR:${APP_NAME}>)
 endif()
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bomberman)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
+
+install(TARGETS ${APP_NAME}
+    BUNDLE DESTINATION . COMPONENT Runtime
+    RUNTIME DESTINATION bin COMPONENT Runtime
+    )
+# Copy all assets to resources file
+# install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"/Assets/ DESTINATION ./Assets/)
+
+if(WIN32)
+	set(APPS "\${CMAKE_INSTALL_PREFIX}/${APP_NAME}.exe")
+elseif(APPLE)
+	set(APPS "\${CMAKE_INSTALL_PREFIX}/${APP_NAME}.app")
+	set(CPACK_GENERATOR "DRAGNDROP")
+endif()
+
+# Directories to look for dependencies
+set(DIRS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} "${CMAKE_CURRENT_SOURCE_DIR}/Assets/")
+
+install(CODE "include(BundleUtilities)
+	fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
+include(CPack)
