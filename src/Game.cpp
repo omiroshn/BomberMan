@@ -10,6 +10,7 @@
 #include "LogicCore/Timer.h"
 #include "LogicCore/TimerManager.h"
 #include "Configure.hpp"
+#include <thread>
 
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
@@ -352,7 +353,10 @@ void Game::loadResources()
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
         loadModels();
-		mRenderer->getParticleManager()->init();
+			mRenderer->getParticleManager()->init();
+
+		std::thread([](Renderer *renderer) {
+		}, mRenderer.get()).detach();
     }
     catch (CustomException &e)
     {

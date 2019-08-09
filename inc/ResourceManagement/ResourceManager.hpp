@@ -211,6 +211,10 @@ private:
 	\brief The path to the executable
 	*/
 	std::string mBinFolder;
+	/*!
+	\brief Cache for textures. you should query it by path to texture.
+	*/
+	std::map<std::string, std::shared_ptr<Texture>>		mTextureCache;
 };
 
 

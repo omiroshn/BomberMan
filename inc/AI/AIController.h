@@ -17,10 +17,11 @@ struct ConfusedState;
  */
 struct IdleState : public State {
 	using State::transition;
+
     IdleState();
     ~IdleState();
-    //IdleState(IdleState const&) = delete;
-    //IdleState& operator=(IdleState const&) = delete;
+	IdleState(IdleState const&);
+	IdleState& operator=(IdleState const&);
 	bool transition(const PatrolState&);
 
 	void onEntry(MovingEntity&);
@@ -35,6 +36,10 @@ private:
  * Makes pawn walk through the maze randomly.
  */
 struct PatrolState : public State {
+    PatrolState();
+    ~PatrolState();
+	PatrolState(PatrolState const&);
+	PatrolState& operator=(PatrolState const&);
 	/** State interface */
 	using State::transition;
 	bool transition(const IdleState&);
@@ -54,6 +59,11 @@ struct PatrolState : public State {
  * Makes pawn walk through the maze randomly.
  */
 struct ChaseState : public State {
+    ChaseState();
+    ~ChaseState();
+	ChaseState(ChaseState const&);
+	ChaseState& operator=(ChaseState const&);
+
 	using State::transition;
 	bool transition(const ConfusedState&);
 	void onTick(MovingEntity&, float DeltaTime = 0);
@@ -65,6 +75,11 @@ struct ChaseState : public State {
 };
 
 struct ConfusedState : public State {
+    ConfusedState();
+    ~ConfusedState();
+	ConfusedState(ConfusedState const&);
+	ConfusedState& operator=(ConfusedState const&);
+
 	using State::transition;
 	bool transition(const PatrolState&);
 	bool transition(const ChaseState&);
