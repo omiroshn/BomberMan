@@ -1,9 +1,10 @@
 #include "Core.hpp"
 
-//This must be done for proper work of SDL2 lib 
+//This must be done for proper work of SDL2 lib
 #undef main
 
 #include "ResourceManagement/ResourceManager.hpp"
+#include "ResourceManagement/MusicPlayer.hpp"
 #include "Game.hpp"
 
 extern "C" {
@@ -18,6 +19,7 @@ int main(int ac, char **av)
     std::string exePath(av[0]);
     std::string exeFolder(exePath.substr(0, exePath.find_last_of("\\/") + 1));
     RESOURCES.setBinFolder(exeFolder);
+	MUSIC_PLAYER.setBinFolder(exeFolder);
 
     av_register_all();
 

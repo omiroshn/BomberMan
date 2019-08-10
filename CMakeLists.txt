@@ -11,8 +11,6 @@ if (APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 endif()
 
-add_subdirectory(3rdParty)
-
 set ( SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2/include )
 set ( SDL2_LIBRARY SDL2 )
 
@@ -31,6 +29,11 @@ set ( STB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/stb/ )
 set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
 
+set ( SDL_MIXER_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2_mixer/ )
+set ( SDL_MIXER_LIBRARY SDL_mixer )
+
+add_subdirectory(3rdParty)
+
 find_package(OpenGL 3.0 REQUIRED)
 find_package(OpenCL 1.2 REQUIRED)
 
@@ -46,8 +49,6 @@ endif()
 
 set(FFMPEG_INCLUDE_SEARCH_PATHES "${FFMPEG_PATH_CUSTOM}/include")
 set(FFMPEG_LIB_SEARCH_PATHES "${FFMPEG_PATH_CUSTOM}/lib")
-
-
 
 find_package(FFmpeg REQUIRED)
 
@@ -67,6 +68,7 @@ set(BOMBERMAN_LIBS
   ${GLEW_LIBRARIES}
   ${IMGUI_LIBRARY}
   ${OpenCL_LIBRARIES}
+  ${SDL_MIXER_LIBRARY}
   ${FFMPEG_LIBRARIES}
   )
 
@@ -80,6 +82,7 @@ set(BOMBERMAN_INCLUDES
   ${GLEW_INCLUDE_DIRS}
   ${IMGUI_INCLUDE_DIRS}
   ${OpenCL_INCLUDE_DIRS}
+  ${SDL_MIXER_INCLUDE_DIR}
   ${FFMPEG_INCLUDE_DIR})
 
 source_group("Source Files" FILES ${BOMBERMAN_LOCAL_SOURCES})
