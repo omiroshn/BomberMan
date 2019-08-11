@@ -8,7 +8,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules")
-set(PROJECTNAME_ARCHITECTURE "x64")
 
 if (APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
@@ -32,7 +31,13 @@ add_subdirectory(inc)
 source_group("Source Files" FILES ${BOMBERMAN_LOCAL_SOURCES})
 source_group("Header File" FILES ${BOMBERMAN_LOCAL_INCLUDES})
 
-add_executable(${APP_NAME} MACOSX_BUNDLE ${BOMBERMAN_SOURCES})
+option(CREATE_PACK "Create *.app or *.exe" ON)
+
+if (CREATE_PACK)
+  add_executable(${APP_NAME} WIN32 MACOSX_BUNDLE ${BOMBERMAN_SOURCES})
+else()
+  add_executable(${APP_NAME} ${BOMBERMAN_SOURCES})
+endif()
 
 set_target_properties(${APP_NAME} PROPERTIES
     CXX_STANDARD 17
@@ -62,8 +67,13 @@ target_link_libraries (${APP_NAME} PRIVATE	OpenGL::GL
 # endif()
 
 function(LINK_ASSETS TARGET_ARG SRC_ARG DIST_ARG )
-  add_custom_command(TARGET ${TARGET_ARG} POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_ARG}/Assets" "${DIST_ARG}/Assets" DEPENDS "${DIST_ARG}")
+  if (CREATE_PACK)
+    add_custom_command(TARGET ${TARGET_ARG} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${SRC_ARG}/Assets" "${DIST_ARG}/Assets" DEPENDS "${DIST_ARG}")
+  else()
+    add_custom_command(TARGET ${TARGET_ARG} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_ARG}/Assets" "${DIST_ARG}/Assets" DEPENDS "${DIST_ARG}")
+  endif()
 endfunction()
 
 if ( MSVC )
@@ -82,19 +92,19 @@ install(TARGETS ${APP_NAME}
     BUNDLE DESTINATION . COMPONENT Runtime
     RUNTIME DESTINATION bin COMPONENT Runtime
     )
-# Copy all assets to resources file
-# install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"/Assets/ DESTINATION ./Assets/)
 
-if(WIN32)
-	set(APPS "\${CMAKE_INSTALL_PREFIX}/${APP_NAME}.exe")
-elseif(APPLE)
-	set(APPS "\${CMAKE_INSTALL_PREFIX}/${APP_NAME}.app")
-	set(CPACK_GENERATOR "DRAGNDROP")
+if (CREATE_PACK)
+  if(WIN32)
+    set(APPS "\${CMAKE_INSTALL_PREFIX}/${APP_NAME}.exe")
+  elseif(APPLE)
+    set(APPS "\${CMAKE_INSTALL_PREFIX}/${APP_NAME}.app")
+    set(CPACK_GENERATOR "DRAGNDROP")
+  endif()
+  
+  # Directories to look for dependencies
+  set(DIRS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
+  install(CODE "include(BundleUtilities)
+    fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
+  include(CPack)
 endif()
-
-# Directories to look for dependencies
-set(DIRS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} "${CMAKE_CURRENT_SOURCE_DIR}/Assets/")
-
-install(CODE "include(BundleUtilities)
-	fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
-include(CPack)

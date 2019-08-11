@@ -46,7 +46,7 @@ set( BUILD_SHARED_LIBS OFF CACHE BOOL "Build only static libs" )
 ## SDL2
 set( SDL_STATIC ON CACHE BOOL "Build the static SDL library" )
 set( SDL_SHARED OFF CACHE BOOL "Build the shared SDL library" )
-add_subdirectory(sdl2)
+add_subdirectory( sdl2 )
 add_library(SDL2::SDL2 ALIAS SDL2-static)
 
 ## GLEW
