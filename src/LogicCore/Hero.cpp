@@ -33,6 +33,7 @@ Hero::Stats Hero::getStats()
 
 void Hero::kill()
 {
+	//AnimateDeath(4);
 	Game::get()->onHeroDied();
 }
 

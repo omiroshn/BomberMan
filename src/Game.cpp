@@ -100,7 +100,9 @@ void Game::start()
                     CONFIGURATION.setChosenStage(1);
                 if (mReloadStage && mStageTimer > 1)
                 {
-                    mWindow->ShowBetweenStageScreen();
+                    if (mStageTimer < 3)
+                        mWindow->ShowBetweenStageScreen();
+                    //mIsPaused = false;
                     mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
                 }
                 else if (mStageTimer < 2)
@@ -523,6 +525,7 @@ void Game::onHeroDied()
 {
     if (mReloadStage)
         return;
+    getHero().AnimateDeath(4);
     if (CONFIGURATION.getLives() == 1)
         gameOver();
     else
