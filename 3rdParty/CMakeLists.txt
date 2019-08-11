@@ -41,23 +41,36 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/3rdParty/ffmpeg/macOs/")
     message(FATAL_ERROR "ffmpeg submodule was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
+set( BUILD_SHARED_LIBS OFF CACHE BOOL "Build only static libs" )
+
 ## SDL2
-set( SDL_STATIC OFF CACHE BOOL "Build the static SDL library" )
-set( SDL_SHARED ON CACHE BOOL "Build the shared SDL library" )
-add_subdirectory(sdl2)
+set( SDL_STATIC ON CACHE BOOL "Build the static SDL library" )
+set( SDL_SHARED OFF CACHE BOOL "Build the shared SDL library" )
+add_subdirectory( sdl2 )
+add_library(SDL2::SDL2 ALIAS SDL2-static)
 
 ## GLEW
-set( glew-cmake_BUILD_SHARED ON CACHE BOOL "Build the shared glew library" )
-set( glew-cmake_BUILD_STATIC OFF CACHE BOOL "Build the static glew library" )
+if ( WIN32 )
+    set( glew-cmake_BUILD_SHARED ON CACHE BOOL "Build the shared glew library" )
+    set( glew-cmake_BUILD_STATIC OFF CACHE BOOL "Build the static glew library" )
+else()
+    set( glew-cmake_BUILD_SHARED OFF CACHE BOOL "Build the shared glew library" )
+    set( glew-cmake_BUILD_STATIC ON CACHE BOOL "Build the static glew library" )
+endif()
 set( glew-cmake_BUILD_SINGLE_CONTEXT ON CACHE BOOL "Build the single context glew library" )
 set( glew-cmake_BUILD_MULTI_CONTEXT OFF CACHE BOOL "Build the multi context glew library" )
+
 add_subdirectory( glew )
-
+if ( WIN32 )
+    add_library(glew::glew ALIAS libglew_shared)
+else()
+    add_library(glew::glew ALIAS libglew_static)
+endif() 
 ## assimp
-
 set( ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "Build assimp tools" )
 set( ASSIMP_BUILD_TESTS OFF CACHE BOOL "Build assimp tests" )
 set( ASSIMP_BUILD_SAMPLES OFF CACHE BOOL "Build assimp samples" )
+set( ASSIMP_NO_EXPORT OFF CACHE BOOL "Build assimp samples" )
 
 set( ASSIMP_BUILD_3DS_IMPORTER OFF CACHE BOOL "Build importer" )
 add_definitions(-DASSIMP_BUILD_NO_3DS_EXPORTER)
@@ -194,9 +207,28 @@ add_definitions(-DASSIMP_BUILD_NO_3MF_EXPORTER)
 add_subdirectory( assimp )
 
 ## imgui
-
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/imgui/)
-add_library (imgui STATIC ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_demo.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_draw.cpp ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_widgets.cpp)
+add_library (imgui-static STATIC	${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.cpp
+									${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_demo.cpp
+									${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_draw.cpp
+									${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_widgets.cpp)
+target_include_directories(imgui-static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/imgui/)
+add_library(imgui::imgui ALIAS imgui-static)
 
 ## sdl2_mixer
 add_subdirectory( sdl2_mixer )
+add_library(SDL2::SDL_mixer ALIAS SDL_mixer)
+
+## glm
+add_library(glm INTERFACE)
+target_include_directories(glm INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/glm/)
+add_library(glm::glm ALIAS glm)
+
+## stb
+add_library(stb INTERFACE)
+target_include_directories(stb INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/stb/)
+add_library(stb::stb ALIAS stb)
+
+## cereal
+add_library(cereal INTERFACE)
+target_include_directories(cereal INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/cereal/include/)
+add_library(cereal::cereal ALIAS cereal)
