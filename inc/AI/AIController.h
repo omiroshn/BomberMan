@@ -25,6 +25,7 @@ struct IdleState : public State {
 	bool transition(const PatrolState&);
 
 	void onEntry(MovingEntity&);
+	void onTick(MovingEntity&, float DeltaTime = 0);
 
 private:
 	float m_TransitionToPatrol;

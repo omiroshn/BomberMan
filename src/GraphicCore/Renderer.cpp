@@ -71,9 +71,6 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
 
     unbreakableWall->draw(s, mTransforms[ModelType::Wall]);
     brick->draw(s, mTransforms[ModelType::Brick]);
-    Animation a;
-    a.setTime(0);
-    bomb->setAnimation(a);
     bomb->draw(s, mTransforms[ModelType::Bomb]);
 
     auto type = Game::get()->powerupTypeOnMap();
@@ -92,7 +89,7 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
     }
 }
 
-void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
+void Renderer::renderMovable(std::shared_ptr<Shader> &s, std::shared_ptr<Shader> &animated, Game &g)
 {
     static auto heroModel = RESOURCES.getModel("hero");
     static auto balloon = RESOURCES.getModel("balloon");
@@ -100,7 +97,7 @@ void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
     //render hero
     auto& Hero = g.getHero();
     heroModel->setAnimation(Hero.getAnimation());
-    heroModel->draw(s, mTransforms[ModelType::Player]);
+    heroModel->draw(animated, mTransforms[ModelType::Player]);
 
     //render enemies
     balloon->draw(s, mTransforms[ModelType::EnemyType1]);
@@ -113,6 +110,7 @@ void Renderer::normalPass(Game& aMap)
  
     static auto ground = RESOURCES.getModel("ground");
     static auto modelShader = RESOURCES.getShader("modelShader");
+    static auto animatedModelShader = RESOURCES.getShader("animatedModelShader");
     static auto skyboxShader = RESOURCES.getShader("skybox");
 
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
@@ -132,7 +130,17 @@ void Renderer::normalPass(Game& aMap)
     modelShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
     modelShader->setFloat("shininess", Shininess);
 
-    renderMovable(modelShader, aMap);
+    animatedModelShader->use();
+    animatedModelShader->setMat4("projection", projection);
+    animatedModelShader->setMat4("view", view);
+    animatedModelShader->setVec3("viewPos", mCamera.position());
+    animatedModelShader->setVec3("lightDir", mLightManager->getCurrentLightDir());
+    animatedModelShader->setInt("shadowMap", mLightManager->bindDepthMap());
+    animatedModelShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
+    animatedModelShader->setFloat("shininess", Shininess);
+    animatedModelShader->setFloat("glossiness", Glossiness);
+
+    renderMovable(modelShader, animatedModelShader, aMap);
     renderObstacles(modelShader);
 
     // render the ground
@@ -181,10 +189,11 @@ void Renderer::normalPass(Game& aMap)
 void Renderer::shadowPass(Game& aMap)
 {
     static auto shadowShader = RESOURCES.getShader("shadow");
+    static auto animatedShadowShader = RESOURCES.getShader("animatedShadow");
     shadowShader->use();
     shadowShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
     mLightManager->prepareForShadowPass();
-    renderMovable(shadowShader, aMap);
+    renderMovable(shadowShader, animatedShadowShader, aMap);
     renderObstacles(shadowShader);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glCullFace(GL_BACK);

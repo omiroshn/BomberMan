@@ -18,15 +18,6 @@ uniform mat4 parentTransform;
 
 void main()
 {
-    mat4 transformModelMat;
-    if (isAnimated)
-    {
-        mat4 boneTransform = boneTransforms[bonesID[0]] * weights[0];
-        for (int i = 1; i < MAX_WEIGHTS; ++i)
-            boneTransform += boneTransforms[bonesID[i]] * weights[i];
-        transformModelMat = modelsMatrix * parentTransform * boneTransform;
-    }
-    else
-        transformModelMat = modelsMatrix * parentTransform;
+    mat4 transformModelMat = modelsMatrix * parentTransform;
     gl_Position = lightSpaceMatrix * transformModelMat * vec4(aPos, 1.0);
 }

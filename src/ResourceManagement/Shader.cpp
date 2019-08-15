@@ -13,6 +13,8 @@
 #include "ResourceManagement/Shader.hpp"
 #include "CustomException.hpp"
 
+unsigned int Shader::sBoundProgram;
+
 Shader::Shader(std::string const &vertexSrcPath, std::string const &fragmentSrcPath)
 {
 	std::string vertexCode;
@@ -85,7 +87,10 @@ bool Shader::isProgramLinked(unsigned int program, int errSize, char *errText) c
 
 void Shader::use()
 {
+	if (!mShaderProgram && mShaderProgram == sBoundProgram)
+		return;
 	glUseProgram(mShaderProgram);
+	sBoundProgram = mShaderProgram;
 }
 
 GLuint Shader::getUniformLocation(std::string const& name) const
@@ -100,7 +105,6 @@ GLuint Shader::getUniformLocation(std::string const& name) const
     }
     return location;
 }
-
 
 void Shader::setBool(const std::string &name, bool value) const
 {

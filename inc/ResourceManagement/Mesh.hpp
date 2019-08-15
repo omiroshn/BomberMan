@@ -33,11 +33,11 @@ struct Vertex
 class Mesh
 {
 public:
-    Mesh(std::vector<Vertex> aVertices,
-        std::vector<unsigned int> aIndices,
-        std::vector<std::shared_ptr<Texture>> aTextures,
-        std::map<std::string, unsigned int> bones,
-        std::vector<glm::mat4> aOffsets,
+    Mesh(std::vector<Vertex>& aVertices,
+        std::vector<unsigned int>& aIndices,
+        std::vector<std::shared_ptr<Texture>>& aTextures,
+        std::map<std::string, unsigned int>& bones,
+        std::vector<glm::mat4>& aOffsets,
         aiScene const *scene,
 		float glossiness);
     void                    draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> const& transforms, glm::mat4 const & parentTransform);

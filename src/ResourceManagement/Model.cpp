@@ -188,7 +188,6 @@ std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *ma
     return textures;
 }
 
-
 void Model::draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> const& transforms)
 {
     for(auto &mesh : mMeshes)

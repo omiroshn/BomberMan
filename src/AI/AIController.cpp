@@ -87,7 +87,7 @@ namespace
 	{
 		glm::vec2 position = pawn.getPosition();
 		glm::vec2 center = closestCenter(position);
-		pawn.AddVelocity(center - position);
+		pawn.AddVelocity((center - position) * 2.f);
 	}
 
 	bool	moveAI(MovingEntity& pawn, glm::vec2 destination)
@@ -103,7 +103,7 @@ namespace
 				correctionDirection = glm::vec2{ offRails.x, 0 };
 			else
 				correctionDirection = glm::vec2{ 0, offRails.y };
-			pawn.AddAcceleration(glm::normalize(correctionDirection) * 10.f);
+			pawn.AddAcceleration(glm::normalize(correctionDirection) * 15.f);
 		}
 		
 		glm::vec2 direction = destination - position;
@@ -178,6 +178,12 @@ namespace
 
 /* Idle state -  start */
 void IdleState::onEntry(MovingEntity&)		   { m_TransitionToPatrol = Game::getCurrentTime() + .3f; }
+
+void IdleState::onTick(MovingEntity& pawn, float)
+{
+	recenter(pawn);
+}
+
 bool IdleState::transition(const PatrolState&) { return m_TransitionToPatrol <= Game::getCurrentTime(); }
 /* Idle state -  end */
 
@@ -213,8 +219,10 @@ void PatrolState::onEntry(MovingEntity& Pawn, float)
 	mPawnSeesPlayer = false;
 	mCurrentDirection = pickRandomDirection(Pawn);
 	glm::vec2 start = Pawn.getPosition();
-	int distance = rand() % info.width;
+	int distance = info.width;
 	mShortTermGoal = march(start, mCurrentDirection, distance);
+	distance = int(glm::length(mShortTermGoal - start) + 0.5f);
+	mShortTermGoal = start + mCurrentDirection * float(std::rand() % (distance + 1));
 	mShouldIdle = false;
 }
 /* Patrol state -  end */

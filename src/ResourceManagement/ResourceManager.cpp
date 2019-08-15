@@ -68,8 +68,9 @@ void ResourceManager::loadShader(const GLchar *vShaderFile, const GLchar *fShade
 
 std::shared_ptr<Shader> ResourceManager::getShader(std::string const &name)
 {
-	if (mShaders.count(name))
-		return mShaders[name];
+	auto It = mShaders.find(name);
+	if (It != mShaders.end())
+		return It->second;
 	else
 		throw CustomException("No such shader: \""  + name + "\"");
 }
@@ -81,8 +82,9 @@ void ResourceManager::loadTexture(const GLchar *file, std::string const &name, s
 
 std::shared_ptr<Texture> ResourceManager::getTexture(std::string const &name)
 {
-	if (mTextures.count(name))
-		return mTextures[name];
+	auto It = mTextures.find(name);
+	if (It != mTextures.end())
+		return It->second;
 	else
 		throw CustomException("No such texture: \""  + name + "\"");
 };
@@ -95,8 +97,9 @@ void ResourceManager::loadModel(const GLchar *file, std::string const &name, glm
 
 std::shared_ptr<Model> ResourceManager::getModel(std::string const &name)
 {
-	if (mModels.count(name))
-		return mModels[name];
+	auto It = mModels.find(name);
+	if (It != mModels.end())
+		return It->second;
 	else
 		throw CustomException("No such model: \"" + name + "\"");
 };
