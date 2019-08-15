@@ -111,6 +111,7 @@ void Game::start()
                     mCollisionInfo.Squares.clear();
                     mCollisionInfo = mapLoader.GetMap(CONFIGURATION.getChosenStage());
                     extractInfo();
+                    addEnemiesOnMap();
                     if (mHero)
                     {
     					Hero::Stats info = mHero->getStats();
@@ -596,6 +597,20 @@ void Game::recacheEnemies()
 	for (auto& It : mBalloons)
 		mEnemies.push_back(It);
 }
+
+void  Game::addEnemiesOnMap()
+{
+    cleanupOnStageChange();
+    for (size_t i = 20; i < mCollisionInfo.Squares.size() - 20; i++)
+    {
+        auto& It = mCollisionInfo.Squares[i];
+        if (It >= SquareType::Brick && rand() % 2)
+        {
+            if (mCollisionInfo.Squares[i + 1] == SquareType::EmptySquare)
+                getBalloons().emplace_back(glm::vec2{(i + 1) % mCollisionInfo.width + 0.5f, i / mCollisionInfo.width + 0.5f});
+        }
+    }
+ }
 
 std::vector<glm::mat4> Game::getWallTransforms() {
 	return Filter(SquareType::Wall);

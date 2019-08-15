@@ -64,6 +64,7 @@ private:
 	typedef Agent<MovingEntity, BalloonController>	Balloon;
 	typedef Agent<Bomb, BombSM>						BombAgent;
 public:
+	void                        addEnemiesOnMap();
 	std::vector<glm::mat4>		getWallTransforms();
 	std::vector<glm::mat4>		getBrickTransforms();
 	std::vector<glm::mat4>		getBombTransforms();
