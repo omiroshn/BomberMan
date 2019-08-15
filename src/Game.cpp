@@ -102,7 +102,7 @@ void Game::start()
                 {
                     if (mStageTimer < 3)
                         mWindow->ShowBetweenStageScreen();
-                    //mIsPaused = false;
+                    mIsPaused = false;
                     mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
                 }
                 else if (mStageTimer < 2)
@@ -527,15 +527,19 @@ void Game::onHeroDied()
     if (mReloadStage)
         return;
     getHero().AnimateDeath(4);
+    mIsPaused = false;
     if (CONFIGURATION.getLives() == 1)
         gameOver();
     else
         CONFIGURATION.setLives(CONFIGURATION.getLives() - 1);
+    TimerManager::Instance()->AddTimer(4, false,
+		[&] () {
     if (mStageTimer > 4)
         mStageStartedTimer = getCurrentTime();
     mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
     Game::mReloadStage = true;
     cleanupOnStageChange();
+        });
 }
 
 void Game::gameOver()

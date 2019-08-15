@@ -1,4 +1,5 @@
 #include "LogicCore/Hero.h"
+#include "LogicCore/TimerManager.h"
 #include "Game.hpp"
 
 Hero::Hero(Stats info, glm::vec2 position /*= {1.5f, 1.5f}*/)
@@ -33,8 +34,12 @@ Hero::Stats Hero::getStats()
 
 void Hero::kill()
 {
-	//AnimateDeath(4);
-	Game::get()->onHeroDied();
+	AnimateDeath(4);
+	//TimerManager::Instance()->AddTimer(4, false,
+		//[] () {
+			Game::get()->onHeroDied();
+		//}
+	//);
 }
 
 void Hero::applyPowerup(PowerupType type)

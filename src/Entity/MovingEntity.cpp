@@ -62,7 +62,7 @@ void MovingEntity::debug()
 
 void MovingEntity::AnimateDeath(float DeltaTime)
 {
-	mAnimation.tick(DeltaTime);
+	//mAnimation.tick(DeltaTime);
     mAnimation.setType(AnimationType::Dying);
 }
 

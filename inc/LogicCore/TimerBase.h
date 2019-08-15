@@ -19,9 +19,9 @@ public:
 	bool toDelete;
 	bool usedEvent;
 
-	TimerBase() = delete;
-	TimerBase(TimerBase const&) = delete;
-    TimerBase& operator=(TimerBase const&) = delete;
+	//TimerBase() = delete;
+	//TimerBase(TimerBase const&) = delete;
+    //TimerBase& operator=(TimerBase const&) = delete;
 	virtual ~TimerBase();
 	
     virtual void Tick() = 0;
