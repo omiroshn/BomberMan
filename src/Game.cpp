@@ -80,9 +80,9 @@ void Game::start()
             {
                 tickAI(mDeltaTime);
                 MovingEntity::debugMovement();
-                resolveCollisions();
                 Tickable::tickTickables(mDeltaTime);
-                mRenderer->draw(*this);
+                resolveCollisions();
+                mRenderer->getParticleManager()->update();
                 static int index = 0;
                 ImGui::RadioButton("NO VSync", &index, 0);
                 ImGui::RadioButton("60", &index, 1);
@@ -90,7 +90,7 @@ void Game::start()
                 if (mHero && !mHero->mIsDying)
                     mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
                 mWindow->ShowInGameMenu();
-                mRenderer->getParticleManager()->update();
+                mRenderer->draw(*this);
                 if (index)
                 {
                     const float TargetDelta = 0.0167f * (float)index;
