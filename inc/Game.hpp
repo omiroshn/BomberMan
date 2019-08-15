@@ -61,8 +61,8 @@ private:
     bool                             mIsPaused;
 
 	// Map for rendering
-	typedef Agent<MovingEntity, BalloonController>	Balloon;
-	typedef Agent<Bomb, BombSM>						BombAgent;
+	typedef Agent<MovingEntity, BalloonController>	BalloonAgent;
+	typedef Agent<Bomb, BombController>				BombAgent;
 public:
 	std::vector<glm::mat4>		getWallTransforms();
 	std::vector<glm::mat4>		getBrickTransforms();
@@ -71,7 +71,7 @@ public:
 	glm::mat4					getExitTransform();
 
 	std::vector<MovingEntity*>&	getEnemies();
-	std::vector<Balloon>&		getBalloons();
+	std::vector<BalloonAgent>&		getBalloons();
 
 	Hero&						getHero();
 	Hero::PowerupType			powerupTypeOnMap();
@@ -83,7 +83,7 @@ public:
 private:
 	std::unique_ptr<Hero>			mHero;
 
-	std::vector<Balloon>			mBalloons;
+	std::vector<BalloonAgent>			mBalloons;
 	std::vector<BombAgent>			mBombs;
 
 	std::vector<MovingEntity*>		mEnemies;

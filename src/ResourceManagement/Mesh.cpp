@@ -3,11 +3,11 @@
 #include "Utilities/AnimationUtils.h"
 #include <imgui.h>
 
-Mesh::Mesh(std::vector<Vertex> vertices,
-            std::vector<unsigned int> indices,
-            std::vector<std::shared_ptr<Texture>> textures,
-            std::map<std::string, unsigned int> bones,
-            std::vector<glm::mat4> aOffsets,
+Mesh::Mesh(std::vector<Vertex>& vertices,
+            std::vector<unsigned int>& indices,
+            std::vector<std::shared_ptr<Texture>>& textures,
+            std::map<std::string, unsigned int>& bones,
+            std::vector<glm::mat4>& aOffsets,
             aiScene const* scene,
 			float glossiness) :
     mVertices{std::move(vertices)}
@@ -119,7 +119,7 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
     glBindBuffer(GL_ARRAY_BUFFER, mIBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    shader->setBool("isAnimated", mIsAnimated);
+	shader->use();
     shader->setFloat("glossiness", mGlossiness);
     shader->setMat4("parentTransform", parentTransform);
     if(mIsAnimated)
@@ -139,7 +139,7 @@ const aiNodeAnim *Mesh::findNodeAnimation(const aiAnimation *animation, const st
     for (unsigned int i = 0; i < animation->mNumChannels; i++)
     {
         const aiNodeAnim *nodeAnim = animation->mChannels[i];
-        if (std::string(nodeAnim->mNodeName.data) == nodeName)
+        if (strcmp(nodeAnim->mNodeName.data, nodeName.data()) == 0)
             return nodeAnim;
     }
     return nullptr;
@@ -150,29 +150,32 @@ void	Mesh::readNodeHierarchy(float animationTime, aiNode const* node, const glm:
 {
 
     std::string nodeName(node->mName.data);
-    glm::mat4 nodeTransform = AnimationUtils::aiMatToGlmMat(node->mTransformation);
 
     auto const* animation = mScene->mAnimations[mCurrentAnimation];
     auto const* pNodeAnimation = findNodeAnimation(animation, nodeName);
 
+	glm::mat4 nodeTransform;
     if (pNodeAnimation)
     {
-        glm::mat4 transMat = glm::mat4(1.f);
-        glm::mat4 rotMat  = AnimationUtils::calcInterpolatedRotation(animationTime, pNodeAnimation);
-        glm::mat4 scaleMat = glm::mat4(1.f);
 
         aiVector3D scaling = AnimationUtils::calcInterpolatedScaling(animationTime, pNodeAnimation);
         aiVector3D translation = AnimationUtils::calcInterpolatedPosition(animationTime, pNodeAnimation);
 
-        scaleMat = glm::scale(scaleMat, glm::vec3(scaling.x, scaling.y, scaling.z));
+        glm::mat4 transMat = glm::mat4(1.f);
         transMat = glm::translate(transMat, glm::vec3(translation.x, translation.y, translation.z));
-        nodeTransform = transMat * rotMat * scaleMat;
+
+        glm::mat4 transScaleMat = glm::scale(transMat, glm::vec3(scaling.x, scaling.y, scaling.z));
+        glm::mat4 rotMat  = AnimationUtils::calcInterpolatedRotation(animationTime, pNodeAnimation);
+		nodeTransform = transScaleMat * rotMat;
     }
+	else
+		nodeTransform = AnimationUtils::aiMatToGlmMat(node->mTransformation);
 
     glm::mat4 globalTransform = parentTransform * nodeTransform;
-    if (mBones.find(nodeName) != mBones.end())
+	auto It = mBones.find(nodeName);
+    if (It != mBones.end())
     {
-        unsigned int boneIndex = mBones.at(nodeName);
+		unsigned int boneIndex = It->second;
         mBoneTransforms[boneIndex] = globalTransform * mOffsetMatrices[boneIndex];
     }
     for (unsigned int i = 0; i < node->mNumChildren; i++)

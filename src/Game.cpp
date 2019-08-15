@@ -327,12 +327,14 @@ void Game::loadResources()
     try
     {
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
+        RESOURCES.loadShader("animatedModelShader.vx.glsl", "modelShader.ft.glsl", "animatedModelShader");
         RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");
 		RESOURCES.loadShader("sprite_p.vx.glsl", "sprite_p.ft.glsl", "sprite_p");
 		RESOURCES.loadShader("sprite_quad.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad");
 		RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
 		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
 		RESOURCES.loadShader("shadowShader.vx.glsl", "shadowShader.ft.glsl", "shadow");
+		RESOURCES.loadShader("animatedShadowShader.vx.glsl", "shadowShader.ft.glsl", "animatedShadow");
 		RESOURCES.loadShader("sparks.vx.glsl", "sparks.ft.glsl", "sparks");
 		RESOURCES.loadShader("gui.vx.glsl", "gui.ft.glsl", "gui");
         RESOURCES.loadTexture("block.png", "block");
@@ -355,8 +357,8 @@ void Game::loadResources()
         loadModels();
 			mRenderer->getParticleManager()->init();
 
-		std::thread([](Renderer *renderer) {
-		}, mRenderer.get()).detach();
+//		std::thread([](Renderer *renderer) {
+		//}, mRenderer.get()).detach();
     }
     catch (CustomException &e)
     {
@@ -367,8 +369,9 @@ void Game::loadResources()
 
 void Game::loadModels()
 {
-    RESOURCES.loadModel("general/hero/model.fbx", "hero", glm::vec3(1.f), glm::vec3{0,0,0}, glm::vec3(0,1,0), 0.f, 0.2f);
-    RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(1.3f), glm::vec3{0,-0.8f,0}, glm::vec3(0,1,0), 0.f, 1.f);
+    RESOURCES.loadModel("general/hero/model.fbx", "hero", glm::vec3(1.f), glm::vec3{0,0,0}, glm::vec3(0,1,0), 0.f, 1.f);
+    RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(1.3f), glm::vec3{0,0.3,0}, glm::vec3(1,0,0), -90.f, 1.f);
+	RESOURCES.getModel("bomb")->mAnimated = false;
 
     // powerups placeholder, please do something about this!!!!!!!!!!!!!!!!!!!!!
     RESOURCES.loadModel("general/powerup/model.dae", "bonus_bombs", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
@@ -620,8 +623,19 @@ glm::mat4 Game::getPowerupTransform() {
     return glm::translate(glm::mat4(1.f), glm::vec3{mPowerup.x, 0, mPowerup.y});
 }
 
-Hero::PowerupType Game::powerupTypeOnMap() {
+glm::mat4 Game::getExitTransform()
+{
+	return glm::translate(glm::mat4(1), glm::vec3(mExit.x, 0, mExit.y));
+}
+
+Hero::PowerupType Game::powerupTypeOnMap()
+{
     return mPowerupType;
+}
+
+bool Game::isExitActive()
+{
+	return mBalloons.empty();
 }
 
 Hero& Game::getHero()
@@ -639,7 +653,7 @@ std::vector<MovingEntity*>& Game::getEnemies()
 	return mEnemies;
 }
 
-std::vector<Game::Balloon>& Game::getBalloons()
+std::vector<Game::BalloonAgent>& Game::getBalloons()
 {
 	return mBalloons;
 }

@@ -34,6 +34,8 @@ public:
     AABB getAABB() const;
     void transform(glm::mat4 const & aTransform);
     void setAnimation(Animation const& anim);
+
+    bool                mAnimated;
 private:
     void makeUnitModel();
     void loadModel(std::string const& path);
@@ -50,7 +52,6 @@ private:
     std::string         mDirectory;
     AABB                mAABB;
     glm::mat4           mTransFormMatrix;
-    bool                mAnimated;
     float               mGlossiness;
     Assimp::Importer    *mImporter;
 };

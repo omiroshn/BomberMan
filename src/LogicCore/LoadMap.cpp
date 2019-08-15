@@ -15,9 +15,10 @@ MapLoader::~MapLoader()
 SquareType& CollisionInfo::operator[](glm::ivec2 coords)
 {
 	const unsigned index = coords.x + coords.y * width;
-	static SquareType WallType = SquareType::Wall;
-	if (coords.x < 0 || coords.y < 0 || coords.x >= (int)width || index >= Squares.size())
-		return WallType;
+//	static SquareType WallType;
+//	WallType = SquareType::Wall;
+//	if (coords.x < 0 || coords.y < 0 || coords.x >= (int)width || index >= Squares.size())
+//		return WallType;
 	return Squares[index];
 }
 
