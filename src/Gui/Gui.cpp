@@ -4,9 +4,6 @@
 #include "GL/glew.h"
 #include "Game.hpp"
 #include  "Configure.hpp"
-#if defined (_WIN32)
-  #include <SDL_syswm.h>
-#endif
 
 Gui::Gui()
 {
