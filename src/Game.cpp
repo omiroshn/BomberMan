@@ -363,7 +363,7 @@ void Game::loadResources()
 
 void Game::loadModels()
 {
-    RESOURCES.loadModel("general/hero/model.fbx", "hero", glm::vec3(1.f), glm::vec3{0,0,0}, glm::vec3(0,1,0), 0.f, 1.f);
+    RESOURCES.loadModel("general/hero/model.fbx", "hero", glm::vec3(1.f), glm::vec3{0,0,0}, glm::vec3(0,1,0), 0.f, 0.2f);
     RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(1.3f), glm::vec3{0,-0.8f,0}, glm::vec3(0,1,0), 0.f, 1.f);
 
     // powerups placeholder, please do something about this!!!!!!!!!!!!!!!!!!!!!
