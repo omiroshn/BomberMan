@@ -386,23 +386,17 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 	};
 	
 
-    glm::vec2 directions[] = {
-        {-1, 0},
-        {1, 0},
-        {0, -1},
-        {0, 1}
-    };
 
     struct Overlaper
     {
-        glm::vec2 point[4];
+        glm::ivec2 point[4];
         Overlaper(glm::ivec2 position) : point{
             position,
             position + glm::ivec2(1),
             position,
             position + glm::ivec2(1)
         } {}
-        glm::ivec2 operator[](int i) {
+        glm::ivec2& operator[](int i) {
             return point[i];
         };
     };
@@ -418,6 +412,13 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
     std::vector<SquareType*> deferedBricks;
 
 std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
+    glm::vec2 directions[] = {
+        {-1, 0},
+        {1, 0},
+        {0, -1},
+        {0, 1}
+    };
+
     Overlaper minMax(center);
     for (uint32_t i = 0; i < ARRAY_COUNT(directions); ++i)
         for (uint32_t j = 1; j <= span; ++j)
@@ -453,9 +454,8 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
         *It = SquareType::EmptySquare;
 
     auto &enemies = getEnemies();
-    auto &hero = getHero();
 
-    std::for_each(overlaps.begin(), overlaps.end(), [&enemies, &hero](Overlaper &overlap) {
+    std::for_each(overlaps.begin(), overlaps.end(), [&enemies/*, &hero*/](Overlaper &overlap) {
         auto hMin = overlap[0];
         auto hMax = overlap[1];
         auto vMin = overlap[2];
@@ -465,6 +465,8 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
             if (circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, hMin, hMax) || circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
                 entity->kill();
         });
+
+        auto &hero = Game::get()->getHero();
         if (circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, hMin, hMax) || circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
             hero.kill();
     });
