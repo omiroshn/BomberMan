@@ -454,8 +454,9 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
         *It = SquareType::EmptySquare;
 
     auto &enemies = getEnemies();
+    auto &hero = getHero();
 
-    std::for_each(overlaps.begin(), overlaps.end(), [&enemies/*, &hero*/](Overlaper &overlap) {
+    std::for_each(overlaps.begin(), overlaps.end(), [&enemies, &hero](Overlaper &overlap) {
         auto hMin = overlap[0];
         auto hMax = overlap[1];
         auto vMin = overlap[2];
@@ -466,7 +467,6 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
                 entity->kill();
         });
 
-        auto &hero = Game::get()->getHero();
         if (circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, hMin, hMax) || circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
             hero.kill();
     });
