@@ -19,6 +19,7 @@ InputManager::InputManager()
     {
         std::cout << "Connected joysticks: " << SDL_NumJoysticks() << std::endl;
         std::cout << "Controller name: " << SDL_JoystickName(mJoystick) << std::endl;
+        std::cout << "Num hats: " << SDL_JoystickNumHats(mJoystick) << std::endl;
         std::cout << "Num axes: " << SDL_JoystickNumAxes(mJoystick) << std::endl;
         std::cout << "Num buttons: " << SDL_JoystickNumButtons(mJoystick) << std::endl;
     }
@@ -90,11 +91,14 @@ Action InputManager::processEvents(SDL_Event &e, KeyboardHandler &keyHandler)
         case SDL_JOYAXISMOTION:
             keyHandler.handleJoystickEvent(e.jaxis);
             return processJoystickMotion(e.jaxis);
+        case SDL_JOYHATMOTION:
+            keyHandler.handleJoystickHatEvent(e.jhat);
+            return Action::Joystick;
         case SDL_JOYBUTTONDOWN:
-            keyHandler.handleJoystickButtonDownEvent(e.jball);
+            keyHandler.handleJoystickButtonDownEvent(e.jbutton);
             return processJoystickButtonDown(e.jbutton);
         case SDL_JOYBUTTONUP:
-            keyHandler.handleJoystickButtonUpEvent(e.jball);
+            keyHandler.handleJoystickButtonUpEvent(e.jbutton);
             break;
         case SDL_QUIT:
             return Action::Finish;

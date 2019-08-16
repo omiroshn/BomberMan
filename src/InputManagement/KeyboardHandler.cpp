@@ -31,6 +31,24 @@ bool KeyboardHandler::isReleased(int keycode)
     return (mKeyboardState[keycode] == SDL_RELEASED);
 }
 
+void KeyboardHandler::handleJoystickHatEvent(SDL_JoyHatEvent jhat)
+{
+    static int last_val = -1;
+
+    if ((int)jhat.value == 0)
+        mJHatButtons[last_val] = false;
+    else
+    {
+        last_val = (int)jhat.value;
+        mJHatButtons[(int)jhat.value] = true;
+    }
+}
+
+bool KeyboardHandler::isHatPressed(int keycode)
+{
+    return (mJHatButtons[keycode] == SDL_PRESSED);
+}
+
 void KeyboardHandler::handleJoystickEvent(SDL_JoyAxisEvent jaxis)
 {
     if (jaxis.axis == 0 || jaxis.axis == 1)
@@ -47,14 +65,14 @@ bool KeyboardHandler::LeftJoystickIsActive()
     return (left_joystick);
 }
 
-void KeyboardHandler::handleJoystickButtonUpEvent(SDL_JoyBallEvent jball)
+void KeyboardHandler::handleJoystickButtonUpEvent(SDL_JoyButtonEvent jbutton)
 {
-    mJButtons[jball.ball] = false;
+    mJButtons[jbutton.button] = false;
 }
 
-void KeyboardHandler::handleJoystickButtonDownEvent(SDL_JoyBallEvent jball)
+void KeyboardHandler::handleJoystickButtonDownEvent(SDL_JoyButtonEvent jbutton)
 {
-    mJButtons[jball.ball] = true;
+    mJButtons[jbutton.button] = true;
 }
 
 bool KeyboardHandler::JButtonIsPressed(int button)

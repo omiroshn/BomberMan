@@ -522,8 +522,10 @@ void Gui::NewFrame(SDL_Window* window)
     io.MouseDown[2] = sMousePressed[2] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0;
     sMousePressed[0] = sMousePressed[1] = sMousePressed[2] = false;
 
-    if ((SDL_GetWindowFlags(window) & (SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_MOUSE_CAPTURE)) != 0)
-        io.MousePos = ImVec2((float)mx, (float)my);
+    if (SDL_ShowCursor(SDL_QUERY) == SDL_ENABLE) {
+	    if ((SDL_GetWindowFlags(window) & (SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_MOUSE_CAPTURE)) != 0)
+	        io.MousePos = ImVec2((float)mx, (float)my);
+	}
     bool any_mouse_button_down = false;
     for (int n = 0; n < IM_ARRAYSIZE(io.MouseDown); n++)
         any_mouse_button_down |= io.MouseDown[n];

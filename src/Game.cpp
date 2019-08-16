@@ -259,10 +259,16 @@ void Game::doAction(Action const& a)
             mIManager->getMouseOffset(x, y);
             mRenderer->getCamera().processMouseMovement(x, y);
             break;
+        case Action::Joystick:
+            SDL_ShowCursor(SDL_DISABLE);
+            break;
         default:
             break;
     }
-    { // keyboard
+
+    if (mWindow.get()->IsGameRunning())
+    {
+        // keyboard
         if (mKeyHandler->isPressed(SDL_SCANCODE_W))
             Hero.AddAcceleration(glm::vec2(0, -offset));
         if (mKeyHandler->isPressed(SDL_SCANCODE_D))
@@ -282,8 +288,8 @@ void Game::doAction(Action const& a)
 			MUSIC_PLAYER.pauseMusic();
 		if (mKeyHandler->isPressed(SDL_SCANCODE_4))
 			MUSIC_PLAYER.unPauseMusic();
-    }
-    { // joystick
+
+        // joystick
         if (mKeyHandler->LeftJoystickIsActive()) {
             auto *joystick = mIManager->getJoystick();
             short x_move = SDL_JoystickGetAxis(joystick, 0);
@@ -297,7 +303,30 @@ void Game::doAction(Action const& a)
         if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_A))
             pause();
         if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
-			Hero.tryPlaceBomb();
+            Hero.tryPlaceBomb();
+    }
+    else
+    {
+        // // keyboard
+        if (mKeyHandler->isPressed(SDL_SCANCODE_W))
+            std::cout << "w" << std::endl;
+        if (mKeyHandler->isPressed(SDL_SCANCODE_S))
+            std::cout << "s" << std::endl;
+        if (mKeyHandler->isPressed(SDL_SCANCODE_RETURN))
+            std::cout << "return" << std::endl;
+        if (mKeyHandler->isPressed(SDL_SCANCODE_BACKSPACE))
+            std::cout << "backspace" << std::endl;
+
+        // // joystick
+        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_B))
+            std::cout << "o" << std::endl;
+        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
+            std::cout << "x" << std::endl;
+
+        if (mKeyHandler->isHatPressed(1))
+            std::cout << "up" << std::endl;
+        if (mKeyHandler->isHatPressed(4))
+            std::cout << "down" << std::endl;
     }
 }
 

@@ -9,6 +9,7 @@ private:
     bool  left_joystick;
     bool right_joystick;
     bool mJButtons[4];
+    bool mJHatButtons[16];
     
 public:
     KeyboardHandler();
@@ -18,10 +19,12 @@ public:
 
     bool isPressed(int keycode);
     bool isReleased(int keycode);
+    bool isHatPressed(int keycode);
     void handleKeyboardEvent(SDL_Event &event);
     void handleJoystickEvent(SDL_JoyAxisEvent jaxis);
-    void handleJoystickButtonUpEvent(SDL_JoyBallEvent jball);
-    void handleJoystickButtonDownEvent(SDL_JoyBallEvent jball);
+    void handleJoystickButtonUpEvent(SDL_JoyButtonEvent jbutton);
+    void handleJoystickButtonDownEvent(SDL_JoyButtonEvent jbutton);
+    void handleJoystickHatEvent(SDL_JoyHatEvent jhat);
     bool LeftJoystickIsActive();
     bool JButtonIsPressed(int button);
 };
