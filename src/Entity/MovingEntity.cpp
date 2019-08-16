@@ -85,7 +85,21 @@ void MovingEntity::animate(float DeltaTime)
     if (GetSpeed() >= 0.2)
         mAnimation.setType(AnimationType::Running);
     else
+	{
+
         mAnimation.setType(AnimationType::Idle);
+		if (DeltaTime < 1)
+			std::cout << "animate in Moving Entity, animation set to Idle" << std::endl;
+	}
+
+	if (mIsDying == true)
+	{
+		mAnimation.setType(AnimationType::Dying);
+		if (DeltaTime < 1)
+			std::cout << "animate in Moving Entity, animation set to Dying *******" << std::endl;
+
+	}
+
 }
 
 void MovingEntity::rotate(float DeltaTime)

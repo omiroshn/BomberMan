@@ -98,13 +98,21 @@ void Game::start()
             {
                 if (CONFIGURATION.getLives() == 0)
                     CONFIGURATION.setChosenStage(1);
+                if (mHero && mHero->mIsDying)
+                    getHero().AnimateDeath(4);
                 if (mReloadStage && mStageTimer > 1)
                 {
                     if (mStageTimer < 3)
                         mWindow->ShowBetweenStageScreen();
                     mIsPaused = false;
                     mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
-                    std::cout << "reloaded true , mStageTimer = " << mStageTimer<< std::endl;
+                    std::cout << "reloaded true , mStageTimer = " << mStageTimer<< " paused = " << mIsPaused<< std::endl;
+                    if (mHero)
+                    {
+                        auto anim = getHero().getAnimation().getType();
+                        if (anim == AnimationType::Dying)
+                            std::cout << "anim =  Dying" << std::endl;
+                    }
                 }
                 else if (mStageTimer < 2)
                 {
@@ -122,6 +130,7 @@ void Game::start()
                         mHero = std::make_unique<Hero>(CONFIGURATION.getStats());
                     mStageStartedTimer = getCurrentTime();
                     mReloadStage = 0;
+                    mHero->mIsDying = false;
                     mIsPaused = false;
                 }
 
@@ -351,6 +360,7 @@ void Game::loadResources()
 		RESOURCES.loadTexture("cloud_trans.jpg", "cloud_trans");
 		RESOURCES.loadTexture("explode.png", "explosion_tmap_2");
 		RESOURCES.loadTexture("sparks.jpg", "sparks");
+		RESOURCES.loadTexture("plitka.jpg", "plitka");
         RESOURCES.loadSkybox("defaultSkybox");
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
@@ -516,31 +526,34 @@ void       Game::stageFinished()
     int current_stage = CONFIGURATION.getChosenStage();
     CONFIGURATION.setBestLevelAchieved(current_stage);
     CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
-    Game::mReloadStage = true;
+    //Game::mReloadStage = true;
     if (mStageTimer > 4)
         mStageStartedTimer = getCurrentTime();
     mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
-    cleanupOnStageChange();
+    //cleanupOnStageChange();
 }
 
 void Game::onHeroDied()
 {
-    if (mReloadStage)
-        return;
     getHero().AnimateDeath(4);
-    mIsPaused = false;
+    mHero->mIsDying = true;
+    std::cout << "onHeroDied" << std::endl;
+    static bool been_there = false;
+    if (been_there)
+        return;
     if (CONFIGURATION.getLives() == 1)
         gameOver();
     else
         CONFIGURATION.setLives(CONFIGURATION.getLives() - 1);
-    //TimerManager::Instance()->AddTimer(4, false,
-	//	[&] () {
     if (mStageTimer > 4)
         mStageStartedTimer = getCurrentTime();
     mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
+    TimerManager::Instance()->AddTimer(4, false,
+		[&] () {
     Game::mReloadStage = true;
     cleanupOnStageChange();
-    //    });
+       });
+       been_there = true;
 }
 
 void Game::gameOver()

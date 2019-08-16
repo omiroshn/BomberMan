@@ -28,6 +28,7 @@ public:
 
 	/** Tickable interface */
 	void		tick(float DeltaTime = 0) override;
+	bool        mIsDying = false;
 
 private:
     void animate(float DeltaTime);

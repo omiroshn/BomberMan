@@ -35,8 +35,10 @@ Hero::Stats Hero::getStats()
 void Hero::kill()
 {
 	AnimateDeath(4);
+	mIsDying = true;
 	//TimerManager::Instance()->AddTimer(4, false,
 		//[] () {
+			std::cout << "++++++  kill in Hero, animation set to Dying ++++++" << std::endl;
 			Game::get()->onHeroDied();
 		//}
 	//);
