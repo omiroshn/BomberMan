@@ -99,7 +99,6 @@ void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
 
     //render hero
     auto& Hero = g.getHero();
-    Hero.debug();
     heroModel->setAnimation(Hero.getAnimation());
     heroModel->draw(s, mTransforms[ModelType::Player]);
 
@@ -188,10 +187,7 @@ void Renderer::shadowPass(Game& aMap)
     static auto shadowShader = RESOURCES.getShader("shadow");
     shadowShader->use();
     shadowShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
-    glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-    glCullFace(GL_FRONT);
-    glBindFramebuffer(GL_FRAMEBUFFER, mLightManager->getDepthFrameBufferID());
-    glClear(GL_DEPTH_BUFFER_BIT);
+    mLightManager->prepareForShadowPass();
     renderMovable(shadowShader, aMap);
     renderObstacles(shadowShader);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

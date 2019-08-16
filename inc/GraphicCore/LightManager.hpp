@@ -3,7 +3,6 @@
 #include "GL/glew.h"
 #include "glm/glm.hpp"
 
-const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 class LightManager
 {
 public:
@@ -15,6 +14,7 @@ public:
     glm::vec3 const& getCurrentLightDir() const;
     int bindDepthMap();
     GLuint getDepthFrameBufferID();
+    void prepareForShadowPass();
     void initLightSpaceMatrix();
 private:
     int  mDepthMapIndex{10};

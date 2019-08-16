@@ -54,7 +54,11 @@ void GameWindow::initSDL()
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+#if (__APPLE__)
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+#else
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+#endif
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 }
 
@@ -88,7 +92,7 @@ void GameWindow::initOpenGL()
     }
     glViewport(0, 0, mWidth, mHeight);
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_MULTISAMPLE);
+    glEnable(GL_MULTISAMPLE);
 }
 
 void GameWindow::update()
