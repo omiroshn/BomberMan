@@ -33,8 +33,8 @@ source_group("Header File" FILES ${BOMBERMAN_LOCAL_INCLUDES})
 
 option(CREATE_PACK "Create *.app or *.exe" ON)
 
-if (CREATE_PACK)
-  add_executable(${APP_NAME} WIN32 MACOSX_BUNDLE ${BOMBERMAN_SOURCES})
+if (CREATE_PACK AND APPLE)
+  add_executable(${APP_NAME} MACOSX_BUNDLE ${BOMBERMAN_SOURCES})
 else()
   add_executable(${APP_NAME} ${BOMBERMAN_SOURCES})
 endif()
