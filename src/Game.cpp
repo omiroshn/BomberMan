@@ -360,7 +360,7 @@ void Game::loadResources()
 		RESOURCES.loadTexture("cloud_trans.jpg", "cloud_trans");
 		RESOURCES.loadTexture("explode.png", "explosion_tmap_2");
 		RESOURCES.loadTexture("sparks.jpg", "sparks");
-		RESOURCES.loadTexture("plitka.jpg", "plitka");
+		//RESOURCES.loadTexture("plitka.jpg", "plitka");
         RESOURCES.loadSkybox("defaultSkybox");
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
