@@ -104,6 +104,7 @@ void Game::start()
                         mWindow->ShowBetweenStageScreen();
                     mIsPaused = false;
                     mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
+                    std::cout << "reloaded true , mStageTimer = " << mStageTimer<< std::endl;
                 }
                 else if (mStageTimer < 2)
                 {
@@ -532,14 +533,14 @@ void Game::onHeroDied()
         gameOver();
     else
         CONFIGURATION.setLives(CONFIGURATION.getLives() - 1);
-    TimerManager::Instance()->AddTimer(4, false,
-		[&] () {
+    //TimerManager::Instance()->AddTimer(4, false,
+	//	[&] () {
     if (mStageTimer > 4)
         mStageStartedTimer = getCurrentTime();
     mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
     Game::mReloadStage = true;
     cleanupOnStageChange();
-        });
+    //    });
 }
 
 void Game::gameOver()
