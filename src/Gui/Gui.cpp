@@ -12,10 +12,10 @@ Gui::Gui()
 
 void Gui::ShowMainMenu()
 {
-	mWidth = CONFIGURATION.getWidth();
-	mHeight = CONFIGURATION.getHeight();
+	mWidth = (float)CONFIGURATION.getWidth();
+	mHeight = (float)CONFIGURATION.getHeight();
 	if (!mBackground)
-		mBackground = (ImTextureID)(size_t)RESOURCES.getTexture("sky")->getTextureID();
+		mBackground = RESOURCES.getTexture("sky").get();
 
 	ImGui::SetNextWindowPos({0, 0},0);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
@@ -172,48 +172,48 @@ void Gui::ChangeStage(int next_stage)
 
 void Gui::ShowLoadSavedGamesMenu()
 {
-		if (mButtonsTextures.empty())
-		{
-			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked0")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked1")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked2")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("unlocked3")->getTextureID());
-			mButtonsTextures.push_back((ImTextureID)(size_t)RESOURCES.getTexture("locked")->getTextureID());
-		}
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(28, 4));
-		ImGui::BeginChildFrame(2, {234, 204}, 4);
-		ImGui::Text("\nStages of the campaign");
-		if (ImGui::ImageButton(mButtonsTextures.at(0), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
-		{
-			ChangeStage(0);
-		}
-		ImGui::SameLine();
-		ImGui::Text("\n   Stage 1");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 0 ? 1 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
-		{
-			ChangeStage(1);
-		}
-		ImGui::SameLine();
-		ImGui::Text("\n   Stage 2");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 1 ? 2 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
-		{
-			ChangeStage(2);
-		}
-		ImGui::SameLine();
-		ImGui::Text("\n   Stage 3");
-		if (ImGui::ImageButton(mButtonsTextures.at(CONFIGURATION.getBestLevelAchieved() > 2 ? 3 : 4), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
-		{
-			ChangeStage(3);
-		}
-		ImGui::SameLine();
-		ImGui::Text("\n   Bonus level");
-		ImGui::EndChildFrame();
-		ImGui::PopStyleVar();
-		if (ImGui::Button("BACK", {234, 48}))
-		{
-			mCurrentMenu = CurrentMenu::mainMenu;
-			return;
-		}
+	std::shared_ptr<Texture> mButtonsTextures[]{
+		RESOURCES.getTexture("unlocked0"),
+		RESOURCES.getTexture("unlocked1"),
+		RESOURCES.getTexture("unlocked2"),
+		RESOURCES.getTexture("unlocked3"),
+		RESOURCES.getTexture("locked")
+	};
+
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(28, 4));
+	ImGui::BeginChildFrame(2, { 234, 204 }, 4);
+	ImGui::Text("\nStages of the campaign");
+	if (ImGui::ImageButton(mButtonsTextures[0].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	{
+		ChangeStage(0);
+	}
+	ImGui::SameLine();
+	ImGui::Text("\n   Stage 1");
+	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 0 ? 1 : 4].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	{
+		ChangeStage(1);
+	}
+	ImGui::SameLine();
+	ImGui::Text("\n   Stage 2");
+	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 1 ? 2 : 4].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	{
+		ChangeStage(2);
+	}
+	ImGui::SameLine();
+	ImGui::Text("\n   Stage 3");
+	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 2 ? 3 : 4].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	{
+		ChangeStage(3);
+	}
+	ImGui::SameLine();
+	ImGui::Text("\n   Bonus level");
+	ImGui::EndChildFrame();
+	ImGui::PopStyleVar();
+	if (ImGui::Button("BACK", { 234, 48 }))
+	{
+		mCurrentMenu = CurrentMenu::mainMenu;
+		return;
+	}
 }
 
 void Gui::ShowSettingsMenu()
@@ -306,15 +306,15 @@ void Gui::GamePaused(bool state)
 
 void Gui::SetBackground(const char* texture)
 {
-	mBackground = (ImTextureID)(size_t)RESOURCES.getTexture(texture)->getTextureID();
+	mBackground = RESOURCES.getTexture(texture).get();
 }
 
 void Gui::ShowLoadingScreen(const char* screen)
 {
-	ImTextureID im = (ImTextureID)(size_t)RESOURCES.getTexture(screen)->getTextureID();
+	ImTextureID im = RESOURCES.getTexture(screen).get();
 	ImGui::SetNextWindowPos({0, 0},0);
-	mWidth = CONFIGURATION.getWidth();
-	mHeight = CONFIGURATION.getHeight();
+	mWidth = (float)CONFIGURATION.getWidth();
+	mHeight = (float)CONFIGURATION.getHeight();
 	ImGui::SetNextWindowSize({mWidth,mHeight});
 	ImGui::Begin("Next Stage", NULL, mWindow_flags);
 	ImGui::Image(im,{mWidth,mHeight}, {1,1}, {0,0});
@@ -338,4 +338,199 @@ void Gui::ShowLoadingScreen(const char* screen)
 Gui::~Gui()
 {
 
+}
+
+char *Gui::sClipboardTextData;
+bool Gui::sMousePressed[3];
+
+const char* Gui::GetClipboardText(void*)
+{
+    if (sClipboardTextData) 
+        SDL_free(sClipboardTextData);
+    sClipboardTextData = SDL_GetClipboardText();
+    return sClipboardTextData;
+}
+
+void Gui::SetClipboardText(void*, const char* text)
+{
+    SDL_SetClipboardText(text);
+}
+
+void Gui::RenderDrawData(ImDrawData* draw_data)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    int fb_width = (int)(io.DisplaySize.x * io.DisplayFramebufferScale.x);
+    int fb_height = (int)(io.DisplaySize.y * io.DisplayFramebufferScale.y);
+    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    glViewport(0, 0, (GLsizei)fb_width, (GLsizei)fb_height);
+
+    glActiveTexture(GL_TEXTURE0);
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_SCISSOR_TEST);
+
+	glm::mat4 orthoProj = glm::ortho(0.f, io.DisplaySize.x, io.DisplaySize.y, 0.f);
+
+	static auto guiShader = RESOURCES.getShader("gui");
+	guiShader->use();
+	guiShader->setMat4("ProjMtx", orthoProj);
+
+    glBindVertexArray(mVaoHandle);
+
+    // Draw
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        const ImDrawIdx* idx_buffer_offset = 0;
+
+        glBindBuffer(GL_ARRAY_BUFFER, mVboHandle);
+        glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)cmd_list->VtxBuffer.Size * sizeof(ImDrawVert), (const GLvoid*)cmd_list->VtxBuffer.Data, GL_STREAM_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mElementsHandle);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx), (const GLvoid*)cmd_list->IdxBuffer.Data, GL_STREAM_DRAW);
+
+        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
+        {
+            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
+			if (pcmd->TextureId)
+				reinterpret_cast<Texture *>(pcmd->TextureId)->bind();
+			glScissor((int)pcmd->ClipRect.x, (int)(fb_height - pcmd->ClipRect.w), (int)(pcmd->ClipRect.z - pcmd->ClipRect.x), (int)(pcmd->ClipRect.w - pcmd->ClipRect.y));
+			glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, GL_UNSIGNED_SHORT, idx_buffer_offset);
+            idx_buffer_offset += pcmd->ElemCount;
+        }
+    }
+
+    glDisable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST); 
+    glDisable(GL_SCISSOR_TEST);
+}
+
+void Gui::CreateFontsTexture()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+	mFontTexture = RESOURCES.loadTextureFromMemory(pixels, "font", width, height, 4, false);
+
+    io.Fonts->TexID = mFontTexture.get();
+}
+
+void Gui::CreateDeviceObjects()
+{
+	static auto guiShader = RESOURCES.getShader("gui");
+	guiShader->setInt("Texture", 0);
+
+    glGenBuffers(1, &mVboHandle);
+    glGenBuffers(1, &mElementsHandle);
+
+    glGenVertexArrays(1, &mVaoHandle);
+    glBindVertexArray(mVaoHandle);
+    glBindBuffer(GL_ARRAY_BUFFER, mVboHandle);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, pos));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, uv));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, col));
+
+    CreateFontsTexture();
+}
+
+void    Gui::InvalidateDeviceObjects()
+{
+    if (mVboHandle)
+		glDeleteBuffers(1, &mVboHandle);
+    if (mElementsHandle)
+		glDeleteBuffers(1, &mElementsHandle);
+    mVboHandle = mElementsHandle = 0;
+
+    if (mFontTexture)
+    {
+        ImGui::GetIO().Fonts->TexID = 0;
+        mFontTexture.reset();
+    }
+}
+
+bool    Gui::Init(SDL_Window* window)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;   // We can honor GetMouseCursor() values (optional)
+
+    io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = SDL_SCANCODE_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow] = SDL_SCANCODE_UP;
+    io.KeyMap[ImGuiKey_DownArrow] = SDL_SCANCODE_DOWN;
+    io.KeyMap[ImGuiKey_PageUp] = SDL_SCANCODE_PAGEUP;
+    io.KeyMap[ImGuiKey_PageDown] = SDL_SCANCODE_PAGEDOWN;
+    io.KeyMap[ImGuiKey_Home] = SDL_SCANCODE_HOME;
+    io.KeyMap[ImGuiKey_End] = SDL_SCANCODE_END;
+    io.KeyMap[ImGuiKey_Insert] = SDL_SCANCODE_INSERT;
+    io.KeyMap[ImGuiKey_Delete] = SDL_SCANCODE_DELETE;
+    io.KeyMap[ImGuiKey_Backspace] = SDL_SCANCODE_BACKSPACE;
+    io.KeyMap[ImGuiKey_Space] = SDL_SCANCODE_SPACE;
+    io.KeyMap[ImGuiKey_Enter] = SDL_SCANCODE_RETURN;
+    io.KeyMap[ImGuiKey_Escape] = SDL_SCANCODE_ESCAPE;
+    io.KeyMap[ImGuiKey_A] = SDL_SCANCODE_A;
+    io.KeyMap[ImGuiKey_C] = SDL_SCANCODE_C;
+    io.KeyMap[ImGuiKey_V] = SDL_SCANCODE_V;
+    io.KeyMap[ImGuiKey_X] = SDL_SCANCODE_X;
+    io.KeyMap[ImGuiKey_Y] = SDL_SCANCODE_Y;
+    io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
+
+    io.SetClipboardTextFn = &Gui::SetClipboardText;
+    io.GetClipboardTextFn = &Gui::GetClipboardText;
+    io.ClipboardUserData = NULL;
+
+    return true;
+}
+
+void Gui::Shutdown()
+{
+    // Destroy last known clipboard data
+    if (sClipboardTextData)
+        SDL_free(sClipboardTextData);
+
+    // Destroy OpenGL objects
+    Gui::InvalidateDeviceObjects();
+}
+
+void Gui::NewFrame(SDL_Window* window)
+{
+    if (!mFontTexture)
+        CreateDeviceObjects();
+
+    ImGuiIO& io = ImGui::GetIO();
+
+    // Setup display size (every frame to accommodate for window resizing)
+    int w, h;
+    int display_w, display_h;
+    SDL_GetWindowSize(window, &w, &h);
+    SDL_GL_GetDrawableSize(window, &display_w, &display_h);
+    io.DisplaySize = ImVec2((float)w, (float)h);
+    io.DisplayFramebufferScale = ImVec2(w > 0 ? ((float)display_w / w) : 0, h > 0 ? ((float)display_h / h) : 0);
+	io.DeltaTime = Game::mDeltaTime;
+
+    int mx, my;
+    Uint32 mouse_buttons = SDL_GetMouseState(&mx, &my);
+    io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+    io.MouseDown[0] = sMousePressed[0] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;
+    io.MouseDown[1] = sMousePressed[1] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_RIGHT)) != 0;
+    io.MouseDown[2] = sMousePressed[2] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0;
+    sMousePressed[0] = sMousePressed[1] = sMousePressed[2] = false;
+
+    if ((SDL_GetWindowFlags(window) & (SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_MOUSE_CAPTURE)) != 0)
+        io.MousePos = ImVec2((float)mx, (float)my);
+    bool any_mouse_button_down = false;
+    for (int n = 0; n < IM_ARRAYSIZE(io.MouseDown); n++)
+        any_mouse_button_down |= io.MouseDown[n];
+    if (any_mouse_button_down && (SDL_GetWindowFlags(window) & SDL_WINDOW_MOUSE_CAPTURE) == 0)
+        SDL_CaptureMouse(SDL_TRUE);
+    if (!any_mouse_button_down && (SDL_GetWindowFlags(window) & SDL_WINDOW_MOUSE_CAPTURE) != 0)
+        SDL_CaptureMouse(SDL_FALSE);
+
+    ImGui::NewFrame();
 }

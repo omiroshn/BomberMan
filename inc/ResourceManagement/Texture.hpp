@@ -14,7 +14,8 @@ enum class TextureType
 	Diffuse = 0,
 	Specular,
 	Normal,
-	Height
+	Height,
+	Font
 };
 
 

@@ -105,7 +105,7 @@ void 			MusicPlayer::playMusicInfinity(std::string const &musicName) const
 	if (music != mMusic.end()){
 		Mix_PlayMusic(music->second, -1);
 	} else {
-		std::cout << "Not found music with name " << musicName << std::endl;
+		//std::cout << "Not found music with name " << musicName << std::endl;
 	}
 
 }
@@ -115,7 +115,7 @@ void 			MusicPlayer::playMusicOnce(std::string const &musicName)
 	if (music != mMusic.end()) {
 		Mix_PlayMusic(music->second, 0);
 	} else {
-		std::cout << "Not found music with name " << musicName << std::endl;
+		//std::cout << "Not found music with name " << musicName << std::endl;
 	}
 }
 

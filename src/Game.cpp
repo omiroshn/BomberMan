@@ -333,6 +333,7 @@ void Game::loadResources()
 		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
 		RESOURCES.loadShader("shadowShader.vx.glsl", "shadowShader.ft.glsl", "shadow");
 		RESOURCES.loadShader("sparks.vx.glsl", "sparks.ft.glsl", "sparks");
+		RESOURCES.loadShader("gui.vx.glsl", "gui.ft.glsl", "gui");
         RESOURCES.loadTexture("block.png", "block");
         RESOURCES.loadTexture("brickwall.png", "brickwall");
         RESOURCES.loadTexture("sky.png", "sky");
