@@ -21,6 +21,10 @@ cmake ..
 make [-j[number_cores]]
 ```
 
+Documentation:
+```
+https://omiroshn.github.io/BomberMan
+```
 
 ```
 On Windows open bomberman.sln from VS with admin rights.
