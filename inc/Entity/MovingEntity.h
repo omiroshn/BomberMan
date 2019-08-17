@@ -21,7 +21,7 @@ public:
 	void		AddAcceleration(glm::vec2);
 	void        SetAnimationType(AnimationType type);
 	
-    Animation const& getAnimation() const;
+    Animation & getAnimation();
 	void		debug();
 
 	static void	debugMovement();

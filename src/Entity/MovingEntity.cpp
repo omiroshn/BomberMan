@@ -81,24 +81,18 @@ glm::vec2 MovingEntity::GetAcceleration() const
 void MovingEntity::animate(float DeltaTime)
 {
     mAnimation.tick(DeltaTime);
-    if (GetSpeed() >= 0.2)
-        mAnimation.setType(AnimationType::Running);
-    else
-	{
-
-        mAnimation.setType(AnimationType::Idle);
-		if (DeltaTime < 1)
-			std::cout << "animate in Moving Entity, animation set to Idle" << std::endl;
-	}
-
-	if (mIsDying == true)
+	if (mIsDying)
 	{
 		mAnimation.setType(AnimationType::Dying);
 		if (DeltaTime < 1)
 			std::cout << "animate in Moving Entity, animation set to Dying *******" << std::endl;
-
+		return;
 	}
 
+    if (GetSpeed() >= 0.2)
+        mAnimation.setType(AnimationType::Running);
+    else
+        mAnimation.setType(AnimationType::Idle);
 }
 
 void MovingEntity::rotate(float DeltaTime)
@@ -136,7 +130,7 @@ void MovingEntity::tick(float DeltaTime)
 	mAcceleration = glm::vec2(0.f);
 }
 
-Animation const& MovingEntity::getAnimation() const
+Animation & MovingEntity::getAnimation()
 {
     return mAnimation;
 }

@@ -83,7 +83,8 @@ void Game::start()
                 ImGui::RadioButton("NO VSync", &index, 0);
                 ImGui::RadioButton("60", &index, 1);
                 ImGui::RadioButton("30", &index, 2);
-                mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
+                if (mHero && !mHero->mIsDying)
+                    mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
                 mWindow->ShowInGameMenu();
                 mRenderer->getParticleManager()->update();
                 if (index)
@@ -93,26 +94,41 @@ void Game::start()
                     if (mDeltaTime < TargetDelta)
                         SDL_Delay(static_cast<Uint32>(ms * 1000));
                 }
+                std::cout << "---- mHero->mIsDying in main loop && mStageTimer = " << mStageTimer<< " paused = " << mIsPaused << "\nmStageStartedTimer = "<< mStageStartedTimer<< std::endl;
+                if (mHero && mHero->mIsDying)
+                {
+                    if (mStageTimer < 2 && mStageTimer >= 0)
+                        mReloadStage = true;
+                    else
+                    {
+                        if (mStageTimer > 4)
+                            mStageStartedTimer = getCurrentTime();
+                        std::cout << "**** mStageStartedTimer = " << mStageStartedTimer << std::endl;
+                        std::cout << "**** getCurrentTime() = " << getCurrentTime() << std::endl;
+                        std::cout << "**** mStageTimer = " << mStageTimer << std::endl;
+                        mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
+                    }
+                    
+                    
+                }
             }
             else
             {
                 if (CONFIGURATION.getLives() == 0)
                     CONFIGURATION.setChosenStage(1);
                 if (mHero && mHero->mIsDying)
-                    getHero().SetAnimationType(AnimationType::Dying);
+                    {
+                        getHero().getAnimation().setTime(0);
+                        getHero().SetAnimationType(AnimationType::Dying);
+                    }
                 if (mReloadStage && mStageTimer > 1)
                 {
-                    if (mStageTimer < 3)
+                    std::cout << "=====*---* imStageTimer = " << mStageTimer << std::endl;
+                    if (mStageTimer < 2)
                         mWindow->ShowBetweenStageScreen();
                     mIsPaused = false;
                     mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
-                    std::cout << "reloaded true , mStageTimer = " << mStageTimer<< " paused = " << mIsPaused<< std::endl;
-                    if (mHero)
-                    {
-                        auto anim = getHero().getAnimation().getType();
-                        if (anim == AnimationType::Dying)
-                            std::cout << "anim =  Dying" << std::endl;
-                    }
+                    std::cout << "reloaded true , mStageTimer = " << mStageTimer << " paused = " << mIsPaused<< std::endl;
                 }
                 else if (mStageTimer < 2)
                 {
@@ -525,22 +541,31 @@ void       Game::stageFinished()
 {
     int current_stage = CONFIGURATION.getChosenStage();
     CONFIGURATION.setBestLevelAchieved(current_stage);
-    CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
-    //Game::mReloadStage = true;
+    if (!mHero->mIsDying)
+        CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
+    Game::mReloadStage = true;
     if (mStageTimer > 4)
         mStageStartedTimer = getCurrentTime();
     mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
-    //cleanupOnStageChange();
+    cleanupOnStageChange();
 }
 
 void Game::onHeroDied()
 {
-    getHero().SetAnimationType(AnimationType::Dying);
-    mHero->mIsDying = true;
-    std::cout << "onHeroDied" << std::endl;
+    if (mStageTimer < 3)
+    {
+        std::cout << "*---*  in onHeroDied" << std::endl;
+        stageFinished();
+    }
     static bool been_there = false;
+
     if (been_there)
+    {
+        if (mReloadStage)
+            been_there = false;
         return;
+    }
+    std::cout << "onHeroDied first time" << std::endl;
     if (CONFIGURATION.getLives() == 1)
         gameOver();
     else
@@ -548,12 +573,10 @@ void Game::onHeroDied()
     if (mStageTimer > 4)
         mStageStartedTimer = getCurrentTime();
     mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
-    TimerManager::Instance()->AddTimer(4, false,
-		[&] () {
-    Game::mReloadStage = true;
+    std::cout << "*----------* mStageTimer = " << mStageTimer << std::endl;
+    std::cout << "*---* mStageStartedTimer = " << mStageStartedTimer << std::endl;
     cleanupOnStageChange();
-       });
-       been_there = true;
+    been_there = true;
 }
 
 void Game::gameOver()
