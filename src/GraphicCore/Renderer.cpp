@@ -117,8 +117,8 @@ void Renderer::normalPass(Game& aMap)
     glm::mat4 view = mCamera.getViewMatrix();
 
 
-	static float Shininess = 32.f;
-	ImGui::SliderFloat("Shininess", &Shininess, 1.f, 32.f);
+	static float Shininess = 20.f;
+	ImGui::SliderFloat("Shininess", &Shininess, 8.f, 64.f);
 
     //render the model
     modelShader->use();
@@ -138,22 +138,21 @@ void Renderer::normalPass(Game& aMap)
     animatedModelShader->setInt("shadowMap", mLightManager->bindDepthMap());
     animatedModelShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
     animatedModelShader->setFloat("shininess", Shininess);
-    animatedModelShader->setFloat("glossiness", Glossiness);
 
     renderMovable(modelShader, animatedModelShader, aMap);
     renderObstacles(modelShader);
 
     // render the ground
-    std::vector<glm::mat4> transforms;
     glm::mat4 groundModel = glm::translate(glm::mat4(1.0f), glm::vec3(.0f, -1.f, .0f));
 
     CollisionInfo &info = Game::getCollisionInfo();
+    std::vector<glm::mat4> transforms(info.Squares.size());
     for (size_t i = 0; i < info.Squares.size(); i++)
     {
         glm::mat4 groundTransform = glm::translate(groundModel,
             glm::vec3(i % info.width + .5f, 0, i / info.width + .5f)
         );
-        transforms.push_back(groundTransform);
+        transforms[i] = groundTransform;
     }
     ground->draw(modelShader, transforms);
 
@@ -192,6 +191,8 @@ void Renderer::shadowPass(Game& aMap)
     static auto animatedShadowShader = RESOURCES.getShader("animatedShadow");
     shadowShader->use();
     shadowShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
+    animatedShadowShader->use();
+    animatedShadowShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
     mLightManager->prepareForShadowPass();
     renderMovable(shadowShader, animatedShadowShader, aMap);
     renderObstacles(shadowShader);
