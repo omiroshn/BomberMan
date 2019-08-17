@@ -1,18 +1,10 @@
 #version 330 core
 
-const int MAX_BONES = 50;
-const int MAX_WEIGHTS = 3;
-
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoords;
 layout (location = 3) in mat4 modelsMatrix;
-
-layout(location = 7) in ivec3 bonesID;
-layout(location = 8) in vec3 weights;
-
 layout (location = 9) in vec3 aTangent;
-layout (location = 10) in vec3 aBitangent;
 
 out VS_OUT {
     vec3 FragPos;
@@ -26,8 +18,6 @@ out VS_OUT {
 
 uniform mat4 view;
 uniform mat4 projection;
-
-uniform mat4 boneTransforms[MAX_BONES];
 
 uniform vec3 lightDir;
 uniform vec3 viewPos;

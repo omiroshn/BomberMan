@@ -3,6 +3,7 @@
 #include "CustomException.hpp"
 #include "Utilities/AnimationUtils.h"
 #include "ResourceManagement/Animation.h"
+#include <limits>
 
 Model::Model(std::string const &path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle, float glossiness)
 	: mTransFormMatrix(glm::mat4(1.0f)), mImporter(new Assimp::Importer()), mGlossiness(glossiness)
@@ -106,37 +107,48 @@ std::vector<Vertex> Model::loadVertices(aiMesh const* mesh)
         vertex.Position.x = mesh->mVertices[i].x;
         vertex.Position.y = mesh->mVertices[i].y;
         vertex.Position.z = mesh->mVertices[i].z;
+        glm::vec3 Normal = glm::vec3(0);
         if (mesh->HasNormals())
         {
-            vertex.Normal.x = mesh->mNormals[i].x;
-            vertex.Normal.y = mesh->mNormals[i].y;
-            vertex.Normal.z = mesh->mNormals[i].z;
-			vertex.Normal = glm::normalize(vertex.Normal);
+            Normal = glm::normalize(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
+            GLuint val = 0;
+            val |= (GLint)(Normal.x * 1024) << 20;
+            val |= (GLint)(Normal.y * 1024) << 10;
+            val |= (GLint)(Normal.z * 1024);
+			vertex.Normal = val;
         }
         if (mesh->HasTangentsAndBitangents())
         {
-            vertex.Tangent.x = mesh->mTangents[i].x;
-            vertex.Tangent.y = mesh->mTangents[i].y;
-            vertex.Tangent.z = mesh->mTangents[i].z;
-            vertex.Bitangent.x = mesh->mBitangents[i].x;
-            vertex.Bitangent.y = mesh->mBitangents[i].y;
-            vertex.Bitangent.z = mesh->mBitangents[i].z;
+            glm::vec3 Vector = glm::normalize(glm::vec3(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z));
+
+            GLuint val = 0;
+            val |= (GLint)(Vector.x * 1024) << 20;
+            val |= (GLint)(Vector.y * 1024) << 10;
+            val |= (GLint)(Vector.z * 1024);
+            vertex.Tangent = val;
         }
 		else
 		{
-			glm::vec3 tmp = glm::cross(vertex.Normal, glm::vec3(0,1,0));
-			if (glm::length(tmp) < 0.001)
-				tmp = glm::cross(glm::vec3(1, 0, 0), vertex.Normal);
-			vertex.Tangent = tmp;
-			vertex.Bitangent = glm::cross(tmp, vertex.Normal);
+			glm::vec3 Vector = glm::cross(Normal, glm::vec3(0,1,0));
+			if (glm::length(Vector) < 0.001)
+				Vector = glm::cross(glm::vec3(1, 0, 0), Normal);
+
+            GLuint val = 0;
+            val |= (GLuint)(Vector.x * 1024) << 20;
+            val |= (GLuint)(Vector.y * 1024) << 10;
+            val |= (GLuint)(Vector.z * 1024);
+            vertex.Tangent = val;
 		}
         if(mesh->mTextureCoords[0])
         {
-            vertex.TexCoords.x = mesh->mTextureCoords[0][i].x;
-            vertex.TexCoords.y = mesh->mTextureCoords[0][i].y;
+            vertex.TexCoords[0] = mesh->mTextureCoords[0][i].x * SHRT_MAX;
+            vertex.TexCoords[1] = mesh->mTextureCoords[0][i].y * SHRT_MAX;
         }
         else
-            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+        {
+            vertex.TexCoords[0] = 0;
+            vertex.TexCoords[1] = 0;
+        }
         vertices.push_back(vertex);
         mAABB += vertex.Position;
     }
