@@ -1,18 +1,13 @@
+/*!
+\file
+\brief Entry point
+
+This file contains the entry point "main" of the program.
+*/
 #include "Core.hpp"
-
-//This must be done for proper work of SDL2 lib
-#undef main
-
 #include "ResourceManagement/ResourceManager.hpp"
 #include "ResourceManagement/MusicPlayer.hpp"
 #include "Game.hpp"
-
-extern "C" {
-    #include "libavcodec/avcodec.h"
-    #include "libavformat/avformat.h"
-    #include "libavformat/avio.h"
-    #include "libavutil/file.h"
-}
 
 int main(int ac, char **av)
 {
@@ -21,10 +16,7 @@ int main(int ac, char **av)
     RESOURCES.setBinFolder(exeFolder);
 	MUSIC_PLAYER.setBinFolder(exeFolder);
 
-    av_register_all();
-
     Game game;
-
     game.start();
 
     return 0;
