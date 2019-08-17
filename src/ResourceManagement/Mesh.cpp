@@ -103,6 +103,7 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
     unsigned int diffuseNr  = 1;
     unsigned int normalNr   = 1;
 
+	shader->use();
     for(unsigned int i = 0; i < mTextures.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0 + i);
@@ -112,14 +113,13 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
             number = std::to_string(diffuseNr++);
         else if (name == "texture_normal")
             number = std::to_string(normalNr++);
-        glUniform1i(glGetUniformLocation(shader->mShaderProgram, (name + number).c_str()), i);
+        shader->setInt((name + number).c_str(), i);
         glBindTexture(GL_TEXTURE_2D, mTextures[i]->getTextureID());
     }
     glActiveTexture(GL_TEXTURE0);
     glBindBuffer(GL_ARRAY_BUFFER, mIBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-	shader->use();
     shader->setFloat("glossiness", mGlossiness);
     shader->setMat4("parentTransform", parentTransform);
     if(mIsAnimated)
