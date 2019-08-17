@@ -10,6 +10,7 @@
 #include "LogicCore/Timer.h"
 #include "LogicCore/TimerManager.h"
 #include "Configure.hpp"
+#include "Gui/Gui.h"
 
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
@@ -260,7 +261,7 @@ void Game::doAction(Action const& a)
             mRenderer->getCamera().processMouseMovement(x, y);
             break;
         case Action::Joystick:
-            SDL_ShowCursor(SDL_DISABLE);
+            // SDL_ShowCursor(SDL_DISABLE);
             break;
         default:
             break;
@@ -309,7 +310,13 @@ void Game::doAction(Action const& a)
     {
         // // keyboard
         if (mKeyHandler->isPressed(SDL_SCANCODE_W))
+        {
+            // ImGui::SetFocusID(ImGui::GetID((name).c_str()), ImGui::GetCurrentWindow()); 
+            // ImGuiContext& g = *ImGui::GetCurrentContext();
+            // g.NavDisableHighlight = false;
             std::cout << "w" << std::endl;
+        }
+            
         if (mKeyHandler->isPressed(SDL_SCANCODE_S))
             std::cout << "s" << std::endl;
         if (mKeyHandler->isPressed(SDL_SCANCODE_RETURN))
