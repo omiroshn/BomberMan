@@ -60,10 +60,9 @@ void MovingEntity::debug()
 	ImGui::DragFloat2("Acceleration", &mAcceleration[0]);
 }
 
-void MovingEntity::AnimateDeath(float DeltaTime)
+void MovingEntity::SetAnimationType(AnimationType type)
 {
-	//mAnimation.tick(DeltaTime);
-    mAnimation.setType(AnimationType::Dying);
+    mAnimation.setType(type);
 }
 
 void MovingEntity::debugMovement()

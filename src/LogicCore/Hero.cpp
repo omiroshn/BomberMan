@@ -34,7 +34,7 @@ Hero::Stats Hero::getStats()
 
 void Hero::kill()
 {
-	AnimateDeath(4);
+	SetAnimationType(AnimationType::Dying);
 	mIsDying = true;
 	//TimerManager::Instance()->AddTimer(4, false,
 		//[] () {

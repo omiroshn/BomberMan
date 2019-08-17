@@ -19,7 +19,7 @@ public:
 	glm::vec2	GetAcceleration()const;
 	void		SetAcceleration(glm::vec2);
 	void		AddAcceleration(glm::vec2);
-	void        AnimateDeath(float DeltaTime);
+	void        SetAnimationType(AnimationType type);
 	
     Animation const& getAnimation() const;
 	void		debug();

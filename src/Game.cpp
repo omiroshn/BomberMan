@@ -99,7 +99,7 @@ void Game::start()
                 if (CONFIGURATION.getLives() == 0)
                     CONFIGURATION.setChosenStage(1);
                 if (mHero && mHero->mIsDying)
-                    getHero().AnimateDeath(4);
+                    getHero().SetAnimationType(AnimationType::Dying);
                 if (mReloadStage && mStageTimer > 1)
                 {
                     if (mStageTimer < 3)
@@ -284,7 +284,7 @@ void Game::doAction(Action const& a)
             Hero.AddAcceleration(glm::vec2(-offset, 0));
         if (mKeyHandler->isPressed(SDL_SCANCODE_S))
             Hero.AddAcceleration(glm::vec2(0, offset));
-		if (mKeyHandler->isPressed(SDL_SCANCODE_0))
+		if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
 			Hero.tryPlaceBomb();
 		//MusicPlayer testing
 		if (mKeyHandler->isPressed(SDL_SCANCODE_5))
@@ -535,7 +535,7 @@ void       Game::stageFinished()
 
 void Game::onHeroDied()
 {
-    getHero().AnimateDeath(4);
+    getHero().SetAnimationType(AnimationType::Dying);
     mHero->mIsDying = true;
     std::cout << "onHeroDied" << std::endl;
     static bool been_there = false;
