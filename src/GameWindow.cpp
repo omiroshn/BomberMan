@@ -92,7 +92,7 @@ void GameWindow::initOpenGL()
     }
     glViewport(0, 0, mWidth, mHeight);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_MULTISAMPLE);
+    //glEnable(GL_MULTISAMPLE);
 }
 
 void GameWindow::update()
