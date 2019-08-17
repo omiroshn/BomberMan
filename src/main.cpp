@@ -18,8 +18,6 @@ int main(int ac, char **av)
 	MUSIC_PLAYER.setBinFolder(exeFolder);
 	FFMPEG.setBinFolder(exeFolder);
 
-    av_register_all();
-
     Game game;
     game.start();
 
