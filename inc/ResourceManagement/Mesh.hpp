@@ -22,12 +22,11 @@
 struct Vertex
 {
     glm::vec3   Position;
-    glm::vec3   Normal;
-    glm::vec2   TexCoords;
-    glm::vec3   Tangent;
-    glm::vec3   Bitangent;
-    glm::ivec4  BonesID;
-    glm::vec4   Weighs;
+    GLint       Normal;
+    GLint       Tangent;
+    int16_t     TexCoords[2];
+    glm::vec3   Weighs;
+    glm::ivec3  BonesID;
 };
 
 class Mesh

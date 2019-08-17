@@ -12,7 +12,6 @@ layout (location = 7) in ivec3 bonesID;
 layout (location = 8) in vec3 weights;
 
 layout (location = 9) in vec3 aTangent;
-layout (location = 10) in vec3 aBitangent;
 
 out VS_OUT {
     vec3 FragPos;
