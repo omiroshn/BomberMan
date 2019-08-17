@@ -33,7 +33,7 @@ vec3 GetLightDir()
 #define ARRAY_COUNT(x) (sizeof(x) / sizeof(x[0]))
 #define OFFSET_SIZE ((1.f/1024.f) * 1.5f)
 
-float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
+float ShadowCalculation(vec4 fragPosLightSpace)
 {
     const vec2 offsets[] = vec2[](
         vec2(OFFSET_SIZE,OFFSET_SIZE),
@@ -46,12 +46,11 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
         vec2(0,-OFFSET_SIZE)
     );
 
-    float bias = max(0.000004 * (1.0 - dot(normal, lightDir)), 0.0001);
     vec3 projCoords = (fragPosLightSpace.xyz / fragPosLightSpace.w) * 0.5 + 0.5;
     float currentDepth = projCoords.z;
     if (currentDepth > 1.f)
         return 0.f;
-    projCoords.z = currentDepth - bias;
+    projCoords.z = currentDepth;
     float shadow = texture(shadowMap, projCoords);
     for (int i = 0; i < offsets.length(); i++)
     {
@@ -59,7 +58,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
         sampleCoords += vec3(offsets[i], 0.f);
         shadow += texture(shadowMap, sampleCoords);
     }
-    return shadow / (offsets.length()) ;
+    return shadow / (offsets.length());
 }
 
 void main()
@@ -76,7 +75,7 @@ void main()
     float diff = max(dot(normal, lightDir), 0.0);
     vec3 diffuse = lightDiffuse * diff * texture(texture_diffuse1, vs_out.TexCoords).rgb;
     //shadow
-    float shadow = ShadowCalculation(fs_in.FragPosLightSpace, fs_in.VertNormal, lightDir);
+    float shadow = ShadowCalculation(fs_in.FragPosLightSpace);
     // specular
     vec3 viewDir = normalize(fs_in.TangentViewPos - fs_in.TangentFragPos);
     vec3 reflectDir = reflect(-lightDir, normal);
