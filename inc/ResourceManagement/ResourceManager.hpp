@@ -95,8 +95,9 @@ public:
 	\param[in] offset [optional] The basic offset of the model
 	\param[in] rotate [optional] The basic rotation axis of the model
 	\param[in] angle [optional] The basic rotation angle of the model
+	\param[in] glossiness [optional] The multiplier for model's specular component
 	*/
-	void                		loadModel(const GLchar* path, std::string const& name, glm::vec3 scale = glm::vec3(1.0f), glm::vec3 offset = glm::vec3(.0f), glm::vec3 rotate = glm::vec3(.0f, 1.0f, .0f), float angle = .0f);
+	void                		loadModel(const GLchar* path, std::string const& name, glm::vec3 scale = glm::vec3(1.0f), glm::vec3 offset = glm::vec3(.0f), glm::vec3 rotate = glm::vec3(.0f, 1.0f, .0f), float angle = .0f, float glossiness = .0f);
 	/*!
 	\brief Returns pointer to the model
 
