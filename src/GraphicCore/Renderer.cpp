@@ -120,10 +120,7 @@ void Renderer::normalPass(Game& aMap)
 
 
 	static float Shininess = 32.f;
-	static float Glossiness = 0.5f;
-
 	ImGui::SliderFloat("Shininess", &Shininess, 1.f, 32.f);
-	ImGui::SliderFloat("Glossiness", &Glossiness, 0.f, 1.f);
 
     //render the model
     modelShader->use();
@@ -134,7 +131,6 @@ void Renderer::normalPass(Game& aMap)
     modelShader->setInt("shadowMap", mLightManager->bindDepthMap());
     modelShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
     modelShader->setFloat("shininess", Shininess);
-    modelShader->setFloat("glossiness", Glossiness);
 
     renderMovable(modelShader, aMap);
     renderObstacles(modelShader);
