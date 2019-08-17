@@ -31,7 +31,7 @@ vec3 GetLightDir()
 }
 
 #define ARRAY_COUNT(x) (sizeof(x) / sizeof(x[0]))
-#define OFFSET_SIZE ((1.f/1024.f) * 1.4f)
+#define OFFSET_SIZE ((1.f/1024.f) * 1.5f)
 
 float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
 {
