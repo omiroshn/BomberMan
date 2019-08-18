@@ -66,6 +66,20 @@ void Model::processMesh(aiMesh const* mesh,  aiScene const* scene)
     mMeshes.emplace_back(std::make_unique<Mesh>(vertices, indices, textures, bones, offsets, scene, mGlossiness));
 }
 
+int32_t Pack_INT_2_10_10_10_REV(float x, float y, float z, float w = 0.f)
+{
+    const uint32_t xs = x < 0;
+    const uint32_t ys = y < 0;
+    const uint32_t zs = z < 0;
+    const uint32_t ws = w < 0;
+    uint32_t vi =
+		(ws << 31 | ((uint32_t)(w	   ) &   1) << 30) |
+        (zs << 29 | ((uint32_t)(z * 511) & 511) << 20) |
+        (ys << 19 | ((uint32_t)(y * 511) & 511) << 10) |
+        (xs << 9  | ((uint32_t)(x * 511) & 511));
+    return vi;
+}
+
 std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std::vector<glm::mat4> & aOffsets, std::vector<Vertex> & vertices)
 {
     std::map<std::string, unsigned int> bones;
@@ -87,7 +101,7 @@ std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std:
             {
 				if (vertices[weight.mVertexId].Weighs[k] == 0)
                 {
-					vertices[weight.mVertexId].Weighs[k] = weight.mWeight;
+					vertices[weight.mVertexId].Weighs[k] = uint8_t(weight.mWeight * UCHAR_MAX);
 					vertices[weight.mVertexId].BonesID[k] = i;
 					break;
 				}
@@ -111,43 +125,25 @@ std::vector<Vertex> Model::loadVertices(aiMesh const* mesh)
         if (mesh->HasNormals())
         {
             Normal = glm::normalize(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
-            GLuint val = 0;
-            val |= (GLint)(Normal.x * 1024) << 20;
-            val |= (GLint)(Normal.y * 1024) << 10;
-            val |= (GLint)(Normal.z * 1024);
-			vertex.Normal = val;
+			vertex.Normal = Pack_INT_2_10_10_10_REV(Normal.x, Normal.y, Normal.z);
         }
         if (mesh->HasTangentsAndBitangents())
         {
-            glm::vec3 Vector = glm::normalize(glm::vec3(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z));
-
-            GLuint val = 0;
-            val |= (GLint)(Vector.x * 1024) << 20;
-            val |= (GLint)(Vector.y * 1024) << 10;
-            val |= (GLint)(Vector.z * 1024);
-            vertex.Tangent = val;
+			vertex.Tangent = Pack_INT_2_10_10_10_REV(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
         }
 		else
 		{
-			glm::vec3 Vector = glm::cross(Normal, glm::vec3(0,1,0));
-			if (glm::length(Vector) < 0.001)
-				Vector = glm::cross(glm::vec3(1, 0, 0), Normal);
+			glm::vec3 Tangent = glm::cross(Normal, glm::vec3(0,1,0));
+			if (glm::length(Tangent) < 0.01)
+				Tangent = glm::cross(glm::vec3(0, 0, 1), Normal);
 
-            GLuint val = 0;
-            val |= (GLuint)(Vector.x * 1024) << 20;
-            val |= (GLuint)(Vector.y * 1024) << 10;
-            val |= (GLuint)(Vector.z * 1024);
-            vertex.Tangent = val;
+			Tangent = glm::normalize(Tangent);
+			vertex.Tangent = Pack_INT_2_10_10_10_REV(Tangent.x, Tangent.y, Tangent.z);
 		}
         if(mesh->mTextureCoords[0])
         {
-            vertex.TexCoords[0] = mesh->mTextureCoords[0][i].x * SHRT_MAX;
-            vertex.TexCoords[1] = mesh->mTextureCoords[0][i].y * SHRT_MAX;
-        }
-        else
-        {
-            vertex.TexCoords[0] = 0;
-            vertex.TexCoords[1] = 0;
+            vertex.TexCoords[0] = int16_t(mesh->mTextureCoords[0][i].x * SHRT_MAX);
+            vertex.TexCoords[1] = int16_t(mesh->mTextureCoords[0][i].y * SHRT_MAX);
         }
         vertices.push_back(vertex);
         mAABB += vertex.Position;

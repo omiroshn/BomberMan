@@ -16,7 +16,6 @@ layout (location = 9) in vec3 aTangent;
 out VS_OUT {
     vec3 FragPos;
     vec2 TexCoords;
-    vec3 VertNormal;
     vec3 TangentLightDir;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
@@ -27,7 +26,6 @@ uniform mat4 view;
 uniform mat4 projection;
 
 uniform mat4 boneTransforms[MAX_BONES];
-uniform bool isAnimated;
 
 uniform vec3 lightDir;
 uniform vec3 viewPos;
@@ -50,7 +48,6 @@ void main()
     mat3 normalMatrix = transpose(inverse(mat3(transformModelMat)));
     vec3 T = normalize(normalMatrix * aTangent);
     vec3 N = normalize(normalMatrix * aNormal);
-    vs_out.VertNormal = N;
     T = normalize(T - dot(T, N) * N);
     vec3 B = cross(N, T);
     mat3 TBN = transpose(mat3(T, B, N));
