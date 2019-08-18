@@ -12,7 +12,6 @@ uniform float glossiness = 0.01;
 in VS_OUT {
     vec3 FragPos;
     vec2 TexCoords;
-    vec3 VertNormal;
     vec3 TangentLightDir;
     vec3 TangentViewPos;
     vec3 TangentFragPos;

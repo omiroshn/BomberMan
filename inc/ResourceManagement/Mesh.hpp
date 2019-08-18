@@ -25,8 +25,8 @@ struct Vertex
     GLint       Normal;
     GLint       Tangent;
     int16_t     TexCoords[2];
-    glm::vec3   Weighs;
-    glm::ivec3  BonesID;
+    uint8_t		Weighs[3];
+	uint8_t		BonesID[3];
 };
 
 class Mesh

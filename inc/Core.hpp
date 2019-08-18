@@ -4,6 +4,10 @@
 #include <SDL.h>
 #include <vector>
 
+#if (_MSC_VER)
+	#undef main
+#endif
+
 namespace bm
 {
 	/**
