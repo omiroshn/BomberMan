@@ -4,6 +4,7 @@
 #include <imgui.h>
 
 Mesh::Mesh(std::vector<Vertex>& vertices,
+            std::vector<WeightData>& weights,
             std::vector<unsigned int>& indices,
             std::vector<std::shared_ptr<Texture>>& textures,
             std::map<std::string, unsigned int>& bones,
@@ -11,14 +12,15 @@ Mesh::Mesh(std::vector<Vertex>& vertices,
             aiScene const* scene,
 			float glossiness) :
     mVertices{std::move(vertices)}
+    , mWeights{std::move(weights)}
     , mIndices{std::move(indices)}
     , mTextures{std::move(textures)}
     , mIsAnimated{scene->HasAnimations()}
     , mCurrentAnimation{0}
+    , mGlossiness{glossiness}
     , mBones{std::move(bones)}
     , mOffsetMatrices{std::move(aOffsets)}
     , mScene{scene}
-    , mGlossiness{glossiness}
 {
     setupMesh();
     setInstanceBuffer();
@@ -37,8 +39,7 @@ Mesh::~Mesh()
 void Mesh::setupMesh()
 {
     glGenVertexArrays(1, &mVAO);
-    glGenBuffers(1, &mVBO);
-    glGenBuffers(1, &mEBO);
+    glGenBuffers(2, &mVBO);
 
     glBindVertexArray(mVAO);
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
@@ -56,15 +57,23 @@ void Mesh::setupMesh()
     glEnableVertexAttribArray(2);	
     glVertexAttribPointer(2, 2, GL_SHORT, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
-
-    glEnableVertexAttribArray(7);
-    glVertexAttribIPointer(7, 3, GL_UNSIGNED_BYTE, sizeof(Vertex), (void*)offsetof(Vertex, BonesID));
-
-    glEnableVertexAttribArray(8);
-    glVertexAttribPointer(8, 3, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, Weighs));
-
     glEnableVertexAttribArray(9);
     glVertexAttribPointer(9, 4, GL_INT_2_10_10_10_REV, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+
+// weights is separate object
+
+    if (mIsAnimated)
+    {
+        glGenBuffers(1, &mWBO);
+        glBindBuffer(GL_ARRAY_BUFFER, mWBO);
+
+        glBufferData(GL_ARRAY_BUFFER, mWeights.size() * sizeof(WeightData), &mWeights[0], GL_STATIC_DRAW);
+        glEnableVertexAttribArray(7);
+        glVertexAttribIPointer(7, 3, GL_UNSIGNED_BYTE, sizeof(WeightData), (void *)offsetof(WeightData, BonesID));
+
+        glEnableVertexAttribArray(8);
+        glVertexAttribPointer(8, 3, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(WeightData), (void *)offsetof(WeightData, Weighs));
+    }
 
     glBindVertexArray(0);
 }

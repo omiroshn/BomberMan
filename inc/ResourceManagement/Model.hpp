@@ -41,7 +41,7 @@ private:
     void loadModel(std::string const& path);
     void processNode(aiNode const* node,  aiScene const* scene);
     void processMesh(aiMesh const* mesh,  aiScene const* scene);
-    std::map<std::string, unsigned int> processBones(aiMesh const* mesh, std::vector<glm::mat4> & aOffsets, std::vector<Vertex> & vertices);
+    std::map<std::string, unsigned int> processBones(aiMesh const* mesh, std::vector<glm::mat4> & aOffsets, std::vector<WeightData> & vertices);
 
     std::vector<Vertex> loadVertices(aiMesh const* mesh);
     std::vector<unsigned int> loadIndices(aiMesh const* mesh);

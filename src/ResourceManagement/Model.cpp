@@ -60,10 +60,15 @@ void Model::processMesh(aiMesh const* mesh,  aiScene const* scene)
     std::vector<Vertex> vertices(loadVertices(mesh));
     std::vector<unsigned int> indices(loadIndices(mesh));
     std::vector<std::shared_ptr<Texture>> textures(loadTextures(mesh, scene));
+    std::vector<WeightData> weights;
     std::vector<glm::mat4> offsets;
     offsets.resize(mesh->mNumBones);
-    std::map<std::string, unsigned int> bones{processBones(mesh, offsets, vertices)};
-    mMeshes.emplace_back(std::make_unique<Mesh>(vertices, indices, textures, bones, offsets, scene, mGlossiness));
+
+    if (mesh->mNumBones > 1)
+        weights.resize(vertices.size());
+        
+    std::map<std::string, unsigned int> bones{processBones(mesh, offsets, weights)};
+    mMeshes.emplace_back(std::make_unique<Mesh>(vertices, weights, indices, textures, bones, offsets, scene, mGlossiness));
 }
 
 int32_t Pack_INT_2_10_10_10_REV(float x, float y, float z, float w = 0.f)
@@ -80,10 +85,12 @@ int32_t Pack_INT_2_10_10_10_REV(float x, float y, float z, float w = 0.f)
     return vi;
 }
 
-std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std::vector<glm::mat4> & aOffsets, std::vector<Vertex> & vertices)
+std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std::vector<glm::mat4> & aOffsets, std::vector<WeightData> & vertices)
 {
     std::map<std::string, unsigned int> bones;
     unsigned int        totalBones{0};
+    if (mesh->mNumBones <= 1)
+        return bones;
 	for (unsigned int i = 0; i < mesh->mNumBones; i++)
     {
 		auto *bone = mesh->mBones[i];
