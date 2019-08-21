@@ -25,6 +25,10 @@ struct Vertex
     GLint       Normal;
     GLint       Tangent;
     int16_t     TexCoords[2];
+};
+
+struct WeightData
+{
     uint8_t		Weighs[3];
 	uint8_t		BonesID[3];
 };
@@ -33,6 +37,7 @@ class Mesh
 {
 public:
     Mesh(std::vector<Vertex>& aVertices,
+        std::vector<WeightData>& aWeights,
         std::vector<unsigned int>& aIndices,
         std::vector<std::shared_ptr<Texture>>& aTextures,
         std::map<std::string, unsigned int>& bones,
@@ -50,8 +55,9 @@ private:
     aiNodeAnim const*       findNodeAnimation(aiAnimation const* animation, std::string nodeName) const;
 
 private:
-    unsigned int mVBO, mEBO, mVAO, mIBO;
+    unsigned int mVBO, mEBO, mVAO, mWBO, mIBO;
     std::vector<Vertex> mVertices;
+    std::vector<WeightData> mWeights;
     std::vector<unsigned int> mIndices;
     std::vector<std::shared_ptr<Texture>> mTextures;
     bool                mIsAnimated;
