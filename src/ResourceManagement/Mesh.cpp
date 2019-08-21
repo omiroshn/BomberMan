@@ -21,7 +21,6 @@ Mesh::Mesh(std::vector<Vertex>& vertices,
     , mBones{std::move(bones)}
     , mOffsetMatrices{std::move(aOffsets)}
     , mScene{scene}
-    , mGlossiness{glossiness}
 {
     setupMesh();
     setInstanceBuffer();
