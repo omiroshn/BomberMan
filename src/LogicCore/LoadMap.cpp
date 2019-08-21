@@ -39,8 +39,7 @@ CollisionInfo MapLoader::GetMap(const int index)
 	else if (index >= 0)
 	{
 		//load from disk
-		mMapOfDigits = mReaderWriter.LoadCampaignMap(index);
-		mWidth = mMapOfDigits.size() / 20;
+		mMapOfDigits = mReaderWriter.LoadCampaignMap(index, mWidth);
 		mLoaded = true;
 	}
 	return CollisionInfo{ mMapOfDigits, mWidth };

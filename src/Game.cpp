@@ -257,7 +257,6 @@ void Game::resolveCollisions()
 
     Hero.move(CollisionOffset / 4.f);
     Hero.AddAcceleration(CollisionOffset * CollisionResolveMultiplier);
-	mRenderer->getCamera().followEntity(getHero(), 10.f, mDeltaTime);
 }
 
 void Game::doAction(Action const& a)

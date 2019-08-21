@@ -62,7 +62,3 @@ std::vector<SquareType> MapGenerator::GenerateNewMap()
 int MapGenerator::GetWidth() const {
 	return mWidth;
 }
-
-int MapGenerator::GetHeight() const {
-	return mHeight;
-}
