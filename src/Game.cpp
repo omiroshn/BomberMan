@@ -79,6 +79,7 @@ void Game::start()
                 MovingEntity::debugMovement();
                 resolveCollisions();
                 Tickable::tickTickables(mDeltaTime);
+                mRenderer->getCamera().followEntity(getHero(), 10.f, mDeltaTime);
                 mRenderer->draw(*this);
                 static int index = 0;
                 ImGui::RadioButton("NO VSync", &index, 0);
@@ -231,7 +232,6 @@ void Game::resolveCollisions()
 
     Hero.move(CollisionOffset / 4.f);
     Hero.AddAcceleration(CollisionOffset * CollisionResolveMultiplier);
-	mRenderer->getCamera().followEntity(getHero(), 10.f, mDeltaTime);
 }
 
 void Game::doAction(Action const& a)

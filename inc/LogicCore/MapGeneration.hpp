@@ -31,8 +31,8 @@ public:
 	int GetHeight() const;
 
 private:
-	int mWidth = 30;
-	int mHeight = 20;
+	int mWidth = 31;
+	int mHeight = 21;
 };
 
 
