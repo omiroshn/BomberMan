@@ -43,7 +43,7 @@ void LightManager::initShadowFramebuffer()
 
 void LightManager::initLightSpaceMatrix(glm::vec3 shadowMapOffset)
 {
-	static float angle = 1.996f;
+	static float angle = 1.979f;
     static glm::vec2 lr{-12.482f, 11.941f};
     static glm::vec2 tb{-10.824f, 7.2f};
     static glm::vec2 nf{38.294f, 71.647f};
