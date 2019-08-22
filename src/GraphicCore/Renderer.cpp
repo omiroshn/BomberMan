@@ -30,11 +30,8 @@ void Renderer::updateSize(int aWidth, int aHeight)
 
 void Renderer::draw(Game& aMap)
 {
-    //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glEnable(GL_CULL_FACE);
-	mLightManager->initLightSpaceMatrix();
+    glEnable(GL_CULL_FACE);
+	mLightManager->initLightSpaceMatrix(aMap.getHero().getPosition3D());
     prepareTransforms(aMap);
     shadowPass(aMap);
     normalPass(aMap);
@@ -117,7 +114,8 @@ void Renderer::normalPass(Game& aMap)
     glm::mat4 view = mCamera.getViewMatrix();
 
 
-	static float Shininess = 20.f;
+	static float Shininess = 32.f;
+
 	ImGui::SliderFloat("Shininess", &Shininess, 8.f, 64.f);
 
     //render the model
