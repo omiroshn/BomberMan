@@ -28,7 +28,7 @@ class AABB;
 class Model 
 {
 public:
-    Model(std::string const &path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle);
+    Model(std::string const &path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle, float glossiness);
     ~Model();
     void draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> const& transforms);
     AABB getAABB() const;
@@ -51,6 +51,7 @@ private:
     AABB                mAABB;
     glm::mat4           mTransFormMatrix;
     bool                mAnimated;
+    float               mGlossiness;
     Assimp::Importer    *mImporter;
 };
 

@@ -3,7 +3,6 @@
 #include "GL/glew.h"
 #include "glm/glm.hpp"
 
-const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 class LightManager
 {
 public:
@@ -12,16 +11,18 @@ public:
 	LightManager(LightManager const&) = delete;
     LightManager& operator=(LightManager const&) = delete;
     glm::mat4 const& getLightSpaceMatrix();
-    glm::vec3 const& getCurrentLightPos() const;
+    glm::vec3 const& getCurrentLightDir() const;
     int bindDepthMap();
     GLuint getDepthFrameBufferID();
+    void prepareForShadowPass();
+    void initLightSpaceMatrix();
 private:
     int  mDepthMapIndex{10};
     void initShadowFramebuffer();
-    void initLightSpaceMatrix();
     GLuint mDepthMapFBO;
     GLuint mDepthMap;
     glm::mat4 mLightSpaceMatrix;
-    glm::vec3 mLightPos{-40.0f, 75.0f, 10.5};
+    glm::vec3 mLightPos{-40.0f, 36.905f, 10.5};
+	glm::vec3 mLightDir;
 };
 typedef std::unique_ptr<LightManager> ptrLM;
