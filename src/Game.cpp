@@ -10,6 +10,7 @@
 #include "LogicCore/Timer.h"
 #include "LogicCore/TimerManager.h"
 #include "Configure.hpp"
+#include "ResourceManagement/FfmpegPlayer.hpp"
 
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
@@ -33,9 +34,12 @@ Game::Game()
 	mTimeNow = SDL_GetPerformanceCounter();
 
 	loadStateFromFile();
-    mWindow = std::make_shared<GameWindow>(CONFIGURATION.getWidth(), CONFIGURATION.getHeight(), cWindowName);
+
+	mWindow = std::make_shared<GameWindow>(CONFIGURATION.getWidth(), CONFIGURATION.getHeight(), cWindowName);
 	mWindow->setFullScreen(CONFIGURATION.getWindowed());
 	CONFIGURATION.setObservableWindow(mWindow);
+	FFMPEG.setSDLWindow(mWindow);
+	FFMPEG.registerCodecs();
 
 	mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
@@ -273,6 +277,13 @@ void Game::doAction(Action const& a)
             Hero.AddAcceleration(glm::vec2(0, offset));
 		if (mKeyHandler->isPressed(SDL_SCANCODE_0))
 			Hero.tryPlaceBomb();
+		//VudeoPlayer testing
+		if (mKeyHandler->isPressed(SDL_SCANCODE_8)) {
+			FFMPEG.playVideo("drop.avi");
+		}
+		if (mKeyHandler->isPressed(SDL_SCANCODE_9)) {
+			FFMPEG.playVideo("Bear.mp4");
+		}
 		//MusicPlayer testing
 		if (mKeyHandler->isPressed(SDL_SCANCODE_5))
 			MUSIC_PLAYER.playMusicInfinity("candyman");

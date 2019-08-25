@@ -39,7 +39,7 @@ void GameWindow::initSDL()
 {
     SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "0");
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS | SDL_INIT_JOYSTICK);
-    
+
     int context_flags = SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG;
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, context_flags);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -149,10 +149,31 @@ void GameWindow::setSize(int const w, int const h)
     SDL_SetWindowSize(mWindow, w, h);
 }
 
+void 		GameWindow::setPosition(int const x, int const y)
+{
+	SDL_SetWindowPosition(mWindow, x, y);
+}
+
 void GameWindow::setFullScreen(bool isFullScreen)
 {
 	if (isFullScreen)
 		SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	else
 		SDL_SetWindowFullscreen(mWindow, 0);
+}
+
+
+void GameWindow::getPosition(int &x, int &y)
+{
+    SDL_GetWindowPosition(mWindow, &x, &y);
+}
+
+SDL_Window   *GameWindow::getSDLWindow() const
+{
+	return mWindow;
+}
+
+SDL_GLContext const & GameWindow::getSDLGLContext() const
+{
+	return mContext;
 }

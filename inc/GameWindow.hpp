@@ -13,6 +13,10 @@ public:
     SDL_Event & getEvent();
 	void tickGui();
     void getSize(int &w, int &h);
+	SDL_Window   *getSDLWindow() const;
+	SDL_GLContext const & getSDLGLContext() const;
+	void getPosition(int &x, int &y);
+	void setPosition(int const x, int const y);
     bool IsGameRunning();
     void ShowStartingMenu();
     void ShowInGameMenu();
