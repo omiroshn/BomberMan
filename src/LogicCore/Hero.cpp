@@ -34,14 +34,11 @@ Hero::Stats Hero::getStats()
 
 void Hero::kill()
 {
-	AnimateDeath(4);
+	SetAnimationType(AnimationType::Dying);
+	getAnimation().setTime(0);
 	mIsDying = true;
-	//TimerManager::Instance()->AddTimer(4, false,
-		//[] () {
-			std::cout << "++++++  kill in Hero, animation set to Dying ++++++" << std::endl;
-			Game::get()->onHeroDied();
-		//}
-	//);
+	std::cout << "++++++  kill in Hero, animation set to Dying ++++++" << std::endl;
+	Game::get()->onHeroDied();
 }
 
 void Hero::applyPowerup(PowerupType type)
