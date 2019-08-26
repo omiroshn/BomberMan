@@ -7,6 +7,7 @@ This file contains the entry point "main" of the program.
 #include "Core.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
 #include "ResourceManagement/MusicPlayer.hpp"
+#include "ResourceManagement/FfmpegPlayer.hpp"
 #include "Game.hpp"
 
 int main(int ac, char **av)
@@ -15,6 +16,7 @@ int main(int ac, char **av)
     std::string exeFolder(exePath.substr(0, exePath.find_last_of("\\/") + 1));
     RESOURCES.setBinFolder(exeFolder);
 	MUSIC_PLAYER.setBinFolder(exeFolder);
+	FFMPEG.setBinFolder(exeFolder);
 
     Game game;
     game.start();
