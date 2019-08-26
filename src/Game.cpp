@@ -388,10 +388,7 @@ void Game::loadResources()
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
         loadModels();
-			mRenderer->getParticleManager()->init();
-
-//		std::thread([](Renderer *renderer) {
-		//}, mRenderer.get()).detach();
+        mRenderer->getParticleManager()->init();
     }
     catch (CustomException &e)
     {
