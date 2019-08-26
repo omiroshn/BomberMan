@@ -31,6 +31,7 @@ public:
     static float   mStageTimer;
     static float   mStageStartedTimer;
     static bool    mIsRunning;
+    static float   mDeltaTime;
 
     void        explosion(glm::ivec2 position, uint32_t span);
 
@@ -52,7 +53,6 @@ private:
 
     static Uint64                    mTimeNow;
     static Uint64                    mTimeLast;
-    static float                     mDeltaTime;
     static float                     mTimeCorrection;
 	static CollisionInfo			 mCollisionInfo;
 	static float					 sInputAcceleration;

@@ -76,7 +76,7 @@ void Bomb::drawSparksQuadsDeferred(glm::mat4 view, glm::mat4 projection)
     glActiveTexture(GL_TEXTURE0);
     RESOURCES.getTexture("sparks")->bind();
 
-	glDrawArrays(GL_POINTS, 0, mSparksQuads.size());
+	glDrawArrays(GL_POINTS, 0, (GLsizei)mSparksQuads.size());
 	glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 }
@@ -113,7 +113,7 @@ void Counting::onEntry(Bomb& bomb)
 	bomb.setScale(1.f);
 	mTimeToExplode = Game::getCurrentTime() + Bomb::FUSE_TIME - Bomb::SPAWN_TIME;
 	mCountdown = mTimeToExplode - Game::getCurrentTime();
-	glm::vec3 SparkPos = bomb.getPosition3D() + glm::vec3({-0.1, 0.5, 0.0});
+	glm::vec3 SparkPos = bomb.getPosition3D() + glm::vec3({-0.1f, 0.2f, 0.f});
 	bomb.drawSparks(glm::vec4(SparkPos, mCountdown));
 }
 

@@ -128,12 +128,14 @@ void MovingEntity::tick(float DeltaTime)
     rotate(DeltaTime);
 	mAcceleration = glm::clamp(mAcceleration, -_MaxAcceleration, _MaxAcceleration);
 	mVelocity += mAcceleration * DeltaTime;
-	mVelocity -= mVelocity * _Friction * DeltaTime;
+	glm::vec2 dampingVector = mVelocity * _Friction * DeltaTime;
+	float damping = glm::length(dampingVector);
+	float speed = GetSpeed();
+	if (damping > speed)
+		dampingVector = (dampingVector / damping) * speed;
+	mVelocity -= dampingVector;
 	mVelocity = glm::clamp(mVelocity, -_MaxVelocity, _MaxVelocity);
 	move(mVelocity * DeltaTime);
-	const float velocityLength = glm::length(mVelocity);
-	if (velocityLength < 0.0001f)
-		mVelocity = glm::vec2(0.f);
 	mAcceleration = glm::vec2(0.f);
 }
 

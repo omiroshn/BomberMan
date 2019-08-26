@@ -88,9 +88,9 @@ std::shared_ptr<Texture> ResourceManager::getTexture(std::string const &name)
 };
 
 
-void ResourceManager::loadModel(const GLchar *file, std::string const &name, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle)
+void ResourceManager::loadModel(const GLchar *file, std::string const &name, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle, float glossiness)
 {
-	mModels.emplace(name, std::make_shared<Model>(mBinFolder + "models/" + file, scale, offset, axis, angle));
+	mModels.emplace(name, std::make_shared<Model>(mBinFolder + "models/" + file, scale, offset, axis, angle, glossiness));
 };
 
 std::shared_ptr<Model> ResourceManager::getModel(std::string const &name)
@@ -123,34 +123,35 @@ std::shared_ptr<Shader> ResourceManager::loadShaderFromFile(const GLchar *vShade
 	return shader;
 };
 
+std::shared_ptr<Texture> ResourceManager::loadTextureFromMemory(unsigned char *data, std::string const &texType, int width, int height, int nrChannels, bool isModelTexture)
+{
+    std::shared_ptr<Texture> texture;
+    GLenum format;
+    if (nrChannels == 1)
+        format = GL_RED;
+    else if (nrChannels == 3)
+        format = GL_RGB;
+    else
+        format = GL_RGBA;
+
+    texture = std::make_shared<Texture>(Texture::getTextureTypeFromString(texType));
+    if (isModelTexture)
+        texture->generate(static_cast<GLuint>(width), static_cast<GLuint>(height), data, format, GL_LINEAR_MIPMAP_LINEAR);
+    else
+        texture->generate(static_cast<GLuint>(width), static_cast<GLuint>(height), data, format);
+    return texture;
+}
+
 std::shared_ptr<Texture> ResourceManager::loadTextureFromFile(const GLchar *file, std::string const &texType, bool isModelTexture)
 {
-	std::shared_ptr<Texture> texture;
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char *data = stbi_load(file, &width, &height, &nrChannels, 0);
-	if (data)
-	{
-        GLenum format;
-        if (nrChannels == 1)
-            format = GL_RED;
-        else if (nrChannels == 3)
-            format = GL_RGB;
-        else
-            format = GL_RGBA;
-
-		texture = std::make_shared<Texture>(Texture::getTextureTypeFromString(texType));
-        if (isModelTexture)
-            texture->generate(static_cast<GLuint>(width), static_cast<GLuint>(height), data, format, GL_LINEAR_MIPMAP_LINEAR);
-        else
-            texture->generate(static_cast<GLuint>(width), static_cast<GLuint>(height), data, format);
-		stbi_image_free(data);
-	}
-	else
-	{
+	if (!data)
         throw CustomException("Something happened when loading texture[" + std::string(file) + "]");
-	}
-	return texture;
+    auto result = loadTextureFromMemory(data, texType, width, height, nrChannels, isModelTexture);
+    stbi_image_free(data);
+    return result;
 };
 
 void    ResourceManager::loadSkybox(std::string const &aSkyboxName)

@@ -38,7 +38,8 @@ public:
         std::vector<std::shared_ptr<Texture>> aTextures,
         std::map<std::string, unsigned int> bones,
         std::vector<glm::mat4> aOffsets,
-        aiScene const *scene);
+        aiScene const *scene,
+		float glossiness);
     void                    draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> const& transforms, glm::mat4 const & parentTransform);
     void                    doAnimation();
     void	                setAnimation(Animation const& anim);
@@ -58,6 +59,7 @@ private:
 
     unsigned int                        mCurrentAnimation;
     float                               mAnimationTime;
+    float                               mGlossiness;
 
     std::map<std::string, unsigned int> const   mBones;
     std::vector<glm::mat4>              const   mOffsetMatrices;

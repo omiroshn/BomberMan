@@ -9,7 +9,8 @@ std::map <TextureType, std::string> cTextureTypesString
                 {TextureType::Diffuse, "texture_diffuse"},
                 {TextureType::Specular, "texture_specular"},
                 {TextureType::Normal, "texture_normal"},
-                {TextureType::Height, "texture_height"}
+                {TextureType::Height, "texture_height"},
+                {TextureType::Font, "font"}
         };
 
 std::map <std::string, TextureType> cStringTextureTypes
@@ -17,7 +18,8 @@ std::map <std::string, TextureType> cStringTextureTypes
                 { "texture_diffuse", TextureType::Diffuse},
                 { "texture_specular", TextureType::Specular},
                 { "texture_normal", TextureType::Normal},
-                { "texture_height", TextureType::Height}
+                { "texture_height", TextureType::Height},
+                { "font", TextureType::Font}
         };
 
 Texture::Texture(TextureType aType)

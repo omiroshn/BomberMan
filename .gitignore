@@ -1,6 +1,7 @@
 3rdParty/*
 !3rdParty/CMakeLists.txt
 build/*
+bomberman.app/*
 
 # Editors trash
 .vscode
