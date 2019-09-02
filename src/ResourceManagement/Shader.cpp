@@ -79,7 +79,7 @@ bool Shader::isShaderCompiled(unsigned int shader, int errSize, char *errText) c
 bool Shader::isProgramLinked(unsigned int program, int errSize, char *errText) const
 {
 	int success;
-	glGetProgramiv(program, GL_COMPILE_STATUS, &success);
+	glGetProgramiv(program, GL_LINK_STATUS, &success);
 	if (!success)
 		glGetProgramInfoLog(program, errSize, nullptr, errText);
 	return success != 0;
