@@ -36,7 +36,7 @@ public:
 	void GamePaused(bool state);
 	void SetBackground(const char* texture);
 
-	bool Init(SDL_Window* window);
+	bool Init();
 	void Shutdown();
 	void NewFrame(SDL_Window* window);
 	void RenderDrawData(ImDrawData* draw_data);

@@ -4,13 +4,14 @@
 #include "ResourceManagement/Model.hpp"
 #include "Core.hpp"
 #include "Entity/MovingEntity.h"
-#include <tuple>
-#include <functional>
 #include "AI/AIController.h"
 #include "LogicCore/Timer.h"
 #include "LogicCore/TimerManager.h"
 #include "Configure.hpp"
 #include "ResourceManagement/FfmpegPlayer.hpp"
+
+#include <array>
+#include <functional>
 
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
@@ -437,19 +438,16 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 
 
 
-    struct Overlaper
-    {
-        glm::ivec2 point[4];
-        Overlaper(glm::ivec2 position) : point{
-            position,
-            position + glm::ivec2(1),
-            position,
-            position + glm::ivec2(1)
-        } {}
-        glm::ivec2& operator[](int i) {
-            return point[i];
-        };
-    };
+	typedef std::array<glm::vec2, 4> Overlaper;
+
+	auto MakeOverlaper = [](glm::ivec2 position) {
+		return Overlaper{
+			position,
+			position + glm::ivec2(1),
+			position,
+			position + glm::ivec2(1)
+		};
+	};
 
     std::vector<Overlaper> overlaps;
 
@@ -469,7 +467,7 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
         {0, 1}
     };
 
-    Overlaper minMax(center);
+    Overlaper minMax = MakeOverlaper(center);
     for (uint32_t i = 0; i < ARRAY_COUNT(directions); ++i)
         for (uint32_t j = 1; j <= span; ++j)
         {

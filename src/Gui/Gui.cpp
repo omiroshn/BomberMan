@@ -455,7 +455,7 @@ void    Gui::InvalidateDeviceObjects()
     }
 }
 
-bool    Gui::Init(SDL_Window* window)
+bool    Gui::Init()
 {
     ImGuiIO& io = ImGui::GetIO();
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;   // We can honor GetMouseCursor() values (optional)

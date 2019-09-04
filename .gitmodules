@@ -31,3 +31,6 @@
 [submodule "3rdParty/ffmpeg"]
 	path = 3rdParty/ffmpeg
 	url = https://Arxcel@bitbucket.org/Arxcel/ffmpeg_bin_mirror.git
+[submodule "3rdParty/sdl2_mixer"]
+	path = 3rdParty/sdl2_mixer
+	url = https://Arxcel@bitbucket.org/Arxcel/sdl2_mixer_mirror.git

@@ -76,7 +76,7 @@ void GameWindow::initGui() {
 
     ImGui::StyleColorsDark();
 
-	mMainMenu.Init(mWindow);
+	mMainMenu.Init();
 }
 
 void GameWindow::initOpenGL()
