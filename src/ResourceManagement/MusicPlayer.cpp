@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ResourceManagement/MusicPlayer.hpp"
+#include "Configure.hpp"
 
 MusicPlayer 	&MusicPlayer::getInstance()
 {
@@ -104,6 +105,7 @@ void 			MusicPlayer::playMusicInfinity(std::string const &musicName) const
 	auto music = mMusic.find(musicName);
 	if (music != mMusic.end()){
 		Mix_PlayMusic(music->second, -1);
+		Mix_VolumeMusic(MIX_MAX_VOLUME * CONFIGURATION.getMusicVolume() / 10);
 	} else {
 		//std::cout << "Not found music with name " << musicName << std::endl;
 	}
@@ -114,6 +116,7 @@ void 			MusicPlayer::playMusicOnce(std::string const &musicName)
 	auto music = mMusic.find(musicName);
 	if (music != mMusic.end()) {
 		Mix_PlayMusic(music->second, 0);
+		Mix_VolumeMusic(MIX_MAX_VOLUME * CONFIGURATION.getMusicVolume() / 10);
 	} else {
 		//std::cout << "Not found music with name " << musicName << std::endl;
 	}
@@ -134,6 +137,7 @@ void 			MusicPlayer::playSound(std::string const &soundName) const
 	auto sound = mSound.find(soundName);
 	if (sound != mSound.end()) {
 		Mix_PlayChannel(-1, sound->second, 0);
+		Mix_Volume(-1, MIX_MAX_VOLUME * CONFIGURATION.getSoundVolume() / 10);
 	} else {
 		std::cout << "Not found sound with name " << soundName << std::endl;
 	}
