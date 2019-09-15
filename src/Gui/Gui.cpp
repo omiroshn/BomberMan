@@ -100,6 +100,12 @@ void Gui::ShowInGameMenu()
 
 		ImGui::Text("   Lives: ");
 		ImGui::Text("%s", std::to_string(CONFIGURATION.getLives()).c_str());
+
+		auto* game = Game::get();
+		auto& hero = game->getHero();
+		if (hero.mStats.wallpass)
+			ImGui::Image(RESOURCES.getTexture("wallpass").get(), {20,20});
+
 		ImGui::EndMainMenuBar();
 	}
 

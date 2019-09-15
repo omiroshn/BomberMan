@@ -83,6 +83,19 @@ void Game::start()
                 MovingEntity::debugMovement();
                 Tickable::tickTickables(mDeltaTime);
                 resolveCollisions();
+
+				for (auto It : buffer1)
+					if (It != 0)
+						__debugbreak();
+
+				for (auto It : buffer2)
+					if (It != 0)
+						__debugbreak();
+
+				for (auto It : buffer3)
+					if (It != 0)
+						__debugbreak();
+
                 mRenderer->getParticleManager()->update();
                 mRenderer->getCamera().followEntity(getHero(), 10.f, mDeltaTime);
                 mRenderer->draw(*this);
@@ -139,7 +152,7 @@ void Game::start()
                     addEnemiesOnMap();
                     if (mHero)
                     {
-    					Hero::Stats info = mHero->getStats();
+    					Hero::Stats info = mHero->mStats;
 					    mHero = std::make_unique<Hero>(info);
                     }
                     else
@@ -237,19 +250,19 @@ void Game::resolveCollisions()
     for (size_t i = 0; i < ARRAY_COUNT(offsets); i++)
     {
         glm::vec2 ProbePoint = Position + offsets[i];
-        bool inObstacle = mCollisionInfo[ProbePoint] != SquareType::EmptySquare;
-        if (!inObstacle)
-            continue;
+		SquareType inObstacle = mCollisionInfo[ProbePoint];
+        if ((inObstacle == SquareType::EmptySquare) || (Hero.mStats.wallpass && inObstacle == SquareType::Brick))
+			continue;
         glm::vec2 ResolutionOffset;
         if (circle_box_collision(Position, radius, glm::floor(ProbePoint), glm::ceil(ProbePoint), &ResolutionOffset))
             CollisionOffset += ResolutionOffset;
     }
 
-    for (MovingEntity* It : mBalloons)
+    for (MovingEntity* It : mEnemies)
     {
         if (circle_circle_collision(Hero.getPosition(), radius, It->getPosition(), radius))
             Hero.kill();
-        glm::vec2 ProbePoint = Position;
+		glm::vec2 ProbePoint = It->getPosition();
         if (mCollisionInfo[ProbePoint] == SquareType::Bomb)
         {
             glm::vec2 center = glm::floor(ProbePoint) + glm::vec2(0.5f);
@@ -323,6 +336,14 @@ void Game::doAction(Action const& a)
             auto *joystick = mIManager->getJoystick();
             short x_move = SDL_JoystickGetAxis(joystick, 0);
             short y_move = SDL_JoystickGetAxis(joystick, 1);
+
+			// this is mandatory
+			if (x_move < JOYSTICK_DEAD_ZONE && -x_move < JOYSTICK_DEAD_ZONE)
+				x_move = 0;
+			if (y_move < JOYSTICK_DEAD_ZONE && -y_move < JOYSTICK_DEAD_ZONE)
+				y_move = 0;
+			//
+
             glm::vec2 normalizedJoystick(
                 x_move / (float)MAX_JOYSTICK_VALUE,
                 y_move / (float)MAX_JOYSTICK_VALUE
@@ -373,6 +394,7 @@ void Game::loadResources()
 		RESOURCES.loadShader("gui.vx.glsl", "gui.ft.glsl", "gui");
         RESOURCES.loadTexture("block.png", "block");
         RESOURCES.loadTexture("brickwall.png", "brickwall");
+        RESOURCES.loadTexture("wallpass.png", "wallpass");
         RESOURCES.loadTexture("sky.png", "sky");
         RESOURCES.loadTexture("locked.png", "locked");
         RESOURCES.loadTexture("unlocked0.png", "unlocked0");
@@ -435,8 +457,6 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 		"pointSphereBomb",
 		"pointSphereBomb2",
 	};
-
-
 
 	typedef std::array<glm::vec2, 4> Overlaper;
 
@@ -515,7 +535,7 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
                 entity->kill();
         });
 
-        if (circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, hMin, hMax) || circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
+        if ((circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, hMin, hMax) || circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, vMin, vMax)) && !hero.mStats.flamepass)
             hero.kill();
     });
 
@@ -612,7 +632,9 @@ void	Game::tickAI(float deltaTime)
 	{
 		getBalloons().emplace_back(glm::vec2{9.5, 9.5});
 	}
+
 	recacheEnemies();
+
 	for (auto& It : mBalloons)
 		It.controller.tick(*It, deltaTime);
 	for (auto& It : mBombs)
@@ -694,7 +716,7 @@ Hero::PowerupType Game::powerupTypeOnMap()
 
 bool Game::isExitActive()
 {
-	return mBalloons.empty();
+	return mEnemies.empty();
 }
 
 Hero& Game::getHero()

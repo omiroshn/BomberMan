@@ -105,6 +105,8 @@ void 			ParticleSystemBrick::drawGLContent(glm::mat4 const & projection, glm::ma
 		throw CustomException("Shader for particle system is not defined!");
 	if (!m_texture)
 		throw CustomException("Texture for Brick system is not defined!");
+	if (transforms.empty())
+		return;
 
 	m_shader->use();
 	m_shader->setMat4("projection", projection);

@@ -116,6 +116,9 @@ void MovingEntity::rotate(float DeltaTime)
 void MovingEntity::tick(float DeltaTime)
 {
     animate(DeltaTime);
+
+	debug();
+
     if (mAcceleration == glm::vec2(0.f) && mVelocity == glm::vec2(0.f))
         return;
     rotate(DeltaTime);

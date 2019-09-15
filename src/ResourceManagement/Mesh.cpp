@@ -60,8 +60,11 @@ void Mesh::setupMesh()
     glEnableVertexAttribArray(9);
     glVertexAttribPointer(9, 4, GL_INT_2_10_10_10_REV, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
 
-// weights is separate object
+	// why this fires?
+	if (mWeights.empty())
+		mIsAnimated = false;
 
+// weights is separate object
     if (mIsAnimated)
     {
         glGenBuffers(1, &mWBO);

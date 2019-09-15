@@ -52,7 +52,6 @@ public:
 
 	void tryPlaceBomb();
 
-	Stats getStats();
 	void kill();
 
 	void applyPowerup(PowerupType type);

@@ -49,7 +49,7 @@ void LightManager::initLightSpaceMatrix(glm::vec3 shadowMapOffset)
     static glm::vec2 nf{38.294f, 71.647f};
     static glm::vec3 lookTarget(-1);
 	ImGui::Begin("Lights");
-    ImGui::SliderFloat("lightmap angle", &angle, 0.f, M_PI * 2.f);
+	ImGui::SliderFloat("lightmap angle", &angle, 0.f, (float)M_PI * 2.f);
     ImGui::SliderFloat2("light left/right", &lr.x, -32, 32);
     ImGui::SliderFloat2("light top/bottom", &tb.x, -32, 32);
     ImGui::SliderFloat2("light near/far", &nf.x, 0, 120);

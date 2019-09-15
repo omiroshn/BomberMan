@@ -60,7 +60,6 @@ private:
 
     bool                             mIsPaused;
 
-	// Map for rendering
 	typedef Agent<MovingEntity, BalloonController>	BalloonAgent;
 	typedef Agent<Bomb, BombController>				BombAgent;
 public:
@@ -84,8 +83,14 @@ public:
 private:
 	std::unique_ptr<Hero>			mHero;
 
-	std::vector<BalloonAgent>			mBalloons;
+	int buffer1[512] = { 0 };
+	std::vector<BalloonAgent>		mBalloons;
+
+	int buffer2[512] = { 0 };
+
 	std::vector<BombAgent>			mBombs;
+
+	int buffer3[512] = { 0 };
 
 	std::vector<MovingEntity*>		mEnemies;
 

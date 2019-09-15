@@ -32,9 +32,10 @@ std::vector<SquareType> Serialization::LoadCampaignMap(int stage, unsigned& outW
     std::string line;
     std::cout << map_name << std::endl;
     std::fstream f{RESOURCES.getMap(map_name)};
+	unsigned width = 0;
     while (std::getline(f, line))
     {
-        outWidth = std::max(outWidth, (unsigned)line.size());
+        width = std::max(width, (unsigned)line.size());
         for (size_t i = 0; i < line.size(); i++)
         {
             if (line[i] >= '0' && line[i] <= '9')
@@ -44,7 +45,7 @@ std::vector<SquareType> Serialization::LoadCampaignMap(int stage, unsigned& outW
             else 
                 map.push_back(SquareType::EmptySquare);
         };
-        //map.push_back(SquareType::Wall);
     }
+	outWidth = width;
     return map;
 }
