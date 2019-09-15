@@ -104,6 +104,7 @@ void Renderer::normalPass(Game& aMap)
 {
     glViewport(0, 0, mWidth, mHeight);
     glClear(GL_DEPTH_BUFFER_BIT);
+    glCullFace(GL_BACK);
  
     static auto ground = RESOURCES.getModel("ground");
     static auto modelShader = RESOURCES.getShader("modelShader");
@@ -195,7 +196,6 @@ void Renderer::shadowPass(Game& aMap)
     renderMovable(shadowShader, animatedShadowShader, aMap);
     renderObstacles(shadowShader);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glCullFace(GL_BACK);
 }
 
 Camera &Renderer::getCamera()

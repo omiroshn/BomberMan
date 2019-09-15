@@ -385,9 +385,7 @@ void Game::loadResources()
         RESOURCES.loadShader("animatedModelShader.vx.glsl", "modelShader.ft.glsl", "animatedModelShader");
         RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");
 		RESOURCES.loadShader("sprite_p.vx.glsl", "sprite_p.ft.glsl", "sprite_p");
-		RESOURCES.loadShader("sprite_quad.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad");
 		RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
-		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
 		RESOURCES.loadShader("shadowShader.vx.glsl", "shadowShader.ft.glsl", "shadow");
 		RESOURCES.loadShader("animatedShadowShader.vx.glsl", "shadowShader.ft.glsl", "animatedShadow");
 		RESOURCES.loadShader("sparks.vx.glsl", "sparks.ft.glsl", "sparks");
@@ -493,20 +491,19 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
         {
             glm::vec2 testPosition = center + (float)j * directions[i];
             auto& type = mCollisionInfo[testPosition];
-            if (type == SquareType::Wall)
-                break;
 
-            fireTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
-            minMax[i] += directions[i];
-
-            if (type == SquareType::Brick)
+			if (type == SquareType::EmptySquare)
+			{
+				fireTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
+				minMax[i] += directions[i];
+			}
+            else if (type == SquareType::Brick)
             {
                 brickTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
                 deferedBricks.push_back(&type);
                 break;
             }
-
-            if (type == SquareType::Bomb)
+            else if (type == SquareType::Bomb)
             {
                 type = SquareType::EmptySquare;
                 chainReaction(testPosition);
@@ -514,6 +511,10 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
                     if (testPosition == It->getPosition())
                         It->kill();
             }
+			else if (type == SquareType::Wall)
+			{
+                break;
+			}
         }
     overlaps.push_back(minMax);
 };
@@ -535,8 +536,12 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
                 entity->kill();
         });
 
-        if ((circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, hMin, hMax) || circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, vMin, vMax)) && !hero.mStats.flamepass)
+		if ((circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, hMin, hMax)
+		  || circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
+		  && !hero.mStats.flamepass)
+		{
             hero.kill();
+		}
     });
 
     mRenderer->getParticleManager()->startDrawPS(brickPool[which], brickTransforms);

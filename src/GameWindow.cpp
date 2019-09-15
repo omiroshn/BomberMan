@@ -91,6 +91,7 @@ void GameWindow::initOpenGL()
     glViewport(0, 0, mWidth, mHeight);
     glEnable(GL_DEPTH_TEST);
 	glEnable(GL_PROGRAM_POINT_SIZE);
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     //glEnable(GL_MULTISAMPLE);
 }
 
