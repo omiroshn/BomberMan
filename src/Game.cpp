@@ -98,7 +98,6 @@ void Game::start()
                     if (mDeltaTime < TargetDelta)
                         SDL_Delay(static_cast<Uint32>(ms * 1000));
                 }
-                std::cout << "---- mHero->mIsDying in main loop && mStageTimer = " << mStageTimer<< " paused = " << mIsPaused << "\nmStageStartedTimer = "<< mStageStartedTimer<< std::endl;
                 if (mHero && mHero->mIsDying)
                 {
                     if (mStageTimer < 2 && mStageTimer >= 0)
@@ -107,9 +106,6 @@ void Game::start()
                     {
                         if (mStageTimer > 4)
                             mStageStartedTimer = getCurrentTime();
-                        std::cout << "**** mStageStartedTimer = " << mStageStartedTimer << std::endl;
-                        std::cout << "**** getCurrentTime() = " << getCurrentTime() << std::endl;
-                        std::cout << "**** mStageTimer = " << mStageTimer << std::endl;
                         mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
                     }
                     
@@ -127,12 +123,10 @@ void Game::start()
                     }
                 if (mReloadStage && mStageTimer > 1)
                 {
-                    std::cout << "=====*---* imStageTimer = " << mStageTimer << std::endl;
                     if (mStageTimer < 2)
                         mWindow->ShowBetweenStageScreen();
                     mIsPaused = false;
                     mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
-                    std::cout << "reloaded true , mStageTimer = " << mStageTimer << " paused = " << mIsPaused<< std::endl;
                 }
                 else if (mStageTimer < 2)
                 {
@@ -564,30 +558,23 @@ void       Game::stageFinished()
 
 void Game::onHeroDied()
 {
+    static bool been_there = false;
     if (mStageTimer < 3)
     {
-        std::cout << "*---*  in onHeroDied" << std::endl;
         stageFinished();
     }
-    static bool been_there = false;
-
+    mHero->mIsDying = true;
+    cleanupOnStageChange();
+    if (CONFIGURATION.getLives() == 1)
+        gameOver();
+    else
+        CONFIGURATION.setLives(CONFIGURATION.getLives() - 1);
     if (been_there)
     {
         if (mReloadStage)
             been_there = false;
         return;
     }
-    std::cout << "onHeroDied first time" << std::endl;
-    if (CONFIGURATION.getLives() == 1)
-        gameOver();
-    else
-        CONFIGURATION.setLives(CONFIGURATION.getLives() - 1);
-    if (mStageTimer > 4)
-        mStageStartedTimer = getCurrentTime();
-    mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
-    std::cout << "*----------* mStageTimer = " << mStageTimer << std::endl;
-    std::cout << "*---* mStageStartedTimer = " << mStageStartedTimer << std::endl;
-    cleanupOnStageChange();
     been_there = true;
 }
 
@@ -596,6 +583,8 @@ void Game::gameOver()
     CONFIGURATION.setLives(DefaultLives);
     CONFIGURATION.setScore(DefaultScore);
     CONFIGURATION.setChosenStage(DefaultChosenStage);
+    mStageTimer = 200;
+    mStageStartedTimer = getCurrentTime();
     pause();
 }
 
