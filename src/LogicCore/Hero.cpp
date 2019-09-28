@@ -1,4 +1,5 @@
 #include "LogicCore/Hero.h"
+#include "LogicCore/TimerManager.h"
 #include "Game.hpp"
 
 Hero::Hero(Stats info, glm::vec2 position /*= {1.5f, 1.5f}*/)
@@ -33,6 +34,10 @@ Hero::Stats Hero::getStats()
 
 void Hero::kill()
 {
+	SetAnimationType(AnimationType::Dying);
+	getAnimation().setTime(0);
+	mIsDying = true;
+	std::cout << "++++++  kill in Hero, animation set to Dying ++++++" << std::endl;
 	Game::get()->onHeroDied();
 }
 

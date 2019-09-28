@@ -19,14 +19,16 @@ public:
 	glm::vec2	GetAcceleration()const;
 	void		SetAcceleration(glm::vec2);
 	void		AddAcceleration(glm::vec2);
-
-    Animation const& getAnimation() const;
+	void        SetAnimationType(AnimationType type);
+	
+    Animation & getAnimation();
 	void		debug();
 
 	static void	debugMovement();
 
 	/** Tickable interface */
 	void		tick(float DeltaTime = 0) override;
+	bool        mIsDying = false;
 
 private:
     void animate(float DeltaTime);

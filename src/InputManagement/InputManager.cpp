@@ -1,5 +1,3 @@
-
-
 #include "InputManagement/InputManager.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
 #include "InputManagement/InputManager.hpp"
@@ -132,11 +130,11 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
         case SDLK_ESCAPE:
             return Action::Finish;
         case SDLK_SPACE:
-            return Action::Pause;
+            return Action::Explosion;
         case SDLK_1:
             return Action::StageFinished;
         case SDLK_UP:
-            //fallthrough
+            return Action::Up;
         case SDLK_w:
             return Action::Forward;
         case SDLK_DOWN:
@@ -144,11 +142,11 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
         case SDLK_s:
             return Action::Backward;
         case SDLK_LEFT:
-            //fallthrough
+            return Action::Left;
         case SDLK_a:
             return Action::Left;
         case SDLK_RIGHT:
-            //fallthrough
+            return Action::Right;
         case SDLK_d:
             return Action::Right;
         case SDLK_q:
@@ -156,7 +154,7 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
         case SDLK_e:
             return Action::Down;
         case SDLK_0:
-            return Action::Explosion;
+            return Action::Pause;
         default:
             return Action::Nothing;
     }

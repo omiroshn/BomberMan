@@ -87,7 +87,8 @@ void Game::start()
                 ImGui::RadioButton("NO VSync", &index, 0);
                 ImGui::RadioButton("60", &index, 1);
                 ImGui::RadioButton("30", &index, 2);
-                mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
+                if (mHero && !mHero->mIsDying)
+                    mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
                 mWindow->ShowInGameMenu();
                 mRenderer->getParticleManager()->update();
                 if (index)
@@ -97,14 +98,34 @@ void Game::start()
                     if (mDeltaTime < TargetDelta)
                         SDL_Delay(static_cast<Uint32>(ms * 1000));
                 }
+                if (mHero && mHero->mIsDying)
+                {
+                    if (mStageTimer < 2 && mStageTimer >= 0)
+                        mReloadStage = true;
+                    else
+                    {
+                        if (mStageTimer > 4)
+                            mStageStartedTimer = getCurrentTime();
+                        mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
+                    }
+                    
+                    
+                }
             }
             else
             {
                 if (CONFIGURATION.getLives() == 0)
                     CONFIGURATION.setChosenStage(1);
+                if (mHero && mHero->mIsDying)
+                    {
+                        getHero().getAnimation().setTime(0);
+                        getHero().SetAnimationType(AnimationType::Dying);
+                    }
                 if (mReloadStage && mStageTimer > 1)
                 {
-                    mWindow->ShowBetweenStageScreen();
+                    if (mStageTimer < 2)
+                        mWindow->ShowBetweenStageScreen();
+                    mIsPaused = false;
                     mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
                 }
                 else if (mStageTimer < 2)
@@ -113,6 +134,7 @@ void Game::start()
                     mCollisionInfo.Squares.clear();
                     mCollisionInfo = mapLoader.GetMap(CONFIGURATION.getChosenStage());
                     extractInfo();
+                    addEnemiesOnMap();
                     if (mHero)
                     {
     					Hero::Stats info = mHero->getStats();
@@ -122,6 +144,7 @@ void Game::start()
                         mHero = std::make_unique<Hero>(CONFIGURATION.getStats());
                     mStageStartedTimer = getCurrentTime();
                     mReloadStage = 0;
+                    mHero->mIsDying = false;
                     mIsPaused = false;
                 }
 
@@ -275,7 +298,7 @@ void Game::doAction(Action const& a)
             Hero.AddAcceleration(glm::vec2(-offset, 0));
         if (mKeyHandler->isPressed(SDL_SCANCODE_S))
             Hero.AddAcceleration(glm::vec2(0, offset));
-		if (mKeyHandler->isPressed(SDL_SCANCODE_0))
+		if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
 			Hero.tryPlaceBomb();
 		//VudeoPlayer testing
 		if (mKeyHandler->isPressed(SDL_SCANCODE_8)) {
@@ -359,6 +382,7 @@ void Game::loadResources()
 		RESOURCES.loadTexture("cloud_trans.jpg", "cloud_trans");
 		RESOURCES.loadTexture("explode.png", "explosion_tmap_2");
 		RESOURCES.loadTexture("sparks.jpg", "sparks");
+		//RESOURCES.loadTexture("plitka.jpg", "plitka");
         RESOURCES.loadSkybox("defaultSkybox");
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
@@ -523,7 +547,8 @@ void       Game::stageFinished()
 {
     int current_stage = CONFIGURATION.getChosenStage();
     CONFIGURATION.setBestLevelAchieved(current_stage);
-    CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
+    if (!mHero->mIsDying)
+        CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
     Game::mReloadStage = true;
     if (mStageTimer > 4)
         mStageStartedTimer = getCurrentTime();
@@ -533,17 +558,24 @@ void       Game::stageFinished()
 
 void Game::onHeroDied()
 {
-    if (mReloadStage)
-        return;
+    static bool been_there = false;
+    if (mStageTimer < 3)
+    {
+        stageFinished();
+    }
+    mHero->mIsDying = true;
+    cleanupOnStageChange();
     if (CONFIGURATION.getLives() == 1)
         gameOver();
     else
         CONFIGURATION.setLives(CONFIGURATION.getLives() - 1);
-    if (mStageTimer > 4)
-        mStageStartedTimer = getCurrentTime();
-    mStageTimer = 3 - (getCurrentTime() - mStageStartedTimer);
-    Game::mReloadStage = true;
-    cleanupOnStageChange();
+    if (been_there)
+    {
+        if (mReloadStage)
+            been_there = false;
+        return;
+    }
+    been_there = true;
 }
 
 void Game::gameOver()
@@ -551,6 +583,8 @@ void Game::gameOver()
     CONFIGURATION.setLives(DefaultLives);
     CONFIGURATION.setScore(DefaultScore);
     CONFIGURATION.setChosenStage(DefaultChosenStage);
+    mStageTimer = 200;
+    mStageStartedTimer = getCurrentTime();
     pause();
 }
 
@@ -605,6 +639,20 @@ void Game::recacheEnemies()
 	for (auto& It : mBalloons)
 		mEnemies.push_back(It);
 }
+
+void  Game::addEnemiesOnMap()
+{
+    cleanupOnStageChange();
+    for (size_t i = 20; i < mCollisionInfo.Squares.size() - 20; i++)
+    {
+        auto& It = mCollisionInfo.Squares[i];
+        if (It >= SquareType::Brick && rand() % 2)
+        {
+            if (mCollisionInfo.Squares[i + 1] == SquareType::EmptySquare)
+                getBalloons().emplace_back(glm::vec2{(i + 1) % mCollisionInfo.width + 0.5f, i / mCollisionInfo.width + 0.5f});
+        }
+    }
+ }
 
 std::vector<glm::mat4> Game::getWallTransforms() {
 	return Filter(SquareType::Wall);

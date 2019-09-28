@@ -60,6 +60,11 @@ void MovingEntity::debug()
 	ImGui::DragFloat2("Acceleration", &mAcceleration[0]);
 }
 
+void MovingEntity::SetAnimationType(AnimationType type)
+{
+    mAnimation.setType(type);
+}
+
 void MovingEntity::debugMovement()
 {
 	ImGui::Text("MovableEntity setting:");
@@ -76,6 +81,14 @@ glm::vec2 MovingEntity::GetAcceleration() const
 void MovingEntity::animate(float DeltaTime)
 {
     mAnimation.tick(DeltaTime);
+	if (mIsDying)
+	{
+		mAnimation.setType(AnimationType::Dying);
+		if (DeltaTime < 1)
+			std::cout << "animate in Moving Entity, animation set to Dying *******" << std::endl;
+		return;
+	}
+
     if (GetSpeed() >= 0.2)
         mAnimation.setType(AnimationType::Running);
     else
@@ -119,7 +132,7 @@ void MovingEntity::tick(float DeltaTime)
 	mAcceleration = glm::vec2(0.f);
 }
 
-Animation const& MovingEntity::getAnimation() const
+Animation & MovingEntity::getAnimation()
 {
     return mAnimation;
 }
