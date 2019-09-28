@@ -84,6 +84,13 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
         };
         bonusModels[type]->draw(s, std::vector<glm::mat4>{Game::get()->getPowerupTransform()});
     }
+
+	bool active = Game::get()->isExitActive();
+	static std::shared_ptr<Model> exit[2] = {
+		RESOURCES.getModel("ground"),
+		RESOURCES.getModel("perimeterWall"),
+	};
+	exit[active]->draw(s, std::vector<glm::mat4>{Game::get()->getExitTransform()});
 }
 
 void Renderer::renderMovable(std::shared_ptr<Shader> &s, std::shared_ptr<Shader> &animated, Game &g)

@@ -61,6 +61,9 @@ void Game::start()
     MapLoader mapLoader;
     int width, height;
     mStageStartedTimer = getCurrentTime();
+	FFMPEG.playVideo("intro.mp4");
+
+	// sync files here
     while (mIsRunning)
     {
         mWindow->tickGui();
@@ -221,7 +224,7 @@ bool circle_box_collision(glm::vec2 position, float radius, glm::vec2 min, glm::
 
 void Game::resolveCollisions()
 {
-    static float CollisionResolveMultiplier = 350.f;
+    static float CollisionResolveMultiplier = 300.f;
     ImGui::SliderFloat("CollisionResolveMultiplier", &CollisionResolveMultiplier, 100, 1000);
 
 	glm::vec2 offsets[] = {
@@ -240,6 +243,8 @@ void Game::resolveCollisions()
     const glm::vec2 Position = Hero.getPosition();
     static float radius = 0.24f;
     ImGui::SliderFloat("Collision radius", &radius, 0.05f, 1.f);
+
+	// pick up item
     if (mPowerupType != Hero::PowerupType::PT_NONE
     && circle_circle_collision(Position, radius, mPowerup, radius))
     {
@@ -256,6 +261,9 @@ void Game::resolveCollisions()
         glm::vec2 ResolutionOffset;
         if (circle_box_collision(Position, radius, glm::floor(ProbePoint), glm::ceil(ProbePoint), &ResolutionOffset))
             CollisionOffset += ResolutionOffset;
+
+		if (inObstacle == SquareType::Bomb)
+			CollisionOffset /= 2.f;
     }
 
     for (MovingEntity* It : mEnemies)
@@ -270,8 +278,16 @@ void Game::resolveCollisions()
         }
     }
 
-    Hero.move(CollisionOffset / 4.f);
+    Hero.move(CollisionOffset / 8.f);
     Hero.AddAcceleration(CollisionOffset * CollisionResolveMultiplier);
+
+	// exit level
+	if (isExitActive() 
+    && circle_circle_collision(Position, radius / 2.f, mExit, radius / 2.f))
+	{
+		FFMPEG.playVideo("betweenstages.mp4");
+		stageFinished();
+	}
 }
 
 void Game::doAction(Action const& a)
@@ -314,13 +330,6 @@ void Game::doAction(Action const& a)
             Hero.AddAcceleration(glm::vec2(0, offset));
 		if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
 			Hero.tryPlaceBomb();
-		//VudeoPlayer testing
-		if (mKeyHandler->isPressed(SDL_SCANCODE_8)) {
-			FFMPEG.playVideo("drop.avi");
-		}
-		if (mKeyHandler->isPressed(SDL_SCANCODE_9)) {
-			FFMPEG.playVideo("Bear.mp4");
-		}
 		//MusicPlayer testing
 		if (mKeyHandler->isPressed(SDL_SCANCODE_5))
 			MUSIC_PLAYER.playMusicInfinity("candyman");
@@ -360,7 +369,7 @@ void Game::doAction(Action const& a)
 void Game::calcDeltaTime()
 {
     static float SpeedOfTime = 1.f;
-    ImGui::SliderFloat("Spee of time", &SpeedOfTime, 0.0001f, 2.f);
+    ImGui::SliderFloat("Speed of time", &SpeedOfTime, 0.0001f, 2.f);
     mTimeLast = mTimeNow;
     mTimeNow = SDL_GetPerformanceCounter();
 
@@ -423,7 +432,7 @@ void Game::loadModels()
 {
     RESOURCES.loadModel("general/hero/model.fbx", "hero", glm::vec3(1.f), glm::vec3{0,0,0}, glm::vec3(0,1,0), 0.f, 1.f);
     RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(1.3f), glm::vec3{0,0.3,0}, glm::vec3(1,0,0), -90.f, 1.f);
-	RESOURCES.getModel("bomb")->mAnimated = false;
+	//RESOURCES.getModel("bomb")->mAnimated = false;
 
     // powerups placeholder, please do something about this!!!!!!!!!!!!!!!!!!!!!
     RESOURCES.loadModel("general/powerup/model.dae", "bonus_bombs", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);

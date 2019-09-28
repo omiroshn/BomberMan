@@ -97,7 +97,7 @@ private:
 	glm::vec2						mPowerup;
 	Hero::PowerupType				mPowerupType { Hero::PowerupType::PT_NONE };
 
-	glm::vec2						mExit;
+	glm::vec2						mExit{ -1, -1 };
 
 	std::vector<glm::mat4>		Filter(SquareType type);
 	void						recacheEnemies();

@@ -29,35 +29,24 @@ vec3 GetLightDir()
     return fs_in.TangentLightDir;
 }
 
-#define ARRAY_COUNT(x) (sizeof(x) / sizeof(x[0]))
-#define OFFSET_SIZE ((1.f/1024.f) * 1.5f)
+#define SAMPLES 2
+#define OFFSET_SIZE 1.2
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
-    const vec2 offsets[] = vec2[](
-        vec2(OFFSET_SIZE,OFFSET_SIZE),
-        vec2(-OFFSET_SIZE,OFFSET_SIZE),
-        vec2(OFFSET_SIZE,-OFFSET_SIZE),
-        vec2(-OFFSET_SIZE,-OFFSET_SIZE),
-        vec2(OFFSET_SIZE,0),
-        vec2(0,OFFSET_SIZE),
-        vec2(-OFFSET_SIZE,0),
-        vec2(0,-OFFSET_SIZE)
-    );
-
     vec3 projCoords = (fragPosLightSpace.xyz / fragPosLightSpace.w) * 0.5 + 0.5;
     float currentDepth = projCoords.z;
     if (currentDepth > 1.f)
         return 0.f;
-    projCoords.z = currentDepth;
     float shadow = texture(shadowMap, projCoords);
-    for (int i = 0; i < offsets.length(); i++)
+    for (int i = -SAMPLES; i <= SAMPLES; i++)
+    for (int j = -SAMPLES; j <= SAMPLES; j++)
     {
         vec3 sampleCoords = projCoords;
-        sampleCoords += vec3(offsets[i], 0.f);
+        sampleCoords += vec3(vec2(i, j) * (1. / textureSize(shadowMap, 0)) * OFFSET_SIZE, 0.f);
         shadow += texture(shadowMap, sampleCoords);
     }
-    return shadow / (offsets.length());
+    return shadow / ((SAMPLES * 2 + 1) * (SAMPLES * 2 + 1));
 }
 
 void main()

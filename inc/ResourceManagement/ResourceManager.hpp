@@ -191,6 +191,14 @@ private:
     unsigned int loadCubemap(std::string const& path);
 
 private:
+
+	enum ResourceType {
+		RT_Shader,
+		RT_Texture,
+		RT_Model,
+		RT_Skybox,
+	};
+
 	/*!
 	\brief The map of stored shaders
 	*/
@@ -215,6 +223,8 @@ private:
 	\brief Cache for textures. you should query it by path to texture.
 	*/
 	std::map<std::string, std::shared_ptr<Texture>>		mTextureCache;
+
+	
 };
 
 

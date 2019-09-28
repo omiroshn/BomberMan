@@ -117,5 +117,5 @@ void 			ParticleSystemBrick::drawGLContent(glm::mat4 const & projection, glm::ma
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
 
     glBindVertexArray(m_VAO);
-    glDrawArraysInstanced(GL_TRIANGLES, 0, m_particleCount * 36, transforms.size());
+    glDrawArraysInstanced(GL_TRIANGLES, 0, m_particleCount * 36, GLsizei(transforms.size()));
 }
