@@ -12,6 +12,7 @@
 
 #include <array>
 #include <functional>
+#include <thread>
 
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
@@ -45,9 +46,14 @@ Game::Game()
 	mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
     mKeyHandler = std::make_unique<KeyboardHandler>();
+
+	std::thread intro([]() {
+        FFMPEG.playVideo("intro.mp4");
+	});
     loadResources();
 	MUSIC_PLAYER.initLoad();
 
+    intro.join();
     sInstance = this;
 }
 
@@ -61,7 +67,7 @@ void Game::start()
     MapLoader mapLoader;
     int width, height;
     mStageStartedTimer = getCurrentTime();
-	FFMPEG.playVideo("intro.mp4");
+
 
 	// sync files here
     while (mIsRunning)

@@ -103,18 +103,16 @@ void 			FfmpegPlayer::createWindow()
 	int x = 100, y = 100;
 
 	m_window->getPosition(x,y);
-	m_screen = SDL_CreateWindow(
-			"Bomberman",
-			x,
-			y,
-			CONFIGURATION.getWidth(),
-			CONFIGURATION.getHeight(),
-			SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL
-		);
+	m_screen = m_window->getSDLWindow();
+//	m_screen = SDL_CreateWindow(
+//			"Bomberman",
+//			x,
+//			y,
+//			CONFIGURATION.getWidth(),
+//			CONFIGURATION.getHeight(),
+//			SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL
+//		);
 
-	if (!m_screen) {
-		throw CustomException("SDL: could not create window!");
-	}
 	SDL_SetWindowResizable(m_screen, SDL_TRUE);
 }
 
@@ -213,7 +211,7 @@ void 			FfmpegPlayer::renderVideo()
 				SDL_RenderCopy(m_renderer, m_texture, NULL, NULL);
 				SDL_RenderPresent(m_renderer);
 
-				updateBaseWindowSizePos();
+				//updateBaseWindowSizePos();
 				SDL_Delay(videoFrameDelay);
 			}
 		}
@@ -251,7 +249,7 @@ void 			FfmpegPlayer::freeMemory()
 
 void 			FfmpegPlayer::resetGLContext()
 {
-	SDL_GL_MakeCurrent(m_window->getSDLWindow(), m_window->getSDLGLContext());
+	//SDL_GL_MakeCurrent(m_window->getSDLWindow(), m_window->getSDLGLContext());
 }
 
 void 			FfmpegPlayer::playVideo(std::string const &source)
@@ -279,7 +277,7 @@ void 			FfmpegPlayer::destroyVideoSession()
 {
 	SDL_DestroyTexture(m_texture);
 	SDL_DestroyRenderer(m_renderer);
-	SDL_DestroyWindow(m_screen);
+	//SDL_DestroyWindow(m_screen);
 }
 
 void 			FfmpegPlayer::updateBaseWindowSizePos()
