@@ -29,8 +29,6 @@ public:
 	void generate(GLuint width, GLuint height, unsigned char* data, GLenum format, GLuint filterMin = GL_LINEAR, GLuint filerMax = GL_LINEAR);
 	void bind() const;
 	std::string getTextureType() const;
-    static std::string getTextureTypeStringFromType(TextureType);
-    static TextureType getTextureTypeFromString(std::string);
 
     GLuint getTextureID();
 private:

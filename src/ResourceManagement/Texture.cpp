@@ -13,15 +13,6 @@ std::map <TextureType, std::string> cTextureTypesString
                 {TextureType::Font, "font"}
         };
 
-std::map <std::string, TextureType> cStringTextureTypes
-        {
-                { "texture_diffuse", TextureType::Diffuse},
-                { "texture_specular", TextureType::Specular},
-                { "texture_normal", TextureType::Normal},
-                { "texture_height", TextureType::Height},
-                { "font", TextureType::Font}
-        };
-
 Texture::Texture(TextureType aType, GLuint width, GLuint height, unsigned char* data, GLenum format, GLuint filterMin, GLuint filerMax)
 	: mType(aType)
 {
@@ -85,17 +76,4 @@ std::string Texture::getTextureType() const
 GLuint Texture::getTextureID()
 {
 	return mID;
-}
-
- std::string Texture::getTextureTypeStringFromType(TextureType type)
-{
-	return cTextureTypesString[type];
-}
-
-TextureType Texture::getTextureTypeFromString(std::string typeString)
-{
-	if (cStringTextureTypes.count(typeString))
-		return cStringTextureTypes[typeString];
-	else
-		throw CustomException("No such texture type");
 }

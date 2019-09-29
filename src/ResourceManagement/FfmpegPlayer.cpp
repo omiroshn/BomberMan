@@ -277,20 +277,5 @@ void 			FfmpegPlayer::destroyVideoSession()
 {
 	SDL_DestroyTexture(m_texture);
 	SDL_DestroyRenderer(m_renderer);
-	//SDL_DestroyWindow(m_screen);
 }
 
-void 			FfmpegPlayer::updateBaseWindowSizePos()
-{
-	int width, height;
-	int x, y;
-
-	SDL_GetWindowSize(m_screen, &width, &height);
-	m_window->setSize(width, height);
-
-	SDL_GetWindowPosition(m_screen, &x, &y);
-	m_window->setPosition(x, y);
-
-	CONFIGURATION.setHeight(height);
-	CONFIGURATION.setWidth(width);
-}

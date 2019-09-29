@@ -420,7 +420,7 @@ void Gui::CreateFontsTexture()
     unsigned char* pixels;
     int width, height;
     io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-	mFontTexture = RESOURCES.loadTextureFromMemory(pixels, "font", width, height, 4, false);
+	mFontTexture = RESOURCES.loadTextureFromMemory(pixels, TextureType::Font, width, height, 4, false);
 
     io.Fonts->TexID = mFontTexture.get();
 }

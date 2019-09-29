@@ -2,6 +2,7 @@
 #include "ResourceManagement/ResourceManager.hpp"
 #include "ResourceManagement/MusicPlayer.hpp"
 #include "ResourceManagement/Model.hpp"
+#include "ResourceManagement/Texture.hpp"
 #include "Core.hpp"
 #include "Entity/MovingEntity.h"
 #include "AI/AIController.h"
@@ -13,6 +14,7 @@
 #include <array>
 #include <functional>
 #include <thread>
+#include "stb_image.h"
 
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
@@ -47,13 +49,12 @@ Game::Game()
     mIManager = std::make_unique<InputManager>();
     mKeyHandler = std::make_unique<KeyboardHandler>();
 
-	std::thread intro([]() {
+	std::thread ([]() {
         FFMPEG.playVideo("intro.mp4");
-	});
+	}).detach();
     loadResources();
 	MUSIC_PLAYER.initLoad();
 
-    intro.join();
     sInstance = this;
 }
 
@@ -68,6 +69,7 @@ void Game::start()
     int width, height;
     mStageStartedTimer = getCurrentTime();
 
+	RESOURCES.endLoading();
 
 	// sync files here
     while (mIsRunning)
@@ -396,6 +398,7 @@ void Game::loadResources()
 {
     try
     {
+		stbi_set_flip_vertically_on_load(false);
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
         RESOURCES.loadShader("animatedModelShader.vx.glsl", "modelShader.ft.glsl", "animatedModelShader");
         RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");
@@ -425,6 +428,7 @@ void Game::loadResources()
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
         loadModels();
+
         mRenderer->getParticleManager()->init();
     }
     catch (CustomException &e)

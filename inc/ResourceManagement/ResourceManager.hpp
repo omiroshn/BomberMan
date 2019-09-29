@@ -15,6 +15,9 @@ This file contains declaration of the ResourceManager class and macros for the u
 #include <iostream>
 #include <fstream>
 #include <glm/glm.hpp>
+#include <mutex>
+#include <thread>
+#include "Texture.hpp"
 
 #define RESOURCES ResourceManager::getInstance()
 
@@ -76,7 +79,7 @@ public:
 	\param[in] name The name with which the texture will be stored in resource manager
 	\param[in] texType [optional] The type of the loaded texture
 	*/
-	void	loadTexture(const GLchar* path, std::string const& name, std::string const& texType = "texture_diffuse");
+	void	loadTexture(const GLchar* path, std::string const& name, TextureType texType = TextureType::Diffuse);
 	/*!
 	\brief Returns pointer to the texture
 
@@ -115,7 +118,7 @@ public:
 	\param[in] isModelTexture The flag which shows is it a model texture loading
 	\return Shared ptr to the texture
 	*/
-    std::shared_ptr<Texture>	loadTextureFromFile(const GLchar* path, std::string const& texType, bool isModelTexture = false);
+    std::shared_ptr<Texture>	loadTextureFromFile(const GLchar* path, TextureType texType, bool isModelTexture = false);
 	/*!
 	\brief Loads texture from memory
 
@@ -128,7 +131,7 @@ public:
 	\param[in] isModelTexture The flag which shows is it a model texture loading
 	\return Shared ptr to the texture
 	*/
-	std::shared_ptr<Texture> loadTextureFromMemory(unsigned char *data, std::string const &texType, int width, int height, int nrChannels, bool isModelTexture);
+	std::shared_ptr<Texture> loadTextureFromMemory(unsigned char *data, TextureType texType, int width, int height, int nrChannels, bool isModelTexture);
 	/*!
 	\brief Loads skybox to the resource manager
 
@@ -166,6 +169,10 @@ public:
 	\return Font, as a char vector
 	*/
     std::vector<char> loadFont(std::string const& path);
+	/*!
+	\brief Makes sure that async texture loading is done
+	*/
+	void endLoading();
 
 	ResourceManager(ResourceManager const&) = delete;
 	ResourceManager &operator=(ResourceManager const&) = delete;
@@ -188,17 +195,9 @@ private:
 	\param[in] path The path to the skybox folder
 	\return Pointer to the cubemap, allocated on the graphics card.
 	*/
-    unsigned int loadCubemap(std::string const& path);
+    unsigned int loadCubemap(std::string const& aSkyboxName, std::shared_ptr<Skybox> tex);
 
 private:
-
-	enum ResourceType {
-		RT_Shader,
-		RT_Texture,
-		RT_Model,
-		RT_Skybox,
-	};
-
 	/*!
 	\brief The map of stored shaders
 	*/
@@ -224,7 +223,30 @@ private:
 	*/
 	std::map<std::string, std::shared_ptr<Texture>>		mTextureCache;
 
-	
+
+	struct SkyboxData {
+		std::vector<uint8_t*>				data;
+		std::vector<std::pair<int, int>>	sizes;
+		std::shared_ptr<Skybox>	texture;
+		GLenum					format;
+	};
+
+	struct TextureData {
+		std::shared_ptr<Texture>	texture;
+		GLint	width;
+		GLint	height;
+		uint8_t	*data;
+		GLenum	format;
+		bool	isModelTexture;
+	};
+
+	std::mutex					mTextureLock;
+	std::vector<std::thread>	mTexReaders;
+	std::vector<TextureData>	mPendingTextures;
+
+	std::mutex					mSkyboxLock;
+	std::vector<std::thread>	mSkyboxReaders;
+	std::vector<SkyboxData>		mPendingSkyboxes;
 };
 
 

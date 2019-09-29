@@ -34,7 +34,7 @@ void Model::makeUnitModel()
 
 void Model::loadModel(std::string const &path)
 {
-    auto const* scene = mImporter->ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals);
+	auto const* scene = mImporter->ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         throw CustomException(std::string("ASSIMP::") + mImporter->GetErrorString());
     mDirectory = path.substr(0, path.find_last_of('/'));
@@ -176,14 +176,14 @@ std::vector<std::shared_ptr<Texture>> Model::loadTextures(aiMesh const* mesh, ai
     std::vector<std::shared_ptr<Texture>> textures;
 
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-    std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+    std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::Diffuse);
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-    std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
+    std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, TextureType::Normal);
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
     return textures;
 }
 
-std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureType texType)
 {
     std::vector<std::shared_ptr<Texture>> textures;
     for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
@@ -197,7 +197,7 @@ std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *ma
             texFullPath.replace(pos, 1, "/");
             pos = texFullPath.find("\\", pos + 1);
         }
-        auto texture = RESOURCES.loadTextureFromFile(texFullPath.c_str(), typeName, true);
+        auto texture = RESOURCES.loadTextureFromFile(texFullPath.c_str(), texType, true);
         textures.push_back(texture);
     }
     return textures;
