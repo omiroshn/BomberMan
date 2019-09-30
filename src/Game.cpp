@@ -33,6 +33,13 @@ namespace
     std::string const cWindowName = "Bomberman";
 }
 
+static int ThreadConformantPlayIntro(void*)
+{
+	SDL_SetThreadPriority(SDL_THREAD_PRIORITY_TIME_CRITICAL);
+	FFMPEG.playVideo("intro.mp4");
+	return 0;
+}
+
 Game::Game()
 {
 	mTimeNow = SDL_GetPerformanceCounter();
@@ -49,9 +56,14 @@ Game::Game()
     mIManager = std::make_unique<InputManager>();
     mKeyHandler = std::make_unique<KeyboardHandler>();
 
-	std::thread ([]() {
-        FFMPEG.playVideo("intro.mp4");
-	}).detach();
+	RESOURCES.loadShader("sprite_p.vx.glsl", "sprite_p.ft.glsl", "sprite_p");
+	RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
+	RESOURCES.loadTexture("flame-fire.png", "flame-fire");
+	RESOURCES.loadTexture("brickwall.png", "brickwall");
+	RESOURCES.loadTexture("container.jpg", "container");
+	mRenderer->getParticleManager()->init();
+
+	moviePlayer = SDL_CreateThread(&ThreadConformantPlayIntro, "MoviePlayer", nullptr);
     loadResources();
 	MUSIC_PLAYER.initLoad();
 
@@ -70,6 +82,8 @@ void Game::start()
     mStageStartedTimer = getCurrentTime();
 
 	RESOURCES.endLoading();
+	
+	SDL_WaitThread(moviePlayer, NULL);
 
 	// sync files here
     while (mIsRunning)
@@ -402,14 +416,11 @@ void Game::loadResources()
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
         RESOURCES.loadShader("animatedModelShader.vx.glsl", "modelShader.ft.glsl", "animatedModelShader");
         RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");
-		RESOURCES.loadShader("sprite_p.vx.glsl", "sprite_p.ft.glsl", "sprite_p");
-		RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
 		RESOURCES.loadShader("shadowShader.vx.glsl", "shadowShader.ft.glsl", "shadow");
 		RESOURCES.loadShader("animatedShadowShader.vx.glsl", "shadowShader.ft.glsl", "animatedShadow");
 		RESOURCES.loadShader("sparks.vx.glsl", "sparks.ft.glsl", "sparks");
 		RESOURCES.loadShader("gui.vx.glsl", "gui.ft.glsl", "gui");
         RESOURCES.loadTexture("block.png", "block");
-        RESOURCES.loadTexture("brickwall.png", "brickwall");
         RESOURCES.loadTexture("wallpass.png", "wallpass");
         RESOURCES.loadTexture("sky.png", "sky");
         RESOURCES.loadTexture("locked.png", "locked");
@@ -417,9 +428,7 @@ void Game::loadResources()
         RESOURCES.loadTexture("unlocked0.png", "unlocked1");
         RESOURCES.loadTexture("unlocked0.png", "unlocked2");
         RESOURCES.loadTexture("unlocked0.png", "unlocked3");
-        RESOURCES.loadTexture("container.jpg", "container");
         RESOURCES.loadTexture("awesomeface.png", "face");
-		RESOURCES.loadTexture("flame-fire.png", "flame-fire");
 		RESOURCES.loadTexture("cloud_trans.jpg", "cloud_trans");
 		RESOURCES.loadTexture("explode.png", "explosion_tmap_2");
 		RESOURCES.loadTexture("sparks.jpg", "sparks");
@@ -429,7 +438,6 @@ void Game::loadResources()
         RESOURCES.loadSkybox("lightblue");
         loadModels();
 
-        mRenderer->getParticleManager()->init();
     }
     catch (CustomException &e)
     {

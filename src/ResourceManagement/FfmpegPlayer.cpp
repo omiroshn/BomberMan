@@ -100,20 +100,7 @@ void 			FfmpegPlayer::allocateFrame()
 
 void 			FfmpegPlayer::createWindow()
 {
-	int x = 100, y = 100;
-
-	m_window->getPosition(x,y);
 	m_screen = m_window->getSDLWindow();
-//	m_screen = SDL_CreateWindow(
-//			"Bomberman",
-//			x,
-//			y,
-//			CONFIGURATION.getWidth(),
-//			CONFIGURATION.getHeight(),
-//			SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL
-//		);
-
-	SDL_SetWindowResizable(m_screen, SDL_TRUE);
 }
 
 void 			FfmpegPlayer::createRenferer()
@@ -145,7 +132,7 @@ void 			FfmpegPlayer::initSWSontext()
 	m_sws_ctx = sws_getContext(m_pCodecCtx->width, m_pCodecCtx->height,
 			m_pCodecCtx->pix_fmt, m_pCodecCtx->width, m_pCodecCtx->height,
 			AV_PIX_FMT_YUV420P,
-			SWS_BILINEAR,
+			SWS_BICUBIC,
 			NULL,
 			NULL,
 			NULL);
@@ -211,7 +198,6 @@ void 			FfmpegPlayer::renderVideo()
 				SDL_RenderCopy(m_renderer, m_texture, NULL, NULL);
 				SDL_RenderPresent(m_renderer);
 
-				//updateBaseWindowSizePos();
 				SDL_Delay(videoFrameDelay);
 			}
 		}

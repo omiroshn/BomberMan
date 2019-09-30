@@ -11,5 +11,5 @@ uniform sampler2D image;
 
 void main()
 {
-    color = texture(image, -gl_PointCoord * scale + vec2(outX, outY));
+    color = texture(image, gl_PointCoord * scale + vec2(outX, outY));
 }

@@ -1,6 +1,8 @@
 #ifndef BOMBERMAN_Game_HPP
 #define BOMBERMAN_Game_HPP
 #include <memory>
+#include <SDL_thread.h>
+
 #include "LogicCore/LoadMap.h"
 #include "GameWindow.hpp"
 #include "GraphicCore/Renderer.hpp"
@@ -101,6 +103,8 @@ private:
 
 	std::vector<glm::mat4>		Filter(SquareType type);
 	void						recacheEnemies();
+
+	SDL_Thread					*moviePlayer;
 };
 
 #endif //BOMBERMAN_Renderer_HPP
