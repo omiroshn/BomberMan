@@ -31,31 +31,13 @@ unsigned int ResourceManager::loadCubemap(std::string const& aSkyboxName, std::s
 	mSkyboxReaders.emplace_back([this, localName = std::string(aSkyboxName), tex]() {
 		SkyboxData skybox;
 		skybox.texture = tex;
+		skybox.format = GL_RGB;
 		for (unsigned int i = 0; i < cSkyboxFaces.size(); i++)
 		{
 			int width, height, nrChannels;
 			std::string facePath(mBinFolder + "img/" + localName + "/" + cSkyboxFaces[i]);
 			unsigned char* data = stbi_load(facePath.c_str(), &width, &height, &nrChannels, 3);
-			if (data)
-			{
-				GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;
-				skybox.format = format;
-
-				// swap by hand
-				size_t line_width = nrChannels * width;
-				std::vector<uint8_t> tmp(line_width);
-
-//				for (int j = 0; j < height / 2; j++)
-//				{
-//					uint8_t* line = data + j * nrChannels;
-//					uint8_t* back = data + (height - j) * nrChannels;
-//
-//					memcpy(tmp.data(), line, line_width);
-//					memcpy(line, back, line_width);
-//					memcpy(back, tmp.data(), line_width);
-//				}
-			}
-			else
+			if (!data)
 			{
 				std::cout << "Cubemap texture failed to load at path: " << facePath << std::endl;
 				return;
