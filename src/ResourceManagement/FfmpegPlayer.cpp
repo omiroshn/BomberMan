@@ -105,7 +105,7 @@ void 			FfmpegPlayer::createWindow()
 
 void 			FfmpegPlayer::createRenferer()
 {
-	m_renderer = SDL_CreateRenderer(m_screen, -1, 0);
+	m_renderer = SDL_CreateRenderer(m_screen, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (!m_renderer) {
 		throw CustomException("SDL: could not create renderer!");
 	}
@@ -201,14 +201,16 @@ void 			FfmpegPlayer::renderVideo()
 				SDL_Delay(videoFrameDelay);
 			}
 		}
-		SDL_PollEvent(&m_event);
-		if (m_event.type == SDL_QUIT || (m_event.type == SDL_KEYDOWN && m_event.key.keysym.sym == SDLK_ESCAPE))
+		while( SDL_PollEvent(&m_event))
 		{
-			destroyVideoSession();
-			CONFIGURATION.serialise();
-			SDL_Quit();
-			exit(0);
-			break;
+			if (m_event.type == SDL_QUIT || (m_event.type == SDL_KEYDOWN && m_event.key.keysym.sym == SDLK_ESCAPE))
+			{
+				destroyVideoSession();
+				CONFIGURATION.serialise();
+				SDL_Quit();
+				exit(0);
+				break;
+			}
 		}
 		av_free_packet(&packet);
 	}
@@ -235,7 +237,7 @@ void 			FfmpegPlayer::freeMemory()
 
 void 			FfmpegPlayer::resetGLContext()
 {
-	//SDL_GL_MakeCurrent(m_window->getSDLWindow(), m_window->getSDLGLContext());
+	SDL_GL_MakeCurrent(m_window->getSDLWindow(), m_window->getSDLGLContext());
 }
 
 void 			FfmpegPlayer::playVideo(std::string const &source)
@@ -264,4 +266,3 @@ void 			FfmpegPlayer::destroyVideoSession()
 	SDL_DestroyTexture(m_texture);
 	SDL_DestroyRenderer(m_renderer);
 }
-

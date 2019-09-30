@@ -63,7 +63,8 @@ Game::Game()
 	RESOURCES.loadTexture("container.jpg", "container");
 	mRenderer->getParticleManager()->init();
 
-	moviePlayer = SDL_CreateThread(&ThreadConformantPlayIntro, "MoviePlayer", nullptr);
+	//moviePlayer = SDL_CreateThread(&ThreadConformantPlayIntro, "MoviePlayer", nullptr);
+    ThreadConformantPlayIntro(NULL);
     loadResources();
 	MUSIC_PLAYER.initLoad();
 
@@ -83,7 +84,7 @@ void Game::start()
 
 	RESOURCES.endLoading();
 	
-	SDL_WaitThread(moviePlayer, NULL);
+	//SDL_WaitThread(moviePlayer, NULL);
 
 	// sync files here
     while (mIsRunning)
@@ -307,7 +308,7 @@ void Game::resolveCollisions()
 	if (isExitActive() 
     && circle_circle_collision(Position, radius / 2.f, mExit, radius / 2.f))
 	{
-		FFMPEG.playVideo("betweenstages.mp4");
+        FFMPEG.playVideo("betweenstages.mp4");
 		stageFinished();
 	}
 }
