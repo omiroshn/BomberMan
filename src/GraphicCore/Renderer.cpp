@@ -184,7 +184,6 @@ void Renderer::normalPass(Game& aMap)
 		mParticleManager->draw(projection, view);
 	} catch (CustomException &ex) {
 		std::cout << ex.what() << std::endl;
-		exit(42);
 	}
 
     // render sparks

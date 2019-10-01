@@ -275,3 +275,27 @@ std::vector<char> ResourceManager::loadFont(std::string const &path)
     infile.read(&data[0], file_size_in_byte);
     return data;
 }
+
+bool ResourceManager::tickLoading()
+{
+	if (!mPendingTextures.empty())
+	{
+		mTextureLock.lock();
+		auto It = mPendingTextures[mPendingTextures.size() - 1];
+		mPendingTextures.pop_back();
+		mTextureLock.unlock();
+		It.texture->generate(It.width, It.height, It.data, It.format, It.isModelTexture ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+		return true;
+	}
+
+	if (!mPendingSkyboxes.empty())
+	{
+		mSkyboxLock.lock();
+		auto It = mPendingSkyboxes[mPendingSkyboxes.size() - 1];
+		mPendingSkyboxes.pop_back();
+		mSkyboxLock.unlock();
+		It.texture->generate(It.data, It.sizes, It.format);
+		return true;
+	}
+	return false;
+}

@@ -42,6 +42,8 @@ static int ThreadConformantPlayIntro(void*)
 
 Game::Game()
 {
+    sInstance = this;
+
 	mTimeNow = SDL_GetPerformanceCounter();
 
 	loadStateFromFile();
@@ -49,8 +51,7 @@ Game::Game()
 	mWindow = std::make_shared<GameWindow>(CONFIGURATION.getWidth(), CONFIGURATION.getHeight(), cWindowName);
 	mWindow->setFullScreen(CONFIGURATION.getWindowed());
 	CONFIGURATION.setObservableWindow(mWindow);
-	FFMPEG.setSDLWindow(mWindow);
-	FFMPEG.registerCodecs();
+	FFMPEG.init(mWindow);
 
 	mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
@@ -64,11 +65,10 @@ Game::Game()
 	mRenderer->getParticleManager()->init();
 
 	//moviePlayer = SDL_CreateThread(&ThreadConformantPlayIntro, "MoviePlayer", nullptr);
-    ThreadConformantPlayIntro(NULL);
     loadResources();
+    ThreadConformantPlayIntro(NULL);
 	MUSIC_PLAYER.initLoad();
 
-    sInstance = this;
 }
 
 Game::~Game()
@@ -413,7 +413,6 @@ void Game::loadResources()
 {
     try
     {
-		stbi_set_flip_vertically_on_load(false);
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
         RESOURCES.loadShader("animatedModelShader.vx.glsl", "modelShader.ft.glsl", "animatedModelShader");
         RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");
@@ -443,7 +442,7 @@ void Game::loadResources()
     catch (CustomException &e)
     {
         std::cout << e.what() << std::endl;
-        exit(42);
+		requestExit();
     }
 }
 
@@ -652,6 +651,11 @@ void  Game::cleanupOnStageChange()
 {
     mBalloons.clear();
     mBombs.clear();
+}
+
+void Game::requestExit()
+{
+	mIsRunning = false;
 }
 
 Game *Game::get()

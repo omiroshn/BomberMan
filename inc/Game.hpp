@@ -28,6 +28,7 @@ public:
 	void        onHeroDied();
 	void        gameOver();
 	void        cleanupOnStageChange();
+	void        requestExit();
 
     static bool    mReloadStage;
     static float   mStageTimer;

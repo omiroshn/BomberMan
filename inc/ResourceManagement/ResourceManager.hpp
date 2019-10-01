@@ -170,6 +170,11 @@ public:
 	*/
     std::vector<char> loadFont(std::string const& path);
 	/*!
+	\brief Process a little bit of textures
+	\return whether did something useful
+	*/
+	bool tickLoading();
+	/*!
 	\brief Makes sure that async texture loading is done
 	*/
 	void endLoading();
