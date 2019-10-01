@@ -15,20 +15,20 @@ enum class TextureType
 	Specular,
 	Normal,
 	Height,
-	Font
+	Font,
+	Depth
 };
 
 
 class Texture
 {
 public:
+	Texture(TextureType aType, GLuint width, GLuint height, unsigned char *data, GLenum format, GLuint filterMin, GLuint filerMax);
 	Texture(TextureType aType = TextureType::Diffuse);
 	~Texture();
 	void generate(GLuint width, GLuint height, unsigned char* data, GLenum format, GLuint filterMin = GL_LINEAR, GLuint filerMax = GL_LINEAR);
 	void bind() const;
 	std::string getTextureType() const;
-    static std::string getTextureTypeStringFromType(TextureType);
-    static TextureType getTextureTypeFromString(std::string);
 
     GLuint getTextureID();
 private:

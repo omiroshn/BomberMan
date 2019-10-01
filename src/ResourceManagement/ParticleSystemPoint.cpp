@@ -3,7 +3,6 @@
 
 ParticleSystemPoint::ParticleSystemPoint()
 {
-	glEnable(GL_PROGRAM_POINT_SIZE);
 	setParticleCount(6);
 }
 
@@ -107,7 +106,7 @@ void 			ParticleSystemPoint::drawGLContent(glm::mat4 const & projection, glm::ma
 	m_texture->bind();
 
     glBindVertexArray(m_VAO);
-    glDrawArraysInstanced(GL_POINTS, 0, m_particleCount, transforms.size());
+    glDrawArraysInstanced(GL_POINTS, 0, m_particleCount, GLsizei(transforms.size()));
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 }

@@ -33,7 +33,8 @@ Bomb::~Bomb()
 	if (auto *hero = &Game::get()->getHero())
 		hero->increaseBombCount();
 	Game::getCollisionInfo()[getPosition()] = SquareType::EmptySquare;
-	mSparksQuads.erase(mSparksQuads.begin());
+	if (!mSparksQuads.empty())
+		mSparksQuads.erase(mSparksQuads.begin());
 }
 
 void Bomb::drawSparks(glm::vec4 position)
@@ -113,7 +114,7 @@ void Counting::onEntry(Bomb& bomb)
 	bomb.setScale(1.f);
 	mTimeToExplode = Game::getCurrentTime() + Bomb::FUSE_TIME - Bomb::SPAWN_TIME;
 	mCountdown = mTimeToExplode - Game::getCurrentTime();
-	glm::vec3 SparkPos = bomb.getPosition3D() + glm::vec3({-0.1f, 0.2f, 0.f});
+	glm::vec3 SparkPos = bomb.getPosition3D() + glm::vec3({-0.1f, 0.5f, 0.f});
 	bomb.drawSparks(glm::vec4(SparkPos, mCountdown));
 }
 

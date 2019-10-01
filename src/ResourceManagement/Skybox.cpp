@@ -75,12 +75,12 @@ Skybox &Skybox::operator=(Skybox const &)
     return *this;
 }
 
-void Skybox::generate(std::vector<unsigned char *> aFacesData, std::vector<std::pair<int, int>> textureSizes)
+void Skybox::generate(std::vector<unsigned char *> aFacesData, std::vector<std::pair<int, int>> textureSizes, GLenum format)
 {
     glBindTexture(GL_TEXTURE_CUBE_MAP, mCubeMap);
 
     int i = 0;
-    for (auto & data : aFacesData)
+    for (auto data : aFacesData)
     {
         if (data)
         {
@@ -88,11 +88,12 @@ void Skybox::generate(std::vector<unsigned char *> aFacesData, std::vector<std::
             i++;
         }
     }
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 }
 
 void Skybox::draw(std::shared_ptr<Shader> aShader)

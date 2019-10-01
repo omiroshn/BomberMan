@@ -98,7 +98,7 @@ protected:
 	t_point						m_startTime;
 	t_point						m_stepTime;
 	float						m_deltaTime;
-	float						m_totalTime;
+	float						m_totalTime = 0.f; // this in some cases is not initialized. no idea why.
 	float						m_liveTime;
 	bool						m_isRunning;
 };

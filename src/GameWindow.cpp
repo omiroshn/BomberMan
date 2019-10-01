@@ -13,7 +13,7 @@ GameWindow::GameWindow(int aWidth, int aHeight, std::string const &aWinName) :
 
 GameWindow::~GameWindow()
 {
-	mMainMenu->Shutdown();
+	mMainMenu.Shutdown();
     ImGui::DestroyContext();
 
     SDL_GL_DeleteContext(mContext);
@@ -38,7 +38,7 @@ void GameWindow::initWindow()
 void GameWindow::initSDL()
 {
     SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "0");
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS | SDL_INIT_JOYSTICK);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO);
 
     int context_flags = SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG;
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, context_flags);
@@ -46,8 +46,8 @@ void GameWindow::initSDL()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-//    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-//    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -70,15 +70,13 @@ void GameWindow::initGui() {
 
     ImGuiIO &io = ImGui::GetIO();
     auto fontData = RESOURCES.loadFont("future.ttf");
-    // need to cope data, because AddFontFromMemoryTTF seems to take control of it, and will try to delete on exit
-    char* data = new char[fontData.size()];
-    std::memcpy(data, fontData.data(), fontData.size());
-	io.Fonts->AddFontFromMemoryTTF(std::move(data), static_cast<int>(fontData.size()), 16);
+	ImFontConfig config;
+	config.FontDataOwnedByAtlas = false;
+	io.Fonts->AddFontFromMemoryTTF(fontData.data(), static_cast<int>(fontData.size()), 16, &config);
 
     ImGui::StyleColorsDark();
 
-	mMainMenu = new Gui();
-	mMainMenu->Init(mWindow);
+	mMainMenu.Init();
 }
 
 void GameWindow::initOpenGL()
@@ -92,13 +90,15 @@ void GameWindow::initOpenGL()
     }
     glViewport(0, 0, mWidth, mHeight);
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_MULTISAMPLE);
+	glEnable(GL_PROGRAM_POINT_SIZE);
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+    glEnable(GL_MULTISAMPLE);
 }
 
 void GameWindow::update()
 {
     ImGui::Render();
-	mMainMenu->RenderDrawData(ImGui::GetDrawData());
+	mMainMenu.RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(mWindow);
 
     SDL_PollEvent(&mEvent);
@@ -111,7 +111,7 @@ SDL_Event & GameWindow::getEvent()
 
 void GameWindow::tickGui()
 {
-	mMainMenu->NewFrame(mWindow);
+	mMainMenu.NewFrame(mWindow);
 }
 
 void GameWindow::getSize(int &w, int &h)
@@ -120,28 +120,28 @@ void GameWindow::getSize(int &w, int &h)
 }
 
 bool GameWindow::IsGameRunning() {
-    return mMainMenu->IsGameRunning();
+    return mMainMenu.IsGameRunning();
 }
 
 void GameWindow::ShowStartingMenu()
 {
-    mMainMenu->ShowMainMenu();
+    mMainMenu.ShowMainMenu();
 }
 
 void GameWindow::ShowInGameMenu()
 {
-    mMainMenu->ShowInGameMenu();
+    mMainMenu.ShowInGameMenu();
 }
 
 void GameWindow::ShowBetweenStageScreen()
 {
-    mMainMenu->ShowBetweenStageScreen();
+    mMainMenu.ShowBetweenStageScreen();
 }
 
 void GameWindow::PauseGame(bool state)
 {
-    mMainMenu->GamePaused(state);
-    mMainMenu->ShowMainMenu();
+    mMainMenu.GamePaused(state);
+    mMainMenu.ShowMainMenu();
 }
 
 void GameWindow::setSize(int const w, int const h)

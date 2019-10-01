@@ -98,12 +98,12 @@ namespace AnimationUtils {
             return ret;
         }
 
-        unsigned int scaleInd = findScale(animationTime, node);
+        unsigned int scaleInd = findScale(float(animationTime), node);
         unsigned int nextScaleInd = scaleInd + 1;
 
         float deltaTime = static_cast<float>(node->mScalingKeys[nextScaleInd].mTime -
                                              node->mScalingKeys[scaleInd].mTime);
-        float factor = (animationTime - static_cast<float>(node->mScalingKeys[scaleInd].mTime)) / deltaTime;
+        float factor = float(animationTime - node->mScalingKeys[scaleInd].mTime) / deltaTime;
         aiVector3D start = node->mScalingKeys[scaleInd].mValue;
         aiVector3D end = node->mScalingKeys[nextScaleInd].mValue;
 
@@ -119,11 +119,11 @@ namespace AnimationUtils {
             aiQuaternion ret = node->mRotationKeys[0].mValue;
             return quatToMat(ret);
         }
-        unsigned int rotInd = findRotation(animationTime, node);
+        unsigned int rotInd = findRotation(float(animationTime), node);
         unsigned int nextRotInd = rotInd + 1;
 
         float deltaTime = static_cast<float>(node->mRotationKeys[nextRotInd].mTime - node->mRotationKeys[rotInd].mTime);
-        float factor = (animationTime - static_cast<float>(node->mRotationKeys[rotInd].mTime)) / deltaTime;
+        float factor = float(animationTime - node->mRotationKeys[rotInd].mTime) / deltaTime;
         aiQuaternion start = node->mRotationKeys[rotInd].mValue;
         aiQuaternion end = node->mRotationKeys[nextRotInd].mValue;
 

@@ -1,6 +1,8 @@
 #ifndef BOMBERMAN_Game_HPP
 #define BOMBERMAN_Game_HPP
 #include <memory>
+#include <SDL_thread.h>
+
 #include "LogicCore/LoadMap.h"
 #include "GameWindow.hpp"
 #include "GraphicCore/Renderer.hpp"
@@ -26,6 +28,7 @@ public:
 	void        onHeroDied();
 	void        gameOver();
 	void        cleanupOnStageChange();
+	void        requestExit();
 
     static bool    mReloadStage;
     static float   mStageTimer;
@@ -60,9 +63,8 @@ private:
 
     bool                             mIsPaused;
 
-	// Map for rendering
-	typedef Agent<MovingEntity, BalloonController>	Balloon;
-	typedef Agent<Bomb, BombSM>						BombAgent;
+	typedef Agent<MovingEntity, BalloonController>	BalloonAgent;
+	typedef Agent<Bomb, BombController>				BombAgent;
 public:
 	void                        addEnemiesOnMap();
 	std::vector<glm::mat4>		getWallTransforms();
@@ -72,7 +74,7 @@ public:
 	glm::mat4					getExitTransform();
 
 	std::vector<MovingEntity*>&	getEnemies();
-	std::vector<Balloon>&		getBalloons();
+	std::vector<BalloonAgent>&		getBalloons();
 
 	Hero&						getHero();
 	Hero::PowerupType			powerupTypeOnMap();
@@ -84,18 +86,26 @@ public:
 private:
 	std::unique_ptr<Hero>			mHero;
 
-	std::vector<Balloon>			mBalloons;
+	int buffer1[512] = { 0 };
+	std::vector<BalloonAgent>		mBalloons;
+
+	int buffer2[512] = { 0 };
+
 	std::vector<BombAgent>			mBombs;
+
+	int buffer3[512] = { 0 };
 
 	std::vector<MovingEntity*>		mEnemies;
 
 	glm::vec2						mPowerup;
 	Hero::PowerupType				mPowerupType { Hero::PowerupType::PT_NONE };
 
-	glm::vec2						mExit;
+	glm::vec2						mExit{ -1, -1 };
 
 	std::vector<glm::mat4>		Filter(SquareType type);
 	void						recacheEnemies();
+
+	SDL_Thread					*moviePlayer;
 };
 
 #endif //BOMBERMAN_Renderer_HPP

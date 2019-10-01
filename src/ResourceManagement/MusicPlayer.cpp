@@ -38,12 +38,6 @@ void 			MusicPlayer::setBinFolder(std::string const& aPath)
 
 void 			MusicPlayer::initLoad()
 {
-	if(SDL_Init(SDL_INIT_AUDIO)==-1)
-	{
-		printf("SDL_Init: %s\n", SDL_GetError());
-		exit(1);
-	}
-
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
 		fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
 	}

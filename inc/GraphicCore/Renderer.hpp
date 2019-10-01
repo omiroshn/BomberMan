@@ -56,7 +56,7 @@ private:
 	ptrPM mParticleManager;
     ptrLM mLightManager;
     void renderObstacles(std::shared_ptr<Shader> &);
-    void renderMovable(std::shared_ptr<Shader> &, Game &);
+    void renderMovable(std::shared_ptr<Shader> &, std::shared_ptr<Shader> &animated, Game &);
     void prepareTransforms(Game &g);
     int mStage;
 };

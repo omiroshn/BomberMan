@@ -3,22 +3,24 @@
 #include "Utilities/AnimationUtils.h"
 #include <imgui.h>
 
-Mesh::Mesh(std::vector<Vertex> vertices,
-            std::vector<unsigned int> indices,
-            std::vector<std::shared_ptr<Texture>> textures,
-            std::map<std::string, unsigned int> bones,
-            std::vector<glm::mat4> aOffsets,
+Mesh::Mesh(std::vector<Vertex>& vertices,
+            std::vector<WeightData>& weights,
+            std::vector<unsigned int>& indices,
+            std::vector<std::shared_ptr<Texture>>& textures,
+            std::map<std::string, unsigned int>& bones,
+            std::vector<glm::mat4>& aOffsets,
             aiScene const* scene,
 			float glossiness) :
     mVertices{std::move(vertices)}
+    , mWeights{std::move(weights)}
     , mIndices{std::move(indices)}
     , mTextures{std::move(textures)}
     , mIsAnimated{scene->HasAnimations()}
     , mCurrentAnimation{0}
+    , mGlossiness{glossiness}
     , mBones{std::move(bones)}
     , mOffsetMatrices{std::move(aOffsets)}
     , mScene{scene}
-    , mGlossiness{glossiness}
 {
     setupMesh();
     setInstanceBuffer();
@@ -37,8 +39,7 @@ Mesh::~Mesh()
 void Mesh::setupMesh()
 {
     glGenVertexArrays(1, &mVAO);
-    glGenBuffers(1, &mVBO);
-    glGenBuffers(1, &mEBO);
+    glGenBuffers(2, &mVBO);
 
     glBindVertexArray(mVAO);
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
@@ -51,23 +52,31 @@ void Mesh::setupMesh()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 
     glEnableVertexAttribArray(1);	
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+    glVertexAttribPointer(1, 4, GL_INT_2_10_10_10_REV, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
 
     glEnableVertexAttribArray(2);	
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-
-
-    glEnableVertexAttribArray(7);
-    glVertexAttribIPointer(7, 3, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, BonesID));
-
-    glEnableVertexAttribArray(8);
-    glVertexAttribPointer(8, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Weighs));
+    glVertexAttribPointer(2, 2, GL_SHORT, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
     glEnableVertexAttribArray(9);
-    glVertexAttribPointer(9, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+    glVertexAttribPointer(9, 4, GL_INT_2_10_10_10_REV, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
 
-    glEnableVertexAttribArray(10);
-    glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
+	// why this fires?
+	if (mWeights.empty())
+		mIsAnimated = false;
+
+// weights is separate object
+    if (mIsAnimated)
+    {
+        glGenBuffers(1, &mWBO);
+        glBindBuffer(GL_ARRAY_BUFFER, mWBO);
+
+        glBufferData(GL_ARRAY_BUFFER, mWeights.size() * sizeof(WeightData), &mWeights[0], GL_STATIC_DRAW);
+        glEnableVertexAttribArray(7);
+        glVertexAttribIPointer(7, 3, GL_UNSIGNED_BYTE, sizeof(WeightData), (void *)offsetof(WeightData, BonesID));
+
+        glEnableVertexAttribArray(8);
+        glVertexAttribPointer(8, 3, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(WeightData), (void *)offsetof(WeightData, Weighs));
+    }
 
     glBindVertexArray(0);
 }
@@ -103,6 +112,7 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
     unsigned int diffuseNr  = 1;
     unsigned int normalNr   = 1;
 
+	shader->use();
     for(unsigned int i = 0; i < mTextures.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0 + i);
@@ -112,14 +122,13 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
             number = std::to_string(diffuseNr++);
         else if (name == "texture_normal")
             number = std::to_string(normalNr++);
-        glUniform1i(glGetUniformLocation(shader->mShaderProgram, (name + number).c_str()), i);
+        shader->setInt((name + number).c_str(), i);
         glBindTexture(GL_TEXTURE_2D, mTextures[i]->getTextureID());
     }
     glActiveTexture(GL_TEXTURE0);
     glBindBuffer(GL_ARRAY_BUFFER, mIBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    shader->setBool("isAnimated", mIsAnimated);
     shader->setFloat("glossiness", mGlossiness);
     shader->setMat4("parentTransform", parentTransform);
     if(mIsAnimated)
@@ -130,7 +139,7 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
         }
     }
     glBindVertexArray(mVAO);
-    glDrawElementsInstanced(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr, transforms.size());
+    glDrawElementsInstanced(GL_TRIANGLES, GLsizei(mIndices.size()), GL_UNSIGNED_INT, nullptr, GLsizei(transforms.size()));
     glBindVertexArray(0);
 }
 
@@ -139,7 +148,7 @@ const aiNodeAnim *Mesh::findNodeAnimation(const aiAnimation *animation, const st
     for (unsigned int i = 0; i < animation->mNumChannels; i++)
     {
         const aiNodeAnim *nodeAnim = animation->mChannels[i];
-        if (std::string(nodeAnim->mNodeName.data) == nodeName)
+        if (strcmp(nodeAnim->mNodeName.data, nodeName.data()) == 0)
             return nodeAnim;
     }
     return nullptr;
@@ -150,29 +159,32 @@ void	Mesh::readNodeHierarchy(float animationTime, aiNode const* node, const glm:
 {
 
     std::string nodeName(node->mName.data);
-    glm::mat4 nodeTransform = AnimationUtils::aiMatToGlmMat(node->mTransformation);
 
     auto const* animation = mScene->mAnimations[mCurrentAnimation];
     auto const* pNodeAnimation = findNodeAnimation(animation, nodeName);
 
+	glm::mat4 nodeTransform;
     if (pNodeAnimation)
     {
-        glm::mat4 transMat = glm::mat4(1.f);
-        glm::mat4 rotMat  = AnimationUtils::calcInterpolatedRotation(animationTime, pNodeAnimation);
-        glm::mat4 scaleMat = glm::mat4(1.f);
 
         aiVector3D scaling = AnimationUtils::calcInterpolatedScaling(animationTime, pNodeAnimation);
         aiVector3D translation = AnimationUtils::calcInterpolatedPosition(animationTime, pNodeAnimation);
 
-        scaleMat = glm::scale(scaleMat, glm::vec3(scaling.x, scaling.y, scaling.z));
+        glm::mat4 transMat = glm::mat4(1.f);
         transMat = glm::translate(transMat, glm::vec3(translation.x, translation.y, translation.z));
-        nodeTransform = transMat * rotMat * scaleMat;
+
+        glm::mat4 transScaleMat = glm::scale(transMat, glm::vec3(scaling.x, scaling.y, scaling.z));
+        glm::mat4 rotMat  = AnimationUtils::calcInterpolatedRotation(animationTime, pNodeAnimation);
+		nodeTransform = transScaleMat * rotMat;
     }
+	else
+		nodeTransform = AnimationUtils::aiMatToGlmMat(node->mTransformation);
 
     glm::mat4 globalTransform = parentTransform * nodeTransform;
-    if (mBones.find(nodeName) != mBones.end())
+	auto It = mBones.find(nodeName);
+    if (It != mBones.end())
     {
-        unsigned int boneIndex = mBones.at(nodeName);
+		unsigned int boneIndex = It->second;
         mBoneTransforms[boneIndex] = globalTransform * mOffsetMatrices[boneIndex];
     }
     for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -185,15 +197,15 @@ void	Mesh::doAnimation()
 {
     if (!mIsAnimated)
         return;
-    float ticksPerSecond = mScene->mAnimations[mCurrentAnimation]->mTicksPerSecond;
+    float ticksPerSecond = float(mScene->mAnimations[mCurrentAnimation]->mTicksPerSecond);
     float timeInTicks = mAnimationTime * ticksPerSecond;
-    float animTime = fmodf(timeInTicks, mScene->mAnimations[mCurrentAnimation]->mDuration - 1);
+    float animTime = fmodf(timeInTicks, float(mScene->mAnimations[mCurrentAnimation]->mDuration - 1.));
     readNodeHierarchy(animTime, mScene->mRootNode, glm::mat4(1.0f));
 }
 
 void	Mesh::setAnimation(Animation const& anim)
 {
-    mAnimationTime = anim.getTime();
+    mAnimationTime = float(anim.getTime());
     auto requiredAnimation = anim.getName();
     std::transform(requiredAnimation.begin(), requiredAnimation.end(), requiredAnimation.begin(), ::tolower);
     for (mCurrentAnimation = mScene->mNumAnimations - 1; mCurrentAnimation != 0; --mCurrentAnimation)

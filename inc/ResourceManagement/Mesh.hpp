@@ -22,22 +22,26 @@
 struct Vertex
 {
     glm::vec3   Position;
-    glm::vec3   Normal;
-    glm::vec2   TexCoords;
-    glm::vec3   Tangent;
-    glm::vec3   Bitangent;
-    glm::ivec4  BonesID;
-    glm::vec4   Weighs;
+    GLint       Normal;
+    GLint       Tangent;
+    int16_t     TexCoords[2];
+};
+
+struct WeightData
+{
+    uint8_t		Weighs[3];
+	uint8_t		BonesID[3];
 };
 
 class Mesh
 {
 public:
-    Mesh(std::vector<Vertex> aVertices,
-        std::vector<unsigned int> aIndices,
-        std::vector<std::shared_ptr<Texture>> aTextures,
-        std::map<std::string, unsigned int> bones,
-        std::vector<glm::mat4> aOffsets,
+    Mesh(std::vector<Vertex>& aVertices,
+        std::vector<WeightData>& aWeights,
+        std::vector<unsigned int>& aIndices,
+        std::vector<std::shared_ptr<Texture>>& aTextures,
+        std::map<std::string, unsigned int>& bones,
+        std::vector<glm::mat4>& aOffsets,
         aiScene const *scene,
 		float glossiness);
     void                    draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> const& transforms, glm::mat4 const & parentTransform);
@@ -51,8 +55,9 @@ private:
     aiNodeAnim const*       findNodeAnimation(aiAnimation const* animation, std::string nodeName) const;
 
 private:
-    unsigned int mVBO, mEBO, mVAO, mIBO;
+    unsigned int mVBO, mEBO, mVAO, mWBO, mIBO;
     std::vector<Vertex> mVertices;
+    std::vector<WeightData> mWeights;
     std::vector<unsigned int> mIndices;
     std::vector<std::shared_ptr<Texture>> mTextures;
     bool                mIsAnimated;

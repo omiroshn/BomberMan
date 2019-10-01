@@ -32,9 +32,9 @@ public:
 	static FfmpegPlayer 	&getInstance();
 
 	void 			setBinFolder(std::string const& aPath);
-	void 			registerCodecs();
 	void 			setSDLWindow(std::shared_ptr<GameWindow>  window);
 	void 			playVideo(std::string const &source);
+	void			init(std::shared_ptr<GameWindow>  window);
 
 private:
 	FfmpegPlayer();
@@ -45,8 +45,6 @@ private:
 	void 			openVideoFile(std::string const &source);
 	void 			findCodec();
 	void 			allocateFrame();
-	void 			createWindow();
-	void 			createRenferer();
 	void 			createTexture();
 	void 			initSWSontext();
 	void 			allocatePixelArray();
@@ -55,26 +53,22 @@ private:
 	void 			resetGLContext();
 	void 			destroyVideoSession();
 
-	void 			updateBaseWindowSizePos();
-
 private:
-	AVFormatContext 	*m_pFormatCtx;
-	AVCodecContext 		*m_pCodecCtx;
-	AVCodecContext 		*m_pCodecCtxOrig;
-	AVCodec 			*m_pCodec;
+	AVFormatContext 	*m_pFormatCtx = NULL;
+	AVCodecContext 		*m_pCodecCtx = NULL;
+	AVCodecContext 		*m_pCodecCtxOrig = NULL;
+	AVCodec 			*m_pCodec = NULL;
 
-	AVFrame 			*m_pFrame;
-	AVFrame 			*m_pFrameRGB;
-	SDL_Window 			*m_screen;
-	SDL_Renderer 		*m_renderer;
-	SDL_Texture 		*m_texture;
+	AVFrame 			*m_pFrame = NULL;
+	AVFrame 			*m_pFrameRGB = NULL;
+	SDL_Renderer 		*m_renderer = NULL;
+	SDL_Texture 		*m_texture = NULL;
 
-	Uint8 				*m_yPlane;
-	Uint8  				*m_uPlane;
-	Uint8  				*m_vPlane;
+	Uint8 				*m_yPlane = NULL;
+	Uint8  				*m_uPlane = NULL;
+	Uint8  				*m_vPlane = NULL;
 
-	struct SwsContext 	*m_sws_ctx;
-	SDL_Event 			m_event;
+	struct SwsContext 	*m_sws_ctx = NULL;
 	int 				m_videoStream;
 	gameWinPtr 			m_window;
 	std::string      	m_BinFolder;

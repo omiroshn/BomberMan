@@ -105,6 +105,8 @@ void 			ParticleSystemBrick::drawGLContent(glm::mat4 const & projection, glm::ma
 		throw CustomException("Shader for particle system is not defined!");
 	if (!m_texture)
 		throw CustomException("Texture for Brick system is not defined!");
+	if (transforms.empty())
+		return;
 
 	m_shader->use();
 	m_shader->setMat4("projection", projection);
@@ -115,5 +117,5 @@ void 			ParticleSystemBrick::drawGLContent(glm::mat4 const & projection, glm::ma
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
 
     glBindVertexArray(m_VAO);
-    glDrawArraysInstanced(GL_TRIANGLES, 0, m_particleCount * 36, transforms.size());
+    glDrawArraysInstanced(GL_TRIANGLES, 0, m_particleCount * 36, GLsizei(transforms.size()));
 }

@@ -2,15 +2,19 @@
 #include "ResourceManagement/ResourceManager.hpp"
 #include "ResourceManagement/MusicPlayer.hpp"
 #include "ResourceManagement/Model.hpp"
+#include "ResourceManagement/Texture.hpp"
 #include "Core.hpp"
 #include "Entity/MovingEntity.h"
-#include <tuple>
-#include <functional>
 #include "AI/AIController.h"
 #include "LogicCore/Timer.h"
 #include "LogicCore/TimerManager.h"
 #include "Configure.hpp"
 #include "ResourceManagement/FfmpegPlayer.hpp"
+
+#include <array>
+#include <functional>
+#include <thread>
+#include "stb_image.h"
 
 Uint64			Game::mTimeNow;
 Uint64			Game::mTimeLast;
@@ -29,8 +33,17 @@ namespace
     std::string const cWindowName = "Bomberman";
 }
 
+static int ThreadConformantPlayIntro(void*)
+{
+	SDL_SetThreadPriority(SDL_THREAD_PRIORITY_TIME_CRITICAL);
+	FFMPEG.playVideo("intro.mp4");
+	return 0;
+}
+
 Game::Game()
 {
+    sInstance = this;
+
 	mTimeNow = SDL_GetPerformanceCounter();
 
 	loadStateFromFile();
@@ -38,16 +51,24 @@ Game::Game()
 	mWindow = std::make_shared<GameWindow>(CONFIGURATION.getWidth(), CONFIGURATION.getHeight(), cWindowName);
 	mWindow->setFullScreen(CONFIGURATION.getWindowed());
 	CONFIGURATION.setObservableWindow(mWindow);
-	FFMPEG.setSDLWindow(mWindow);
-	FFMPEG.registerCodecs();
+	FFMPEG.init(mWindow);
 
 	mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
     mKeyHandler = std::make_unique<KeyboardHandler>();
+
+	RESOURCES.loadShader("sprite_p.vx.glsl", "sprite_p.ft.glsl", "sprite_p");
+	RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
+	RESOURCES.loadTexture("flame-fire.png", "flame-fire");
+	RESOURCES.loadTexture("brickwall.png", "brickwall");
+	RESOURCES.loadTexture("container.jpg", "container");
+	mRenderer->getParticleManager()->init();
+
+	//moviePlayer = SDL_CreateThread(&ThreadConformantPlayIntro, "MoviePlayer", nullptr);
     loadResources();
+    ThreadConformantPlayIntro(NULL);
 	MUSIC_PLAYER.initLoad();
 
-    sInstance = this;
 }
 
 Game::~Game()
@@ -60,6 +81,12 @@ void Game::start()
     MapLoader mapLoader;
     int width, height;
     mStageStartedTimer = getCurrentTime();
+
+	RESOURCES.endLoading();
+	
+	//SDL_WaitThread(moviePlayer, NULL);
+
+	// sync files here
     while (mIsRunning)
     {
         mWindow->tickGui();
@@ -80,17 +107,31 @@ void Game::start()
             {
                 tickAI(mDeltaTime);
                 MovingEntity::debugMovement();
-                resolveCollisions();
                 Tickable::tickTickables(mDeltaTime);
+                resolveCollisions();
+
+				for (auto It : buffer1)
+					if (It != 0)
+						__debugbreak();
+
+				for (auto It : buffer2)
+					if (It != 0)
+						__debugbreak();
+
+				for (auto It : buffer3)
+					if (It != 0)
+						__debugbreak();
+
+                mRenderer->getParticleManager()->update();
+                mRenderer->getCamera().followEntity(getHero(), 10.f, mDeltaTime);
                 mRenderer->draw(*this);
+#if DEBUG
                 static int index = 0;
                 ImGui::RadioButton("NO VSync", &index, 0);
                 ImGui::RadioButton("60", &index, 1);
                 ImGui::RadioButton("30", &index, 2);
                 if (mHero && !mHero->mIsDying)
                     mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
-                mWindow->ShowInGameMenu();
-                mRenderer->getParticleManager()->update();
                 if (index)
                 {
                     const float TargetDelta = 0.0167f * (float)index;
@@ -98,6 +139,8 @@ void Game::start()
                     if (mDeltaTime < TargetDelta)
                         SDL_Delay(static_cast<Uint32>(ms * 1000));
                 }
+#endif
+                mWindow->ShowInGameMenu();
                 if (mHero && mHero->mIsDying)
                 {
                     if (mStageTimer < 2 && mStageTimer >= 0)
@@ -108,8 +151,6 @@ void Game::start()
                             mStageStartedTimer = getCurrentTime();
                         mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
                     }
-                    
-                    
                 }
             }
             else
@@ -137,7 +178,7 @@ void Game::start()
                     addEnemiesOnMap();
                     if (mHero)
                     {
-    					Hero::Stats info = mHero->getStats();
+    					Hero::Stats info = mHero->mStats;
 					    mHero = std::make_unique<Hero>(info);
                     }
                     else
@@ -206,8 +247,12 @@ bool circle_box_collision(glm::vec2 position, float radius, glm::vec2 min, glm::
 
 void Game::resolveCollisions()
 {
-    static float CollisionResolveMultiplier = 350.f;
+    static float CollisionResolveMultiplier = 300.f;
+    static float radius = 0.24f;
+#if DEBUG
     ImGui::SliderFloat("CollisionResolveMultiplier", &CollisionResolveMultiplier, 100, 1000);
+    ImGui::SliderFloat("Collision radius", &radius, 0.05f, 1.f);
+#endif
 
 	glm::vec2 offsets[] = {
 		{-1, -1},
@@ -223,8 +268,8 @@ void Game::resolveCollisions()
 	auto& Hero = getHero();
     glm::vec2 CollisionOffset(0);
     const glm::vec2 Position = Hero.getPosition();
-    static float radius = 0.24f;
-    ImGui::SliderFloat("Collision radius", &radius, 0.05f, 1.f);
+
+	// pick up item
     if (mPowerupType != Hero::PowerupType::PT_NONE
     && circle_circle_collision(Position, radius, mPowerup, radius))
     {
@@ -235,19 +280,22 @@ void Game::resolveCollisions()
     for (size_t i = 0; i < ARRAY_COUNT(offsets); i++)
     {
         glm::vec2 ProbePoint = Position + offsets[i];
-        bool inObstacle = mCollisionInfo[ProbePoint] != SquareType::EmptySquare;
-        if (!inObstacle)
-            continue;
+		SquareType inObstacle = mCollisionInfo[ProbePoint];
+        if ((inObstacle == SquareType::EmptySquare) || (Hero.mStats.wallpass && inObstacle == SquareType::Brick))
+			continue;
         glm::vec2 ResolutionOffset;
         if (circle_box_collision(Position, radius, glm::floor(ProbePoint), glm::ceil(ProbePoint), &ResolutionOffset))
             CollisionOffset += ResolutionOffset;
+
+		if (inObstacle == SquareType::Bomb)
+			CollisionOffset /= 2.f;
     }
 
-    for (MovingEntity* It : mBalloons)
+    for (MovingEntity* It : mEnemies)
     {
         if (circle_circle_collision(Hero.getPosition(), radius, It->getPosition(), radius))
             Hero.kill();
-        glm::vec2 ProbePoint = Position;
+		glm::vec2 ProbePoint = It->getPosition();
         if (mCollisionInfo[ProbePoint] == SquareType::Bomb)
         {
             glm::vec2 center = glm::floor(ProbePoint) + glm::vec2(0.5f);
@@ -255,15 +303,24 @@ void Game::resolveCollisions()
         }
     }
 
-    Hero.move(CollisionOffset / 4.f);
+    Hero.move(CollisionOffset / 8.f);
     Hero.AddAcceleration(CollisionOffset * CollisionResolveMultiplier);
-	mRenderer->getCamera().followEntity(getHero(), 10.f, mDeltaTime);
+
+	// exit level
+	if (isExitActive() 
+    && circle_circle_collision(Position, radius / 2.f, mExit, radius / 2.f))
+	{
+        FFMPEG.playVideo("betweenstages.mp4");
+		stageFinished();
+	}
 }
 
 void Game::doAction(Action const& a)
 {
     auto& Hero = getHero();
+#if DEBUG
     ImGui::SliderFloat("Input Hero acceleration", &sInputAcceleration, 0, 10000);
+#endif
 	const float offset  = mDeltaTime * sInputAcceleration;
 
     switch (a)
@@ -300,13 +357,6 @@ void Game::doAction(Action const& a)
             Hero.AddAcceleration(glm::vec2(0, offset));
 		if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
 			Hero.tryPlaceBomb();
-		//VudeoPlayer testing
-		if (mKeyHandler->isPressed(SDL_SCANCODE_8)) {
-			FFMPEG.playVideo("drop.avi");
-		}
-		if (mKeyHandler->isPressed(SDL_SCANCODE_9)) {
-			FFMPEG.playVideo("Bear.mp4");
-		}
 		//MusicPlayer testing
 		if (mKeyHandler->isPressed(SDL_SCANCODE_5))
 			MUSIC_PLAYER.playMusicInfinity("candyman");
@@ -322,6 +372,14 @@ void Game::doAction(Action const& a)
             auto *joystick = mIManager->getJoystick();
             short x_move = SDL_JoystickGetAxis(joystick, 0);
             short y_move = SDL_JoystickGetAxis(joystick, 1);
+
+			// this is mandatory
+			if (x_move < JOYSTICK_DEAD_ZONE && -x_move < JOYSTICK_DEAD_ZONE)
+				x_move = 0;
+			if (y_move < JOYSTICK_DEAD_ZONE && -y_move < JOYSTICK_DEAD_ZONE)
+				y_move = 0;
+			//
+
             glm::vec2 normalizedJoystick(
                 x_move / (float)MAX_JOYSTICK_VALUE,
                 y_move / (float)MAX_JOYSTICK_VALUE
@@ -338,7 +396,9 @@ void Game::doAction(Action const& a)
 void Game::calcDeltaTime()
 {
     static float SpeedOfTime = 1.f;
-    ImGui::SliderFloat("Spee of time", &SpeedOfTime, 0.0001f, 2.f);
+#if DEBUG
+    ImGui::SliderFloat("Speed of time", &SpeedOfTime, 0.0001f, 2.f);
+#endif
     mTimeLast = mTimeNow;
     mTimeNow = SDL_GetPerformanceCounter();
 
@@ -351,8 +411,10 @@ void Game::calcDeltaTime()
         mTimeCorrection += mDeltaTime - newDelta;
         mDeltaTime = newDelta;
     }
+#if DEBUG
 	ImGui::Text("Current time: %f", getCurrentTime());
 	ImGui::Text("Delta time: %f", mDeltaTime);
+#endif
 }
 
 void Game::loadResources()
@@ -360,25 +422,21 @@ void Game::loadResources()
     try
     {
         RESOURCES.loadShader("modelShader.vx.glsl", "modelShader.ft.glsl", "modelShader");
+        RESOURCES.loadShader("animatedModelShader.vx.glsl", "modelShader.ft.glsl", "animatedModelShader");
         RESOURCES.loadShader("skybox.vx.glsl", "skybox.ft.glsl", "skybox");
-		RESOURCES.loadShader("sprite_p.vx.glsl", "sprite_p.ft.glsl", "sprite_p");
-		RESOURCES.loadShader("sprite_quad.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad");
-		RESOURCES.loadShader("sprite_quad_brick.vx.glsl", "sprite_quad.ft.glsl", "sprite_quad_brick");
-		RESOURCES.loadShader("sprite_quad_cloud.vx.glsl", "sprite_quad_cloud.ft.glsl", "sprite_quad_cloud");
 		RESOURCES.loadShader("shadowShader.vx.glsl", "shadowShader.ft.glsl", "shadow");
+		RESOURCES.loadShader("animatedShadowShader.vx.glsl", "shadowShader.ft.glsl", "animatedShadow");
 		RESOURCES.loadShader("sparks.vx.glsl", "sparks.ft.glsl", "sparks");
 		RESOURCES.loadShader("gui.vx.glsl", "gui.ft.glsl", "gui");
         RESOURCES.loadTexture("block.png", "block");
-        RESOURCES.loadTexture("brickwall.png", "brickwall");
+        RESOURCES.loadTexture("wallpass.png", "wallpass");
         RESOURCES.loadTexture("sky.png", "sky");
         RESOURCES.loadTexture("locked.png", "locked");
         RESOURCES.loadTexture("unlocked0.png", "unlocked0");
         RESOURCES.loadTexture("unlocked0.png", "unlocked1");
         RESOURCES.loadTexture("unlocked0.png", "unlocked2");
         RESOURCES.loadTexture("unlocked0.png", "unlocked3");
-        RESOURCES.loadTexture("container.jpg", "container");
         RESOURCES.loadTexture("awesomeface.png", "face");
-		RESOURCES.loadTexture("flame-fire.png", "flame-fire");
 		RESOURCES.loadTexture("cloud_trans.jpg", "cloud_trans");
 		RESOURCES.loadTexture("explode.png", "explosion_tmap_2");
 		RESOURCES.loadTexture("sparks.jpg", "sparks");
@@ -387,19 +445,20 @@ void Game::loadResources()
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
         loadModels();
-		mRenderer->getParticleManager()->init();
+
     }
     catch (CustomException &e)
     {
         std::cout << e.what() << std::endl;
-        exit(42);
+		requestExit();
     }
 }
 
 void Game::loadModels()
 {
-    RESOURCES.loadModel("general/hero/model.fbx", "hero", glm::vec3(1.f), glm::vec3{0,0,0}, glm::vec3(0,1,0), 0.f, 0.2f);
-    RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(1.3f), glm::vec3{0,-0.8f,0}, glm::vec3(0,1,0), 0.f, 1.f);
+    RESOURCES.loadModel("general/hero/model.fbx", "hero", glm::vec3(1.f), glm::vec3{0,0,0}, glm::vec3(0,1,0), 0.f, 1.f);
+    RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(1.3f), glm::vec3{0,0.3,0}, glm::vec3(1,0,0), -90.f, 1.f);
+	//RESOURCES.getModel("bomb")->mAnimated = false;
 
     // powerups placeholder, please do something about this!!!!!!!!!!!!!!!!!!!!!
     RESOURCES.loadModel("general/powerup/model.dae", "bonus_bombs", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
@@ -432,27 +491,16 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 		"pointSphereBomb2",
 	};
 
+	typedef std::array<glm::vec2, 4> Overlaper;
 
-    glm::vec2 directions[] = {
-        {-1, 0},
-        {1, 0},
-        {0, -1},
-        {0, 1}
-    };
-
-    struct Overlaper
-    {
-        glm::vec2 point[4];
-        Overlaper(glm::ivec2 position) : point{
-            position,
-            position + glm::ivec2(1),
-            position,
-            position + glm::ivec2(1)
-        } {}
-        glm::ivec2 operator[](int i) {
-            return point[i];
-        };
-    };
+	auto MakeOverlaper = [](glm::ivec2 position) {
+		return Overlaper{
+			position,
+			position + glm::ivec2(1),
+			position,
+			position + glm::ivec2(1)
+		};
+	};
 
     std::vector<Overlaper> overlaps;
 
@@ -465,26 +513,32 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
     std::vector<SquareType*> deferedBricks;
 
 std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
-    Overlaper minMax(center);
+    glm::vec2 directions[] = {
+        {-1, 0},
+        {1, 0},
+        {0, -1},
+        {0, 1}
+    };
+
+    Overlaper minMax = MakeOverlaper(center);
     for (uint32_t i = 0; i < ARRAY_COUNT(directions); ++i)
         for (uint32_t j = 1; j <= span; ++j)
         {
             glm::vec2 testPosition = center + (float)j * directions[i];
             auto& type = mCollisionInfo[testPosition];
-            if (type == SquareType::Wall)
-                break;
 
-            fireTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
-            minMax[i] += directions[i];
-
-            if (type == SquareType::Brick)
+			if (type == SquareType::EmptySquare)
+			{
+				fireTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
+				minMax[i] += directions[i];
+			}
+            else if (type == SquareType::Brick)
             {
                 brickTransforms.push_back(glm::translate(glm::mat4(1), glm::vec3(testPosition.x, 0, testPosition. y)));
                 deferedBricks.push_back(&type);
                 break;
             }
-
-            if (type == SquareType::Bomb)
+            else if (type == SquareType::Bomb)
             {
                 type = SquareType::EmptySquare;
                 chainReaction(testPosition);
@@ -492,6 +546,10 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
                     if (testPosition == It->getPosition())
                         It->kill();
             }
+			else if (type == SquareType::Wall)
+			{
+                break;
+			}
         }
     overlaps.push_back(minMax);
 };
@@ -500,7 +558,9 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
         *It = SquareType::EmptySquare;
 
     auto &enemies = getEnemies();
-    std::for_each(overlaps.begin(), overlaps.end(), [&enemies](Overlaper &overlap) {
+    auto &hero = getHero();
+
+    std::for_each(overlaps.begin(), overlaps.end(), [&enemies, &hero](Overlaper &overlap) {
         auto hMin = overlap[0];
         auto hMax = overlap[1];
         auto vMin = overlap[2];
@@ -510,6 +570,13 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
             if (circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, hMin, hMax) || circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
                 entity->kill();
         });
+
+		if ((circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, hMin, hMax)
+		  || circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
+		  && !hero.mStats.flamepass)
+		{
+            hero.kill();
+		}
     });
 
     mRenderer->getParticleManager()->startDrawPS(brickPool[which], brickTransforms);
@@ -594,6 +661,11 @@ void  Game::cleanupOnStageChange()
     mBombs.clear();
 }
 
+void Game::requestExit()
+{
+	mIsRunning = false;
+}
+
 Game *Game::get()
 {
 	return sInstance;
@@ -601,11 +673,20 @@ Game *Game::get()
 
 void	Game::tickAI(float deltaTime)
 {
+#if DEBUG
 	if (ImGui::Button("Add balloon"))
 	{
 		getBalloons().emplace_back(glm::vec2{9.5, 9.5});
 	}
+	if (ImGui::Button("Kill all"))
+	{
+		for (auto& It : mEnemies)
+			It->kill();
+	}
+#endif
+
 	recacheEnemies();
+
 	for (auto& It : mBalloons)
 		It.controller.tick(*It, deltaTime);
 	for (auto& It : mBombs)
@@ -675,8 +756,19 @@ glm::mat4 Game::getPowerupTransform() {
     return glm::translate(glm::mat4(1.f), glm::vec3{mPowerup.x, 0, mPowerup.y});
 }
 
-Hero::PowerupType Game::powerupTypeOnMap() {
+glm::mat4 Game::getExitTransform()
+{
+	return glm::translate(glm::mat4(1), glm::vec3(mExit.x, 0, mExit.y));
+}
+
+Hero::PowerupType Game::powerupTypeOnMap()
+{
     return mPowerupType;
+}
+
+bool Game::isExitActive()
+{
+	return mEnemies.empty();
 }
 
 Hero& Game::getHero()
@@ -694,7 +786,7 @@ std::vector<MovingEntity*>& Game::getEnemies()
 	return mEnemies;
 }
 
-std::vector<Game::Balloon>& Game::getBalloons()
+std::vector<Game::BalloonAgent>& Game::getBalloons()
 {
 	return mBalloons;
 }

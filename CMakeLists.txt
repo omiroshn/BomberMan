@@ -14,6 +14,11 @@ if (APPLE)
 endif()
 
 add_subdirectory(3rdParty)
+add_definitions(
+  -D_CRT_NONSTDC_NO_WARNINGS
+  -DCL_USE_DEPRECATED_OPENCL_2_0_APIS
+  -DCL_USE_DEPRECATED_OPENCL_1_1_APIS
+)
 
 if ( WIN32 )
   set(FFMPEG_PATH_CUSTOM "${CMAKE_CURRENT_LIST_DIR}/3rdParty/ffmpeg/win64")

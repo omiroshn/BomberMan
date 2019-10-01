@@ -34,23 +34,24 @@ public:
     AABB getAABB() const;
     void transform(glm::mat4 const & aTransform);
     void setAnimation(Animation const& anim);
+
+    bool                mAnimated;
 private:
     void makeUnitModel();
     void loadModel(std::string const& path);
     void processNode(aiNode const* node,  aiScene const* scene);
     void processMesh(aiMesh const* mesh,  aiScene const* scene);
-    std::map<std::string, unsigned int> processBones(aiMesh const* mesh, std::vector<glm::mat4> & aOffsets, std::vector<Vertex> & vertices);
+    std::map<std::string, unsigned int> processBones(aiMesh const* mesh, std::vector<glm::mat4> & aOffsets, std::vector<WeightData> & vertices);
 
     std::vector<Vertex> loadVertices(aiMesh const* mesh);
     std::vector<unsigned int> loadIndices(aiMesh const* mesh);
     std::vector<std::shared_ptr<Texture>> loadTextures(aiMesh const* mesh, aiScene const* scene);
-    std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
+    std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureType texType);
 private:
     std::vector<std::unique_ptr<Mesh>> mMeshes;
     std::string         mDirectory;
     AABB                mAABB;
     glm::mat4           mTransFormMatrix;
-    bool                mAnimated;
     float               mGlossiness;
     Assimp::Importer    *mImporter;
 };

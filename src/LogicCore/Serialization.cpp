@@ -12,6 +12,7 @@
 
 #include "LogicCore/Serialization.hpp"
 #include "ResourceManagement/ResourceManager.hpp"
+#include <algorithm>
 
 Serialization::Serialization()
 {
@@ -23,7 +24,7 @@ Serialization::~Serialization()
 
 }
 
-std::vector<SquareType> Serialization::LoadCampaignMap(int stage)
+std::vector<SquareType> Serialization::LoadCampaignMap(int stage, unsigned& outWidth)
 {
     std::string map_name = "map" + std::to_string(stage) + ".txt";
     std::vector<SquareType> map;
@@ -31,8 +32,10 @@ std::vector<SquareType> Serialization::LoadCampaignMap(int stage)
     std::string line;
     std::cout << map_name << std::endl;
     std::fstream f{RESOURCES.getMap(map_name)};
-    if(std::getline(f, line))
+	unsigned width = 0;
+    while (std::getline(f, line))
     {
+        width = std::max(width, (unsigned)line.size());
         for (size_t i = 0; i < line.size(); i++)
         {
             if (line[i] >= '0' && line[i] <= '9')
@@ -42,12 +45,7 @@ std::vector<SquareType> Serialization::LoadCampaignMap(int stage)
             else 
                 map.push_back(SquareType::EmptySquare);
         };
-        map.push_back(SquareType::Wall);
     }
-    else
-    {
-        map = LoadCampaignMap(1);
-    }
-
+	outWidth = width;
     return map;
 }

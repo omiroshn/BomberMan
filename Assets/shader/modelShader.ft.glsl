@@ -12,7 +12,6 @@ uniform float glossiness;
 in VS_OUT {
     vec3 FragPos;
     vec2 TexCoords;
-    vec3 VertNormal;
     vec3 TangentLightDir;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
@@ -30,36 +29,24 @@ vec3 GetLightDir()
     return fs_in.TangentLightDir;
 }
 
-#define ARRAY_COUNT(x) (sizeof(x) / sizeof(x[0]))
-#define OFFSET_SIZE ((1.f/1024.f) * 1.4f)
+#define SAMPLES 2
+#define OFFSET_SIZE 1.2
 
-float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
+float ShadowCalculation(vec4 fragPosLightSpace)
 {
-    const vec2 offsets[] = vec2[](
-        vec2(OFFSET_SIZE,OFFSET_SIZE),
-        vec2(-OFFSET_SIZE,OFFSET_SIZE),
-        vec2(OFFSET_SIZE,-OFFSET_SIZE),
-        vec2(-OFFSET_SIZE,-OFFSET_SIZE),
-        vec2(OFFSET_SIZE,0),
-        vec2(0,OFFSET_SIZE),
-        vec2(-OFFSET_SIZE,0),
-        vec2(0,-OFFSET_SIZE)
-    );
-
-    float bias = max(0.000004 * (1.0 - dot(normal, lightDir)), 0.0001);
     vec3 projCoords = (fragPosLightSpace.xyz / fragPosLightSpace.w) * 0.5 + 0.5;
     float currentDepth = projCoords.z;
     if (currentDepth > 1.f)
         return 0.f;
-    projCoords.z = currentDepth - bias;
     float shadow = texture(shadowMap, projCoords);
-    for (int i = 0; i < offsets.length(); i++)
+    for (int i = -SAMPLES; i <= SAMPLES; i++)
+    for (int j = -SAMPLES; j <= SAMPLES; j++)
     {
         vec3 sampleCoords = projCoords;
-        sampleCoords += vec3(offsets[i], 0.f);
+        sampleCoords += vec3(vec2(i, j) * (1. / textureSize(shadowMap, 0)) * OFFSET_SIZE, 0.f);
         shadow += texture(shadowMap, sampleCoords);
     }
-    return shadow / (offsets.length()) ;
+    return shadow / ((SAMPLES * 2 + 1) * (SAMPLES * 2 + 1));
 }
 
 void main()
@@ -76,7 +63,7 @@ void main()
     float diff = max(dot(normal, lightDir), 0.0);
     vec3 diffuse = lightDiffuse * diff * texture(texture_diffuse1, fs_in.TexCoords).rgb;
     //shadow
-    float shadow = ShadowCalculation(fs_in.FragPosLightSpace, fs_in.VertNormal, lightDir);
+    float shadow = ShadowCalculation(fs_in.FragPosLightSpace);
     // specular
     vec3 viewDir = normalize(fs_in.TangentViewPos - fs_in.TangentFragPos);
     vec3 reflectDir = reflect(-lightDir, normal);

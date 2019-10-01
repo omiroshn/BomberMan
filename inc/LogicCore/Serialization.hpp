@@ -21,7 +21,7 @@ class Serialization
         ~Serialization();
         Serialization(Serialization const&) = delete;
         Serialization& operator=(Serialization const&) = delete;
-        std::vector<SquareType> LoadCampaignMap(int stage);
+        std::vector<SquareType> LoadCampaignMap(int stage, unsigned& outWidth);
 };
 
 #endif //BOMBERMAN_SERIALIZATION_H

@@ -39,5 +39,5 @@ private:
     SDL_Window   *mWindow;
     SDL_GLContext mContext;
     SDL_Event     mEvent;
-	Gui          *mMainMenu;
+	Gui           mMainMenu;
 };

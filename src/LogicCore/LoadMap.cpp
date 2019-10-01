@@ -15,7 +15,8 @@ MapLoader::~MapLoader()
 SquareType& CollisionInfo::operator[](glm::ivec2 coords)
 {
 	const unsigned index = coords.x + coords.y * width;
-	static SquareType WallType = SquareType::Wall;
+	static SquareType WallType;
+	WallType = SquareType::Wall;
 	if (coords.x < 0 || coords.y < 0 || coords.x >= (int)width || index >= Squares.size())
 		return WallType;
 	return Squares[index];
@@ -28,18 +29,17 @@ SquareType& CollisionInfo::operator[](glm::vec2 coords)
 
 CollisionInfo MapLoader::GetMap(const int index)
 {
-	if (index == -1)
+	if (index > 0)
+	{
+		//load from disk
+		mMapOfDigits = mReaderWriter.LoadCampaignMap(index, mWidth);
+		mLoaded = true;
+	}
+	else
 	{
 		MapGenerator mapGenerator(0);
 		mMapOfDigits = mapGenerator.GenerateNewMap();
 		mWidth = mapGenerator.GetWidth();
-		mLoaded = true;
-	}
-	else if (index >= 0)
-	{
-		//load from disk
-		mMapOfDigits = mReaderWriter.LoadCampaignMap(index);
-		mWidth = mMapOfDigits.size() / 20;
 		mLoaded = true;
 	}
 	return CollisionInfo{ mMapOfDigits, mWidth };

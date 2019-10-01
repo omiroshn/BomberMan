@@ -15,7 +15,7 @@ public:
     Skybox &operator=(Skybox const &);
 
     /*draw*/
-    void generate(std::vector<unsigned char *> aFacesData, std::vector<std::pair<int, int>> textureSizes);
+	void generate(std::vector<unsigned char*> aFacesData, std::vector<std::pair<int, int>> textureSizes, GLenum format);
     void draw(std::shared_ptr<Shader> aShader);
     unsigned int mCubeMap;
 private:

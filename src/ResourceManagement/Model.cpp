@@ -3,6 +3,7 @@
 #include "CustomException.hpp"
 #include "Utilities/AnimationUtils.h"
 #include "ResourceManagement/Animation.h"
+#include <limits>
 
 Model::Model(std::string const &path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle, float glossiness)
 	: mTransFormMatrix(glm::mat4(1.0f)), mImporter(new Assimp::Importer()), mGlossiness(glossiness)
@@ -33,7 +34,7 @@ void Model::makeUnitModel()
 
 void Model::loadModel(std::string const &path)
 {
-    auto const* scene = mImporter->ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals);
+	auto const* scene = mImporter->ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         throw CustomException(std::string("ASSIMP::") + mImporter->GetErrorString());
     mDirectory = path.substr(0, path.find_last_of('/'));
@@ -59,16 +60,37 @@ void Model::processMesh(aiMesh const* mesh,  aiScene const* scene)
     std::vector<Vertex> vertices(loadVertices(mesh));
     std::vector<unsigned int> indices(loadIndices(mesh));
     std::vector<std::shared_ptr<Texture>> textures(loadTextures(mesh, scene));
+    std::vector<WeightData> weights;
     std::vector<glm::mat4> offsets;
     offsets.resize(mesh->mNumBones);
-    std::map<std::string, unsigned int> bones{processBones(mesh, offsets, vertices)};
-    mMeshes.emplace_back(std::make_unique<Mesh>(vertices, indices, textures, bones, offsets, scene, mGlossiness));
+
+    if (mesh->mNumBones > 1)
+        weights.resize(vertices.size());
+        
+    std::map<std::string, unsigned int> bones{processBones(mesh, offsets, weights)};
+    mMeshes.emplace_back(std::make_unique<Mesh>(vertices, weights, indices, textures, bones, offsets, scene, mGlossiness));
 }
 
-std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std::vector<glm::mat4> & aOffsets, std::vector<Vertex> & vertices)
+int32_t Pack_INT_2_10_10_10_REV(float x, float y, float z, float w = 0.f)
+{
+    const uint32_t xs = x < 0;
+    const uint32_t ys = y < 0;
+    const uint32_t zs = z < 0;
+    const uint32_t ws = w < 0;
+    uint32_t vi =
+		(ws << 31 | ((uint32_t)(w	   ) &   1) << 30) |
+        (zs << 29 | ((uint32_t)(z * 511) & 511) << 20) |
+        (ys << 19 | ((uint32_t)(y * 511) & 511) << 10) |
+        (xs << 9  | ((uint32_t)(x * 511) & 511));
+    return vi;
+}
+
+std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std::vector<glm::mat4> & aOffsets, std::vector<WeightData> & vertices)
 {
     std::map<std::string, unsigned int> bones;
     unsigned int        totalBones{0};
+    if (mesh->mNumBones <= 1)
+        return bones;
 	for (unsigned int i = 0; i < mesh->mNumBones; i++)
     {
 		auto *bone = mesh->mBones[i];
@@ -86,7 +108,7 @@ std::map<std::string, unsigned int> Model::processBones(aiMesh const* mesh, std:
             {
 				if (vertices[weight.mVertexId].Weighs[k] == 0)
                 {
-					vertices[weight.mVertexId].Weighs[k] = weight.mWeight;
+					vertices[weight.mVertexId].Weighs[k] = uint8_t(weight.mWeight * UCHAR_MAX);
 					vertices[weight.mVertexId].BonesID[k] = i;
 					break;
 				}
@@ -106,37 +128,30 @@ std::vector<Vertex> Model::loadVertices(aiMesh const* mesh)
         vertex.Position.x = mesh->mVertices[i].x;
         vertex.Position.y = mesh->mVertices[i].y;
         vertex.Position.z = mesh->mVertices[i].z;
+        glm::vec3 Normal = glm::vec3(0);
         if (mesh->HasNormals())
         {
-            vertex.Normal.x = mesh->mNormals[i].x;
-            vertex.Normal.y = mesh->mNormals[i].y;
-            vertex.Normal.z = mesh->mNormals[i].z;
-			vertex.Normal = glm::normalize(vertex.Normal);
+            Normal = glm::normalize(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
+			vertex.Normal = Pack_INT_2_10_10_10_REV(Normal.x, Normal.y, Normal.z);
         }
         if (mesh->HasTangentsAndBitangents())
         {
-            vertex.Tangent.x = mesh->mTangents[i].x;
-            vertex.Tangent.y = mesh->mTangents[i].y;
-            vertex.Tangent.z = mesh->mTangents[i].z;
-            vertex.Bitangent.x = mesh->mBitangents[i].x;
-            vertex.Bitangent.y = mesh->mBitangents[i].y;
-            vertex.Bitangent.z = mesh->mBitangents[i].z;
+			vertex.Tangent = Pack_INT_2_10_10_10_REV(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
         }
 		else
 		{
-			glm::vec3 tmp = glm::cross(vertex.Normal, glm::vec3(0,1,0));
-			if (glm::length(tmp) < 0.001)
-				tmp = glm::cross(glm::vec3(1, 0, 0), vertex.Normal);
-			vertex.Tangent = tmp;
-			vertex.Bitangent = glm::cross(tmp, vertex.Normal);
+			glm::vec3 Tangent = glm::cross(Normal, glm::vec3(0,1,0));
+			if (glm::length(Tangent) < 0.01)
+				Tangent = glm::cross(glm::vec3(0, 0, 1), Normal);
+
+			Tangent = glm::normalize(Tangent);
+			vertex.Tangent = Pack_INT_2_10_10_10_REV(Tangent.x, Tangent.y, Tangent.z);
 		}
         if(mesh->mTextureCoords[0])
         {
-            vertex.TexCoords.x = mesh->mTextureCoords[0][i].x;
-            vertex.TexCoords.y = mesh->mTextureCoords[0][i].y;
+            vertex.TexCoords[0] = int16_t(mesh->mTextureCoords[0][i].x * SHRT_MAX);
+            vertex.TexCoords[1] = int16_t(mesh->mTextureCoords[0][i].y * SHRT_MAX);
         }
-        else
-            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
         vertices.push_back(vertex);
         mAABB += vertex.Position;
     }
@@ -161,14 +176,14 @@ std::vector<std::shared_ptr<Texture>> Model::loadTextures(aiMesh const* mesh, ai
     std::vector<std::shared_ptr<Texture>> textures;
 
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-    std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+    std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::Diffuse);
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-    std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
+    std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, TextureType::Normal);
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
     return textures;
 }
 
-std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureType texType)
 {
     std::vector<std::shared_ptr<Texture>> textures;
     for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
@@ -182,12 +197,11 @@ std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *ma
             texFullPath.replace(pos, 1, "/");
             pos = texFullPath.find("\\", pos + 1);
         }
-        auto texture = RESOURCES.loadTextureFromFile(texFullPath.c_str(), typeName, true);
+        auto texture = RESOURCES.loadTextureFromFile(texFullPath.c_str(), texType, true);
         textures.push_back(texture);
     }
     return textures;
 }
-
 
 void Model::draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> const& transforms)
 {

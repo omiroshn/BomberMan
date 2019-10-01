@@ -87,7 +87,7 @@ namespace
 	{
 		glm::vec2 position = pawn.getPosition();
 		glm::vec2 center = closestCenter(position);
-		pawn.AddVelocity(center - position);
+		pawn.AddVelocity((center - position) * 2.f);
 	}
 
 	bool	moveAI(MovingEntity& pawn, glm::vec2 destination)
@@ -103,7 +103,7 @@ namespace
 				correctionDirection = glm::vec2{ offRails.x, 0 };
 			else
 				correctionDirection = glm::vec2{ 0, offRails.y };
-			pawn.AddAcceleration(glm::normalize(correctionDirection) * 10.f);
+			pawn.AddAcceleration(glm::normalize(correctionDirection) * 15.f);
 		}
 		
 		glm::vec2 direction = destination - position;
@@ -175,12 +175,15 @@ namespace
 	}
 }
 /** AI utility functions - end */
-IdleState::IdleState()
-{
 
-}
 /* Idle state -  start */
 void IdleState::onEntry(MovingEntity&)		   { m_TransitionToPatrol = Game::getCurrentTime() + .3f; }
+
+void IdleState::onTick(MovingEntity& pawn, float)
+{
+	recenter(pawn);
+}
+
 bool IdleState::transition(const PatrolState&) { return m_TransitionToPatrol <= Game::getCurrentTime(); }
 /* Idle state -  end */
 
@@ -198,6 +201,7 @@ void PatrolState::onTick(MovingEntity& pawn, float)
 	auto& Hero = map->getHero();
 	mPawnSeesPlayer = checkVisibility(pawn, Hero.getPosition());
 }
+
 bool PatrolState::transition(const IdleState&)
 {
 	return mShouldIdle;
@@ -215,8 +219,10 @@ void PatrolState::onEntry(MovingEntity& Pawn, float)
 	mPawnSeesPlayer = false;
 	mCurrentDirection = pickRandomDirection(Pawn);
 	glm::vec2 start = Pawn.getPosition();
-	int distance = rand() % info.width;
+	int distance = info.width;
 	mShortTermGoal = march(start, mCurrentDirection, distance);
+	distance = int(glm::length(mShortTermGoal - start) + 0.5f);
+	mShortTermGoal = start + mCurrentDirection * float(std::rand() % (distance + 1));
 	mShouldIdle = false;
 }
 /* Patrol state -  end */
@@ -239,23 +245,20 @@ void ChaseState::onTick(MovingEntity& pawn, float)
 	}
 }
 
-bool ChaseState::transition(const ConfusedState&)
-{
-	return mIsConfused;
-}
-
 void ChaseState::onEntry(MovingEntity& , float /*= 0*/)
 {
 	mPawnSeesPlayer = true;
 	mIsConfused = false;
 	mLastSeenPlayer = glm::vec3(0);
 }
+
+bool ChaseState::transition(const ConfusedState&) { return mIsConfused; }
 /* Chase state -  end */
 
-/* Chase state - start */
+/* Confused state - start */
 bool ConfusedState::transition(const PatrolState&)
 {
-	return (Game::getCurrentTime() - mConfusionStarted) >= M_PI;
+	return (Game::getCurrentTime() - mConfusionStarted) >= float(M_PI);
 }
 
 bool ConfusedState::transition(const ChaseState&)
@@ -280,7 +283,55 @@ void ConfusedState::onEntry(MovingEntity& pawn, float /*= 0*/)
 	initialAngle = pawn.getAngle();
 }
 /* Confused state -  end */
-IdleState::~IdleState()
-{
 
+
+// copliens form is stupid
+
+ChaseState::ChaseState() : mPawnSeesPlayer(false), mLastSeenPlayer(0.f, 0.f), mIsConfused(false) { } 
+ChaseState::ChaseState(ChaseState const& Other) : mPawnSeesPlayer(false), mLastSeenPlayer(0.f, 0.f), mIsConfused(false) { operator=(Other); }
+ChaseState::~ChaseState() { }
+
+ChaseState& ChaseState::operator=(ChaseState const& Other)
+{
+	mPawnSeesPlayer =  Other.mPawnSeesPlayer;
+	mLastSeenPlayer =  Other.mLastSeenPlayer;
+	mIsConfused =      Other.mIsConfused;
+	return *this;
 }
+
+IdleState::IdleState() : m_TransitionToPatrol(0) { }
+IdleState::~IdleState() { }
+IdleState::IdleState(IdleState const& Other) : m_TransitionToPatrol(0) { operator=(Other); }
+
+IdleState& IdleState::operator=(IdleState const&Other)
+{
+	m_TransitionToPatrol = Other.m_TransitionToPatrol;
+	return *this;
+}
+
+PatrolState::PatrolState() : mPawnSeesPlayer(false), mShortTermGoal(0.f, 0.f), mShouldIdle(false), mCurrentDirection(0.f, 0.f) { } 
+PatrolState::~PatrolState() { }
+PatrolState::PatrolState(PatrolState const& Other) : mPawnSeesPlayer(false), mShortTermGoal(0.f, 0.f), mShouldIdle(false), mCurrentDirection(0.f, 0.f) { operator=(Other); }
+
+PatrolState& PatrolState::operator=(PatrolState const& Other)
+{
+	mPawnSeesPlayer = Other.mPawnSeesPlayer;
+	mShortTermGoal = Other.mShortTermGoal;
+	mShouldIdle = Other.mShouldIdle;
+	mCurrentDirection = Other.mCurrentDirection;
+	return *this;
+}
+
+ConfusedState::ConfusedState() :  mConfusionStarted(0.f), initialAngle(0.f), mShouldMoveOn(false), mPawnSeesPlayer(false) { }
+ConfusedState::~ConfusedState() { }
+ConfusedState::ConfusedState(ConfusedState const& Other) :  mConfusionStarted(0.f), initialAngle(0.f), mShouldMoveOn(false), mPawnSeesPlayer(false) { operator=(Other); } 
+
+ConfusedState& ConfusedState::operator=(ConfusedState const& Other)
+{
+	mConfusionStarted = Other.mConfusionStarted;
+	initialAngle =      Other.initialAngle;
+	mShouldMoveOn =     Other.mShouldMoveOn;
+	mPawnSeesPlayer =   Other.mPawnSeesPlayer;
+	return *this;
+}
+

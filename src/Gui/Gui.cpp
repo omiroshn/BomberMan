@@ -100,6 +100,12 @@ void Gui::ShowInGameMenu()
 
 		ImGui::Text("   Lives: ");
 		ImGui::Text("%s", std::to_string(CONFIGURATION.getLives()).c_str());
+
+		auto* game = Game::get();
+		auto& hero = game->getHero();
+		if (hero.mStats.wallpass)
+			ImGui::Image(RESOURCES.getTexture("wallpass").get(), {20,20});
+
 		ImGui::EndMainMenuBar();
 	}
 
@@ -183,25 +189,25 @@ void Gui::ShowLoadSavedGamesMenu()
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(28, 4));
 	ImGui::BeginChildFrame(2, { 234, 204 }, 4);
 	ImGui::Text("\nStages of the campaign");
-	if (ImGui::ImageButton(mButtonsTextures[0].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	if (ImGui::ImageButton(mButtonsTextures[0].get(), ImVec2(32, 32), ImVec2(0, 0), ImVec2(1, 1), 2, ImColor(0, 0, 0, 255)))
 	{
 		ChangeStage(0);
 	}
 	ImGui::SameLine();
 	ImGui::Text("\n   Stage 1");
-	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 0 ? 1 : 4].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 0 ? 1 : 4].get(), ImVec2(32, 32), ImVec2(0, 0), ImVec2(1, 1), 2, ImColor(0, 0, 0, 255)))
 	{
 		ChangeStage(1);
 	}
 	ImGui::SameLine();
 	ImGui::Text("\n   Stage 2");
-	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 1 ? 2 : 4].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 1 ? 2 : 4].get(), ImVec2(32, 32), ImVec2(0, 0), ImVec2(1, 1), 2, ImColor(0, 0, 0, 255)))
 	{
 		ChangeStage(2);
 	}
 	ImGui::SameLine();
 	ImGui::Text("\n   Stage 3");
-	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 2 ? 3 : 4].get(), ImVec2(32, 32), ImVec2(0, 1), ImVec2(1.0f, 0.0f), 2, ImColor(0, 0, 0, 255)))
+	if (ImGui::ImageButton(mButtonsTextures[CONFIGURATION.getBestLevelAchieved() > 2 ? 3 : 4].get(), ImVec2(32, 32), ImVec2(0, 0), ImVec2(1, 1), 2, ImColor(0, 0, 0, 255)))
 	{
 		ChangeStage(3);
 	}
@@ -317,7 +323,7 @@ void Gui::ShowLoadingScreen(const char* screen)
 	mHeight = (float)CONFIGURATION.getHeight();
 	ImGui::SetNextWindowSize({mWidth,mHeight});
 	ImGui::Begin("Next Stage", NULL, mWindow_flags);
-	ImGui::Image(im,{mWidth,mHeight}, {1,1}, {0,0});
+	ImGui::Image(im,{mWidth,mHeight}, {0,0}, {1,1});
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
 	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 50, mHeight / 2), ImColor(1.0f,1.0f,1.0f,1.0f), "Welcome to next stage" );
 	if (CONFIGURATION.getChosenStage() > 0)
@@ -414,7 +420,7 @@ void Gui::CreateFontsTexture()
     unsigned char* pixels;
     int width, height;
     io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-	mFontTexture = RESOURCES.loadTextureFromMemory(pixels, "font", width, height, 4, false);
+	mFontTexture = RESOURCES.loadTextureFromMemory(pixels, TextureType::Font, width, height, 4, false);
 
     io.Fonts->TexID = mFontTexture.get();
 }
@@ -455,7 +461,7 @@ void    Gui::InvalidateDeviceObjects()
     }
 }
 
-bool    Gui::Init(SDL_Window* window)
+bool    Gui::Init()
 {
     ImGuiIO& io = ImGui::GetIO();
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;   // We can honor GetMouseCursor() values (optional)
@@ -532,6 +538,5 @@ void Gui::NewFrame(SDL_Window* window)
         SDL_CaptureMouse(SDL_TRUE);
     if (!any_mouse_button_down && (SDL_GetWindowFlags(window) & SDL_WINDOW_MOUSE_CAPTURE) != 0)
         SDL_CaptureMouse(SDL_FALSE);
-
     ImGui::NewFrame();
 }

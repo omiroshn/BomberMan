@@ -50,4 +50,4 @@ struct Counting : public State {
 	float mCountdown;
 };
 
-typedef SM<Bomb, Spawning, Counting> BombSM;
+typedef SM<Bomb, Spawning, Counting> BombController;

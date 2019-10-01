@@ -30,11 +30,8 @@ void Renderer::updateSize(int aWidth, int aHeight)
 
 void Renderer::draw(Game& aMap)
 {
-    //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glEnable(GL_CULL_FACE);
-	mLightManager->initLightSpaceMatrix();
+    glEnable(GL_CULL_FACE);
+	mLightManager->initLightSpaceMatrix(aMap.getHero().getPosition3D());
     prepareTransforms(aMap);
     shadowPass(aMap);
     normalPass(aMap);
@@ -71,9 +68,6 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
 
     unbreakableWall->draw(s, mTransforms[ModelType::Wall]);
     brick->draw(s, mTransforms[ModelType::Brick]);
-    Animation a;
-    a.setTime(0);
-    bomb->setAnimation(a);
     bomb->draw(s, mTransforms[ModelType::Bomb]);
 
     auto type = Game::get()->powerupTypeOnMap();
@@ -90,9 +84,16 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
         };
         bonusModels[type]->draw(s, std::vector<glm::mat4>{Game::get()->getPowerupTransform()});
     }
+
+	bool active = Game::get()->isExitActive();
+	static std::shared_ptr<Model> exit[2] = {
+		RESOURCES.getModel("ground"),
+		RESOURCES.getModel("perimeterWall"),
+	};
+	exit[active]->draw(s, std::vector<glm::mat4>{Game::get()->getExitTransform()});
 }
 
-void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
+void Renderer::renderMovable(std::shared_ptr<Shader> &s, std::shared_ptr<Shader> &animated, Game &g)
 {
     static auto heroModel = RESOURCES.getModel("hero");
     static auto balloon = RESOURCES.getModel("balloon");
@@ -100,7 +101,7 @@ void Renderer::renderMovable(std::shared_ptr<Shader> &s, Game &g)
     //render hero
     auto& Hero = g.getHero();
     heroModel->setAnimation(Hero.getAnimation());
-    heroModel->draw(s, mTransforms[ModelType::Player]);
+    heroModel->draw(animated, mTransforms[ModelType::Player]);
 
     //render enemies
     balloon->draw(s, mTransforms[ModelType::EnemyType1]);
@@ -110,9 +111,11 @@ void Renderer::normalPass(Game& aMap)
 {
     glViewport(0, 0, mWidth, mHeight);
     glClear(GL_DEPTH_BUFFER_BIT);
+    glCullFace(GL_BACK);
  
     static auto ground = RESOURCES.getModel("ground");
     static auto modelShader = RESOURCES.getShader("modelShader");
+    static auto animatedModelShader = RESOURCES.getShader("animatedModelShader");
     static auto skyboxShader = RESOURCES.getShader("skybox");
 
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
@@ -120,7 +123,10 @@ void Renderer::normalPass(Game& aMap)
 
 
 	static float Shininess = 32.f;
-	ImGui::SliderFloat("Shininess", &Shininess, 1.f, 32.f);
+
+#if DEBUG
+	ImGui::SliderFloat("Shininess", &Shininess, 8.f, 64.f);
+#endif
 
     //render the model
     modelShader->use();
@@ -132,20 +138,29 @@ void Renderer::normalPass(Game& aMap)
     modelShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
     modelShader->setFloat("shininess", Shininess);
 
-    renderMovable(modelShader, aMap);
+    animatedModelShader->use();
+    animatedModelShader->setMat4("projection", projection);
+    animatedModelShader->setMat4("view", view);
+    animatedModelShader->setVec3("viewPos", mCamera.position());
+    animatedModelShader->setVec3("lightDir", mLightManager->getCurrentLightDir());
+    animatedModelShader->setInt("shadowMap", mLightManager->bindDepthMap());
+    animatedModelShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
+    animatedModelShader->setFloat("shininess", Shininess);
+
+    renderMovable(modelShader, animatedModelShader, aMap);
     renderObstacles(modelShader);
 
     // render the ground
-    std::vector<glm::mat4> transforms;
     glm::mat4 groundModel = glm::translate(glm::mat4(1.0f), glm::vec3(.0f, -1.f, .0f));
 
     CollisionInfo &info = Game::getCollisionInfo();
+    std::vector<glm::mat4> transforms(info.Squares.size());
     for (size_t i = 0; i < info.Squares.size(); i++)
     {
         glm::mat4 groundTransform = glm::translate(groundModel,
             glm::vec3(i % info.width + .5f, 0, i / info.width + .5f)
         );
-        transforms.push_back(groundTransform);
+        transforms[i] = groundTransform;
     }
     ground->draw(modelShader, transforms);
 
@@ -171,7 +186,6 @@ void Renderer::normalPass(Game& aMap)
 		mParticleManager->draw(projection, view);
 	} catch (CustomException &ex) {
 		std::cout << ex.what() << std::endl;
-		exit(42);
 	}
 
     // render sparks
@@ -181,13 +195,15 @@ void Renderer::normalPass(Game& aMap)
 void Renderer::shadowPass(Game& aMap)
 {
     static auto shadowShader = RESOURCES.getShader("shadow");
+    static auto animatedShadowShader = RESOURCES.getShader("animatedShadow");
     shadowShader->use();
     shadowShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
+    animatedShadowShader->use();
+    animatedShadowShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
     mLightManager->prepareForShadowPass();
-    renderMovable(shadowShader, aMap);
+    renderMovable(shadowShader, animatedShadowShader, aMap);
     renderObstacles(shadowShader);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glCullFace(GL_BACK);
 }
 
 Camera &Renderer::getCamera()

@@ -46,9 +46,11 @@ glm::mat4 Entity::getModelMatrix() const
 /** call it from anywhere in game loop, and you will have accessors for all major variables */
 void Entity::debug()
 {
+#if DEBUG
 	ImGui::Text("Entity_%d:", mUid);
 	ImGui::DragFloat2("Position", &mPosition[0], 0.1f);
 	ImGui::SliderAngle("Angle", &mAngle, -180, 180);
+#endif
 }
 
 // left for compatibility reasons

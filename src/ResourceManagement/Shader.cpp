@@ -13,6 +13,8 @@
 #include "ResourceManagement/Shader.hpp"
 #include "CustomException.hpp"
 
+unsigned int Shader::sBoundProgram;
+
 Shader::Shader(std::string const &vertexSrcPath, std::string const &fragmentSrcPath)
 {
 	std::string vertexCode;
@@ -33,7 +35,7 @@ Shader::Shader(std::string const &vertexSrcPath, std::string const &fragmentSrcP
 		vertexCode   = vShaderStream.str();
 		fragmentCode = fShaderStream.str();
 	}
-	catch(std::ifstream::failure &e)
+	catch(std::ifstream::failure &)
 	{
 		throw CustomException("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ\n");
 	}
@@ -77,7 +79,7 @@ bool Shader::isShaderCompiled(unsigned int shader, int errSize, char *errText) c
 bool Shader::isProgramLinked(unsigned int program, int errSize, char *errText) const
 {
 	int success;
-	glGetProgramiv(program, GL_COMPILE_STATUS, &success);
+	glGetProgramiv(program, GL_LINK_STATUS, &success);
 	if (!success)
 		glGetProgramInfoLog(program, errSize, nullptr, errText);
 	return success != 0;
@@ -85,7 +87,10 @@ bool Shader::isProgramLinked(unsigned int program, int errSize, char *errText) c
 
 void Shader::use()
 {
+	if (!mShaderProgram && mShaderProgram == sBoundProgram)
+		return;
 	glUseProgram(mShaderProgram);
+	sBoundProgram = mShaderProgram;
 }
 
 GLuint Shader::getUniformLocation(std::string const& name) const
@@ -100,7 +105,6 @@ GLuint Shader::getUniformLocation(std::string const& name) const
     }
     return location;
 }
-
 
 void Shader::setBool(const std::string &name, bool value) const
 {

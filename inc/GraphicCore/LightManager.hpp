@@ -2,6 +2,7 @@
 #include <memory>
 #include "GL/glew.h"
 #include "glm/glm.hpp"
+#include "ResourceManagement/Texture.hpp"
 
 class LightManager
 {
@@ -15,12 +16,12 @@ public:
     int bindDepthMap();
     GLuint getDepthFrameBufferID();
     void prepareForShadowPass();
-    void initLightSpaceMatrix();
+	void initLightSpaceMatrix(glm::vec3 shadowMapOffset);
+    std::shared_ptr<Texture> mDepthTexture;
 private:
     int  mDepthMapIndex{10};
     void initShadowFramebuffer();
     GLuint mDepthMapFBO;
-    GLuint mDepthMap;
     glm::mat4 mLightSpaceMatrix;
     glm::vec3 mLightPos{-40.0f, 36.905f, 10.5};
 	glm::vec3 mLightDir;

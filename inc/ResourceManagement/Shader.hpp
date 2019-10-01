@@ -39,6 +39,7 @@ public:
 private:
     GLuint getUniformLocation(std::string const&) const;
     mutable std::map<std::string, GLuint> mUniformLocations;
+	static unsigned int sBoundProgram;
 };
 
 #endif

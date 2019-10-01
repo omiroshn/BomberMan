@@ -27,11 +27,6 @@ void Hero::tryPlaceBomb()
 	Game::get()->plantBomb(getPosition(), mStats.bombStrength);
 }
 
-Hero::Stats Hero::getStats()
-{
-	return mStats;
-}
-
 void Hero::kill()
 {
 	SetAnimationType(AnimationType::Dying);
