@@ -538,9 +538,5 @@ void Gui::NewFrame(SDL_Window* window)
         SDL_CaptureMouse(SDL_TRUE);
     if (!any_mouse_button_down && (SDL_GetWindowFlags(window) & SDL_WINDOW_MOUSE_CAPTURE) != 0)
         SDL_CaptureMouse(SDL_FALSE);
-<<<<<<< HEAD
-=======
-
->>>>>>> it works! almost done even
     ImGui::NewFrame();
 }

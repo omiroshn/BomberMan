@@ -124,7 +124,9 @@ void Renderer::normalPass(Game& aMap)
 
 	static float Shininess = 32.f;
 
+#if DEBUG
 	ImGui::SliderFloat("Shininess", &Shininess, 8.f, 64.f);
+#endif
 
     //render the model
     modelShader->use();

@@ -125,13 +125,13 @@ void Game::start()
                 mRenderer->getParticleManager()->update();
                 mRenderer->getCamera().followEntity(getHero(), 10.f, mDeltaTime);
                 mRenderer->draw(*this);
+#if DEBUG
                 static int index = 0;
                 ImGui::RadioButton("NO VSync", &index, 0);
                 ImGui::RadioButton("60", &index, 1);
                 ImGui::RadioButton("30", &index, 2);
                 if (mHero && !mHero->mIsDying)
                     mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
-                mWindow->ShowInGameMenu();
                 if (index)
                 {
                     const float TargetDelta = 0.0167f * (float)index;
@@ -139,6 +139,8 @@ void Game::start()
                     if (mDeltaTime < TargetDelta)
                         SDL_Delay(static_cast<Uint32>(ms * 1000));
                 }
+#endif
+                mWindow->ShowInGameMenu();
                 if (mHero && mHero->mIsDying)
                 {
                     if (mStageTimer < 2 && mStageTimer >= 0)
@@ -149,8 +151,6 @@ void Game::start()
                             mStageStartedTimer = getCurrentTime();
                         mStageTimer = 4 - (getCurrentTime() - mStageStartedTimer);
                     }
-                    
-                    
                 }
             }
             else
@@ -248,7 +248,11 @@ bool circle_box_collision(glm::vec2 position, float radius, glm::vec2 min, glm::
 void Game::resolveCollisions()
 {
     static float CollisionResolveMultiplier = 300.f;
+    static float radius = 0.24f;
+#if DEBUG
     ImGui::SliderFloat("CollisionResolveMultiplier", &CollisionResolveMultiplier, 100, 1000);
+    ImGui::SliderFloat("Collision radius", &radius, 0.05f, 1.f);
+#endif
 
 	glm::vec2 offsets[] = {
 		{-1, -1},
@@ -264,8 +268,6 @@ void Game::resolveCollisions()
 	auto& Hero = getHero();
     glm::vec2 CollisionOffset(0);
     const glm::vec2 Position = Hero.getPosition();
-    static float radius = 0.24f;
-    ImGui::SliderFloat("Collision radius", &radius, 0.05f, 1.f);
 
 	// pick up item
     if (mPowerupType != Hero::PowerupType::PT_NONE
@@ -316,7 +318,9 @@ void Game::resolveCollisions()
 void Game::doAction(Action const& a)
 {
     auto& Hero = getHero();
+#if DEBUG
     ImGui::SliderFloat("Input Hero acceleration", &sInputAcceleration, 0, 10000);
+#endif
 	const float offset  = mDeltaTime * sInputAcceleration;
 
     switch (a)
@@ -392,7 +396,9 @@ void Game::doAction(Action const& a)
 void Game::calcDeltaTime()
 {
     static float SpeedOfTime = 1.f;
+#if DEBUG
     ImGui::SliderFloat("Speed of time", &SpeedOfTime, 0.0001f, 2.f);
+#endif
     mTimeLast = mTimeNow;
     mTimeNow = SDL_GetPerformanceCounter();
 
@@ -405,8 +411,10 @@ void Game::calcDeltaTime()
         mTimeCorrection += mDeltaTime - newDelta;
         mDeltaTime = newDelta;
     }
+#if DEBUG
 	ImGui::Text("Current time: %f", getCurrentTime());
 	ImGui::Text("Delta time: %f", mDeltaTime);
+#endif
 }
 
 void Game::loadResources()
@@ -665,10 +673,17 @@ Game *Game::get()
 
 void	Game::tickAI(float deltaTime)
 {
+#if DEBUG
 	if (ImGui::Button("Add balloon"))
 	{
 		getBalloons().emplace_back(glm::vec2{9.5, 9.5});
 	}
+	if (ImGui::Button("Kill all"))
+	{
+		for (auto& It : mEnemies)
+			It->kill();
+	}
+#endif
 
 	recacheEnemies();
 

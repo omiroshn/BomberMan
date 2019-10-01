@@ -55,9 +55,11 @@ void MovingEntity::AddAcceleration(glm::vec2 accelerationOffset)
 
 void MovingEntity::debug()
 {
+#if DEBUG
 	Entity::debug();
 	ImGui::DragFloat2("Velocity", &mVelocity[0]);
 	ImGui::DragFloat2("Acceleration", &mAcceleration[0]);
+#endif
 }
 
 void MovingEntity::SetAnimationType(AnimationType type)
@@ -67,10 +69,12 @@ void MovingEntity::SetAnimationType(AnimationType type)
 
 void MovingEntity::debugMovement()
 {
+#if DEBUG
 	ImGui::Text("MovableEntity setting:");
 	ImGui::SliderFloat("Friction", &_Friction, 0.5, 20);
 	ImGui::SliderFloat("MaxVelocity", &_MaxVelocity, 0, 20);
 	ImGui::SliderFloat("MaxAcceleration", &_MaxAcceleration, 0, 150);
+#endif
 }
 
 glm::vec2 MovingEntity::GetAcceleration() const

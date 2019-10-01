@@ -48,6 +48,7 @@ void LightManager::initLightSpaceMatrix(glm::vec3 shadowMapOffset)
     static glm::vec2 tb{-10.824f, 7.2f};
     static glm::vec2 nf{38.294f, 71.647f};
     static glm::vec3 lookTarget(-1);
+#if DEBUG
 	ImGui::Begin("Lights");
 	ImGui::SliderFloat("lightmap angle", &angle, 0.f, (float)M_PI * 2.f);
     ImGui::SliderFloat2("light left/right", &lr.x, -32, 32);
@@ -57,6 +58,7 @@ void LightManager::initLightSpaceMatrix(glm::vec3 shadowMapOffset)
     ImGui::SliderFloat3("lightPos", &mLightPos.x, 0, 100);
 	ImGui::Image(mDepthTexture.get(), ImVec2(400,400));
 	ImGui::End();
+#endif
 
     mLightDir = glm::normalize(mLightPos - lookTarget);
 	glm::vec3 up = glm::vec3(0.0, 1.0, 0.0) * glm::mat3(glm::rotate(glm::mat4(1), angle, mLightDir));
