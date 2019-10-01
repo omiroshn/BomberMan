@@ -15,7 +15,7 @@ endif()
 
 add_subdirectory(3rdParty)
 add_definitions(
-  -DAV_NOWARN_DEPRECATED
+  -D_CRT_NONSTDC_NO_WARNINGS
   -DCL_USE_DEPRECATED_OPENCL_2_0_APIS
   -DCL_USE_DEPRECATED_OPENCL_1_1_APIS
 )

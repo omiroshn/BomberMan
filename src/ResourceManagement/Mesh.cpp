@@ -139,7 +139,7 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
         }
     }
     glBindVertexArray(mVAO);
-    glDrawElementsInstanced(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr, GLsizei(transforms.size()));
+    glDrawElementsInstanced(GL_TRIANGLES, GLsizei(mIndices.size()), GL_UNSIGNED_INT, nullptr, GLsizei(transforms.size()));
     glBindVertexArray(0);
 }
 
@@ -199,13 +199,13 @@ void	Mesh::doAnimation()
         return;
     float ticksPerSecond = float(mScene->mAnimations[mCurrentAnimation]->mTicksPerSecond);
     float timeInTicks = mAnimationTime * ticksPerSecond;
-    float animTime = fmodf(timeInTicks, mScene->mAnimations[mCurrentAnimation]->mDuration - 1);
+    float animTime = fmodf(timeInTicks, float(mScene->mAnimations[mCurrentAnimation]->mDuration - 1.));
     readNodeHierarchy(animTime, mScene->mRootNode, glm::mat4(1.0f));
 }
 
 void	Mesh::setAnimation(Animation const& anim)
 {
-    mAnimationTime = anim.getTime();
+    mAnimationTime = float(anim.getTime());
     auto requiredAnimation = anim.getName();
     std::transform(requiredAnimation.begin(), requiredAnimation.end(), requiredAnimation.begin(), ::tolower);
     for (mCurrentAnimation = mScene->mNumAnimations - 1; mCurrentAnimation != 0; --mCurrentAnimation)
