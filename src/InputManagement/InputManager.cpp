@@ -29,7 +29,7 @@ InputManager::~InputManager()
 
 Action InputManager::processEvents(SDL_Event &e, KeyboardHandler &keyHandler)
 {
-    if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
+    if (e.type == SDL_QUIT)
         return Action::Finish;
 
     ImGuiIO& io = ImGui::GetIO();
@@ -128,7 +128,7 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
     switch (keyPressed)
     {
         case SDLK_ESCAPE:
-            return Action::Finish;
+            return Action::Pause;
         case SDLK_SPACE:
             return Action::Explosion;
         case SDLK_1:
@@ -154,7 +154,7 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
         case SDLK_e:
             return Action::Down;
         case SDLK_0:
-            return Action::Explosion;
+            return Action::Finish;
         default:
             return Action::Nothing;
     }
