@@ -68,10 +68,10 @@ private:
 	float mHeight = 600.0f;
 
 	// OpenGL data
-	char         mGlslVersion[32] = {"#version 330\n"};
+//	char         mGlslVersion[32] = {"#version 330\n"};
 	GLuint       mVaoHandle = 0, mVboHandle = 0, mElementsHandle = 0;
-	int          mAttribLocationTex = 0, mAttribLocationProjMtx = 0;
-	int          mAttribLocationPosition = 0, mAttribLocationUV = 0, mAttribLocationColor = 0;
+//	int          mAttribLocationTex = 0, mAttribLocationProjMtx = 0;
+//	int          mAttribLocationPosition = 0, mAttribLocationUV = 0, mAttribLocationColor = 0;
 
 	std::shared_ptr<Texture> mFontTexture = 0;
 };

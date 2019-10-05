@@ -75,7 +75,7 @@ Skybox &Skybox::operator=(Skybox const &)
     return *this;
 }
 
-void Skybox::generate(std::vector<unsigned char *> aFacesData, std::vector<std::pair<int, int>> textureSizes, GLenum format)
+void Skybox::generate(std::vector<unsigned char *> aFacesData, std::vector<std::pair<int, int>> textureSizes, GLenum )
 {
     glBindTexture(GL_TEXTURE_CUBE_MAP, mCubeMap);
 

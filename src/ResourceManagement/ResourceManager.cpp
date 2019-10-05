@@ -61,8 +61,6 @@ unsigned int ResourceManager::loadCubemap(std::string const& aSkyboxName, std::s
     return textureID;
 }
 
-#pragma optimize("", off)
-
 void ResourceManager::endLoading()
 {
 	std::vector<TextureData> localTex;
@@ -96,8 +94,6 @@ void ResourceManager::endLoading()
 	mPendingTextures.clear();
 	mPendingSkyboxes.clear();
 }
-
-#pragma optimize("", on)
 
 ResourceManager &ResourceManager::getInstance()
 {

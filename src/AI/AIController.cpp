@@ -287,8 +287,8 @@ void ConfusedState::onEntry(MovingEntity& pawn, float /*= 0*/)
 
 // copliens form is stupid
 
-ChaseState::ChaseState() : mPawnSeesPlayer(false), mLastSeenPlayer(0.f, 0.f), mIsConfused(false) { } 
-ChaseState::ChaseState(ChaseState const& Other) : mPawnSeesPlayer(false), mLastSeenPlayer(0.f, 0.f), mIsConfused(false) { operator=(Other); }
+ChaseState::ChaseState() : mLastSeenPlayer(0.f, 0.f), mPawnSeesPlayer(false), mIsConfused(false) { }
+ChaseState::ChaseState(ChaseState const& Other) : mLastSeenPlayer(0.f, 0.f), mPawnSeesPlayer(false), mIsConfused(false) { operator=(Other); }
 ChaseState::~ChaseState() { }
 
 ChaseState& ChaseState::operator=(ChaseState const& Other)
@@ -309,9 +309,9 @@ IdleState& IdleState::operator=(IdleState const&Other)
 	return *this;
 }
 
-PatrolState::PatrolState() : mPawnSeesPlayer(false), mShortTermGoal(0.f, 0.f), mShouldIdle(false), mCurrentDirection(0.f, 0.f) { } 
+PatrolState::PatrolState() : mCurrentDirection(0.f, 0.f), mShortTermGoal(0.f, 0.f), mShouldIdle(false), mPawnSeesPlayer(false){ }
 PatrolState::~PatrolState() { }
-PatrolState::PatrolState(PatrolState const& Other) : mPawnSeesPlayer(false), mShortTermGoal(0.f, 0.f), mShouldIdle(false), mCurrentDirection(0.f, 0.f) { operator=(Other); }
+PatrolState::PatrolState(PatrolState const& Other) : mCurrentDirection(0.f, 0.f), mShortTermGoal(0.f, 0.f), mShouldIdle(false), mPawnSeesPlayer(false) { operator=(Other); }
 
 PatrolState& PatrolState::operator=(PatrolState const& Other)
 {
