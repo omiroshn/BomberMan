@@ -6,7 +6,7 @@
 #include <limits>
 
 Model::Model(std::string const &path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle, float glossiness)
-	: mTransFormMatrix(glm::mat4(1.0f)), mImporter(new Assimp::Importer()), mGlossiness(glossiness)
+	: mTransFormMatrix(glm::mat4(1.0f)), mGlossiness(glossiness), mImporter(new Assimp::Importer())
 {
     loadModel(path);
     makeUnitModel();

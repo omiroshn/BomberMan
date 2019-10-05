@@ -13,12 +13,12 @@
 #include "LogicCore/MapGeneration.hpp"
 #include <iostream>
 
-MapGenerator::MapGenerator(int hardness)
+MapGenerator::MapGenerator(int )
 {
 
 }
 
-MapGenerator::MapGenerator(int width, int height, int hardness) :
+MapGenerator::MapGenerator(int width, int height, int ) :
 	mWidth(width),
 	mHeight(height)
 {

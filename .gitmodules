@@ -16,9 +16,6 @@
 [submodule "3rdParty/glew"]
 	path = 3rdParty/glew
 	url = https://github.com/Perlmint/glew-cmake.git
-[submodule "3rdParty/stb"]
-	path = 3rdParty/stb
-	url = https://github.com/nothings/stb.git
 [submodule "3rdParty/cotire"]
 	path = 3rdParty/cotire
 	url = https://github.com/sakra/cotire.git
@@ -31,3 +28,6 @@
 [submodule "3rdParty/ffmpeg"]
 	path = 3rdParty/ffmpeg
 	url = https://Arxcel@bitbucket.org/Arxcel/ffmpeg_bin_mirror.git
+[submodule "3rdParty/stb"]
+	path = 3rdParty/stb
+	url = https://Arxcel@bitbucket.org/Arxcel/stb_image_mirror.git

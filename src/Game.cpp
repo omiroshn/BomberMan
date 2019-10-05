@@ -33,12 +33,12 @@ namespace
     std::string const cWindowName = "Bomberman";
 }
 
-static int ThreadConformantPlayIntro(void*)
-{
-	SDL_SetThreadPriority(SDL_THREAD_PRIORITY_TIME_CRITICAL);
-	//FFMPEG.playVideo("intro.mp4");
-	return 0;
-}
+//static int ThreadConformantPlayIntro(void*)
+//{
+//	SDL_SetThreadPriority(SDL_THREAD_PRIORITY_TIME_CRITICAL);
+//	//FFMPEG.playVideo("intro.mp4");
+//	return 0;
+//}
 
 Game::Game()
 {
@@ -480,15 +480,14 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 
 	typedef std::array<glm::vec2, 4> Overlaper;
 
-	auto MakeOverlaper = [](glm::ivec2 position) {
-		return Overlaper{
-			position,
-			position + glm::ivec2(1),
-			position,
-			position + glm::ivec2(1)
-		};
-	};
-
+    auto MakeOverlaper = [](glm::ivec2 position) {
+        return Overlaper{
+                {position,
+                position + glm::ivec2(1),
+                position,
+                position + glm::ivec2(1)}
+        };
+    };
     std::vector<Overlaper> overlaps;
 
     glm::vec2 centerPosition = glm::vec2(position) + glm::vec2(0.5f);

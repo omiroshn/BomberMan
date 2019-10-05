@@ -13,7 +13,7 @@ std::map <TextureType, std::string> cTextureTypesString
                 {TextureType::Font, "font"}
         };
 
-Texture::Texture(TextureType aType, GLuint width, GLuint height, unsigned char* data, GLenum format, GLuint filterMin, GLuint filerMax)
+Texture::Texture(TextureType aType, GLuint width, GLuint height, unsigned char* data, GLenum format, GLuint, GLuint)
 	: mType(aType)
 {
 	glGenTextures(1, &mID);
