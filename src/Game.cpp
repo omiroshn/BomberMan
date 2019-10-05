@@ -36,7 +36,7 @@ namespace
 static int ThreadConformantPlayIntro(void*)
 {
 	SDL_SetThreadPriority(SDL_THREAD_PRIORITY_TIME_CRITICAL);
-	FFMPEG.playVideo("intro.mp4");
+	//FFMPEG.playVideo("intro.mp4");
 	return 0;
 }
 
@@ -51,7 +51,7 @@ Game::Game()
 	mWindow = std::make_shared<GameWindow>(CONFIGURATION.getWidth(), CONFIGURATION.getHeight(), cWindowName);
 	mWindow->setFullScreen(CONFIGURATION.getWindowed());
 	CONFIGURATION.setObservableWindow(mWindow);
-	FFMPEG.init(mWindow);
+	//FFMPEG.init(mWindow);
 
 	mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
@@ -66,7 +66,7 @@ Game::Game()
 
 	//moviePlayer = SDL_CreateThread(&ThreadConformantPlayIntro, "MoviePlayer", nullptr);
     loadResources();
-    ThreadConformantPlayIntro(NULL);
+    //ThreadConformantPlayIntro(NULL);
 	MUSIC_PLAYER.initLoad();
 
 }
@@ -112,13 +112,13 @@ void Game::start()
                 mRenderer->getParticleManager()->update();
                 mRenderer->getCamera().followEntity(getHero(), 10.f, mDeltaTime);
                 mRenderer->draw(*this);
+                if (mHero && !mHero->mIsDying)
+                    mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
 #if DEBUG
                 static int index = 0;
                 ImGui::RadioButton("NO VSync", &index, 0);
                 ImGui::RadioButton("60", &index, 1);
                 ImGui::RadioButton("30", &index, 2);
-                if (mHero && !mHero->mIsDying)
-                    mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
                 if (index)
                 {
                     const float TargetDelta = 0.0167f * (float)index;
@@ -297,7 +297,7 @@ void Game::resolveCollisions()
 	if (isExitActive() 
     && circle_circle_collision(Position, radius / 2.f, mExit, radius / 2.f))
 	{
-        FFMPEG.playVideo("betweenstages.mp4");
+        //FFMPEG.playVideo("betweenstages.mp4");
 		stageFinished();
 	}
 }
@@ -542,7 +542,10 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
 };
     chainReaction(centerPosition);
     for (auto It : deferedBricks)
-        *It = SquareType::EmptySquare;
+        {
+            *It = SquareType::EmptySquare;
+            CONFIGURATION.setScore(CONFIGURATION.getScore() + 5);
+        }
 
     auto &enemies = getEnemies();
     auto &hero = getHero();
@@ -555,7 +558,10 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
 
         std::for_each(enemies.begin(), enemies.end(), [hMin, hMax, vMin, vMax](MovingEntity *entity) {
             if (circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, hMin, hMax) || circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
-                entity->kill();
+                {
+                    entity->kill();
+                    CONFIGURATION.setScore(CONFIGURATION.getScore() + 10);
+                }
         });
 
 		if ((circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, hMin, hMax)
@@ -563,6 +569,7 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
 		  && !hero.mStats.flamepass)
 		{
             hero.kill();
+            CONFIGURATION.setScore(DefaultScore);
 		}
     });
 
@@ -637,6 +644,7 @@ void Game::gameOver()
     CONFIGURATION.setLives(DefaultLives);
     CONFIGURATION.setScore(DefaultScore);
     CONFIGURATION.setChosenStage(DefaultChosenStage);
+    CONFIGURATION.setBestLevelAchieved(DefaultBestLevelAchieved);
     mStageTimer = 200;
     mStageStartedTimer = getCurrentTime();
     pause();

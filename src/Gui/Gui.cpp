@@ -133,6 +133,9 @@ void Gui::ShowBetweenStageScreen()
 		case 3:
 			ShowLoadingScreen("explosion_tmap_2");
 			break;
+		case 4:
+			ShowLoadingScreen("face");
+			break;
 		default:
 			break;
 	}
@@ -157,6 +160,8 @@ void Gui::ShowStartNewGameMenu()
 		CONFIGURATION.setLives(DefaultLives);
 		CONFIGURATION.setBestLevelAchieved(DefaultBestLevelAchieved);
 		CONFIGURATION.setScore(DefaultScore);
+		if (IsGameRunning())
+			Game::mReloadStage = true;
 		GamePaused(false);
 		StartTheGame(true);
 	}

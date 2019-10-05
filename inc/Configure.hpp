@@ -22,7 +22,7 @@
 int const DefaultScreenWidth = 960;
 int const DefaultScreenHeight = 640;
 int const DefaultChosenStage = 1;
-int const DefaultScore = 42;
+int const DefaultScore = 0;
 int const DefaultLives = 3;
 int const DefaultMusicVolume = 5;
 int const DefaultmSoundsVolume = 2;
