@@ -109,19 +109,6 @@ void Game::start()
                 MovingEntity::debugMovement();
                 Tickable::tickTickables(mDeltaTime);
                 resolveCollisions();
-
-				for (auto It : buffer1)
-					if (It != 0)
-						__debugbreak();
-
-				for (auto It : buffer2)
-					if (It != 0)
-						__debugbreak();
-
-				for (auto It : buffer3)
-					if (It != 0)
-						__debugbreak();
-
                 mRenderer->getParticleManager()->update();
                 mRenderer->getCamera().followEntity(getHero(), 10.f, mDeltaTime);
                 mRenderer->draw(*this);

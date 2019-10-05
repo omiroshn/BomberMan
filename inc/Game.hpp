@@ -86,15 +86,8 @@ public:
 private:
 	std::unique_ptr<Hero>			mHero;
 
-	int buffer1[512] = { 0 };
 	std::vector<BalloonAgent>		mBalloons;
-
-	int buffer2[512] = { 0 };
-
 	std::vector<BombAgent>			mBombs;
-
-	int buffer3[512] = { 0 };
-
 	std::vector<MovingEntity*>		mEnemies;
 
 	glm::vec2						mPowerup;
