@@ -90,6 +90,11 @@ void ResourceManager::endLoading()
 		It.texture->generate(It.width, It.height, It.data, It.format, It.isModelTexture ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 	for (auto& It : mPendingSkyboxes)
 		It.texture->generate(It.data, It.sizes, It.format);
+
+	mTexReaders.clear();
+	mSkyboxReaders.clear();
+	mPendingTextures.clear();
+	mPendingSkyboxes.clear();
 }
 
 #pragma optimize("", on)
