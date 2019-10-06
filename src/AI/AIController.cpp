@@ -241,7 +241,7 @@ void ChaseState::onTick(MovingEntity& pawn, float)
 	else
 	{
 		bool atDestination = !moveAI(pawn, mLastSeenPlayer);
-		mIsConfused = !mPawnSeesPlayer && atDestination;
+		mIsConfused = (!mPawnSeesPlayer && atDestination) || !checkVisibility(pawn, mLastSeenPlayer);
 	}
 }
 

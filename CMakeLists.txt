@@ -61,6 +61,9 @@ target_link_libraries (${PROJECT_NAME} PRIVATE	OpenGL::GL
                                             cereal::cereal
                                             ffmpeg::ffmpeg)
 
+if ( DEBUG )
+	add_definitions(-DDEBUG=1)
+endif()
 
 function(LINK_ASSETS TARGET_ARG SRC_ARG DIST_ARG )
   if (CREATE_PACK)
