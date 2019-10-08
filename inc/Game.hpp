@@ -97,8 +97,6 @@ private:
 
 	std::vector<glm::mat4>		Filter(SquareType type);
 	void						recacheEnemies();
-
-//	SDL_Thread					*moviePlayer;
 };
 
 #endif //BOMBERMAN_Renderer_HPP

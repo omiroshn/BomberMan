@@ -197,6 +197,7 @@ void 			FfmpegPlayer::renderVideo()
 				SDL_RenderCopy(m_renderer, m_texture, NULL, NULL);
 				SDL_RenderPresent(m_renderer);
 
+				resetGLContext();
 				bool worked = RESOURCES.tickLoading();
 
 				Uint32 currentTime = SDL_GetTicks();
@@ -217,9 +218,7 @@ void 			FfmpegPlayer::renderVideo()
 		{
 			if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
 			{
-				destroyVideoSession();
 				CONFIGURATION.serialise();
-				Game::get()->requestExit();
 				return;
 			}
 		}

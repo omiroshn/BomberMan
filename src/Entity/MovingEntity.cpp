@@ -88,8 +88,6 @@ void MovingEntity::animate(float DeltaTime)
 	if (mIsDying)
 	{
 		mAnimation.setType(AnimationType::Dying);
-		if (DeltaTime < 1)
-			std::cout << "animate in Moving Entity, animation set to Dying *******" << std::endl;
 		return;
 	}
 
@@ -122,6 +120,9 @@ void MovingEntity::tick(float DeltaTime)
     animate(DeltaTime);
 
 	debug();
+
+	if (mIsDying)
+		mAcceleration = glm::vec2(0.f);
 
     if (mAcceleration == glm::vec2(0.f) && mVelocity == glm::vec2(0.f))
         return;

@@ -32,7 +32,6 @@ void Hero::kill()
 	SetAnimationType(AnimationType::Dying);
 	getAnimation().setTime(0);
 	mIsDying = true;
-	std::cout << "++++++  kill in Hero, animation set to Dying ++++++" << std::endl;
 	Game::get()->onHeroDied();
 }
 

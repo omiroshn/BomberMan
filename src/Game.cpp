@@ -33,13 +33,6 @@ namespace
     std::string const cWindowName = "Bomberman";
 }
 
-//static int ThreadConformantPlayIntro(void*)
-//{
-//	SDL_SetThreadPriority(SDL_THREAD_PRIORITY_TIME_CRITICAL);
-//	//FFMPEG.playVideo("intro.mp4");
-//	return 0;
-//}
-
 Game::Game()
 {
     sInstance = this;
@@ -51,7 +44,6 @@ Game::Game()
 	mWindow = std::make_shared<GameWindow>(CONFIGURATION.getWidth(), CONFIGURATION.getHeight(), cWindowName);
 	mWindow->setFullScreen(CONFIGURATION.getWindowed());
 	CONFIGURATION.setObservableWindow(mWindow);
-	//FFMPEG.init(mWindow);
 
 	mRenderer = std::make_unique<Renderer>();
     mIManager = std::make_unique<InputManager>();
@@ -64,11 +56,10 @@ Game::Game()
 	RESOURCES.loadTexture("container.jpg", "container");
 	mRenderer->getParticleManager()->init();
 
-	//moviePlayer = SDL_CreateThread(&ThreadConformantPlayIntro, "MoviePlayer", nullptr);
     loadResources();
-    //ThreadConformantPlayIntro(NULL);
+	FFMPEG.init(mWindow);
+	FFMPEG.playVideo("intro.mp4");
 	MUSIC_PLAYER.initLoad();
-
 }
 
 Game::~Game()
@@ -82,6 +73,7 @@ void Game::start()
     int width, height;
     mStageStartedTimer = getCurrentTime();
 
+    SDL_GL_MakeCurrent(mWindow->getSDLWindow(), mWindow->getSDLGLContext());
 	RESOURCES.endLoading();
 	
 	//SDL_WaitThread(moviePlayer, NULL);
@@ -297,7 +289,7 @@ void Game::resolveCollisions()
 	if (isExitActive() 
     && circle_circle_collision(Position, radius / 2.f, mExit, radius / 2.f))
 	{
-        //FFMPEG.playVideo("betweenstages.mp4");
+        FFMPEG.playVideo("betweenstages.mp4");
 		stageFinished();
 	}
 }
