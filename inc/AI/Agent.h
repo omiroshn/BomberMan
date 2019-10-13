@@ -2,6 +2,11 @@
 #include <memory>
 #include "AI/AIController.h"
 
+/*!
+\brief Templated class for all entities which are controlled by some kind of StateMachine.
+
+It's just a simple wrapper for creating a pair of controller-entity.
+*/
 template <class Pawn, class Controller>
 struct Agent
 {

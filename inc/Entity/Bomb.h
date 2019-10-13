@@ -9,7 +9,12 @@
 struct Spawning;
 struct Counting;
 struct Exploding;
+/*!
+\brief The class representing bomb.
 
+It emits sparks and serves a purpose of some kind of point
+of reference for what we think of as bomb.
+*/
 class Bomb : public Entity
 {
 public:
@@ -30,6 +35,9 @@ public:
 	static const float SPAWN_TIME;
 };
 
+/*!
+\brief Struct representing the state of bomb when it's just spawned and slowly grows.
+*/
 struct Spawning : public State {
 	using State::transition;
 
@@ -40,6 +48,9 @@ struct Spawning : public State {
 	float mStartTime;
 };
 
+/*!
+\brief Struct representing the state of bomb when it's ticking, counting time to explosion.
+*/
 struct Counting : public State {
 	using State::transition;
 
@@ -50,4 +61,7 @@ struct Counting : public State {
 	float mCountdown;
 };
 
+/*!
+\brief State machine which controlls how Bomb behaves.
+*/
 typedef SM<Bomb, Spawning, Counting> BombController;
