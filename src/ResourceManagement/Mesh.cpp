@@ -16,8 +16,8 @@ Mesh::Mesh(std::vector<Vertex>& vertices,
     , mIndices{std::move(indices)}
     , mTextures{std::move(textures)}
     , mIsAnimated{scene->HasAnimations()}
-    , mCurrentAnimation{0}
     , mGlossiness{glossiness}
+    , mCurrentAnimation{AnimationType::Idle}
     , mBones{std::move(bones)}
     , mOffsetMatrices{std::move(aOffsets)}
     , mScene{scene}
@@ -25,8 +25,12 @@ Mesh::Mesh(std::vector<Vertex>& vertices,
     setupMesh();
     setInstanceBuffer();
     if(mIsAnimated)
+    {
         mBoneTransforms.resize(mBones.size());
+        setupAnimations();
+    }
 }
+
 
 Mesh::~Mesh()
 {
@@ -107,7 +111,7 @@ void	Mesh::setInstanceBuffer()
 
 void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> const & transforms, glm::mat4 const & parentTransform)
 {
-	if (transforms.size() == 0)
+	if (transforms.empty())
 		return;
     unsigned int diffuseNr  = 1;
     unsigned int normalNr   = 1;
@@ -122,7 +126,7 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
             number = std::to_string(diffuseNr++);
         else if (name == "texture_normal")
             number = std::to_string(normalNr++);
-        shader->setInt((name + number).c_str(), i);
+        shader->setInt((name + number), i);
         glBindTexture(GL_TEXTURE_2D, mTextures[i]->getTextureID());
     }
     glActiveTexture(GL_TEXTURE0);
@@ -143,7 +147,7 @@ void Mesh::draw(std::shared_ptr<Shader> const &shader, std::vector<glm::mat4> co
     glBindVertexArray(0);
 }
 
-const aiNodeAnim *Mesh::findNodeAnimation(const aiAnimation *animation, const std::string nodeName) const
+const aiNodeAnim *Mesh::findNodeAnimation(const aiAnimation *animation, const std::string& nodeName) const
 {
     for (unsigned int i = 0; i < animation->mNumChannels; i++)
     {
@@ -157,11 +161,8 @@ const aiNodeAnim *Mesh::findNodeAnimation(const aiAnimation *animation, const st
 
 void	Mesh::readNodeHierarchy(float animationTime, aiNode const* node, const glm::mat4 parentTransform)
 {
-
     std::string nodeName(node->mName.data);
-
-    auto const* animation = mScene->mAnimations[mCurrentAnimation];
-    auto const* pNodeAnimation = findNodeAnimation(animation, nodeName);
+    auto const* pNodeAnimation = findNodeAnimation(mAnimations[mCurrentAnimation], nodeName);
 
 	glm::mat4 nodeTransform;
     if (pNodeAnimation)
@@ -177,8 +178,10 @@ void	Mesh::readNodeHierarchy(float animationTime, aiNode const* node, const glm:
         glm::mat4 rotMat  = AnimationUtils::calcInterpolatedRotation(animationTime, pNodeAnimation);
 		nodeTransform = transScaleMat * rotMat;
     }
-	else
-		nodeTransform = AnimationUtils::aiMatToGlmMat(node->mTransformation);
+    else
+    {
+        nodeTransform = AnimationUtils::aiMatToGlmMat(node->mTransformation);
+    }
 
     glm::mat4 globalTransform = parentTransform * nodeTransform;
 	auto It = mBones.find(nodeName);
@@ -195,27 +198,34 @@ void	Mesh::readNodeHierarchy(float animationTime, aiNode const* node, const glm:
 
 void	Mesh::doAnimation()
 {
-    if (!mIsAnimated)
+    if (!mIsAnimated || mAnimations.count(mCurrentAnimation) == 0)
         return;
-    float ticksPerSecond = float(mScene->mAnimations[mCurrentAnimation]->mTicksPerSecond);
-    float timeInTicks = mAnimationTime * ticksPerSecond;
-    float animTime = fmodf(timeInTicks, float(mScene->mAnimations[mCurrentAnimation]->mDuration - 1.));
+    auto ticksPerSecond = float(mAnimations[mCurrentAnimation]->mTicksPerSecond);
+    auto timeInTicks = mAnimationTime * ticksPerSecond;
+    auto animTime = fmodf(timeInTicks, float(mAnimations[mCurrentAnimation]->mDuration - 1.));
     readNodeHierarchy(animTime, mScene->mRootNode, glm::mat4(1.0f));
 }
 
 void	Mesh::setAnimation(Animation const& anim)
 {
     mAnimationTime = float(anim.getTime());
-    auto requiredAnimation = anim.getName();
-    std::transform(requiredAnimation.begin(), requiredAnimation.end(), requiredAnimation.begin(), ::tolower);
-    for (mCurrentAnimation = mScene->mNumAnimations - 1; mCurrentAnimation != 0; --mCurrentAnimation)
-    {
-        std::string animationName(mScene->mAnimations[mCurrentAnimation]->mName.C_Str());
+    mCurrentAnimation = anim.getType();
+}
+
+void Mesh::setupAnimations() {
+    for (int i = mScene->mNumAnimations - 1; i != 0; --i) {
+        std::string animationName(mScene->mAnimations[i]->mName.C_Str());
         std::transform(animationName.begin(), animationName.end(), animationName.begin(), ::tolower);
         animationName = animationName.substr(animationName.find('|') + 1);
-        if (animationName.find(requiredAnimation) != std::string::npos)
-        {
-            break;
+        if (animationName.find("run") != std::string::npos) {
+            mAnimations.insert(
+                    std::pair<AnimationType, const aiAnimation *>(AnimationType::Running, mScene->mAnimations[i]));
+        } else if (animationName.find("die") != std::string::npos) {
+            mAnimations.insert(
+                    std::pair<AnimationType, const aiAnimation *>(AnimationType::Dying, mScene->mAnimations[i]));
+        } else if (animationName.find("idle") != std::string::npos) {
+            mAnimations.insert(
+                    std::pair<AnimationType, const aiAnimation *>(AnimationType::Idle, mScene->mAnimations[i]));
         }
     }
 }
