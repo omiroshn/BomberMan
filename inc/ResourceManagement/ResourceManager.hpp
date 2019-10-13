@@ -160,7 +160,7 @@ public:
 	\param[in] aName The filename of the map.
 	\return fstream of the loaded map
 	*/
-	std::fstream getMap(std::string const& aName);
+	std::ifstream getMap(std::string const& aName);
 	/*!
 	\brief Loads font
 

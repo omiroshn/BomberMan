@@ -31,7 +31,7 @@ std::vector<SquareType> Serialization::LoadCampaignMap(int stage, unsigned& outW
     map.reserve(400);
     std::string line;
     std::cout << map_name << std::endl;
-    std::fstream f{RESOURCES.getMap(map_name)};
+    std::ifstream f{RESOURCES.getMap(map_name)};
 	unsigned width = 0;
     while (std::getline(f, line))
     {

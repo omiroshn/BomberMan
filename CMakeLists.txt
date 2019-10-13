@@ -8,10 +8,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules")
 
-if (APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-endif()
-
 add_subdirectory(3rdParty)
 
 if ( WIN32 )
@@ -67,6 +63,10 @@ if ( DEBUG )
 	add_definitions(-DDEBUG=1)
 endif()
 
+if (APPLE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+endif()
+
 function(LINK_ASSETS TARGET_ARG SRC_ARG DIST_ARG )
   if (CREATE_PACK)
     add_custom_command(TARGET ${TARGET_ARG} POST_BUILD
@@ -86,7 +86,6 @@ else()
   add_custom_command(TARGET ${PROJECT_NAME} PRE_LINK
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${FFMPEG_PATH_CUSTOM}/lib $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif()
-
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
