@@ -3,6 +3,9 @@
 #include "Core.hpp"
 #include "ResourceManagement/Animation.h"
 
+/*!
+\brief Extends the functionality of Entity. Represents all Moving entities in game.
+*/
 class MovingEntity : public Entity, public Tickable
 {
 public:
@@ -12,18 +15,36 @@ public:
 	MovingEntity(MovingEntity const&) = delete;
     MovingEntity& operator=(MovingEntity const&) = delete;
 	
+/*!
+\return Speed of this MovingEntity 
+*/
 	float		GetSpeed()const;
-	glm::vec2	GetVelocity()const;
-	void		SetVelocity(glm::vec2);
-	void		AddVelocity(glm::vec2);
-	glm::vec2	GetAcceleration()const;
-	void		SetAcceleration(glm::vec2);
+/*!
+\brief Adds velocity to this MovingEntity own velocity.
+\param[in] velocityOffset Velocity to add.
+*/
+	void		AddVelocity(glm::vec2 velocityOffset);
+/*!
+\brief Adds acceleration to this MovingEntity own acceleration.
+
+This is basically the only appropriate way to move
+an Entity that will look and feel properly.
+\param[in] velocityOffset Velocity to add.
+*/
 	void		AddAcceleration(glm::vec2);
-	void        SetAnimationType(AnimationType type);
-	
+/*!
+\return Reference to Animation for this Entity
+*/
     Animation & getAnimation();
+
+/*!
+\brief Expands on Entity's debug func. Adds even more fields to debug window.
+*/
 	void		debug();
 
+/*!
+\brief Adds Entity-independant movement variables to debug window.
+*/
 	static void	debugMovement();
 
 	/** Tickable interface */

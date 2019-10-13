@@ -70,7 +70,6 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
         static std::shared_ptr<Model> bonusModels[Hero::PowerupType::PT_NONE] = {
             RESOURCES.getModel("bonus_bombs"),
             RESOURCES.getModel("bonus_flames"),
-            RESOURCES.getModel("bonus_speed"),
             RESOURCES.getModel("bonus_wallpass"),
             RESOURCES.getModel("bonus_detonator"),
             RESOURCES.getModel("bonus_bombpass"),

@@ -28,24 +28,9 @@ float MovingEntity::GetSpeed() const
 	return sqrt(ElementsSquared.x + ElementsSquared.y);
 }
 
-void MovingEntity::SetVelocity(glm::vec2 velocity)
-{
-	mVelocity = velocity;
-}
-
 void MovingEntity::AddVelocity(glm::vec2 velocityOffset)
 {
 	mVelocity += velocityOffset;
-}
-
-glm::vec2 MovingEntity::GetVelocity() const
-{
-	return mVelocity;
-}
-
-void MovingEntity::SetAcceleration(glm::vec2 acceleration)
-{
-	mAcceleration = acceleration;
 }
 
 void MovingEntity::AddAcceleration(glm::vec2 accelerationOffset)
@@ -62,11 +47,6 @@ void MovingEntity::debug()
 #endif
 }
 
-void MovingEntity::SetAnimationType(AnimationType type)
-{
-    mAnimation.setType(type);
-}
-
 void MovingEntity::debugMovement()
 {
 #if DEBUG
@@ -75,11 +55,6 @@ void MovingEntity::debugMovement()
 	ImGui::SliderFloat("MaxVelocity", &_MaxVelocity, 0, 20);
 	ImGui::SliderFloat("MaxAcceleration", &_MaxAcceleration, 0, 150);
 #endif
-}
-
-glm::vec2 MovingEntity::GetAcceleration() const
-{
-	return mAcceleration;
 }
 
 void MovingEntity::animate(float DeltaTime)

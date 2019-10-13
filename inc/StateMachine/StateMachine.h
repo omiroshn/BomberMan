@@ -2,40 +2,46 @@
 #include <tuple>
 #include <stdint.h>
 
-struct Event
-{
-};
-
+/*!
+\brief Represents current state of the StateMachine.
+Holds all necessary info about current state in itself.
+*/
 struct State
 {
-	unsigned char uid;
-
+/*!
+\brief Called every frame for this state and lets him do everything he needs to.
+*/
 	template<typename T>
 	void onTick(T&, float) {};
+/*!
+\brief Called every time this state is entered. Lets this state setup it's data.
+*/
 	template<typename T>
 	void onEntry(T&) {}
-
+/*!
+\brief Called every frame to see if this State need to be changed to another.
+*/
 	template<typename T>
 	bool transition(const T&) { return false; }
 };
 
+/*!
+\brief Compile-time generated StateMachine. Useful for implementing AI.
+
+Holds all of it's states in itself.
+It controlls 1 specific type of Entity per template instatiation.
+*/
 template <typename OwnerType, typename... Ts>
 class SM {
 	static const uint8_t INVALID_STATE = 255;
 public:
-	SM() :
-		m_CurrentState(INVALID_STATE)
-	{
-		init();
-	}
 
+/*!
+\brief Called every frame.
+This is where current state is ticked and transitions are dispatched.
+*/
 	void tick(OwnerType& owner, float DeltaTime = 0)
 	{
-		if (m_CurrentState == INVALID_STATE)
-		{
-			m_CurrentState = 0;
-			dispatchEntry<0, Ts...>(owner);
-		}
 		tickCurrentState(owner, DeltaTime);
 		dispatchTransitions(owner);
 	}
@@ -43,11 +49,6 @@ public:
 private:
 	std::tuple<Ts...>	m_States;
 	unsigned char		m_CurrentState;
-
-	void init()
-	{
-		setStateIds<0, Ts...>();
-	}
 
 	template <unsigned char N, typename T, typename... Args>
 	auto dispatchTick(OwnerType& owner, float DeltaTime)
@@ -67,14 +68,6 @@ private:
 			dispatchEntry<N + 1, Args...>(owner);
 	}
 
-	template<unsigned char N, typename T, typename... Args>
-	void setStateIds()
-	{
-		std::get<N>(m_States).uid = N;
-		if constexpr (sizeof...(Args) > 0)
-			setStateIds<N + 1, Args...>();
-	}
-
 	template <unsigned char N, typename T, typename... Args>
 	auto dispatchTransitionsImpl(OwnerType& owner)
 	{
@@ -84,9 +77,13 @@ private:
 			dispatchTransitionsImpl<N + 1, Args...>(owner);
 	}
 
-	void tickCurrentState(OwnerType& owner, float DeltaTime) { dispatchTick<0, Ts...>(owner, DeltaTime); }
+	void tickCurrentState(OwnerType& owner, float DeltaTime)
+	{
+		dispatchTick<0, Ts...>(owner, DeltaTime);
+	}
 
-	void dispatchTransitions(OwnerType& owner) {
+	void dispatchTransitions(OwnerType& owner)
+	{
 		dispatchTransitionsImpl<0, Ts...>(owner);
 	}
 

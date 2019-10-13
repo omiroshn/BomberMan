@@ -6,8 +6,6 @@
 #include "Core.hpp"
 #include "Entity/MovingEntity.h"
 #include "AI/AIController.h"
-#include "LogicCore/Timer.h"
-#include "LogicCore/TimerManager.h"
 #include "Configure.hpp"
 #include "ResourceManagement/FfmpegPlayer.hpp"
 
@@ -135,10 +133,9 @@ void Game::start()
                 if (CONFIGURATION.getLives() == 0)
                     CONFIGURATION.setChosenStage(1);
                 if (mHero && mHero->mIsDying)
-                    {
-                        getHero().getAnimation().setTime(0);
-                        getHero().SetAnimationType(AnimationType::Dying);
-                    }
+                {
+                    getHero().getAnimation().setTime(0);
+                }
                 if (mReloadStage && mStageTimer > 1)
                 {
                     if (mStageTimer < 2)

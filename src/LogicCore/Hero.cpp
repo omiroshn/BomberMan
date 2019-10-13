@@ -1,5 +1,4 @@
 #include "LogicCore/Hero.h"
-#include "LogicCore/TimerManager.h"
 #include "Game.hpp"
 
 Hero::Hero(Stats info, glm::vec2 position /*= {1.5f, 1.5f}*/)
@@ -29,7 +28,6 @@ void Hero::tryPlaceBomb()
 
 void Hero::kill()
 {
-	SetAnimationType(AnimationType::Dying);
 	getAnimation().setTime(0);
 	mIsDying = true;
 	Game::get()->onHeroDied();
@@ -48,11 +46,6 @@ void Hero::applyPowerup(PowerupType type)
 		case PowerupType::PT_Flames:
 		{
 			increaseBombStrength();
-			break;
-		}
-		case PowerupType::PT_Speed:
-		{
-			mStats.movementSpeed += 0.5f;
 			break;
 		}
 		case PowerupType::PT_Wallpass:
