@@ -62,7 +62,7 @@ void Gui::ShowMainMenu()
 
 		if (ImGui::Button("EXIT", STANDARD_MENU_BUTTON))
 		{
-			Game::mIsRunning = false;
+			Game::get()->requestExit();
 		}
 
 		ImGui::EndChildFrame();		
