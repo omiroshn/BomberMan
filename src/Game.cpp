@@ -326,25 +326,54 @@ void Game::doAction(Action const& a)
             break;
     }
     { // keyboard
-        if (mKeyHandler->isPressed(SDL_SCANCODE_W))
-            Hero.AddAcceleration(glm::vec2(0, -offset));
-        if (mKeyHandler->isPressed(SDL_SCANCODE_D))
-            Hero.AddAcceleration(glm::vec2(offset, 0));
-        if (mKeyHandler->isPressed(SDL_SCANCODE_A))
-            Hero.AddAcceleration(glm::vec2(-offset, 0));
-        if (mKeyHandler->isPressed(SDL_SCANCODE_S))
-            Hero.AddAcceleration(glm::vec2(0, offset));
-		if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
-			Hero.tryPlaceBomb();
-		//MusicPlayer testing
-		if (mKeyHandler->isPressed(SDL_SCANCODE_5))
-			MUSIC_PLAYER.playMusicInfinity("candyman");
-		if (mKeyHandler->isPressed(SDL_SCANCODE_2))
-			MUSIC_PLAYER.playMusicInfinity("tango");
-		if (mKeyHandler->isPressed(SDL_SCANCODE_3))
-			MUSIC_PLAYER.pauseMusic();
-		if (mKeyHandler->isPressed(SDL_SCANCODE_4))
-			MUSIC_PLAYER.unPauseMusic();
+    if (mHero && !mHero->mIsDying)
+        {
+            int keybinding = CONFIGURATION.getKeyBindVolume();
+            if (keybinding == 0)
+            {
+                if (mKeyHandler->isPressed(SDL_SCANCODE_UP))
+                    Hero.AddAcceleration(glm::vec2(0, -offset));
+                if (mKeyHandler->isPressed(SDL_SCANCODE_RIGHT))
+                    Hero.AddAcceleration(glm::vec2(offset, 0));
+                if (mKeyHandler->isPressed(SDL_SCANCODE_LEFT))
+                    Hero.AddAcceleration(glm::vec2(-offset, 0));
+                if (mKeyHandler->isPressed(SDL_SCANCODE_DOWN))
+                    Hero.AddAcceleration(glm::vec2(0, offset));
+            }
+            else if (keybinding == 1)
+            {
+                if (mKeyHandler->isPressed(SDL_SCANCODE_W))
+                    Hero.AddAcceleration(glm::vec2(0, -offset));
+                if (mKeyHandler->isPressed(SDL_SCANCODE_D))
+                    Hero.AddAcceleration(glm::vec2(offset, 0));
+                if (mKeyHandler->isPressed(SDL_SCANCODE_A))
+                    Hero.AddAcceleration(glm::vec2(-offset, 0));
+                if (mKeyHandler->isPressed(SDL_SCANCODE_S))
+                    Hero.AddAcceleration(glm::vec2(0, offset));
+            }
+            else if (keybinding == 3)
+            {
+                if (mKeyHandler->isPressed(SDL_SCANCODE_Y))
+                    Hero.AddAcceleration(glm::vec2(0, -offset));
+                if (mKeyHandler->isPressed(SDL_SCANCODE_J))
+                    Hero.AddAcceleration(glm::vec2(offset, 0));
+                if (mKeyHandler->isPressed(SDL_SCANCODE_G))
+                    Hero.AddAcceleration(glm::vec2(-offset, 0));
+                if (mKeyHandler->isPressed(SDL_SCANCODE_H))
+                    Hero.AddAcceleration(glm::vec2(0, offset)); 
+            }
+            if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
+                Hero.tryPlaceBomb();
+            //MusicPlayer testing
+            if (mKeyHandler->isPressed(SDL_SCANCODE_5))
+                MUSIC_PLAYER.playMusicInfinity("candyman");
+            if (mKeyHandler->isPressed(SDL_SCANCODE_2))
+                MUSIC_PLAYER.playMusicInfinity("tango");
+            if (mKeyHandler->isPressed(SDL_SCANCODE_3))
+                MUSIC_PLAYER.pauseMusic();
+            if (mKeyHandler->isPressed(SDL_SCANCODE_4))
+                MUSIC_PLAYER.unPauseMusic();
+        }
     }
     { // joystick
         if (mKeyHandler->LeftJoystickIsActive()) {

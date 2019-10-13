@@ -138,7 +138,7 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
         case SDLK_w:
             return Action::Forward;
         case SDLK_DOWN:
-            return Action::HeroDied;
+            return Action::Backward;
         case SDLK_s:
             return Action::Backward;
         case SDLK_LEFT:
@@ -155,6 +155,8 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
             return Action::Down;
         case SDLK_0:
             return Action::Finish;
+        case SDLK_p:
+            return Action::HeroDied;
         default:
             return Action::Nothing;
     }
