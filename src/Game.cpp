@@ -484,7 +484,7 @@ void Game::loadModels()
     RESOURCES.loadModel("map/first/unbreakableWall/model.fbx", "unbreakableWall", glm::vec3(1), glm::vec3(0),  glm::normalize(glm::vec3(1,0,0)), -90);
     RESOURCES.loadModel("map/first/breakableWall/model.fbx", "breakableWall", glm::vec3(0.9f));
 
-    RESOURCES.loadModel("balloon/balloon.obj", "balloon");
+    RESOURCES.loadModel("general/hero/model.fbx", "enemy1");
 }
 
 void Game::explosion(glm::ivec2 position, uint32_t span)

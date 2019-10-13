@@ -52,7 +52,7 @@ private:
     void                    setupMesh();
     void                    setInstanceBuffer();
     void	                readNodeHierarchy(float animationTime, aiNode const* node, glm::mat4 parentTransform);
-    aiNodeAnim const*       findNodeAnimation(aiAnimation const* animation, std::string nodeName) const;
+    aiNodeAnim const*       findNodeAnimation(aiAnimation const* animation, const std::string& nodeName) const;
 
 private:
     unsigned int mVBO, mEBO, mVAO, mWBO, mIBO;
@@ -60,16 +60,17 @@ private:
     std::vector<WeightData> mWeights;
     std::vector<unsigned int> mIndices;
     std::vector<std::shared_ptr<Texture>> mTextures;
-    bool                mIsAnimated;
+    bool mIsAnimated;
 
-    unsigned int                        mCurrentAnimation;
-    float                               mAnimationTime;
-    float                               mGlossiness;
+    void setupAnimations();
 
-    std::map<std::string, unsigned int> const   mBones;
-    std::vector<glm::mat4>              const   mOffsetMatrices;
-    std::vector<glm::mat4>                      mBoneTransforms;
-
-    aiScene const*  mScene;
+    float mAnimationTime;
+    float mGlossiness;
+    AnimationType mCurrentAnimation;
+    std::map<AnimationType, const aiAnimation *> mAnimations;
+    std::map<std::string, unsigned int> const mBones;
+    std::vector<glm::mat4> const mOffsetMatrices;
+    std::vector<glm::mat4> mBoneTransforms;
+    aiScene const *mScene;
 };
 #endif

@@ -43,12 +43,6 @@ void Renderer::prepareTransforms(Game &g)
     mTransforms[ModelType::Wall] = g.getWallTransforms();
     mTransforms[ModelType::Bomb] = g.getBombTransforms();
     mTransforms[ModelType::Player] = std::vector<glm::mat4>{g.getHero().getModelMatrix()};
-
-    std::vector<glm::mat4> transforms;
-    auto& Enemies = g.getEnemies();
-    for (auto It : Enemies)
-        transforms.push_back(It->getModelMatrix());
-    mTransforms[ModelType::EnemyType1] = transforms;
 }
 
 void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
@@ -93,18 +87,22 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
 	exit[active]->draw(s, std::vector<glm::mat4>{Game::get()->getExitTransform()});
 }
 
-void Renderer::renderMovable(std::shared_ptr<Shader> &s, std::shared_ptr<Shader> &animated, Game &g)
+void Renderer::renderMovable(std::shared_ptr<Shader> &animated, Game &g)
 {
     static auto heroModel = RESOURCES.getModel("hero");
-    static auto balloon = RESOURCES.getModel("balloon");
-
+    static auto enemy1 = RESOURCES.getModel("enemy1");
     //render hero
     auto& Hero = g.getHero();
     heroModel->setAnimation(Hero.getAnimation());
     heroModel->draw(animated, mTransforms[ModelType::Player]);
 
     //render enemies
-    balloon->draw(s, mTransforms[ModelType::EnemyType1]);
+    auto& Enemies = g.getEnemies();
+    for (auto const& It : Enemies)
+    {
+        enemy1->setAnimation(It->getAnimation());
+        enemy1->draw(animated, {It->getModelMatrix()});
+    }
 }
 
 void Renderer::normalPass(Game& aMap)
@@ -147,7 +145,7 @@ void Renderer::normalPass(Game& aMap)
     animatedModelShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
     animatedModelShader->setFloat("shininess", Shininess);
 
-    renderMovable(modelShader, animatedModelShader, aMap);
+    renderMovable(animatedModelShader, aMap);
     renderObstacles(modelShader);
 
     // render the ground
@@ -201,7 +199,7 @@ void Renderer::shadowPass(Game& aMap)
     animatedShadowShader->use();
     animatedShadowShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
     mLightManager->prepareForShadowPass();
-    renderMovable(shadowShader, animatedShadowShader, aMap);
+    renderMovable(animatedShadowShader, aMap);
     renderObstacles(shadowShader);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

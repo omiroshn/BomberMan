@@ -213,11 +213,6 @@ void Model::draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> c
     }
 }
 
-AABB Model::getAABB() const
-{
-    return mAABB;
-}
-
 void Model::transform(glm::mat4 const & aTransform)
 {
     mTransFormMatrix *= aTransform;
