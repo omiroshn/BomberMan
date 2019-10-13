@@ -86,7 +86,7 @@ void GameWindow::initOpenGL()
 	if (err != GLEW_OK)
     {
 		BM_CRITICAL("%s", glewGetErrorString(err));
-        abort();
+        exit(0);
     }
     glViewport(0, 0, mWidth, mHeight);
     glEnable(GL_DEPTH_TEST);

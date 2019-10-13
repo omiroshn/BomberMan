@@ -76,8 +76,6 @@ void Game::start()
     SDL_GL_MakeCurrent(mWindow->getSDLWindow(), mWindow->getSDLGLContext());
 	RESOURCES.endLoading();
 	
-	//SDL_WaitThread(moviePlayer, NULL);
-
 	// sync files here
     while (mIsRunning)
     {
@@ -305,7 +303,7 @@ void Game::doAction(Action const& a)
     switch (a)
     {
         case Action::Finish:
-            mIsRunning = false;
+            requestExit();
 			saveCurrentState();
             break;
         case Action::Pause:
