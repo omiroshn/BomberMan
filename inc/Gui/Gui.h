@@ -1,3 +1,9 @@
+/*!
+\file
+\brief Header file of the Gui class
+
+This file contains declaration of the Gui class.
+*/
 #ifndef BOMBERMAN_GUI_H
 #define BOMBERMAN_GUI_H
 
@@ -19,7 +25,11 @@ enum class CurrentMenu
 	exitMenu,
 	inGameMenu
 };
+/*!
+\brief The class to manage user interface
 
+This class suppose to create all GUI instances and manage mouse input on it
+*/
 class Gui
 {
 public:
