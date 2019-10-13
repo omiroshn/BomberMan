@@ -259,9 +259,9 @@ ResourceManager::~ResourceManager()
 	clear();
 };
 
-std::fstream ResourceManager::getMap(std::string const & aName)
+std::ifstream ResourceManager::getMap(std::string const & aName)
 {
-    std::fstream f(mBinFolder + "maps/" + aName);
+    std::ifstream f(mBinFolder + "maps/" + aName);
     return f;
 }
 
