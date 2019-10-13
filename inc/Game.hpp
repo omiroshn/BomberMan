@@ -182,12 +182,6 @@ public:
 	*/
 	std::vector<MovingEntity*>&	getEnemies();
 	/*!
-	\brief All of the balloons.
-
-	\return std::vector of pointers to balloons.
-	*/
-	std::vector<BalloonAgent>&	getBalloons();
-	/*!
 	\brief Hero reference.
 
 	\return non-const reference to Hero.
@@ -242,6 +236,8 @@ private:
 
 	std::vector<glm::mat4>			Filter(SquareType type);
 	void							recacheEnemies();
+
+	friend class Renderer;
 };
 
 #endif //BOMBERMAN_Renderer_HPP

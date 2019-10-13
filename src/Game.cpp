@@ -557,10 +557,10 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
 };
     chainReaction(centerPosition);
     for (auto It : deferedBricks)
-        {
-            *It = SquareType::EmptySquare;
-            CONFIGURATION.setScore(CONFIGURATION.getScore() + 5);
-        }
+    {
+        *It = SquareType::EmptySquare;
+        CONFIGURATION.setScore(CONFIGURATION.getScore() + 5);
+    }
 
     auto &enemies = getEnemies();
     auto &hero = getHero();
@@ -668,6 +668,8 @@ void Game::gameOver()
 void  Game::cleanupOnStageChange()
 {
     mBalloons.clear();
+    mOnils.clear();
+    mOvapes.clear();
     mBombs.clear();
 }
 
@@ -684,10 +686,6 @@ Game *Game::get()
 void	Game::tickAI(float deltaTime)
 {
 #if DEBUG
-	if (ImGui::Button("Add balloon"))
-	{
-		getBalloons().emplace_back(glm::vec2{9.5, 9.5});
-	}
 	if (ImGui::Button("Kill all"))
 	{
 		for (auto& It : mEnemies)
@@ -697,9 +695,13 @@ void	Game::tickAI(float deltaTime)
 
 	recacheEnemies();
 
+	for (auto& It : mBombs)
+		It.controller.tick(*It, deltaTime);
 	for (auto& It : mBalloons)
 		It.controller.tick(*It, deltaTime);
-	for (auto& It : mBombs)
+	for (auto& It : mOnils)
+		It.controller.tick(*It, deltaTime);
+	for (auto& It : mOvapes)
 		It.controller.tick(*It, deltaTime);
 }
 
@@ -719,15 +721,26 @@ std::vector<glm::mat4> Game::Filter(SquareType type)
 
 void Game::recacheEnemies()
 {
-	mEnemies.clear();
 	mBalloons.erase(std::remove_if(mBalloons.begin(), mBalloons.end(), [](const MovingEntity *balloon){
 		return balloon->isDead();
 	}), mBalloons.end());
+	mOnils.erase(std::remove_if(mOnils.begin(), mOnils.end(), [](const MovingEntity *onil){
+		return onil->isDead();
+	}), mOnils.end());
+	mOvapes.erase(std::remove_if(mOvapes.begin(), mOvapes.end(), [](const MovingEntity *ovapes){
+		return ovapes->isDead();
+	}), mOvapes.end());
+
 	mBombs.erase(std::remove_if(mBombs.begin(), mBombs.end(), [](const Bomb *bomb){
 		return bomb->isDead();
 	}), mBombs.end());
 
+	mEnemies.clear();
 	for (auto& It : mBalloons)
+		mEnemies.push_back(It);
+	for (auto& It : mOnils)
+		mEnemies.push_back(It);
+	for (auto& It : mOvapes)
 		mEnemies.push_back(It);
 }
 
@@ -739,8 +752,22 @@ void  Game::addEnemiesOnMap()
         auto& It = mCollisionInfo.Squares[i];
         if (It >= SquareType::Brick && rand() % 2)
         {
-            if (mCollisionInfo.Squares[i + 1] == SquareType::EmptySquare)
-                getBalloons().emplace_back(glm::vec2{(i + 1) % mCollisionInfo.width + 0.5f, i / mCollisionInfo.width + 0.5f});
+            int type = rand() % 3;
+            switch (type)
+            {
+                case 0:{
+                    if (mCollisionInfo.Squares[i + 1] == SquareType::EmptySquare)
+                        mBalloons.emplace_back(glm::vec2{(i + 1) % mCollisionInfo.width + 0.5f, i / mCollisionInfo.width + 0.5f});
+                }
+                case 1:{
+                    if (mCollisionInfo.Squares[i + 1] == SquareType::EmptySquare)
+                        mOnils.emplace_back(glm::vec2{(i + 1) % mCollisionInfo.width + 0.5f, i / mCollisionInfo.width + 0.5f});
+                }
+                case 2:{
+                    if (mCollisionInfo.Squares[i + 1] == SquareType::EmptySquare)
+                        mOvapes.emplace_back(glm::vec2{(i + 1) % mCollisionInfo.width + 0.5f, i / mCollisionInfo.width + 0.5f});
+                }
+            }
         }
     }
  }
@@ -794,11 +821,6 @@ void Game::plantBomb(glm::vec2 position, int strength)
 std::vector<MovingEntity*>& Game::getEnemies()
 {
 	return mEnemies;
-}
-
-std::vector<Game::BalloonAgent>& Game::getBalloons()
-{
-	return mBalloons;
 }
 
 void Game::extractInfo()

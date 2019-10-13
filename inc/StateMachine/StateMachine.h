@@ -42,13 +42,18 @@ This is where current state is ticked and transitions are dispatched.
 */
 	void tick(OwnerType& owner, float DeltaTime = 0)
 	{
+		if (m_CurrentState == INVALID_STATE)	
+		{	
+			m_CurrentState = 0;	
+			dispatchEntry<0, Ts...>(owner);	
+		}
 		tickCurrentState(owner, DeltaTime);
 		dispatchTransitions(owner);
 	}
 
 private:
 	std::tuple<Ts...>	m_States;
-	unsigned char		m_CurrentState;
+	unsigned char		m_CurrentState = INVALID_STATE;
 
 	template <unsigned char N, typename T, typename... Args>
 	auto dispatchTick(OwnerType& owner, float DeltaTime)

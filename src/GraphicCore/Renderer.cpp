@@ -89,18 +89,30 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
 void Renderer::renderMovable(std::shared_ptr<Shader> &animated, Game &g)
 {
     static auto heroModel = RESOURCES.getModel("hero");
-    static auto enemy1 = RESOURCES.getModel("enemy1");
+    static auto balloon = RESOURCES.getModel("balloon");
+    static auto onil = RESOURCES.getModel("bonus_speed");
+    static auto ovape = RESOURCES.getModel("unbreakableWall");
+
     //render hero
     auto& Hero = g.getHero();
     heroModel->setAnimation(Hero.getAnimation());
     heroModel->draw(animated, mTransforms[ModelType::Player]);
 
     //render enemies
-    auto& Enemies = g.getEnemies();
-    for (auto const& It : Enemies)
+    for (MovingEntity *It : g.mBalloons)
     {
-        enemy1->setAnimation(It->getAnimation());
-        enemy1->draw(animated, {It->getModelMatrix()});
+        balloon->setAnimation(It->getAnimation());
+        balloon->draw(animated, {It->getModelMatrix()});
+    }
+    for (MovingEntity *It : g.mOnils)
+    {
+        onil->setAnimation(It->getAnimation());
+        onil->draw(animated, {It->getModelMatrix()});
+    }
+    for (MovingEntity *It : g.mOvapes)
+    {
+        ovape->setAnimation(It->getAnimation());
+        ovape->draw(animated, {It->getModelMatrix()});
     }
 }
 
