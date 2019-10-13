@@ -21,9 +21,6 @@ namespace ModelType{
         Wall = 0,
         Brick,
         Player,
-        EnemyType1,
-        EnemyType2,
-        EnemyType3,
         Bomb,
         Perimeter,
         MAX
@@ -56,7 +53,7 @@ private:
 	ptrPM mParticleManager;
     ptrLM mLightManager;
     void renderObstacles(std::shared_ptr<Shader> &);
-    void renderMovable(std::shared_ptr<Shader> &animated, Game &);
+    void renderMovable(std::shared_ptr<Shader> &s, std::shared_ptr<Shader> &animated, Game &);
     void prepareTransforms(Game &g);
     int mStage;
 };

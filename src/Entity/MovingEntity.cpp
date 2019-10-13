@@ -94,7 +94,7 @@ void MovingEntity::tick(float DeltaTime)
 {
     animate(DeltaTime);
 
-	debug();
+	//debug();
 
 	if (mIsDying)
 		mAcceleration = glm::vec2(0.f);
