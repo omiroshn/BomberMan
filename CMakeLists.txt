@@ -37,7 +37,9 @@ else()
   add_executable(${PROJECT_NAME} ${BOMBERMAN_SOURCES})
 endif()
 
+if (APPLE)
 target_compile_options(bomberman PRIVATE -Wall -Wextra -Werror -Wno-deprecated -fvisibility=hidden)
+endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 17

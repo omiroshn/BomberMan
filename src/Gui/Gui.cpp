@@ -233,8 +233,7 @@ void Gui::ShowSettingsMenu()
 		ImGui::Text("\n    Set keybinding\n");
 		ImGui::RadioButton("Arrows", &CONFIGURATION.getKeyBindVolume(), 0);ImGui::SameLine();
 		ImGui::RadioButton("ASWD", &CONFIGURATION.getKeyBindVolume(), 1);
-		ImGui::RadioButton("🎮", &CONFIGURATION.getKeyBindVolume(), 2);ImGui::SameLine();
-		ImGui::RadioButton("HJKL", &CONFIGURATION.getKeyBindVolume(), 3);
+		ImGui::RadioButton("HJKL", &CONFIGURATION.getKeyBindVolume(), 2);
 		ImGui::Separator();
 
 		if (ImGui::Checkbox("     FullScreen", &CONFIGURATION.getWindowed()))

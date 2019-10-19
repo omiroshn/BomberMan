@@ -247,15 +247,15 @@ void Game::handleInput()
             if (mKeyHandler->isPressed(SDL_SCANCODE_S))
                 mHero->AddAcceleration(glm::vec2(0, offset));
         }
-        else if (keybinding == 3)
+        else if (keybinding == 2)
         {
-            if (mKeyHandler->isPressed(SDL_SCANCODE_Y))
+            if (mKeyHandler->isPressed(SDL_SCANCODE_K))
                 mHero->AddAcceleration(glm::vec2(0, -offset));
-            if (mKeyHandler->isPressed(SDL_SCANCODE_J))
+            if (mKeyHandler->isPressed(SDL_SCANCODE_L))
                 mHero->AddAcceleration(glm::vec2(offset, 0));
-            if (mKeyHandler->isPressed(SDL_SCANCODE_G))
-                mHero->AddAcceleration(glm::vec2(-offset, 0));
             if (mKeyHandler->isPressed(SDL_SCANCODE_H))
+                mHero->AddAcceleration(glm::vec2(-offset, 0));
+            if (mKeyHandler->isPressed(SDL_SCANCODE_J))
                 mHero->AddAcceleration(glm::vec2(0, offset));
         }
         if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
