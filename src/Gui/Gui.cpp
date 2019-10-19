@@ -25,7 +25,7 @@ void Gui::ShowMainMenu()
 	ImGui::Begin("Main Menu", NULL, mWindow_flags);
 	ImGui::GetWindowDrawList()->AddImage(mBackground, ImVec2(0, 0), ImVec2(mWidth, mHeight));
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(mWidth / 2 - 112, mHeight / 2 - 200));
-	ImGui::BeginChildFrame(5, ImVec2(mWidth, mHeight), ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::BeginChildFrame(5, ImVec2(mWidth, mHeight), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NavFlattened);
 
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2,2));
 
@@ -36,7 +36,7 @@ void Gui::ShowMainMenu()
 
 		/////////////////////////////////START GAME////////////////////////////////////
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
-		ImGui::BeginChildFrame(1, {224, 204}, ImGuiWindowFlags_AlwaysAutoResize);
+		ImGui::BeginChildFrame(1, {224, 204}, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NavFlattened);
 
 		ShowStartNewGameMenu();
 
@@ -143,15 +143,6 @@ void Gui::ShowBetweenStageScreen()
 
 void Gui::ShowStartNewGameMenu()
 {
-	if (ImGui::BeginPopup("Select stage"))
-	{
-		ImGui::BeginChildFrame(4, {200, 204}, 4);
-		ImGui::Text("     Enter your name");
-		 static char str0[128] = "Your name";
-		 ImGui::InputText("", str0, IM_ARRAYSIZE(str0));
-
-		ImGui::EndPopup();
-	}
 	if (ImGui::Button("Start new Campaign", STANDARD_MENU_BUTTON))
 	{
 		//ImGui::OpenPopup("Select stage");
@@ -192,7 +183,7 @@ void Gui::ShowLoadSavedGamesMenu()
 	};
 
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(28, 4));
-	ImGui::BeginChildFrame(2, { 234, 204 }, 4);
+	ImGui::BeginChildFrame(2, { 234, 204 }, 4 | ImGuiWindowFlags_NavFlattened);
 	ImGui::Text("\nStages of the campaign");
 	if (ImGui::ImageButton(mButtonsTextures[0].get(), ImVec2(32, 32), ImVec2(0, 0), ImVec2(1, 1), 2, ImColor(0, 0, 0, 255)))
 	{
@@ -231,7 +222,7 @@ void Gui::ShowSettingsMenu()
 {
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(40, 4));
 		const ImVec2 saved_frame = {234, 330};
-		ImGui::BeginChildFrame(3, saved_frame, 4);
+		ImGui::BeginChildFrame(3, saved_frame, 4 | ImGuiWindowFlags_NavFlattened);
 
 		ImGui::Text("\n    Set music volume\n");
 		ImGui::SliderInt("1O", &CONFIGURATION.getMusicVolume(), 0, 10, "Music");
@@ -339,7 +330,6 @@ void Gui::ShowLoadingScreen(const char* screen)
 	ImGui::Begin("Next Stage", NULL, mWindow_flags);
 	ImGui::Image(im,{mWidth,mHeight}, {0,0}, {1,1});
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	//ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 50, mHeight / 2), ImColor(1.0f,1.0f,1.0f,1.0f), "Welcome to next stage" );
 	if (CONFIGURATION.getChosenStage() > 0)
 	{
 		char stage[] = "Stage:  ";
