@@ -9,13 +9,9 @@ KeyboardHandler::KeyboardHandler()
     mKeyboardState = nullptr;
     left_joystick = false;
     right_joystick = false;
-}
-KeyboardHandler::~KeyboardHandler(){}
-
-void KeyboardHandler::handleKeyboardEvent(SDL_Event &)
-{
     mKeyboardState = SDL_GetKeyboardState(NULL);
 }
+KeyboardHandler::~KeyboardHandler(){}
 
 bool KeyboardHandler::isPressed(int keycode)
 {
@@ -40,11 +36,6 @@ void KeyboardHandler::handleJoystickEvent(SDL_JoyAxisEvent jaxis)
         else
             left_joystick = false;
     }
-}
-
-bool KeyboardHandler::LeftJoystickIsActive()
-{
-    return (left_joystick);
 }
 
 void KeyboardHandler::handleJoystickButtonUpEvent(SDL_JoyBallEvent jball)

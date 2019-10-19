@@ -83,6 +83,10 @@ public:
 	*/
 	void        requestExit();
 	/*!
+	\brief Called from input manager when something important happens.
+	*/
+    void		doAction(Action);
+	/*!
 	\brief Utility function for triggering explosion from bombs.
 
 	Handles all the edge-cases (bombs triggering other bombs, walls, bricks).
@@ -117,7 +121,7 @@ public:
 
 private:
 	void		resolveCollisions();
-    void		doAction(Action const&);
+	void        heroInput();
     void		calcDeltaTime();
     void		loadResources();
     void        loadModels();

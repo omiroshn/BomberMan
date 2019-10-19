@@ -89,8 +89,8 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
 void Renderer::renderMovable(std::shared_ptr<Shader> &s, std::shared_ptr<Shader> &animated, Game &g)
 {
     static auto heroModel = RESOURCES.getModel("hero");
-    static auto balloon = RESOURCES.getModel("enemy1");
-    static auto onil = RESOURCES.getModel("enemy2");
+    static auto balloon = RESOURCES.getModel("enemy2");
+    static auto onil = RESOURCES.getModel("enemy1");
     static auto ovape = RESOURCES.getModel("unbreakableWall");
 
     //render hero
@@ -101,18 +101,33 @@ void Renderer::renderMovable(std::shared_ptr<Shader> &s, std::shared_ptr<Shader>
     //render enemies
     for (MovingEntity *It : g.mBalloons)
     {
-        balloon->setAnimation(It->getAnimation());
-        balloon->draw(s, {It->getModelMatrix()});
+        if (!balloon->mAnimated)
+            balloon->draw(s, {It->getModelMatrix()});
+        else
+        {
+            balloon->setAnimation(It->getAnimation());
+            balloon->draw(animated, {It->getModelMatrix()});
+        }
     }
     for (MovingEntity *It : g.mOnils)
     {
-        onil->setAnimation(It->getAnimation());
-        onil->draw(s, {It->getModelMatrix()});
+        if (!onil->mAnimated)
+            onil->draw(s, {It->getModelMatrix()});
+        else
+        {
+            onil->setAnimation(It->getAnimation());
+            onil->draw(animated, {It->getModelMatrix()});
+        }
     }
     for (MovingEntity *It : g.mOvapes)
     {
-        ovape->setAnimation(It->getAnimation());
-        ovape->draw(s, {It->getModelMatrix()});
+        if (!ovape->mAnimated)
+            ovape->draw(s, {It->getModelMatrix()});
+        else
+        {
+            ovape->setAnimation(It->getAnimation());
+            ovape->draw(animated, {It->getModelMatrix()});
+        }
     }
 }
 
@@ -129,7 +144,6 @@ void Renderer::normalPass(Game& aMap)
 
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
     glm::mat4 view = mCamera.getViewMatrix();
-
 
 	static float Shininess = 32.f;
 

@@ -3,7 +3,7 @@
 
 ParticleSystemPoint::ParticleSystemPoint()
 {
-	setParticleCount(6);
+	setParticleCount(80);
 }
 
 ParticleSystemPoint::~ParticleSystemPoint()

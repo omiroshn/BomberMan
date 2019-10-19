@@ -83,7 +83,8 @@ void Game::start()
         mRenderer->updateSize(width, height);
         CONFIGURATION.setHeight(height);
         CONFIGURATION.setWidth(width);
-        doAction(mIManager->processEvents(mWindow->getEvent(), *mKeyHandler.get()));
+        mIManager->processEvents(this);
+        heroInput();
         if (!mWindow.get()->IsGameRunning())
         {
             mWindow.get()->ShowStartingMenu();
@@ -219,6 +220,72 @@ bool circle_box_collision(glm::vec2 position, float radius, glm::vec2 min, glm::
     return true;
 }
 
+void Game::heroInput()
+{
+    const float offset = mDeltaTime * sInputAcceleration;
+    if (mHero && !mHero->mIsDying)
+    {
+        int keybinding = CONFIGURATION.getKeyBindVolume();
+        if (keybinding == 0)
+        {
+            if (mKeyHandler->isPressed(SDL_SCANCODE_UP))
+                mHero->AddAcceleration(glm::vec2(0, -offset));
+            if (mKeyHandler->isPressed(SDL_SCANCODE_RIGHT))
+                mHero->AddAcceleration(glm::vec2(offset, 0));
+            if (mKeyHandler->isPressed(SDL_SCANCODE_LEFT))
+                mHero->AddAcceleration(glm::vec2(-offset, 0));
+            if (mKeyHandler->isPressed(SDL_SCANCODE_DOWN))
+                mHero->AddAcceleration(glm::vec2(0, offset));
+        }
+        else if (keybinding == 1)
+        {
+            if (mKeyHandler->isPressed(SDL_SCANCODE_W))
+                mHero->AddAcceleration(glm::vec2(0, -offset));
+            if (mKeyHandler->isPressed(SDL_SCANCODE_D))
+                mHero->AddAcceleration(glm::vec2(offset, 0));
+            if (mKeyHandler->isPressed(SDL_SCANCODE_A))
+                mHero->AddAcceleration(glm::vec2(-offset, 0));
+            if (mKeyHandler->isPressed(SDL_SCANCODE_S))
+                mHero->AddAcceleration(glm::vec2(0, offset));
+        }
+        else if (keybinding == 3)
+        {
+            if (mKeyHandler->isPressed(SDL_SCANCODE_Y))
+                mHero->AddAcceleration(glm::vec2(0, -offset));
+            if (mKeyHandler->isPressed(SDL_SCANCODE_J))
+                mHero->AddAcceleration(glm::vec2(offset, 0));
+            if (mKeyHandler->isPressed(SDL_SCANCODE_G))
+                mHero->AddAcceleration(glm::vec2(-offset, 0));
+            if (mKeyHandler->isPressed(SDL_SCANCODE_H))
+                mHero->AddAcceleration(glm::vec2(0, offset));
+        }
+        if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
+            mHero->tryPlaceBomb();
+    }
+    if (auto *joystick = mIManager->getJoystick())
+    {
+        short x_move = SDL_JoystickGetAxis(joystick, 0);
+        short y_move = SDL_JoystickGetAxis(joystick, 1);
+
+        // this is mandatory
+        if (x_move < JOYSTICK_DEAD_ZONE && -x_move < JOYSTICK_DEAD_ZONE)
+            x_move = 0;
+        if (y_move < JOYSTICK_DEAD_ZONE && -y_move < JOYSTICK_DEAD_ZONE)
+            y_move = 0;
+        //
+
+        glm::vec2 normalizedJoystick(
+            x_move / (float)MAX_JOYSTICK_VALUE,
+            y_move / (float)MAX_JOYSTICK_VALUE);
+        mHero->AddAcceleration(normalizedJoystick * offset);
+
+        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_A))
+            pause();
+        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
+            mHero->tryPlaceBomb();
+    }
+}
+
 void Game::resolveCollisions()
 {
     static float CollisionResolveMultiplier = 300.f;
@@ -280,23 +347,16 @@ void Game::resolveCollisions()
     Hero.move(CollisionOffset / 8.f);
     Hero.AddAcceleration(CollisionOffset * CollisionResolveMultiplier);
 
-	// exit level
 	if (isExitActive() 
-    && circle_circle_collision(Position, radius / 2.f, mExit, radius / 2.f))
+    &&  circle_circle_collision(Position, radius / 2.f, mExit, radius / 2.f))
 	{
         FFMPEG.playVideo("betweenstages.mp4");
 		stageFinished();
 	}
 }
 
-void Game::doAction(Action const& a)
+void Game::doAction(Action a)
 {
-    auto& Hero = getHero();
-#if DEBUG
-    ImGui::SliderFloat("Input Hero acceleration", &sInputAcceleration, 0, 10000);
-#endif
-	const float offset  = mDeltaTime * sInputAcceleration;
-
     switch (a)
     {
         case Action::Finish:
@@ -309,9 +369,6 @@ void Game::doAction(Action const& a)
         case Action::StageFinished:
             stageFinished();
             break;
-        case Action::HeroDied:
-            onHeroDied();
-            break;
         case Action::CameraRotate:
             float x,y;
             mIManager->getMouseOffset(x, y);
@@ -319,80 +376,6 @@ void Game::doAction(Action const& a)
             break;
         default:
             break;
-    }
-    { // keyboard
-    if (mHero && !mHero->mIsDying)
-        {
-            int keybinding = CONFIGURATION.getKeyBindVolume();
-            if (keybinding == 0)
-            {
-                if (mKeyHandler->isPressed(SDL_SCANCODE_UP))
-                    Hero.AddAcceleration(glm::vec2(0, -offset));
-                if (mKeyHandler->isPressed(SDL_SCANCODE_RIGHT))
-                    Hero.AddAcceleration(glm::vec2(offset, 0));
-                if (mKeyHandler->isPressed(SDL_SCANCODE_LEFT))
-                    Hero.AddAcceleration(glm::vec2(-offset, 0));
-                if (mKeyHandler->isPressed(SDL_SCANCODE_DOWN))
-                    Hero.AddAcceleration(glm::vec2(0, offset));
-            }
-            else if (keybinding == 1)
-            {
-                if (mKeyHandler->isPressed(SDL_SCANCODE_W))
-                    Hero.AddAcceleration(glm::vec2(0, -offset));
-                if (mKeyHandler->isPressed(SDL_SCANCODE_D))
-                    Hero.AddAcceleration(glm::vec2(offset, 0));
-                if (mKeyHandler->isPressed(SDL_SCANCODE_A))
-                    Hero.AddAcceleration(glm::vec2(-offset, 0));
-                if (mKeyHandler->isPressed(SDL_SCANCODE_S))
-                    Hero.AddAcceleration(glm::vec2(0, offset));
-            }
-            else if (keybinding == 3)
-            {
-                if (mKeyHandler->isPressed(SDL_SCANCODE_Y))
-                    Hero.AddAcceleration(glm::vec2(0, -offset));
-                if (mKeyHandler->isPressed(SDL_SCANCODE_J))
-                    Hero.AddAcceleration(glm::vec2(offset, 0));
-                if (mKeyHandler->isPressed(SDL_SCANCODE_G))
-                    Hero.AddAcceleration(glm::vec2(-offset, 0));
-                if (mKeyHandler->isPressed(SDL_SCANCODE_H))
-                    Hero.AddAcceleration(glm::vec2(0, offset)); 
-            }
-            if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
-                Hero.tryPlaceBomb();
-            //MusicPlayer testing
-            if (mKeyHandler->isPressed(SDL_SCANCODE_5))
-                MUSIC_PLAYER.playMusicInfinity("candyman");
-            if (mKeyHandler->isPressed(SDL_SCANCODE_2))
-                MUSIC_PLAYER.playMusicInfinity("tango");
-            if (mKeyHandler->isPressed(SDL_SCANCODE_3))
-                MUSIC_PLAYER.pauseMusic();
-            if (mKeyHandler->isPressed(SDL_SCANCODE_4))
-                MUSIC_PLAYER.unPauseMusic();
-        }
-    }
-    { // joystick
-        if (mKeyHandler->LeftJoystickIsActive()) {
-            auto *joystick = mIManager->getJoystick();
-            short x_move = SDL_JoystickGetAxis(joystick, 0);
-            short y_move = SDL_JoystickGetAxis(joystick, 1);
-
-			// this is mandatory
-			if (x_move < JOYSTICK_DEAD_ZONE && -x_move < JOYSTICK_DEAD_ZONE)
-				x_move = 0;
-			if (y_move < JOYSTICK_DEAD_ZONE && -y_move < JOYSTICK_DEAD_ZONE)
-				y_move = 0;
-			//
-
-            glm::vec2 normalizedJoystick(
-                x_move / (float)MAX_JOYSTICK_VALUE,
-                y_move / (float)MAX_JOYSTICK_VALUE
-            );
-            Hero.AddAcceleration(normalizedJoystick * offset);
-        }
-        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_A))
-            pause();
-        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
-			Hero.tryPlaceBomb();
     }
 }
 
@@ -443,7 +426,6 @@ void Game::loadResources()
 		RESOURCES.loadTexture("cloud_trans.jpg", "cloud_trans");
 		RESOURCES.loadTexture("explode.png", "explosion_tmap_2");
 		RESOURCES.loadTexture("sparks.jpg", "sparks");
-		//RESOURCES.loadTexture("plitka.jpg", "plitka");
         RESOURCES.loadSkybox("defaultSkybox");
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
@@ -461,7 +443,6 @@ void Game::loadModels()
 {
     RESOURCES.loadModel("general/hero/model.fbx", "hero", glm::vec3(1.f), glm::vec3{0,0,0}, glm::vec3(0,1,0), 0.f, 1.f);
     RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(1.3f), glm::vec3{0,0.3,0}, glm::vec3(1,0,0), -90.f, 1.f);
-	//RESOURCES.getModel("bomb")->mAnimated = false;
 
     // powerups placeholder, please do something about this!!!!!!!!!!!!!!!!!!!!!
     RESOURCES.loadModel("general/powerup/model.dae", "bonus_bombs", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
@@ -480,6 +461,7 @@ void Game::loadModels()
     RESOURCES.loadModel("map/first/breakableWall/model.fbx", "breakableWall", glm::vec3(0.9f));
 
     RESOURCES.loadModel("general/monster/model.fbx", "enemy1");
+    RESOURCES.loadModel("general/villain/model.fbx", "enemy2");
 }
 
 void Game::explosion(glm::ivec2 position, uint32_t span)
@@ -514,7 +496,7 @@ void Game::explosion(glm::ivec2 position, uint32_t span)
 
     std::vector<SquareType*> deferedBricks;
 
-std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
+std::function<void (glm::vec2, uint32_t)> chainReaction = [&] (glm::vec2 center, uint32_t explosionStrength) {
     glm::vec2 directions[] = {
         {-1, 0},
         {1, 0},
@@ -524,7 +506,7 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
 
     Overlaper minMax = MakeOverlaper(center);
     for (uint32_t i = 0; i < ARRAY_COUNT(directions); ++i)
-        for (uint32_t j = 1; j <= span; ++j)
+        for (uint32_t j = 1; j <= explosionStrength; ++j)
         {
             glm::vec2 testPosition = center + (float)j * directions[i];
             auto& type = mCollisionInfo[testPosition];
@@ -543,10 +525,13 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
             else if (type == SquareType::Bomb)
             {
                 type = SquareType::EmptySquare;
-                chainReaction(testPosition);
-                for (Entity* It : mBombs)
+                for (Bomb* It : mBombs)
                     if (testPosition == It->getPosition())
+                    {
                         It->kill();
+                        chainReaction(testPosition, It->mExplosionStrength);
+                        break;
+                    }
             }
 			else if (type == SquareType::Wall)
 			{
@@ -555,7 +540,7 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
         }
     overlaps.push_back(minMax);
 };
-    chainReaction(centerPosition);
+    chainReaction(centerPosition, span);
     for (auto It : deferedBricks)
     {
         *It = SquareType::EmptySquare;
@@ -572,15 +557,16 @@ std::function<void (glm::vec2)> chainReaction = [&] (glm::vec2 center) {
         auto vMax = overlap[3];
 
         std::for_each(enemies.begin(), enemies.end(), [hMin, hMax, vMin, vMax](MovingEntity *entity) {
-            if (circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, hMin, hMax) || circle_box_collision(entity->getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
+            if (circle_box_collision(entity->getPosition(), .4f, hMin, hMax)
+             || circle_box_collision(entity->getPosition(), .4f, vMin, vMax))
                 {
                     entity->kill();
                     CONFIGURATION.setScore(CONFIGURATION.getScore() + 10);
                 }
         });
 
-		if ((circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, hMin, hMax)
-		  || circle_box_collision(hero.getPosition() + glm::vec2(0.5f), .3f, vMin, vMax))
+		if ((circle_box_collision(hero.getPosition(), .1f, hMin, hMax)
+		  || circle_box_collision(hero.getPosition(), .1f, vMin, vMax))
 		  && !hero.mStats.flamepass)
 		{
             hero.kill();
@@ -634,24 +620,14 @@ void       Game::stageFinished()
 
 void Game::onHeroDied()
 {
-    static bool been_there = false;
     if (mStageTimer < 3)
     {
         stageFinished();
     }
-    mHero->mIsDying = true;
-    cleanupOnStageChange();
     if (CONFIGURATION.getLives() == 1)
         gameOver();
     else
         CONFIGURATION.setLives(CONFIGURATION.getLives() - 1);
-    if (been_there)
-    {
-        if (mReloadStage)
-            been_there = false;
-        return;
-    }
-    been_there = true;
 }
 
 void Game::gameOver()

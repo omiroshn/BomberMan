@@ -339,7 +339,7 @@ void Gui::ShowLoadingScreen(const char* screen)
 	ImGui::Begin("Next Stage", NULL, mWindow_flags);
 	ImGui::Image(im,{mWidth,mHeight}, {0,0}, {1,1});
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 50, mHeight / 2), ImColor(1.0f,1.0f,1.0f,1.0f), "Welcome to next stage" );
+	//ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 50, mHeight / 2), ImColor(1.0f,1.0f,1.0f,1.0f), "Welcome to next stage" );
 	if (CONFIGURATION.getChosenStage() > 0)
 	{
 		char stage[] = "Stage:  ";

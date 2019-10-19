@@ -18,7 +18,6 @@ public:
 
     bool isPressed(int keycode);
     bool isReleased(int keycode);
-    void handleKeyboardEvent(SDL_Event &event);
     void handleJoystickEvent(SDL_JoyAxisEvent jaxis);
     void handleJoystickButtonUpEvent(SDL_JoyBallEvent jball);
     void handleJoystickButtonDownEvent(SDL_JoyBallEvent jball);

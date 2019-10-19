@@ -100,13 +100,6 @@ void GameWindow::update()
     ImGui::Render();
 	mMainMenu.RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(mWindow);
-
-    SDL_PollEvent(&mEvent);
-}
-
-SDL_Event & GameWindow::getEvent()
-{
-    return mEvent;
 }
 
 void GameWindow::tickGui()
