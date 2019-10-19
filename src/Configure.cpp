@@ -105,6 +105,8 @@ void 			Configure::setSize(int const w, int const h)
 {
 	setWidth(w);
 	setHeight(h);
+	if (observableWindow)
+    	observableWindow->setSize(w,h);
 }
 
 void 			Configure::setWidth(int const w)
