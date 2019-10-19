@@ -147,7 +147,7 @@ void Gui::ShowStartNewGameMenu()
 	{
 		//ImGui::OpenPopup("Select stage");
 		mCurrentMenu = CurrentMenu::inGameMenu;
-		CONFIGURATION.setChosenStage(DefaultChosenStage);
+		CONFIGURATION.setChosenStage(CONFIGURATION.getChosenStage());
 		CONFIGURATION.setLives(DefaultLives);
 		CONFIGURATION.setBestLevelAchieved(DefaultBestLevelAchieved);
 		CONFIGURATION.setScore(DefaultScore);
