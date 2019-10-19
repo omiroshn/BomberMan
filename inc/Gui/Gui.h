@@ -64,24 +64,15 @@ private:
 
 	void CreateFontsTexture();
 
-	static char*        sClipboardTextData;
-	static const char*	GetClipboardText(void*);
-	static void 		SetClipboardText(void*, const char *text);
-
-
 	bool mGameStarted = false;
-	bool mGamePaused = false; //make static in Game
+	bool mGamePaused = false;
 	ImGuiWindowFlags mWindow_flags = 0;
 	CurrentMenu mCurrentMenu = CurrentMenu::mainMenu;
 	ImTextureID mBackground = nullptr;
 	float mWidth = 800.0f;
 	float mHeight = 600.0f;
 
-	// OpenGL data
-//	char         mGlslVersion[32] = {"#version 330\n"};
 	GLuint       mVaoHandle = 0, mVboHandle = 0, mElementsHandle = 0;
-//	int          mAttribLocationTex = 0, mAttribLocationProjMtx = 0;
-//	int          mAttribLocationPosition = 0, mAttribLocationUV = 0, mAttribLocationColor = 0;
 
 	std::shared_ptr<Texture> mFontTexture = 0;
 };

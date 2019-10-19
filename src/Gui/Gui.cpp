@@ -25,18 +25,18 @@ void Gui::ShowMainMenu()
 	ImGui::Begin("Main Menu", NULL, mWindow_flags);
 	ImGui::GetWindowDrawList()->AddImage(mBackground, ImVec2(0, 0), ImVec2(mWidth, mHeight));
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(mWidth / 2 - 112, mHeight / 2 - 200));
-	ImGui::BeginChildFrame(5, ImVec2(mWidth, mHeight), ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::BeginChildFrame(5, ImVec2(mWidth, mHeight), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NavFlattened);
 
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2,2));
 
 	if (mCurrentMenu == CurrentMenu::mainMenu)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-		ImGui::Text("       BomberMan game menu");
+		ImGui::Text("                BomberMan");
 
 		/////////////////////////////////START GAME////////////////////////////////////
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
-		ImGui::BeginChildFrame(1, {224, 204}, ImGuiWindowFlags_AlwaysAutoResize);
+		ImGui::BeginChildFrame(1, {224, 204}, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NavFlattened);
 
 		ShowStartNewGameMenu();
 
@@ -62,7 +62,7 @@ void Gui::ShowMainMenu()
 
 		if (ImGui::Button("EXIT", STANDARD_MENU_BUTTON))
 		{
-			Game::mIsRunning = false;
+			Game::get()->requestExit();
 		}
 
 		ImGui::EndChildFrame();		
@@ -143,15 +143,6 @@ void Gui::ShowBetweenStageScreen()
 
 void Gui::ShowStartNewGameMenu()
 {
-	if (ImGui::BeginPopup("Select stage"))
-	{
-		ImGui::BeginChildFrame(4, {200, 204}, 4);
-		ImGui::Text("     Enter your name");
-		 static char str0[128] = "Your name";
-		 ImGui::InputText("", str0, IM_ARRAYSIZE(str0));
-
-		ImGui::EndPopup();
-	}
 	if (ImGui::Button("Start new Campaign", STANDARD_MENU_BUTTON))
 	{
 		//ImGui::OpenPopup("Select stage");
@@ -192,7 +183,7 @@ void Gui::ShowLoadSavedGamesMenu()
 	};
 
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(28, 4));
-	ImGui::BeginChildFrame(2, { 234, 204 }, 4);
+	ImGui::BeginChildFrame(2, { 234, 204 }, 4 | ImGuiWindowFlags_NavFlattened);
 	ImGui::Text("\nStages of the campaign");
 	if (ImGui::ImageButton(mButtonsTextures[0].get(), ImVec2(32, 32), ImVec2(0, 0), ImVec2(1, 1), 2, ImColor(0, 0, 0, 255)))
 	{
@@ -231,7 +222,7 @@ void Gui::ShowSettingsMenu()
 {
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(40, 4));
 		const ImVec2 saved_frame = {234, 330};
-		ImGui::BeginChildFrame(3, saved_frame, 4);
+		ImGui::BeginChildFrame(3, saved_frame, 4 | ImGuiWindowFlags_NavFlattened);
 
 		ImGui::Text("\n    Set music volume\n");
 		ImGui::SliderInt("1O", &CONFIGURATION.getMusicVolume(), 0, 10, "Music");
@@ -339,7 +330,6 @@ void Gui::ShowLoadingScreen(const char* screen)
 	ImGui::Begin("Next Stage", NULL, mWindow_flags);
 	ImGui::Image(im,{mWidth,mHeight}, {0,0}, {1,1});
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-	ImGui::GetWindowDrawList()->AddText( ImVec2(mWidth / 2 - 50, mHeight / 2), ImColor(1.0f,1.0f,1.0f,1.0f), "Welcome to next stage" );
 	if (CONFIGURATION.getChosenStage() > 0)
 	{
 		char stage[] = "Stage:  ";
@@ -360,21 +350,7 @@ Gui::~Gui()
 
 }
 
-char *Gui::sClipboardTextData;
 bool Gui::sMousePressed[3];
-
-const char* Gui::GetClipboardText(void*)
-{
-    if (sClipboardTextData) 
-        SDL_free(sClipboardTextData);
-    sClipboardTextData = SDL_GetClipboardText();
-    return sClipboardTextData;
-}
-
-void Gui::SetClipboardText(void*, const char* text)
-{
-    SDL_SetClipboardText(text);
-}
 
 void Gui::RenderDrawData(ImDrawData* draw_data)
 {
@@ -478,7 +454,10 @@ void    Gui::InvalidateDeviceObjects()
 bool    Gui::Init()
 {
     ImGuiIO& io = ImGui::GetIO();
-    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;   // We can honor GetMouseCursor() values (optional)
+    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
+    io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
     io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;
     io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
@@ -502,8 +481,6 @@ bool    Gui::Init()
     io.KeyMap[ImGuiKey_Y] = SDL_SCANCODE_Y;
     io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
 
-    io.SetClipboardTextFn = &Gui::SetClipboardText;
-    io.GetClipboardTextFn = &Gui::GetClipboardText;
     io.ClipboardUserData = NULL;
 
     return true;
@@ -511,10 +488,6 @@ bool    Gui::Init()
 
 void Gui::Shutdown()
 {
-    // Destroy last known clipboard data
-    if (sClipboardTextData)
-        SDL_free(sClipboardTextData);
-
     // Destroy OpenGL objects
     Gui::InvalidateDeviceObjects();
 }

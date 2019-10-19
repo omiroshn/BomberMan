@@ -1,5 +1,6 @@
 #include "Entity/MovingEntity.h"
 #include "imgui.h"
+#include "Game.hpp"
 #include <assimp/types.h>
 #include <glm/common.hpp>
 #include <glm/ext/quaternion_float.hpp>
@@ -28,24 +29,21 @@ float MovingEntity::GetSpeed() const
 	return sqrt(ElementsSquared.x + ElementsSquared.y);
 }
 
-void MovingEntity::SetVelocity(glm::vec2 velocity)
-{
-	mVelocity = velocity;
-}
-
 void MovingEntity::AddVelocity(glm::vec2 velocityOffset)
 {
 	mVelocity += velocityOffset;
 }
 
-glm::vec2 MovingEntity::GetVelocity() const
+bool MovingEntity::isDeadForAwhile() const
 {
-	return mVelocity;
+	return mDead && Game::get()->getCurrentTime() > (mTimeOfDeath + 2.5f);
 }
 
-void MovingEntity::SetAcceleration(glm::vec2 acceleration)
+void MovingEntity::kill()
 {
-	mAcceleration = acceleration;
+	mAnimation.setTime(0.0);
+	mTimeOfDeath = Game::get()->getCurrentTime();
+	Entity::kill();
 }
 
 void MovingEntity::AddAcceleration(glm::vec2 accelerationOffset)
@@ -62,11 +60,6 @@ void MovingEntity::debug()
 #endif
 }
 
-void MovingEntity::SetAnimationType(AnimationType type)
-{
-    mAnimation.setType(type);
-}
-
 void MovingEntity::debugMovement()
 {
 #if DEBUG
@@ -77,15 +70,10 @@ void MovingEntity::debugMovement()
 #endif
 }
 
-glm::vec2 MovingEntity::GetAcceleration() const
-{
-	return mAcceleration;
-}
-
 void MovingEntity::animate(float DeltaTime)
 {
     mAnimation.tick(DeltaTime);
-	if (mIsDying)
+	if (mDead)
 	{
 		mAnimation.setType(AnimationType::Dying);
 		return;
@@ -121,8 +109,8 @@ void MovingEntity::tick(float DeltaTime)
 
 	debug();
 
-	if (mIsDying)
-		mAcceleration = glm::vec2(0.f);
+	if (mDead)
+		return;
 
     if (mAcceleration == glm::vec2(0.f) && mVelocity == glm::vec2(0.f))
         return;

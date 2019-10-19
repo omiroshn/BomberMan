@@ -12,13 +12,12 @@ enum class SquareType : uint_fast8_t
 	Bomb				= 3,
 	Powerup_Bombs		= 4,
 	Powerup_Flames		= 5,
-	Powerup_Speed		= 6,
-	Powerup_Wallpass	= 7,
-	Powerup_Detonator	= 8,
-	Powerup_Bombpass	= 9,
-	Powerup_Flamepass 	= 10,
-	Powerup_Mystery		= 11,
-	Exit				= 12
+	Powerup_Wallpass	= 6,
+	Powerup_Detonator	= 7,
+	Powerup_Bombpass	= 8,
+	Powerup_Flamepass 	= 9,
+	Powerup_Mystery		= 10,
+	Exit				= 11
 };
 
 #endif

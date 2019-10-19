@@ -10,7 +10,11 @@
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include <map>
+/*!
+\brief The representation of Shader.
 
+Holds shader program and provides useful methods for setting Uniforms.
+*/
 class Shader
 {
 public:
@@ -19,27 +23,35 @@ public:
 	Shader();
 
 public:
+/*!
+\brief Binds this shader for further use.
+*/
 	void use();
-	void setBool(const std::string &, bool ) const;
+/*!
+\brief Sets uniform of type Int on this Shader.
+*/
 	void setInt(const std::string &, int ) const;
+/*!
+\brief Sets uniform of type Float on this Shader.
+*/
 	void setFloat(const std::string &, float ) const;
-	void setVec2(const std::string &, const glm::vec2 &) const;
-	void setVec2(const std::string &, float, float) const;
+/*!
+\brief Sets uniform of type vec3 on this Shader.
+*/
 	void setVec3(const std::string &, const glm::vec3 &) const;
-	void setVec3(const std::string &, float, float, float) const;
-	void setVec4(const std::string &, const glm::vec4 &) const;
-	void setVec4(const std::string &, float, float, float, float) const;
-	void setMat2(const std::string &, const glm::mat2 &) const;
-	void setMat3(const std::string &, const glm::mat3 &) const;
+/*!
+\brief Sets uniform of type mat4 on this Shader.
+*/
 	void setMat4(const std::string &, const glm::mat4 &) const;
-	bool isShaderCompiled(unsigned int, int, char *) const;
-	bool isProgramLinked(unsigned int, int, char *) const;
-	unsigned int mShaderProgram;
 
 private:
     GLuint getUniformLocation(std::string const&) const;
     mutable std::map<std::string, GLuint> mUniformLocations;
 	static unsigned int sBoundProgram;
+
+	bool isShaderCompiled(unsigned int, int, char *) const;
+	bool isProgramLinked(unsigned int, int, char *) const;
+	unsigned int mShaderProgram;
 };
 
 #endif

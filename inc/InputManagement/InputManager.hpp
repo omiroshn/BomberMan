@@ -13,18 +13,12 @@ enum class Action
     Finish,
     Pause,
     StageFinished,
-    HeroDied,
     Forward,
     Backward,
     Up,
     Down,
     Right,
     Left,
-    Joystick,
-    JoystickButtonX,
-    JoystickButtonY,
-    JoystickButtonA,
-    JoystickButtonB,
     Explosion,
     Space,
 //For internal testing
@@ -41,7 +35,7 @@ public:
     ~InputManager();
     InputManager(InputManager const&) = delete;
     InputManager& operator=(InputManager const&) = delete;
-    Action processEvents(SDL_Event &e, KeyboardHandler &keyHandler);
+    void processEvents(class Game *game, KeyboardHandler &keyHandler);
     Action processKeyDown(SDL_Keycode keyPressed);
     Action processMouseMotion(SDL_Event const &e);
     Action processJoystickMotion(SDL_JoyAxisEvent jaxis);

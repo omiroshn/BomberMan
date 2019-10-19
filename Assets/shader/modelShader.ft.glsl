@@ -29,16 +29,15 @@ vec3 GetLightDir()
     return fs_in.TangentLightDir;
 }
 
-#define SAMPLES 2
-#define OFFSET_SIZE 1.2
+#define SAMPLES 3
+#define OFFSET_SIZE 0.9
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
     vec3 projCoords = (fragPosLightSpace.xyz / fragPosLightSpace.w) * 0.5 + 0.5;
-    float currentDepth = projCoords.z;
-    if (currentDepth > 1.f)
-        return 0.f;
-    float shadow = texture(shadowMap, projCoords);
+    if (projCoords.z > 1.f)
+        return 0.0;
+    float shadow = 0.0;
     for (int i = -SAMPLES; i <= SAMPLES; i++)
     for (int j = -SAMPLES; j <= SAMPLES; j++)
     {
@@ -46,7 +45,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
         sampleCoords += vec3(vec2(i, j) * (1. / textureSize(shadowMap, 0)) * OFFSET_SIZE, 0.f);
         shadow += texture(shadowMap, sampleCoords);
     }
-    return shadow / ((SAMPLES * 2 + 1) * (SAMPLES * 2 + 1));
+    return shadow / float((SAMPLES * 2 + 1) * (SAMPLES * 2 + 1));
 }
 
 void main()

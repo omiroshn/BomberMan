@@ -54,24 +54,18 @@ void 			MusicPlayer::loadMusic(std::string const &musicName, std::string const &
 {
 	Mix_Music* musicPtr = Mix_LoadMUS((mBinFolder + "music/" + source).c_str());
 	if (!musicPtr){
-		std::cout << "Could not open music with name " << musicName << " from source "
-		<< (mBinFolder + "music/" + source)<<std::endl;
 		return;
 	}
 	mMusic.emplace(musicName, musicPtr);
-	std::cout << "Open music with name " << musicName << std::endl;
 }
 
 void 			MusicPlayer::loadSound(std::string const &soundName, std::string const &source)
 {
 	Mix_Chunk* soundPtr = Mix_LoadWAV((mBinFolder + "music/" + source).c_str());
 	if (!soundPtr){
-		std::cout << "Could not open sound with name " << soundName << " from source "
-		<< (mBinFolder + "music/" + source)<<std::endl;
 		return;
 	}
 	mSound.emplace(soundName, soundPtr);
-	std::cout << "Open sound with name " << soundName << std::endl;
 }
 
 void 			MusicPlayer::clearMusicMap()

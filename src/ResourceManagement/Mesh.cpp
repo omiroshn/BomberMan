@@ -213,7 +213,7 @@ void	Mesh::setAnimation(Animation const& anim)
 }
 
 void Mesh::setupAnimations() {
-    for (int i = mScene->mNumAnimations - 1; i != 0; --i) {
+    for (int i = mScene->mNumAnimations - 1; i >= 0; --i) {
         std::string animationName(mScene->mAnimations[i]->mName.C_Str());
         std::transform(animationName.begin(), animationName.end(), animationName.begin(), ::tolower);
         animationName = animationName.substr(animationName.find('|') + 1);

@@ -30,12 +30,20 @@ std::vector<SquareType> Serialization::LoadCampaignMap(int stage, unsigned& outW
     std::vector<SquareType> map;
     map.reserve(400);
     std::string line;
-    std::cout << map_name << std::endl;
     std::ifstream f{RESOURCES.getMap(map_name)};
 	unsigned width = 0;
     while (std::getline(f, line))
     {
-        width = std::max(width, (unsigned)line.size());
+        unsigned lineSize = (unsigned)line.size();
+        if (width && lineSize != width)
+        {
+            std::cerr << "map  " << map_name << " is mailformed\n";
+            return map;
+        }
+        else if (!width)
+        {
+            width = lineSize;
+        }
         for (size_t i = 0; i < line.size(); i++)
         {
             if (line[i] >= '0' && line[i] <= '9')

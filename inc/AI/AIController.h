@@ -2,19 +2,17 @@
 #include "StateMachine/StateMachine.h"
 #include "glm/vec2.hpp"
 
-class MovingEntity;
 
 /* It's better to provide forward declarations so that any type knows of any other type */
 struct IdleState;
 struct PatrolState;
 struct ChaseState;
 struct ConfusedState;
+class MovingEntity;
 
-/**
- * Idle state
- *
- * Makes pawn stay in place for 1s.
- */
+/*!
+\brief Struct representing the state of entity when it's doing nothing.
+*/
 struct IdleState : public State {
 	using State::transition;
 
@@ -31,11 +29,10 @@ private:
 	float m_TransitionToPatrol;
 };
 
-/**
- * Patrol state
- *
- * Makes pawn walk through the maze randomly.
- */
+/*!
+\brief Struct representing the state of entity when it's wandering around the map
+Makes pawn walk through the maze randomly.
+*/
 struct PatrolState : public State {
     PatrolState();
     ~PatrolState();
@@ -54,11 +51,10 @@ struct PatrolState : public State {
 	bool mPawnSeesPlayer;
 };
 
-/**
- * Patrol state
- *
- * Makes pawn walk through the maze randomly.
- */
+/*!
+\brief Struct representing the state of entity when it's seen a player.
+Makes pawn chase after the player.
+*/
 struct ChaseState : public State {
     ChaseState();
     ~ChaseState();
@@ -75,6 +71,10 @@ struct ChaseState : public State {
 	bool mIsConfused;
 };
 
+/*!
+\brief Struct representing the state of entity when it's lost a player when chasing him.
+Makes pawn stay in place trying to find the player.
+*/
 struct ConfusedState : public State {
     ConfusedState();
     ~ConfusedState();
@@ -93,4 +93,6 @@ struct ConfusedState : public State {
 	bool	mPawnSeesPlayer;
 };
 
-typedef SM<MovingEntity, IdleState, PatrolState, ChaseState, ConfusedState> BalloonController;
+typedef SM<MovingEntity, IdleState, PatrolState> BalloonController;
+typedef SM<MovingEntity, IdleState, PatrolState, ChaseState, ConfusedState> OnilController;
+typedef SM<MovingEntity, IdleState, PatrolState> OvapeController;

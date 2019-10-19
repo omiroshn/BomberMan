@@ -74,6 +74,13 @@ void GameWindow::initGui() {
 	config.FontDataOwnedByAtlas = false;
 	io.Fonts->AddFontFromMemoryTTF(fontData.data(), static_cast<int>(fontData.size()), 16, &config);
 
+    io.IniFilename = NULL;
+    io.LogFilename = NULL;
+    io.WantSaveIniSettings = false;
+    io.WantTextInput = false;
+    io.NavActive = true;
+    io.NavVisible = true;
+
     ImGui::StyleColorsDark();
 
 	mMainMenu.Init();
@@ -86,7 +93,7 @@ void GameWindow::initOpenGL()
 	if (err != GLEW_OK)
     {
 		BM_CRITICAL("%s", glewGetErrorString(err));
-        abort();
+        exit(0);
     }
     glViewport(0, 0, mWidth, mHeight);
     glEnable(GL_DEPTH_TEST);
@@ -100,13 +107,6 @@ void GameWindow::update()
     ImGui::Render();
 	mMainMenu.RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(mWindow);
-
-    SDL_PollEvent(&mEvent);
-}
-
-SDL_Event & GameWindow::getEvent()
-{
-    return mEvent;
 }
 
 void GameWindow::tickGui()
@@ -141,7 +141,6 @@ void GameWindow::ShowBetweenStageScreen()
 void GameWindow::PauseGame(bool state)
 {
     mMainMenu.GamePaused(state);
-    mMainMenu.ShowMainMenu();
 }
 
 void GameWindow::setSize(int const w, int const h)

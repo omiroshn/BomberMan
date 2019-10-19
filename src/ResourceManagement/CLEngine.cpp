@@ -54,13 +54,10 @@ void 	CLEngine::defineDevice()
 	m_usedPlatform.getDevices(CL_DEVICE_TYPE_GPU, &m_allDevices);
 	if (m_allDevices.size() < 1)
 		throw CustomException("Graphic device is not found");
-	std::cout << "Using platform: "<< m_usedPlatform.getInfo<CL_PLATFORM_NAME>()<<"\n";
 
 	m_usedDevice = m_allDevices[0];
 	auto vendor = m_usedDevice.getInfo<CL_DEVICE_VENDOR>();
 	auto version = m_usedDevice.getInfo<CL_DEVICE_VERSION>();
-	std::cout<< "Using device: "<< m_usedDevice.getInfo<CL_DEVICE_NAME>() << std::endl;
-	std::cout<< "Using device:" << vendor << "with version" << version << std::endl;
 }
 
 void 	CLEngine::defineContext()

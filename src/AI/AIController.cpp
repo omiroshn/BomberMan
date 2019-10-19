@@ -90,6 +90,19 @@ namespace
 		pawn.AddVelocity((center - position) * 2.f);
 	}
 
+	glm::vec2	march(glm::vec2 start, glm::vec2 direction, int distance)
+	{
+		auto& info = Game::getCollisionInfo();
+		
+		for (int i = 0; i < distance; i++)
+		{
+			if (info[start + direction] != SquareType::EmptySquare)
+				break;
+			start += direction;
+		}
+		return closestCenter(start);
+	}
+
 	bool	moveAI(MovingEntity& pawn, glm::vec2 destination)
 	{
 		glm::vec2 position = pawn.getPosition();
@@ -108,6 +121,10 @@ namespace
 		
 		glm::vec2 direction = destination - position;
 		float length = glm::length(direction);
+
+		glm::vec2 firstObstacle = march(position, glm::normalize(direction), int(length + 0.5f));
+		if (glm::distance(position, firstObstacle) < length)
+			return false;
 		
 
 		if (length < 0.02)
@@ -120,19 +137,6 @@ namespace
 
 		pawn.AddAcceleration(acceleration);
 		return true;
-	}
-
-	glm::vec2	march(glm::vec2 start, glm::vec2 direction, int distance)
-	{
-		auto& info = Game::getCollisionInfo();
-		
-		for (int i = 0; i < distance; i++)
-		{
-			if (info[start + direction] != SquareType::EmptySquare)
-				break;
-			start += direction;
-		}
-		return closestCenter(start);
 	}
 
 	bool checkVisibility(MovingEntity& pawn, glm::vec2 point)

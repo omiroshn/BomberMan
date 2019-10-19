@@ -70,7 +70,6 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
         static std::shared_ptr<Model> bonusModels[Hero::PowerupType::PT_NONE] = {
             RESOURCES.getModel("bonus_bombs"),
             RESOURCES.getModel("bonus_flames"),
-            RESOURCES.getModel("bonus_speed"),
             RESOURCES.getModel("bonus_wallpass"),
             RESOURCES.getModel("bonus_detonator"),
             RESOURCES.getModel("bonus_bombpass"),
@@ -87,21 +86,48 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
 	exit[active]->draw(s, std::vector<glm::mat4>{Game::get()->getExitTransform()});
 }
 
-void Renderer::renderMovable(std::shared_ptr<Shader> &animated, Game &g)
+void Renderer::renderMovable(std::shared_ptr<Shader> &s, std::shared_ptr<Shader> &animated, Game &g)
 {
     static auto heroModel = RESOURCES.getModel("hero");
-    static auto enemy1 = RESOURCES.getModel("enemy1");
+    static auto balloon = RESOURCES.getModel("enemy2");
+    static auto onil = RESOURCES.getModel("enemy1");
+    static auto ovape = RESOURCES.getModel("unbreakableWall");
+
     //render hero
     auto& Hero = g.getHero();
     heroModel->setAnimation(Hero.getAnimation());
     heroModel->draw(animated, mTransforms[ModelType::Player]);
 
     //render enemies
-    auto& Enemies = g.getEnemies();
-    for (auto const& It : Enemies)
+    for (MovingEntity *It : g.mBalloons)
     {
-        enemy1->setAnimation(It->getAnimation());
-        enemy1->draw(animated, {It->getModelMatrix()});
+        if (!balloon->mAnimated)
+            balloon->draw(s, {It->getModelMatrix()});
+        else
+        {
+            balloon->setAnimation(It->getAnimation());
+            balloon->draw(animated, {It->getModelMatrix()});
+        }
+    }
+    for (MovingEntity *It : g.mOnils)
+    {
+        if (!onil->mAnimated)
+            onil->draw(s, {It->getModelMatrix()});
+        else
+        {
+            onil->setAnimation(It->getAnimation());
+            onil->draw(animated, {It->getModelMatrix()});
+        }
+    }
+    for (MovingEntity *It : g.mOvapes)
+    {
+        if (!ovape->mAnimated)
+            ovape->draw(s, {It->getModelMatrix()});
+        else
+        {
+            ovape->setAnimation(It->getAnimation());
+            ovape->draw(animated, {It->getModelMatrix()});
+        }
     }
 }
 
@@ -118,7 +144,6 @@ void Renderer::normalPass(Game& aMap)
 
     glm::mat4 projection = glm::perspective(glm::radians(mCamera.zoom()), static_cast<float>(mWidth) / static_cast<float>(mHeight), 0.1f, 90.0f);
     glm::mat4 view = mCamera.getViewMatrix();
-
 
 	static float Shininess = 32.f;
 
@@ -145,7 +170,7 @@ void Renderer::normalPass(Game& aMap)
     animatedModelShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
     animatedModelShader->setFloat("shininess", Shininess);
 
-    renderMovable(animatedModelShader, aMap);
+    renderMovable(modelShader,animatedModelShader, aMap);
     renderObstacles(modelShader);
 
     // render the ground
@@ -199,7 +224,7 @@ void Renderer::shadowPass(Game& aMap)
     animatedShadowShader->use();
     animatedShadowShader->setMat4("lightSpaceMatrix", mLightManager->getLightSpaceMatrix());
     mLightManager->prepareForShadowPass();
-    renderMovable(animatedShadowShader, aMap);
+    renderMovable(shadowShader, animatedShadowShader, aMap);
     renderObstacles(shadowShader);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
