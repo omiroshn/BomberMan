@@ -3,7 +3,7 @@
 build/*
 bomberman*
 bomberman.dmg
-
+imgui.ini
 
 # Editors trash
 .vscode

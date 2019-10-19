@@ -148,7 +148,7 @@ void Game::start()
                 {
                     mapLoader.cleanMapForRendering();
                     mCollisionInfo.Squares.clear();
-                    mCollisionInfo = mapLoader.GetMap(CONFIGURATION.getChosenStage());
+                    mCollisionInfo = mapLoader.GetMap(CONFIGURATION.getChosenStage() < 4 ? CONFIGURATION.getChosenStage() : 3);
                     extractInfo();
                     addEnemiesOnMap();
                     if (mHero)
@@ -457,6 +457,7 @@ void Game::loadModels()
     RESOURCES.loadModel("map/first/perimeterWall/model.fbx", "perimeterWall");
     RESOURCES.loadModel("map/first/unbreakableWall/model.fbx", "unbreakableWall", glm::vec3(1), glm::vec3(0),  glm::normalize(glm::vec3(1,0,0)), -90);
     RESOURCES.loadModel("map/first/breakableWall/model.fbx", "breakableWall", glm::vec3(0.9f));
+    RESOURCES.loadModel("map/first/door/door.fbx", "door", glm::vec3(0.9f), glm::vec3(0), glm::normalize(glm::vec3(1,0,0)), 0.5f, 10);
 
     RESOURCES.loadModel("general/monster/model.fbx", "enemy1");
     RESOURCES.loadModel("general/villain/model.fbx", "enemy2");
