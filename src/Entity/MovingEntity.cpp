@@ -36,7 +36,7 @@ void MovingEntity::AddVelocity(glm::vec2 velocityOffset)
 
 bool MovingEntity::isDeadForAwhile() const
 {
-	return mDead && Game::get()->getCurrentTime() > (mTimeOfDeath + 2.5f);
+	return mDead && Game::get()->getCurrentTime() > (mTimeOfDeath + 2.f);
 }
 
 void MovingEntity::kill()

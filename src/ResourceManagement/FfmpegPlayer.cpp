@@ -35,7 +35,8 @@ void FfmpegPlayer::init(std::shared_ptr<GameWindow>  window)
 {
 	setSDLWindow(window);
 	m_renderer = SDL_CreateRenderer(m_window->getSDLWindow(), -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (!m_renderer) {
+	if (!m_renderer)
+	{
 		throw CustomException("SDL: could not create renderer!");
 	}
 }

@@ -376,14 +376,13 @@ void Game::doAction(Action a)
         case Action::Pause:
             pause();
             break;
-        case Action::StageFinished:
-            stageFinished();
-            break;
+#if DEBUG
         case Action::CameraRotate:
             float x,y;
             mIManager->getMouseOffset(x, y);
             mRenderer->getCamera().processMouseMovement(x, y);
             break;
+#endif
         default:
             break;
     }
@@ -688,6 +687,9 @@ void	Game::tickAI(float deltaTime)
 		It.controller.tick(*It, deltaTime);
 	for (auto& It : mOvapes)
 		It.controller.tick(*It, deltaTime);
+
+	if (mHero->isDeadForAwhile())
+		onHeroDied();
 }
 
 std::vector<glm::mat4> Game::Filter(SquareType type)
