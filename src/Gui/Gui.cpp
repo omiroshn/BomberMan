@@ -254,17 +254,20 @@ void Gui::ShowSettingsMenu()
 		}
 
 		ImGui::Text("\nSet screen resolution\n");
-        const char* items[] = {"360", "480", "720", "1400"};
+        const char* items[] = {"960 x 720", "1280 x 1080", "1600 x 1440", "1920 x 480"};
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		float w = ImGui::CalcItemWidth();
 		float spacing = style.ItemInnerSpacing.x;
 		float button_sz = ImGui::GetFrameHeight();
 		ImGui::PushItemWidth(w - spacing * 2.0f - button_sz * 2.0f);
-		if (ImGui::ArrowButton("##r", ImGuiDir_Left))
+		if (ImGui::ArrowButton("##l", ImGuiDir_Left))
 		{
-			if (CONFIGURATION.getScreenResolution() > 0)
+			if (CONFIGURATION.getWidth() >= 1280)
+			{
 				CONFIGURATION.getScreenResolution()--;
+				CONFIGURATION.setSize(CONFIGURATION.getWidth() - 320, CONFIGURATION.getHeight() - 360);
+			}
 		}
 		static const char* current_item = items[CONFIGURATION.getScreenResolution()];
 		ImGui::SameLine(0, spacing);
@@ -274,7 +277,10 @@ void Gui::ShowSettingsMenu()
 			{
 				bool is_selected = (current_item == items[n]);
 				if (ImGui::Selectable(items[n], is_selected))
+				{
+					CONFIGURATION.setSize(640 + n * 320, 360 + n * 360);
 					current_item = items[n];
+				}
 				if (is_selected)
 					ImGui::SetItemDefaultFocus();
 			}
@@ -284,8 +290,11 @@ void Gui::ShowSettingsMenu()
 		ImGui::SameLine(0, spacing);
 		if (ImGui::ArrowButton("##r", ImGuiDir_Right))
 		{
-			if (CONFIGURATION.getScreenResolution() < 4)
+			if (CONFIGURATION.getWidth() <= 1600)
+			{
 				CONFIGURATION.getScreenResolution()++;
+				CONFIGURATION.setSize(CONFIGURATION.getWidth() + 320, CONFIGURATION.getHeight() + 360);
+			}
 		}
 		ImGui::EndChildFrame();
 		ImGui::PopStyleVar();
