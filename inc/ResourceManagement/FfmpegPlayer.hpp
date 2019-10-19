@@ -56,7 +56,6 @@ private:
 private:
 	AVFormatContext 	*m_pFormatCtx = NULL;
 	AVCodecContext 		*m_pCodecCtx = NULL;
-	AVCodecContext 		*m_pCodecCtxOrig = NULL;
 	AVCodec 			*m_pCodec = NULL;
 
 	AVFrame 			*m_pFrame = NULL;

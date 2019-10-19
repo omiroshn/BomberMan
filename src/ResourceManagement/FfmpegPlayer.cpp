@@ -238,7 +238,6 @@ void 			FfmpegPlayer::freeMemory()
 	// Close the codec
 	avcodec_free_context(&m_pCodecCtx);
 	avcodec_close(m_pCodecCtx);
-	avcodec_close(m_pCodecCtxOrig);
 
 	// Close the video file
 	avformat_close_input(&m_pFormatCtx);
