@@ -77,14 +77,14 @@ void Game::start()
 	// sync files here
     while (mIsRunning)
     {
+        mIManager->processEvents(this, *mKeyHandler.get());
+        handleInput();
         mWindow->tickGui();
         mWindow->getSize(width, height);
         calcDeltaTime();
         mRenderer->updateSize(width, height);
         CONFIGURATION.setHeight(height);
         CONFIGURATION.setWidth(width);
-        mIManager->processEvents(this, *mKeyHandler.get());
-        handleInput();
         if (!mWindow.get()->IsGameRunning())
         {
             mWindow.get()->ShowStartingMenu();
@@ -266,9 +266,9 @@ void Game::handleInput()
             short y_move = SDL_JoystickGetAxis(joystick, 1);
 
             // this is mandatory
-            if (x_move < JOYSTICK_DEAD_ZONE && -x_move < JOYSTICK_DEAD_ZONE)
+            if (x_move < JOYSTICK_DEAD_ZONE && x_move > -JOYSTICK_DEAD_ZONE)
                 x_move = 0;
-            if (y_move < JOYSTICK_DEAD_ZONE && -y_move < JOYSTICK_DEAD_ZONE)
+            if (y_move < JOYSTICK_DEAD_ZONE && y_move > -JOYSTICK_DEAD_ZONE)
                 y_move = 0;
             //
 
@@ -280,6 +280,17 @@ void Game::handleInput()
             if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
                 mHero->tryPlaceBomb();
         }
+    }
+    if (auto *joystick = mIManager->getJoystick())
+    {
+        short x_move = SDL_JoystickGetAxis(joystick, 0);
+        short y_move = SDL_JoystickGetAxis(joystick, 1);
+
+        ImGuiIO &io = ImGui::GetIO();
+        io.NavInputs[ImGuiNavInput_DpadLeft] = x_move < -JOYSTICK_DEAD_ZONE;
+        io.NavInputs[ImGuiNavInput_DpadRight] = x_move > JOYSTICK_DEAD_ZONE;
+        io.NavInputs[ImGuiNavInput_DpadUp] = y_move < -JOYSTICK_DEAD_ZONE;
+        io.NavInputs[ImGuiNavInput_DpadDown] = y_move > JOYSTICK_DEAD_ZONE;
     }
 }
 

@@ -78,8 +78,6 @@ void GameWindow::initGui() {
     io.LogFilename = NULL;
     io.WantSaveIniSettings = false;
     io.WantTextInput = false;
-    io.NavActive = true;
-    io.NavVisible = true;
 
     ImGui::StyleColorsDark();
 
@@ -104,6 +102,7 @@ void GameWindow::initOpenGL()
 
 void GameWindow::update()
 {
+    ImGui::EndFrame();
     ImGui::Render();
 	mMainMenu.RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(mWindow);
