@@ -77,9 +77,11 @@ private:
 	float		mAngle;
 	unsigned	mUid;
 	float		mScale;
-	bool		mDead;
 
 	static unsigned sEntity_counter;
+
+protected:
+	bool		mDead = false;
 };
 
 #endif

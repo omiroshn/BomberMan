@@ -74,6 +74,13 @@ void GameWindow::initGui() {
 	config.FontDataOwnedByAtlas = false;
 	io.Fonts->AddFontFromMemoryTTF(fontData.data(), static_cast<int>(fontData.size()), 16, &config);
 
+    io.IniFilename = NULL;
+    io.LogFilename = NULL;
+    io.WantSaveIniSettings = false;
+    io.WantTextInput = false;
+    io.NavActive = true;
+    io.NavVisible = true;
+
     ImGui::StyleColorsDark();
 
 	mMainMenu.Init();
@@ -134,7 +141,6 @@ void GameWindow::ShowBetweenStageScreen()
 void GameWindow::PauseGame(bool state)
 {
     mMainMenu.GamePaused(state);
-    mMainMenu.ShowMainMenu();
 }
 
 void GameWindow::setSize(int const w, int const h)

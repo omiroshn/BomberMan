@@ -121,7 +121,7 @@ public:
 
 private:
 	void		resolveCollisions();
-	void        heroInput();
+	void        handleInput();
     void		calcDeltaTime();
     void		loadResources();
     void        loadModels();

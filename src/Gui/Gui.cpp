@@ -32,7 +32,7 @@ void Gui::ShowMainMenu()
 	if (mCurrentMenu == CurrentMenu::mainMenu)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-		ImGui::Text("       BomberMan game menu");
+		ImGui::Text("                BomberMan");
 
 		/////////////////////////////////START GAME////////////////////////////////////
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
@@ -360,21 +360,7 @@ Gui::~Gui()
 
 }
 
-char *Gui::sClipboardTextData;
 bool Gui::sMousePressed[3];
-
-const char* Gui::GetClipboardText(void*)
-{
-    if (sClipboardTextData) 
-        SDL_free(sClipboardTextData);
-    sClipboardTextData = SDL_GetClipboardText();
-    return sClipboardTextData;
-}
-
-void Gui::SetClipboardText(void*, const char* text)
-{
-    SDL_SetClipboardText(text);
-}
 
 void Gui::RenderDrawData(ImDrawData* draw_data)
 {
@@ -478,7 +464,10 @@ void    Gui::InvalidateDeviceObjects()
 bool    Gui::Init()
 {
     ImGuiIO& io = ImGui::GetIO();
-    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;   // We can honor GetMouseCursor() values (optional)
+    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
+    io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
     io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;
     io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
@@ -502,8 +491,6 @@ bool    Gui::Init()
     io.KeyMap[ImGuiKey_Y] = SDL_SCANCODE_Y;
     io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
 
-    io.SetClipboardTextFn = &Gui::SetClipboardText;
-    io.GetClipboardTextFn = &Gui::GetClipboardText;
     io.ClipboardUserData = NULL;
 
     return true;
@@ -511,10 +498,6 @@ bool    Gui::Init()
 
 void Gui::Shutdown()
 {
-    // Destroy last known clipboard data
-    if (sClipboardTextData)
-        SDL_free(sClipboardTextData);
-
     // Destroy OpenGL objects
     Gui::InvalidateDeviceObjects();
 }

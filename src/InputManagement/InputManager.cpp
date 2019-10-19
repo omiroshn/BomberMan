@@ -9,9 +9,6 @@
 
 InputManager::InputManager()
 {
-    if (SDL_NumJoysticks() < 1)
-        std::cout << "Warning: No joysticks connected!" << std::endl;
-
     mJoystick = SDL_JoystickOpen(0);
 }
 
@@ -20,7 +17,7 @@ InputManager::~InputManager()
     SDL_JoystickClose(mJoystick);
 }
 
-void InputManager::processEvents(Game *game)
+void InputManager::processEvents(Game *game, KeyboardHandler &keyHandler)
 {
     SDL_Event e;
 
@@ -80,6 +77,14 @@ void InputManager::processEvents(Game *game)
             break;
         case SDL_MOUSEBUTTONDOWN:
             processMouseButton(e.button, true);
+            break;
+        case SDL_JOYBUTTONDOWN:
+            if (e.jbutton.button == SDL_CONTROLLER_BUTTON_START)
+                game->doAction(Action::Pause);
+            keyHandler.handleJoystickButtonDownEvent(e.jbutton);
+            break;
+        case SDL_JOYBUTTONUP:
+            keyHandler.handleJoystickButtonUpEvent(e.jbutton);
             break;
         case SDL_MOUSEBUTTONUP:
             processMouseButton(e.button, false);

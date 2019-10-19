@@ -28,10 +28,10 @@ void Hero::tryPlaceBomb()
 
 void Hero::kill()
 {
-	if (mIsDying)
+	if (mDead)
 		return;
 	getAnimation().setTime(0);
-	mIsDying = true;
+	mDead = true;
 	Game::get()->onHeroDied();
 }
 

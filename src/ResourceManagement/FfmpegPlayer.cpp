@@ -29,8 +29,6 @@ FfmpegPlayer::FfmpegPlayer() : m_videoStream(-1)
 
 FfmpegPlayer::~FfmpegPlayer()
 {
-	if (m_renderer)
-		SDL_DestroyRenderer(m_renderer);
 }
 
 void FfmpegPlayer::init(std::shared_ptr<GameWindow>  window)
@@ -216,9 +214,9 @@ void 			FfmpegPlayer::renderVideo()
 		SDL_Event e;
 		while(SDL_PollEvent(&e))
 		{
-			if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
+			if ((e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+			|| (e.type == SDL_JOYBUTTONDOWN)))
 			{
-				CONFIGURATION.serialise();
 				return;
 			}
 		}
@@ -262,7 +260,6 @@ void 			FfmpegPlayer::playVideo(std::string const &source)
 		freeMemory();
 		destroyVideoSession();
 		resetGLContext();
-		std::cout << "video form source " << source << "was played "<< std::endl;
 	} catch (std::exception& e) {
 		std::cerr << "Error:" << e.what() <<  " when loading video " << source << std::endl;
 	}

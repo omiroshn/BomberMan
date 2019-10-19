@@ -83,8 +83,8 @@ void Game::start()
         mRenderer->updateSize(width, height);
         CONFIGURATION.setHeight(height);
         CONFIGURATION.setWidth(width);
-        mIManager->processEvents(this);
-        heroInput();
+        mIManager->processEvents(this, *mKeyHandler.get());
+        handleInput();
         if (!mWindow.get()->IsGameRunning())
         {
             mWindow.get()->ShowStartingMenu();
@@ -101,7 +101,7 @@ void Game::start()
                 mRenderer->getParticleManager()->update();
                 mRenderer->getCamera().followEntity(getHero(), 10.f, mDeltaTime);
                 mRenderer->draw(*this);
-                if (mHero && !mHero->mIsDying)
+                if (mHero && !mHero->isDead())
                     mStageTimer = 200 - (getCurrentTime() - mStageStartedTimer);
 #if DEBUG
                 static int index = 0;
@@ -117,7 +117,7 @@ void Game::start()
                 }
 #endif
                 mWindow->ShowInGameMenu();
-                if (mHero && mHero->mIsDying)
+                if (mHero && mHero->isDead())
                 {
                     if (mStageTimer < 2 && mStageTimer >= 0)
                         mReloadStage = true;
@@ -133,7 +133,7 @@ void Game::start()
             {
                 if (CONFIGURATION.getLives() == 0)
                     CONFIGURATION.setChosenStage(1);
-                if (mHero && mHero->mIsDying)
+                if (mHero && mHero->isDead())
                 {
                     getHero().getAnimation().setTime(0);
                 }
@@ -160,7 +160,6 @@ void Game::start()
                         mHero = std::make_unique<Hero>(CONFIGURATION.getStats());
                     mStageStartedTimer = getCurrentTime();
                     mReloadStage = 0;
-                    mHero->mIsDying = false;
                     mIsPaused = false;
                 }
 
@@ -220,10 +219,10 @@ bool circle_box_collision(glm::vec2 position, float radius, glm::vec2 min, glm::
     return true;
 }
 
-void Game::heroInput()
+void Game::handleInput()
 {
     const float offset = mDeltaTime * sInputAcceleration;
-    if (mHero && !mHero->mIsDying)
+    if (mHero && !mHero->isDead())
     {
         int keybinding = CONFIGURATION.getKeyBindVolume();
         if (keybinding == 0)
@@ -261,28 +260,26 @@ void Game::heroInput()
         }
         if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
             mHero->tryPlaceBomb();
-    }
-    if (auto *joystick = mIManager->getJoystick())
-    {
-        short x_move = SDL_JoystickGetAxis(joystick, 0);
-        short y_move = SDL_JoystickGetAxis(joystick, 1);
+        if (auto *joystick = mIManager->getJoystick())
+        {
+            short x_move = SDL_JoystickGetAxis(joystick, 0);
+            short y_move = SDL_JoystickGetAxis(joystick, 1);
 
-        // this is mandatory
-        if (x_move < JOYSTICK_DEAD_ZONE && -x_move < JOYSTICK_DEAD_ZONE)
-            x_move = 0;
-        if (y_move < JOYSTICK_DEAD_ZONE && -y_move < JOYSTICK_DEAD_ZONE)
-            y_move = 0;
-        //
+            // this is mandatory
+            if (x_move < JOYSTICK_DEAD_ZONE && -x_move < JOYSTICK_DEAD_ZONE)
+                x_move = 0;
+            if (y_move < JOYSTICK_DEAD_ZONE && -y_move < JOYSTICK_DEAD_ZONE)
+                y_move = 0;
+            //
 
-        glm::vec2 normalizedJoystick(
-            x_move / (float)MAX_JOYSTICK_VALUE,
-            y_move / (float)MAX_JOYSTICK_VALUE);
-        mHero->AddAcceleration(normalizedJoystick * offset);
+            glm::vec2 normalizedJoystick(
+                x_move / (float)MAX_JOYSTICK_VALUE,
+                y_move / (float)MAX_JOYSTICK_VALUE);
+            mHero->AddAcceleration(normalizedJoystick * offset);
 
-        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_A))
-            pause();
-        if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
-            mHero->tryPlaceBomb();
+            if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
+                mHero->tryPlaceBomb();
+        }
     }
 }
 
@@ -334,6 +331,8 @@ void Game::resolveCollisions()
 
     for (MovingEntity* It : mEnemies)
     {
+        if (It->isDead())
+            continue;
         if (circle_circle_collision(Hero.getPosition(), radius, It->getPosition(), radius))
             Hero.kill();
 		glm::vec2 ProbePoint = It->getPosition();
@@ -430,7 +429,6 @@ void Game::loadResources()
         RESOURCES.loadSkybox("blue");
         RESOURCES.loadSkybox("lightblue");
         loadModels();
-
     }
     catch (CustomException &e)
     {
@@ -576,9 +574,9 @@ std::function<void (glm::vec2, uint32_t)> chainReaction = [&] (glm::vec2 center,
 
     mRenderer->getParticleManager()->startDrawPS(brickPool[which], brickTransforms);
     mRenderer->getParticleManager()->startDrawPS(bombPool[which], fireTransforms);
-	which = !which;
 	mRenderer->getCamera().addShake(0.05f);
 	MUSIC_PLAYER.playSound("explosion");
+	which = !which;
 }
 
 void 		Game::saveCurrentState(std::string fileName)
@@ -609,7 +607,7 @@ void       Game::stageFinished()
 {
     int current_stage = CONFIGURATION.getChosenStage();
     CONFIGURATION.setBestLevelAchieved(current_stage);
-    if (!mHero->mIsDying)
+    if (!mHero->isDead())
         CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
     Game::mReloadStage = true;
     if (mStageTimer > 4)
@@ -698,13 +696,13 @@ std::vector<glm::mat4> Game::Filter(SquareType type)
 void Game::recacheEnemies()
 {
 	mBalloons.erase(std::remove_if(mBalloons.begin(), mBalloons.end(), [](const MovingEntity *balloon){
-		return balloon->isDead();
+		return balloon->isDeadForAwhile();
 	}), mBalloons.end());
 	mOnils.erase(std::remove_if(mOnils.begin(), mOnils.end(), [](const MovingEntity *onil){
-		return onil->isDead();
+		return onil->isDeadForAwhile();
 	}), mOnils.end());
 	mOvapes.erase(std::remove_if(mOvapes.begin(), mOvapes.end(), [](const MovingEntity *ovapes){
-		return ovapes->isDead();
+		return ovapes->isDeadForAwhile();
 	}), mOvapes.end());
 
 	mBombs.erase(std::remove_if(mBombs.begin(), mBombs.end(), [](const Bomb *bomb){

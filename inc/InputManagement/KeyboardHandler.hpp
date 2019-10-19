@@ -8,7 +8,7 @@ private:
     const Uint8 *mKeyboardState;
     bool  left_joystick;
     bool right_joystick;
-    bool mJButtons[4];
+    bool mJButtons[32] = {0};
     
 public:
     KeyboardHandler();
@@ -19,8 +19,8 @@ public:
     bool isPressed(int keycode);
     bool isReleased(int keycode);
     void handleJoystickEvent(SDL_JoyAxisEvent jaxis);
-    void handleJoystickButtonUpEvent(SDL_JoyBallEvent jball);
-    void handleJoystickButtonDownEvent(SDL_JoyBallEvent jball);
+    void handleJoystickButtonUpEvent(SDL_JoyButtonEvent jball);
+    void handleJoystickButtonDownEvent(SDL_JoyButtonEvent jball);
     bool LeftJoystickIsActive();
     bool JButtonIsPressed(int button);
 };

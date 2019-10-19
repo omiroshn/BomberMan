@@ -35,7 +35,7 @@ public:
     ~InputManager();
     InputManager(InputManager const&) = delete;
     InputManager& operator=(InputManager const&) = delete;
-    void processEvents(class Game *game);
+    void processEvents(class Game *game, KeyboardHandler &keyHandler);
     Action processKeyDown(SDL_Keycode keyPressed);
     Action processMouseMotion(SDL_Event const &e);
     Action processJoystickMotion(SDL_JoyAxisEvent jaxis);

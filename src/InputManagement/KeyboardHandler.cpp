@@ -38,14 +38,14 @@ void KeyboardHandler::handleJoystickEvent(SDL_JoyAxisEvent jaxis)
     }
 }
 
-void KeyboardHandler::handleJoystickButtonUpEvent(SDL_JoyBallEvent jball)
+void KeyboardHandler::handleJoystickButtonUpEvent(SDL_JoyButtonEvent jball)
 {
-    mJButtons[jball.ball] = false;
+    mJButtons[jball.button] = false;
 }
 
-void KeyboardHandler::handleJoystickButtonDownEvent(SDL_JoyBallEvent jball)
+void KeyboardHandler::handleJoystickButtonDownEvent(SDL_JoyButtonEvent jball)
 {
-    mJButtons[jball.ball] = true;
+    mJButtons[jball.button] = true;
 }
 
 bool KeyboardHandler::JButtonIsPressed(int button)

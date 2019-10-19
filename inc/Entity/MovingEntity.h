@@ -16,6 +16,14 @@ public:
     MovingEntity& operator=(MovingEntity const&) = delete;
 	
 /*!
+\brief Non-virtual override of Entity::kill
+*/
+	void		kill();
+/*!
+\return Whether this Entity was dead for a long time.
+*/
+	bool		isDeadForAwhile() const;
+/*!
 \return Speed of this MovingEntity 
 */
 	float		GetSpeed()const;
@@ -49,7 +57,6 @@ an Entity that will look and feel properly.
 
 	/** Tickable interface */
 	void		tick(float DeltaTime = 0) override;
-	bool        mIsDying = false;
 
 private:
     void animate(float DeltaTime);
@@ -58,6 +65,7 @@ private:
 	glm::vec2	mVelocity;
 	glm::vec2	mAcceleration;
     Animation   mAnimation;
+	float		mTimeOfDeath;
 
 	static float _Friction;
 	static float _MaxVelocity;

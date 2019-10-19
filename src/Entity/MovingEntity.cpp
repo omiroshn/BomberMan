@@ -1,5 +1,6 @@
 #include "Entity/MovingEntity.h"
 #include "imgui.h"
+#include "Game.hpp"
 #include <assimp/types.h>
 #include <glm/common.hpp>
 #include <glm/ext/quaternion_float.hpp>
@@ -33,6 +34,18 @@ void MovingEntity::AddVelocity(glm::vec2 velocityOffset)
 	mVelocity += velocityOffset;
 }
 
+bool MovingEntity::isDeadForAwhile() const
+{
+	return mDead && Game::get()->getCurrentTime() > (mTimeOfDeath + 2.5f);
+}
+
+void MovingEntity::kill()
+{
+	mAnimation.setTime(0.0);
+	mTimeOfDeath = Game::get()->getCurrentTime();
+	Entity::kill();
+}
+
 void MovingEntity::AddAcceleration(glm::vec2 accelerationOffset)
 {
 	mAcceleration += accelerationOffset;
@@ -60,7 +73,7 @@ void MovingEntity::debugMovement()
 void MovingEntity::animate(float DeltaTime)
 {
     mAnimation.tick(DeltaTime);
-	if (mIsDying)
+	if (mDead)
 	{
 		mAnimation.setType(AnimationType::Dying);
 		return;
@@ -96,8 +109,8 @@ void MovingEntity::tick(float DeltaTime)
 
 	debug();
 
-	if (mIsDying)
-		mAcceleration = glm::vec2(0.f);
+	if (mDead)
+		return;
 
     if (mAcceleration == glm::vec2(0.f) && mVelocity == glm::vec2(0.f))
         return;

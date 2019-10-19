@@ -2,6 +2,7 @@
 #include <Entity/Entity.h>
 #include <glm/ext/matrix_transform.hpp>
 #include "imgui.h"
+#include "Game.hpp"
 
 /** static variable */
 unsigned Entity::sEntity_counter = 0;
@@ -26,7 +27,11 @@ bool		Entity::isDead() const					{ return mDead; }
 void		Entity::setPosition(glm::vec2 position)	{ mPosition = position; }
 void		Entity::setAngle(float radians)			{ mAngle = radians; }
 void		Entity::setScale(float value)			{ mScale = value; }
-void		Entity::kill()							{ mDead = true; }
+
+void		Entity::kill()
+{
+	mDead = true;
+}
 
 void Entity::move(glm::vec2 offset)
 {
