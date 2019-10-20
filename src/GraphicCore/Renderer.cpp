@@ -30,6 +30,7 @@ void Renderer::updateSize(int aWidth, int aHeight)
 
 void Renderer::draw(Game& aMap)
 {
+    mStage = CONFIGURATION.getChosenStage();
     glEnable(GL_CULL_FACE);
 	mLightManager->initLightSpaceMatrix(aMap.getHero().getPosition3D());
     prepareTransforms(aMap);
@@ -67,14 +68,8 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
     auto type = Game::get()->powerupTypeOnMap();
     if (type != Hero::PowerupType::PT_NONE)
     {
-        static std::shared_ptr<Model> bonusModels[Hero::PowerupType::PT_NONE] = {
-            RESOURCES.getModel("bonus_bombs"),
-            RESOURCES.getModel("bonus_flames"),
-            RESOURCES.getModel("bonus_wallpass"),
-            RESOURCES.getModel("bonus_bombpass"),
-            RESOURCES.getModel("bonus_flamepass")
-        };
-        bonusModels[type]->draw(s, std::vector<glm::mat4>{Game::get()->getPowerupTransform()});
+        static std::shared_ptr<Model> bonusModel = RESOURCES.getModel("bonus");
+        bonusModel->draw(s, std::vector<glm::mat4>{Game::get()->getPowerupTransform()});
     }
 
 	bool active = Game::get()->isExitActive();

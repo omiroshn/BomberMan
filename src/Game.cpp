@@ -459,10 +459,7 @@ void Game::loadModels()
     RESOURCES.loadModel("general/bomb/model.fbx", "bomb", glm::vec3(1.3f), glm::vec3{0,0.3,0}, glm::vec3(1,0,0), -90.f, 1.f);
 
     // powerups placeholder, please do something about this!!!!!!!!!!!!!!!!!!!!!
-    RESOURCES.loadModel("general/powerup/model.dae", "bonus_bombs", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
-    RESOURCES.loadModel("general/powerup/model.dae", "bonus_flames", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
-    RESOURCES.loadModel("general/powerup/model.dae", "bonus_wallpass", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
-    RESOURCES.loadModel("general/powerup/model.dae", "bonus_flamepass", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
+    RESOURCES.loadModel("general/powerup/model.dae", "bonus", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     RESOURCES.loadModel("map/first/ground/model.fbx", "ground");
