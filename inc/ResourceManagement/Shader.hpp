@@ -21,6 +21,7 @@ public:
 	Shader(std::string const &vertexSrcPath, std::string const &fragmentSrcPath);
 	~Shader();
 	Shader();
+	Shader& operator=(const Shader&) = default;
 
 public:
 /*!

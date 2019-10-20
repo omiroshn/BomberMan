@@ -59,7 +59,6 @@ private:
 	AVCodec 			*m_pCodec = NULL;
 
 	AVFrame 			*m_pFrame = NULL;
-//	AVFrame 			*m_pFrameRGB = NULL;
 	SDL_Renderer 		*m_renderer = NULL;
 	SDL_Texture 		*m_texture = NULL;
 

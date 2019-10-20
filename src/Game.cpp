@@ -431,7 +431,7 @@ void Game::loadResources()
         RESOURCES.loadTexture("unlocked0.png", "unlocked1");
         RESOURCES.loadTexture("unlocked0.png", "unlocked2");
         RESOURCES.loadTexture("unlocked0.png", "unlocked3");
-        RESOURCES.loadTexture("awesomeface.png", "face");
+        RESOURCES.loadTexture("victory.png", "face");
 		RESOURCES.loadTexture("cloud_trans.jpg", "cloud_trans");
 		RESOURCES.loadTexture("explode.png", "explosion_tmap_2");
 		RESOURCES.loadTexture("sparks.jpg", "sparks");
@@ -618,7 +618,11 @@ void       Game::stageFinished()
     int current_stage = CONFIGURATION.getChosenStage();
     CONFIGURATION.setBestLevelAchieved(current_stage);
     if (!mHero->isDead())
+    {
         CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
+        if (current_stage == 3)
+            FFMPEG.playVideo("victory.mp4");
+    }
     Game::mReloadStage = true;
     if (mStageTimer > 4)
         mStageStartedTimer = getCurrentTime();

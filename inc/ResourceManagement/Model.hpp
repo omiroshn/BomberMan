@@ -29,6 +29,7 @@ class Model
 {
 public:
     Model(std::string const &path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle, float glossiness);
+    Model& operator=(const Model&) = default;
     ~Model();
     void draw(std::shared_ptr<Shader> const& shader, std::vector<glm::mat4> const& transforms);
     void transform(glm::mat4 const & aTransform);

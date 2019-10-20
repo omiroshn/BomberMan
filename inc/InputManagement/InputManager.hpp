@@ -21,8 +21,7 @@ enum class Action
     Explosion,
     Space,
 //For internal testing
-    CameraRotate,
-    CameraZoom
+    CameraRotate
 };
 
 class InputManager

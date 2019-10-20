@@ -31,16 +31,6 @@ Texture::~Texture()
 	glDeleteTextures(1, &mID);
 };
 
-Texture::Texture(Texture const &)
-{
-
-};
-
-Texture &Texture::operator=(Texture const &)
-{
-	return *this;
-};
-
 void Texture::generate(GLuint width, GLuint height, unsigned char* data, GLenum format, GLuint filterMin, GLuint filerMax)
 {
 	mWidth = width;

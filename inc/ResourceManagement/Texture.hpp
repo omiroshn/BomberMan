@@ -25,6 +25,8 @@ class Texture
 public:
 	Texture(TextureType aType, GLuint width, GLuint height, unsigned char *data, GLenum format, GLuint filterMin, GLuint filerMax);
 	Texture(TextureType aType = TextureType::Diffuse);
+	Texture(Texture const &) = delete;
+	Texture &operator=(Texture const &) = delete;
 	~Texture();
 	void generate(GLuint width, GLuint height, unsigned char* data, GLenum format, GLuint filterMin = GL_LINEAR, GLuint filerMax = GL_LINEAR);
 	void bind() const;
@@ -41,8 +43,6 @@ private:
 			mFilterMin,
 			mFilterMax;
 	TextureType mType;
-	Texture(Texture const &);
-	Texture &operator=(Texture const &);
 };
 
 #endif
