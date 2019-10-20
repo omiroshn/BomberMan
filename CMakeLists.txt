@@ -59,7 +59,8 @@ target_link_libraries (${PROJECT_NAME} PRIVATE	OpenGL::GL
                                             glm::glm
                                             stb::stb
                                             cereal::cereal
-                                            ffmpeg::ffmpeg)
+                                            ffmpeg::ffmpeg
+                                            adapters::cl_hpp)
 
 if ( DEBUG )
 	add_definitions(-DDEBUG=1)
