@@ -66,6 +66,8 @@ void InputManager::processEvents(Game *game, KeyboardHandler &keyHandler)
         case SDL_JOYBUTTONDOWN:
             if (e.jbutton.button == SDL_CONTROLLER_BUTTON_START)
                 game->doAction(Action::Pause);
+            if (e.jbutton.button == SDL_CONTROLLER_BUTTON_X)
+                game->doAction(Action::Explosion);
             io.NavInputs[ImGuiNavInput_Activate] = e.jbutton.button == SDL_CONTROLLER_BUTTON_X;
             io.NavInputs[ImGuiNavInput_Cancel] = e.jbutton.button == SDL_CONTROLLER_BUTTON_B;
             keyHandler.handleJoystickButtonDownEvent(e.jbutton);

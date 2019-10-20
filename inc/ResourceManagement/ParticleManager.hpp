@@ -34,6 +34,7 @@ public:
 	void 						startDrawPS(std::string const & name, std::vector<glm::mat4> const & transforms);
 	void 						draw(glm::mat4 const & projection, glm::mat4 const & view);
 	void 						update();
+	void 						clear();
 
 
 private:
