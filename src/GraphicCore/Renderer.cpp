@@ -74,8 +74,8 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
 
 	bool active = Game::get()->isExitActive();
 	static std::shared_ptr<Model> exit[2] = {
-		RESOURCES.getModel("ground"),
-		RESOURCES.getModel("perimeterWall"),
+		RESOURCES.getModel("gate1"),
+		RESOURCES.getModel("gate2"),
 	};
 	exit[active]->draw(s, std::vector<glm::mat4>{Game::get()->getExitTransform()});
 }
