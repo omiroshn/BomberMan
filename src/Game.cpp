@@ -376,6 +376,10 @@ void Game::doAction(Action a)
         case Action::Pause:
             pause();
             break;
+        case Action::KillAll:
+            for (auto& It : mEnemies)
+                It->kill();
+            break;
 #if DEBUG
         case Action::CameraRotate:
             float x,y;

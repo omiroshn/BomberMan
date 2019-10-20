@@ -20,6 +20,7 @@ enum class Action
     Left,
     Explosion,
     Space,
+    KillAll,
 //For internal testing
     CameraRotate
 };
