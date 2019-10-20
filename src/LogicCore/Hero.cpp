@@ -31,8 +31,7 @@ void Hero::kill()
 	if (mDead)
 		return;
 	getAnimation().setTime(0);
-	mDead = true;
-	Game::get()->onHeroDied();
+	MovingEntity::kill();
 }
 
 void Hero::applyPowerup(PowerupType type)

@@ -38,21 +38,6 @@ void InputManager::processEvents(Game *game, KeyboardHandler &keyHandler)
                 io.MouseWheel -= 1;
             break;
         }
-        case SDL_MOUSEBUTTONDOWN:
-        {
-            if (e.button.button == SDL_BUTTON_LEFT)
-                Gui::sMousePressed[0] = true;
-            if (e.button.button == SDL_BUTTON_RIGHT)
-                Gui::sMousePressed[1] = true;
-            if (e.button.button == SDL_BUTTON_MIDDLE)
-                Gui::sMousePressed[2] = true;
-            break;
-        }
-        case SDL_TEXTINPUT:
-        {
-            io.AddInputCharactersUTF8(e.text.text);
-            break;
-        }
         case SDL_KEYDOWN:
         case SDL_KEYUP:
         {
@@ -81,6 +66,8 @@ void InputManager::processEvents(Game *game, KeyboardHandler &keyHandler)
         case SDL_JOYBUTTONDOWN:
             if (e.jbutton.button == SDL_CONTROLLER_BUTTON_START)
                 game->doAction(Action::Pause);
+            io.NavInputs[ImGuiNavInput_Activate] = e.jbutton.button == SDL_CONTROLLER_BUTTON_X;
+            io.NavInputs[ImGuiNavInput_Cancel] = e.jbutton.button == SDL_CONTROLLER_BUTTON_B;
             keyHandler.handleJoystickButtonDownEvent(e.jbutton);
             break;
         case SDL_JOYBUTTONUP:

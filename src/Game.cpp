@@ -77,14 +77,14 @@ void Game::start()
 	// sync files here
     while (mIsRunning)
     {
+        mIManager->processEvents(this, *mKeyHandler.get());
+        handleInput();
         mWindow->tickGui();
         mWindow->getSize(width, height);
         calcDeltaTime();
         mRenderer->updateSize(width, height);
         CONFIGURATION.setHeight(height);
         CONFIGURATION.setWidth(width);
-        mIManager->processEvents(this, *mKeyHandler.get());
-        handleInput();
         if (!mWindow.get()->IsGameRunning())
         {
             mWindow.get()->ShowStartingMenu();
@@ -247,15 +247,15 @@ void Game::handleInput()
             if (mKeyHandler->isPressed(SDL_SCANCODE_S))
                 mHero->AddAcceleration(glm::vec2(0, offset));
         }
-        else if (keybinding == 3)
+        else if (keybinding == 2)
         {
-            if (mKeyHandler->isPressed(SDL_SCANCODE_Y))
+            if (mKeyHandler->isPressed(SDL_SCANCODE_K))
                 mHero->AddAcceleration(glm::vec2(0, -offset));
-            if (mKeyHandler->isPressed(SDL_SCANCODE_J))
+            if (mKeyHandler->isPressed(SDL_SCANCODE_L))
                 mHero->AddAcceleration(glm::vec2(offset, 0));
-            if (mKeyHandler->isPressed(SDL_SCANCODE_G))
-                mHero->AddAcceleration(glm::vec2(-offset, 0));
             if (mKeyHandler->isPressed(SDL_SCANCODE_H))
+                mHero->AddAcceleration(glm::vec2(-offset, 0));
+            if (mKeyHandler->isPressed(SDL_SCANCODE_J))
                 mHero->AddAcceleration(glm::vec2(0, offset));
         }
         if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
@@ -266,9 +266,9 @@ void Game::handleInput()
             short y_move = SDL_JoystickGetAxis(joystick, 1);
 
             // this is mandatory
-            if (x_move < JOYSTICK_DEAD_ZONE && -x_move < JOYSTICK_DEAD_ZONE)
+            if (x_move < JOYSTICK_DEAD_ZONE && x_move > -JOYSTICK_DEAD_ZONE)
                 x_move = 0;
-            if (y_move < JOYSTICK_DEAD_ZONE && -y_move < JOYSTICK_DEAD_ZONE)
+            if (y_move < JOYSTICK_DEAD_ZONE && y_move > -JOYSTICK_DEAD_ZONE)
                 y_move = 0;
             //
 
@@ -280,6 +280,17 @@ void Game::handleInput()
             if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
                 mHero->tryPlaceBomb();
         }
+    }
+    if (auto *joystick = mIManager->getJoystick())
+    {
+        short x_move = SDL_JoystickGetAxis(joystick, 0);
+        short y_move = SDL_JoystickGetAxis(joystick, 1);
+
+        ImGuiIO &io = ImGui::GetIO();
+        io.NavInputs[ImGuiNavInput_DpadLeft] = x_move < -JOYSTICK_DEAD_ZONE;
+        io.NavInputs[ImGuiNavInput_DpadRight] = x_move > JOYSTICK_DEAD_ZONE;
+        io.NavInputs[ImGuiNavInput_DpadUp] = y_move < -JOYSTICK_DEAD_ZONE;
+        io.NavInputs[ImGuiNavInput_DpadDown] = y_move > JOYSTICK_DEAD_ZONE;
     }
 }
 
@@ -365,14 +376,13 @@ void Game::doAction(Action a)
         case Action::Pause:
             pause();
             break;
-        case Action::StageFinished:
-            stageFinished();
-            break;
+#if DEBUG
         case Action::CameraRotate:
             float x,y;
             mIManager->getMouseOffset(x, y);
             mRenderer->getCamera().processMouseMovement(x, y);
             break;
+#endif
         default:
             break;
     }
@@ -677,6 +687,9 @@ void	Game::tickAI(float deltaTime)
 		It.controller.tick(*It, deltaTime);
 	for (auto& It : mOvapes)
 		It.controller.tick(*It, deltaTime);
+
+	if (mHero->isDeadForAwhile())
+		onHeroDied();
 }
 
 std::vector<glm::mat4> Game::Filter(SquareType type)

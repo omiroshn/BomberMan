@@ -41,8 +41,6 @@ void Gui::ShowMainMenu()
 		ShowStartNewGameMenu();
 
 		/////////////////////////////////LOAD GAME////////////////////////////////////
-
-		
 		if (ImGui::Button("Continue", STANDARD_MENU_BUTTON))
 		{
 			mCurrentMenu = CurrentMenu::changeStageMenu;
@@ -235,8 +233,7 @@ void Gui::ShowSettingsMenu()
 		ImGui::Text("\n    Set keybinding\n");
 		ImGui::RadioButton("Arrows", &CONFIGURATION.getKeyBindVolume(), 0);ImGui::SameLine();
 		ImGui::RadioButton("ASWD", &CONFIGURATION.getKeyBindVolume(), 1);
-		ImGui::RadioButton("🎮", &CONFIGURATION.getKeyBindVolume(), 2);ImGui::SameLine();
-		ImGui::RadioButton("HJKL", &CONFIGURATION.getKeyBindVolume(), 3);
+		ImGui::RadioButton("HJKL", &CONFIGURATION.getKeyBindVolume(), 2);
 		ImGui::Separator();
 
 		if (ImGui::Checkbox("     FullScreen", &CONFIGURATION.getWindowed()))
@@ -350,8 +347,6 @@ Gui::~Gui()
 
 }
 
-bool Gui::sMousePressed[3];
-
 void Gui::RenderDrawData(ImDrawData* draw_data)
 {
     ImGuiIO& io = ImGui::GetIO();
@@ -454,7 +449,6 @@ void    Gui::InvalidateDeviceObjects()
 bool    Gui::Init()
 {
     ImGuiIO& io = ImGui::GetIO();
-    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
     io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -511,19 +505,11 @@ void Gui::NewFrame(SDL_Window* window)
     int mx, my;
     Uint32 mouse_buttons = SDL_GetMouseState(&mx, &my);
     io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
-    io.MouseDown[0] = sMousePressed[0] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;
-    io.MouseDown[1] = sMousePressed[1] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_RIGHT)) != 0;
-    io.MouseDown[2] = sMousePressed[2] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0;
-    sMousePressed[0] = sMousePressed[1] = sMousePressed[2] = false;
+    io.MouseDown[0] = (mouse_buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;
+    io.MouseDown[1] = (mouse_buttons & SDL_BUTTON(SDL_BUTTON_RIGHT)) != 0;
+    io.MouseDown[2] = (mouse_buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0;
 
     if ((SDL_GetWindowFlags(window) & (SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_MOUSE_CAPTURE)) != 0)
         io.MousePos = ImVec2((float)mx, (float)my);
-    bool any_mouse_button_down = false;
-    for (int n = 0; n < IM_ARRAYSIZE(io.MouseDown); n++)
-        any_mouse_button_down |= io.MouseDown[n];
-    if (any_mouse_button_down && (SDL_GetWindowFlags(window) & SDL_WINDOW_MOUSE_CAPTURE) == 0)
-        SDL_CaptureMouse(SDL_TRUE);
-    if (!any_mouse_button_down && (SDL_GetWindowFlags(window) & SDL_WINDOW_MOUSE_CAPTURE) != 0)
-        SDL_CaptureMouse(SDL_FALSE);
     ImGui::NewFrame();
 }

@@ -8,7 +8,7 @@ private:
     const Uint8 *mKeyboardState;
     bool  left_joystick;
     bool right_joystick;
-    bool mJButtons[32] = {0};
+    bool mJButtons[SDL_CONTROLLER_BUTTON_MAX] = {0};
     
 public:
     KeyboardHandler();

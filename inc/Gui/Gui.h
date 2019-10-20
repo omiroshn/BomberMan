@@ -54,7 +54,6 @@ public:
 	void InvalidateDeviceObjects();
 	void CreateDeviceObjects();
 
-	static bool sMousePressed[3];
 
 private:
 	void ShowStartNewGameMenu();
