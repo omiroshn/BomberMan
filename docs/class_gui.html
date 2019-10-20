@@ -42,12 +42,14 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="class_gui-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Gui Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>The class to manage user interface.  
+ <a href="class_gui.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_gui_8h_source.html">Gui.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -77,8 +79,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af1b23c54d16cbed2753e91b263aad840"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0032d8c4bcb79937b6b7f39889b73680"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui.html#a0032d8c4bcb79937b6b7f39889b73680">SetBackground</a> (const char *texture)</td></tr>
 <tr class="separator:a0032d8c4bcb79937b6b7f39889b73680"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ca01dcfcff6d1fbd6c63c5230b4a96a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui.html#a8ca01dcfcff6d1fbd6c63c5230b4a96a">Init</a> (SDL_Window *window)</td></tr>
-<tr class="separator:a8ca01dcfcff6d1fbd6c63c5230b4a96a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9816cdc95782b4dfb959c69d58968ac6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui.html#a9816cdc95782b4dfb959c69d58968ac6">Init</a> ()</td></tr>
+<tr class="separator:a9816cdc95782b4dfb959c69d58968ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fc6fca05a23dc63c618cb6628a576dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui.html#a7fc6fca05a23dc63c618cb6628a576dc">Shutdown</a> ()</td></tr>
 <tr class="separator:a7fc6fca05a23dc63c618cb6628a576dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84f83f7f57e02cf599f6439474a8f426"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui.html#a84f83f7f57e02cf599f6439474a8f426">NewFrame</a> (SDL_Window *window)</td></tr>
@@ -89,13 +91,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adc0cbaf256ab80d8e8a66ee8ee099617"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cd3a49867b4dcab35f3c942a1fb8380"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui.html#a7cd3a49867b4dcab35f3c942a1fb8380">CreateDeviceObjects</a> ()</td></tr>
 <tr class="separator:a7cd3a49867b4dcab35f3c942a1fb8380"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:ac19fef7945b006b3d8e7dee46599b14f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui.html#ac19fef7945b006b3d8e7dee46599b14f">sMousePressed</a> [3]</td></tr>
-<tr class="separator:ac19fef7945b006b3d8e7dee46599b14f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The class to manage user interface. </p>
+<p>This class suppose to create all GUI instances and manage mouse input on it </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab2655dbb6d3a91d7e90cb83dad6c0450"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab2655dbb6d3a91d7e90cb83dad6c0450">&#9670;&nbsp;</a></span>Gui() <span class="overload">[1/2]</span></h2>
 
@@ -192,8 +192,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8ca01dcfcff6d1fbd6c63c5230b4a96a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ca01dcfcff6d1fbd6c63c5230b4a96a">&#9670;&nbsp;</a></span>Init()</h2>
+<a id="a9816cdc95782b4dfb959c69d58968ac6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9816cdc95782b4dfb959c69d58968ac6">&#9670;&nbsp;</a></span>Init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -201,8 +201,7 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">bool Gui::Init </td>
           <td>(</td>
-          <td class="paramtype">SDL_Window *&#160;</td>
-          <td class="paramname"><em>window</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -424,29 +423,6 @@ Static Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="ac19fef7945b006b3d8e7dee46599b14f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac19fef7945b006b3d8e7dee46599b14f">&#9670;&nbsp;</a></span>sMousePressed</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Gui::sMousePressed</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

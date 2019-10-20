@@ -72,70 +72,83 @@ $(function() {
 <div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="struct_vertex.html">   22</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_vertex.html">Vertex</a></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;{</div>
 <div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="struct_vertex.html#abb3cfacd96b5955b0cec9359840ee49f">   24</a></span>&#160;    glm::vec3   <a class="code" href="struct_vertex.html#abb3cfacd96b5955b0cec9359840ee49f">Position</a>;</div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="struct_vertex.html#a9ab4dc431b41509f0b1bb1a4bf09d4e2">   25</a></span>&#160;    glm::vec3   <a class="code" href="struct_vertex.html#a9ab4dc431b41509f0b1bb1a4bf09d4e2">Normal</a>;</div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="struct_vertex.html#a921a513c1e6d1e63e99d477fa837a317">   26</a></span>&#160;    glm::vec2   <a class="code" href="struct_vertex.html#a921a513c1e6d1e63e99d477fa837a317">TexCoords</a>;</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="struct_vertex.html#abfd8917796f41a3bd16441b2626e8212">   27</a></span>&#160;    glm::vec3   <a class="code" href="struct_vertex.html#abfd8917796f41a3bd16441b2626e8212">Tangent</a>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="struct_vertex.html#af65a7edcbe784e73e9fb29fdf6368615">   28</a></span>&#160;    glm::vec3   <a class="code" href="struct_vertex.html#af65a7edcbe784e73e9fb29fdf6368615">Bitangent</a>;</div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="struct_vertex.html#a6d656764e783af87b6261c56565a095d">   29</a></span>&#160;    glm::ivec4  <a class="code" href="struct_vertex.html#a6d656764e783af87b6261c56565a095d">BonesID</a>;</div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="struct_vertex.html#ab25486578254d8459e296f3a1ba1c94f">   30</a></span>&#160;    glm::vec4   <a class="code" href="struct_vertex.html#ab25486578254d8459e296f3a1ba1c94f">Weighs</a>;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;};</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="class_mesh.html">   33</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_mesh.html">Mesh</a></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="class_mesh.html#a1b194ae2d6650fc3e717550a3b3d3b1f">Mesh</a>(std::vector&lt;Vertex&gt; aVertices,</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        std::vector&lt;unsigned int&gt; aIndices,</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        std::vector&lt;std::shared_ptr&lt;Texture&gt;&gt; aTextures,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        std::map&lt;std::string, unsigned int&gt; bones,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        std::vector&lt;glm::mat4&gt; aOffsets,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        aiScene <span class="keyword">const</span> *scene);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">void</span>                    <a class="code" href="class_mesh.html#a5a73cf9c150a107991fcfbf679cf4cc6">draw</a>(std::shared_ptr&lt;Shader&gt; <span class="keyword">const</span>&amp; shader, std::vector&lt;glm::mat4&gt; <span class="keyword">const</span>&amp; transforms, glm::mat4 <span class="keyword">const</span> &amp; parentTransform);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">void</span>                    <a class="code" href="class_mesh.html#a1ec31daf3252fdace8e399d0bec344f9">doAnimation</a>();</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordtype">void</span>                    <a class="code" href="class_mesh.html#a3c16c361f0f4b739ea17b647c980117e">setAnimation</a>(<a class="code" href="class_animation.html">Animation</a> <span class="keyword">const</span>&amp; anim);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="class_mesh.html#a5efe4da1a4c0971cfb037bd70304c303">~Mesh</a>();</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">void</span>                    setupMesh();</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordtype">void</span>                    setInstanceBuffer();</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">void</span>                    readNodeHierarchy(<span class="keywordtype">float</span> animationTime, aiNode <span class="keyword">const</span>* node, glm::mat4 parentTransform);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    aiNodeAnim <span class="keyword">const</span>*       findNodeAnimation(aiAnimation <span class="keyword">const</span>* animation, std::string nodeName) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> mVBO, mEBO, mVAO, mIBO;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    std::vector&lt;Vertex&gt; mVertices;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    std::vector&lt;unsigned int&gt; mIndices;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    std::vector&lt;std::shared_ptr&lt;Texture&gt;&gt; mTextures;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordtype">bool</span>                mIsAnimated;</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="struct_vertex.html#a57c66f91c2f395787c78467f1f2976b2">   25</a></span>&#160;    GLint       <a class="code" href="struct_vertex.html#a57c66f91c2f395787c78467f1f2976b2">Normal</a>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="struct_vertex.html#ac3155e4833cae391b2fc82acb90cfa14">   26</a></span>&#160;    GLint       <a class="code" href="struct_vertex.html#ac3155e4833cae391b2fc82acb90cfa14">Tangent</a>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="struct_vertex.html#aa64c7ad03f93a99ff5ea834489285e99">   27</a></span>&#160;    int16_t     <a class="code" href="struct_vertex.html#aa64c7ad03f93a99ff5ea834489285e99">TexCoords</a>[2];</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;};</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="struct_weight_data.html">   30</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_weight_data.html">WeightData</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="struct_weight_data.html#ab9a044b995a8be063d7e40b341d934d7">   32</a></span>&#160;    uint8_t     <a class="code" href="struct_weight_data.html#ab9a044b995a8be063d7e40b341d934d7">Weighs</a>[3];</div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="struct_weight_data.html#a56f0ce9c7a08224dbaf2817dd10b5571">   33</a></span>&#160;    uint8_t     <a class="code" href="struct_weight_data.html#a56f0ce9c7a08224dbaf2817dd10b5571">BonesID</a>[3];</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;};</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="class_mesh.html">   36</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_mesh.html">Mesh</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="class_mesh.html#a2af137f1571af89172b9c102302c416b">Mesh</a>();</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="class_mesh.html">Mesh</a>&amp; <a class="code" href="class_mesh.html#af06ecafd1b7cf16c687666dbfce53657">operator=</a>(<span class="keyword">const</span> <a class="code" href="class_mesh.html">Mesh</a>&amp;) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="class_mesh.html#a2af137f1571af89172b9c102302c416b">Mesh</a>(std::vector&lt;Vertex&gt;&amp; aVertices,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        std::vector&lt;WeightData&gt;&amp; aWeights,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        std::vector&lt;unsigned int&gt;&amp; aIndices,</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        std::vector&lt;std::shared_ptr&lt;Texture&gt;&gt;&amp; aTextures,</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        std::map&lt;std::string, unsigned int&gt;&amp; bones,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        std::vector&lt;glm::mat4&gt;&amp; aOffsets,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        aiScene <span class="keyword">const</span> *scene,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">float</span> glossiness);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">void</span>                    <a class="code" href="class_mesh.html#a5a73cf9c150a107991fcfbf679cf4cc6">draw</a>(std::shared_ptr&lt;Shader&gt; <span class="keyword">const</span>&amp; shader, std::vector&lt;glm::mat4&gt; <span class="keyword">const</span>&amp; transforms, glm::mat4 <span class="keyword">const</span> &amp; parentTransform);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordtype">void</span>                    <a class="code" href="class_mesh.html#a1ec31daf3252fdace8e399d0bec344f9">doAnimation</a>();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">void</span>                    <a class="code" href="class_mesh.html#a3c16c361f0f4b739ea17b647c980117e">setAnimation</a>(<a class="code" href="class_animation.html">Animation</a> <span class="keyword">const</span>&amp; anim);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="class_mesh.html#a5efe4da1a4c0971cfb037bd70304c303">~Mesh</a>();</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span>                    setupMesh();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">void</span>                    setInstanceBuffer();</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">void</span>                    readNodeHierarchy(<span class="keywordtype">float</span> animationTime, aiNode <span class="keyword">const</span>* node, glm::mat4 parentTransform);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    aiNodeAnim <span class="keyword">const</span>*       findNodeAnimation(aiAnimation <span class="keyword">const</span>* animation, <span class="keyword">const</span> std::string&amp; nodeName) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>                        mCurrentAnimation;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">float</span>                               mAnimationTime;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    std::map&lt;std::string, unsigned int&gt; <span class="keyword">const</span>   mBones;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    std::vector&lt;glm::mat4&gt;              <span class="keyword">const</span>   mOffsetMatrices;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    std::vector&lt;glm::mat4&gt;                      mBoneTransforms;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    aiScene <span class="keyword">const</span>*  mScene;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;};</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> mVBO = 0, mEBO = 0, mVAO = 0, mWBO = 0, mIBO = 0;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    std::vector&lt;Vertex&gt; mVertices;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    std::vector&lt;WeightData&gt; mWeights;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    std::vector&lt;unsigned int&gt; mIndices;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    std::vector&lt;std::shared_ptr&lt;Texture&gt;&gt; mTextures;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">bool</span> mIsAnimated = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">void</span> setupAnimations();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">float</span> mAnimationTime = 0.f;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">float</span> mGlossiness = 1.f;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <a class="code" href="_animation_8h.html#affb455e5ea72d01e065758c70f810a95">AnimationType</a> mCurrentAnimation = <a class="code" href="_animation_8h.html#affb455e5ea72d01e065758c70f810a95ae599161956d626eda4cb0a5ffb85271c">AnimationType::Idle</a>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    std::map&lt;AnimationType, const aiAnimation *&gt; mAnimations;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    std::map&lt;std::string, unsigned int&gt; <span class="keyword">const</span> mBones;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    std::vector&lt;glm::mat4&gt; <span class="keyword">const</span> mOffsetMatrices;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    std::vector&lt;glm::mat4&gt; mBoneTransforms;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    aiScene <span class="keyword">const</span> *mScene = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;};</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="astruct_vertex_html_aa64c7ad03f93a99ff5ea834489285e99"><div class="ttname"><a href="struct_vertex.html#aa64c7ad03f93a99ff5ea834489285e99">Vertex::TexCoords</a></div><div class="ttdeci">int16_t TexCoords[2]</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:27</div></div>
 <div class="ttc" id="astruct_vertex_html_abb3cfacd96b5955b0cec9359840ee49f"><div class="ttname"><a href="struct_vertex.html#abb3cfacd96b5955b0cec9359840ee49f">Vertex::Position</a></div><div class="ttdeci">glm::vec3 Position</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:24</div></div>
+<div class="ttc" id="astruct_weight_data_html"><div class="ttname"><a href="struct_weight_data.html">WeightData</a></div><div class="ttdef"><b>Definition:</b> Mesh.hpp:30</div></div>
 <div class="ttc" id="a_animation_8h_html"><div class="ttname"><a href="_animation_8h.html">Animation.h</a></div></div>
-<div class="ttc" id="astruct_vertex_html_af65a7edcbe784e73e9fb29fdf6368615"><div class="ttname"><a href="struct_vertex.html#af65a7edcbe784e73e9fb29fdf6368615">Vertex::Bitangent</a></div><div class="ttdeci">glm::vec3 Bitangent</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:28</div></div>
-<div class="ttc" id="aclass_mesh_html"><div class="ttname"><a href="class_mesh.html">Mesh</a></div><div class="ttdef"><b>Definition:</b> Mesh.hpp:33</div></div>
-<div class="ttc" id="aclass_mesh_html_a1b194ae2d6650fc3e717550a3b3d3b1f"><div class="ttname"><a href="class_mesh.html#a1b194ae2d6650fc3e717550a3b3d3b1f">Mesh::Mesh</a></div><div class="ttdeci">Mesh(std::vector&lt; Vertex &gt; aVertices, std::vector&lt; unsigned int &gt; aIndices, std::vector&lt; std::shared_ptr&lt; Texture &gt;&gt; aTextures, std::map&lt; std::string, unsigned int &gt; bones, std::vector&lt; glm::mat4 &gt; aOffsets, aiScene const *scene)</div><div class="ttdef"><b>Definition:</b> Mesh.cpp:5</div></div>
-<div class="ttc" id="astruct_vertex_html_a921a513c1e6d1e63e99d477fa837a317"><div class="ttname"><a href="struct_vertex.html#a921a513c1e6d1e63e99d477fa837a317">Vertex::TexCoords</a></div><div class="ttdeci">glm::vec2 TexCoords</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:26</div></div>
-<div class="ttc" id="aclass_mesh_html_a1ec31daf3252fdace8e399d0bec344f9"><div class="ttname"><a href="class_mesh.html#a1ec31daf3252fdace8e399d0bec344f9">Mesh::doAnimation</a></div><div class="ttdeci">void doAnimation()</div><div class="ttdef"><b>Definition:</b> Mesh.cpp:182</div></div>
-<div class="ttc" id="aclass_mesh_html_a3c16c361f0f4b739ea17b647c980117e"><div class="ttname"><a href="class_mesh.html#a3c16c361f0f4b739ea17b647c980117e">Mesh::setAnimation</a></div><div class="ttdeci">void setAnimation(Animation const &amp;anim)</div><div class="ttdef"><b>Definition:</b> Mesh.cpp:192</div></div>
-<div class="ttc" id="astruct_vertex_html_abfd8917796f41a3bd16441b2626e8212"><div class="ttname"><a href="struct_vertex.html#abfd8917796f41a3bd16441b2626e8212">Vertex::Tangent</a></div><div class="ttdeci">glm::vec3 Tangent</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:27</div></div>
-<div class="ttc" id="aclass_mesh_html_a5efe4da1a4c0971cfb037bd70304c303"><div class="ttname"><a href="class_mesh.html#a5efe4da1a4c0971cfb037bd70304c303">Mesh::~Mesh</a></div><div class="ttdeci">~Mesh()</div><div class="ttdef"><b>Definition:</b> Mesh.cpp:26</div></div>
+<div class="ttc" id="astruct_vertex_html_ac3155e4833cae391b2fc82acb90cfa14"><div class="ttname"><a href="struct_vertex.html#ac3155e4833cae391b2fc82acb90cfa14">Vertex::Tangent</a></div><div class="ttdeci">GLint Tangent</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:26</div></div>
+<div class="ttc" id="aclass_mesh_html_a2af137f1571af89172b9c102302c416b"><div class="ttname"><a href="class_mesh.html#a2af137f1571af89172b9c102302c416b">Mesh::Mesh</a></div><div class="ttdeci">Mesh()</div><div class="ttdef"><b>Definition:</b> Mesh.cpp:6</div></div>
+<div class="ttc" id="aclass_mesh_html"><div class="ttname"><a href="class_mesh.html">Mesh</a></div><div class="ttdef"><b>Definition:</b> Mesh.hpp:36</div></div>
+<div class="ttc" id="a_animation_8h_html_affb455e5ea72d01e065758c70f810a95"><div class="ttname"><a href="_animation_8h.html#affb455e5ea72d01e065758c70f810a95">AnimationType</a></div><div class="ttdeci">AnimationType</div><div class="ttdef"><b>Definition:</b> Animation.h:9</div></div>
+<div class="ttc" id="aclass_mesh_html_a1ec31daf3252fdace8e399d0bec344f9"><div class="ttname"><a href="class_mesh.html#a1ec31daf3252fdace8e399d0bec344f9">Mesh::doAnimation</a></div><div class="ttdeci">void doAnimation()</div><div class="ttdef"><b>Definition:</b> Mesh.cpp:204</div></div>
+<div class="ttc" id="aclass_mesh_html_a3c16c361f0f4b739ea17b647c980117e"><div class="ttname"><a href="class_mesh.html#a3c16c361f0f4b739ea17b647c980117e">Mesh::setAnimation</a></div><div class="ttdeci">void setAnimation(Animation const &amp;anim)</div><div class="ttdef"><b>Definition:</b> Mesh.cpp:214</div></div>
+<div class="ttc" id="astruct_vertex_html_a57c66f91c2f395787c78467f1f2976b2"><div class="ttname"><a href="struct_vertex.html#a57c66f91c2f395787c78467f1f2976b2">Vertex::Normal</a></div><div class="ttdeci">GLint Normal</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:25</div></div>
+<div class="ttc" id="aclass_mesh_html_a5efe4da1a4c0971cfb037bd70304c303"><div class="ttname"><a href="class_mesh.html#a5efe4da1a4c0971cfb037bd70304c303">Mesh::~Mesh</a></div><div class="ttdeci">~Mesh()</div><div class="ttdef"><b>Definition:</b> Mesh.cpp:40</div></div>
 <div class="ttc" id="aclass_animation_html"><div class="ttname"><a href="class_animation.html">Animation</a></div><div class="ttdef"><b>Definition:</b> Animation.h:16</div></div>
-<div class="ttc" id="astruct_vertex_html_ab25486578254d8459e296f3a1ba1c94f"><div class="ttname"><a href="struct_vertex.html#ab25486578254d8459e296f3a1ba1c94f">Vertex::Weighs</a></div><div class="ttdeci">glm::vec4 Weighs</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:30</div></div>
 <div class="ttc" id="a_shader_8hpp_html"><div class="ttname"><a href="_shader_8hpp.html">Shader.hpp</a></div></div>
 <div class="ttc" id="a_a_a_b_b_8hpp_html"><div class="ttname"><a href="_a_a_b_b_8hpp.html">AABB.hpp</a></div></div>
 <div class="ttc" id="astruct_vertex_html"><div class="ttname"><a href="struct_vertex.html">Vertex</a></div><div class="ttdef"><b>Definition:</b> Mesh.hpp:22</div></div>
-<div class="ttc" id="astruct_vertex_html_a9ab4dc431b41509f0b1bb1a4bf09d4e2"><div class="ttname"><a href="struct_vertex.html#a9ab4dc431b41509f0b1bb1a4bf09d4e2">Vertex::Normal</a></div><div class="ttdeci">glm::vec3 Normal</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:25</div></div>
-<div class="ttc" id="astruct_vertex_html_a6d656764e783af87b6261c56565a095d"><div class="ttname"><a href="struct_vertex.html#a6d656764e783af87b6261c56565a095d">Vertex::BonesID</a></div><div class="ttdeci">glm::ivec4 BonesID</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:29</div></div>
+<div class="ttc" id="astruct_weight_data_html_a56f0ce9c7a08224dbaf2817dd10b5571"><div class="ttname"><a href="struct_weight_data.html#a56f0ce9c7a08224dbaf2817dd10b5571">WeightData::BonesID</a></div><div class="ttdeci">uint8_t BonesID[3]</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:33</div></div>
+<div class="ttc" id="aclass_mesh_html_af06ecafd1b7cf16c687666dbfce53657"><div class="ttname"><a href="class_mesh.html#af06ecafd1b7cf16c687666dbfce53657">Mesh::operator=</a></div><div class="ttdeci">Mesh &amp; operator=(const Mesh &amp;)=default</div></div>
+<div class="ttc" id="a_animation_8h_html_affb455e5ea72d01e065758c70f810a95ae599161956d626eda4cb0a5ffb85271c"><div class="ttname"><a href="_animation_8h.html#affb455e5ea72d01e065758c70f810a95ae599161956d626eda4cb0a5ffb85271c">AnimationType::Idle</a></div></div>
 <div class="ttc" id="a_texture_8hpp_html"><div class="ttname"><a href="_texture_8hpp.html">Texture.hpp</a></div></div>
-<div class="ttc" id="aclass_mesh_html_a5a73cf9c150a107991fcfbf679cf4cc6"><div class="ttname"><a href="class_mesh.html#a5a73cf9c150a107991fcfbf679cf4cc6">Mesh::draw</a></div><div class="ttdeci">void draw(std::shared_ptr&lt; Shader &gt; const &amp;shader, std::vector&lt; glm::mat4 &gt; const &amp;transforms, glm::mat4 const &amp;parentTransform)</div><div class="ttdef"><b>Definition:</b> Mesh.cpp:96</div></div>
+<div class="ttc" id="astruct_weight_data_html_ab9a044b995a8be063d7e40b341d934d7"><div class="ttname"><a href="struct_weight_data.html#ab9a044b995a8be063d7e40b341d934d7">WeightData::Weighs</a></div><div class="ttdeci">uint8_t Weighs[3]</div><div class="ttdef"><b>Definition:</b> Mesh.hpp:32</div></div>
+<div class="ttc" id="aclass_mesh_html_a5a73cf9c150a107991fcfbf679cf4cc6"><div class="ttname"><a href="class_mesh.html#a5a73cf9c150a107991fcfbf679cf4cc6">Mesh::draw</a></div><div class="ttdeci">void draw(std::shared_ptr&lt; Shader &gt; const &amp;shader, std::vector&lt; glm::mat4 &gt; const &amp;transforms, glm::mat4 const &amp;parentTransform)</div><div class="ttdef"><b>Definition:</b> Mesh.cpp:117</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

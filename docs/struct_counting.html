@@ -49,6 +49,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Struct representing the state of bomb when it's ticking, counting time to explosion.  
+ <a href="struct_counting.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_bomb_8h_source.html">Bomb.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for Counting:</div>
@@ -56,7 +59,7 @@ Inheritance diagram for Counting:</div>
  <div class="center">
   <img src="struct_counting.png" usemap="#Counting_map" alt=""/>
   <map id="Counting_map" name="Counting_map">
-<area href="struct_state.html" alt="State" shape="rect" coords="0,0,62,24"/>
+<area href="struct_state.html" title="Represents current state of the StateMachine. Holds all necessary info about current state in itself." alt="State" shape="rect" coords="0,0,62,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -68,16 +71,20 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a05782199b1c626fb3fa32100e9215d79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbff759a376d40069e3d93d97eb1e498"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:abbff759a376d40069e3d93d97eb1e498"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_counting.html#abbff759a376d40069e3d93d97eb1e498">transition</a> (const T &amp;)</td></tr>
+<tr class="memdesc:abbff759a376d40069e3d93d97eb1e498"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every frame to see if this <a class="el" href="struct_state.html" title="Represents current state of the StateMachine. Holds all necessary info about current state in itself.">State</a> need to be changed to another.  <a href="struct_counting.html#abbff759a376d40069e3d93d97eb1e498">More...</a><br /></td></tr>
 <tr class="separator:abbff759a376d40069e3d93d97eb1e498"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_struct_state"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_struct_state')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="struct_state.html">State</a></td></tr>
 <tr class="memitem:a4a64851966bcb5374029bcb5931cc424 inherit pub_methods_struct_state"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a4a64851966bcb5374029bcb5931cc424 inherit pub_methods_struct_state"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">onTick</a> (T &amp;, float)</td></tr>
+<tr class="memdesc:a4a64851966bcb5374029bcb5931cc424 inherit pub_methods_struct_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every frame for this state and lets him do everything he needs to.  <a href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">More...</a><br /></td></tr>
 <tr class="separator:a4a64851966bcb5374029bcb5931cc424 inherit pub_methods_struct_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bab7dcc32ebb6a4b2ed112298694abe inherit pub_methods_struct_state"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a5bab7dcc32ebb6a4b2ed112298694abe inherit pub_methods_struct_state"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">onEntry</a> (T &amp;)</td></tr>
+<tr class="memdesc:a5bab7dcc32ebb6a4b2ed112298694abe inherit pub_methods_struct_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every time this state is entered. Lets this state setup it's data.  <a href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">More...</a><br /></td></tr>
 <tr class="separator:a5bab7dcc32ebb6a4b2ed112298694abe inherit pub_methods_struct_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbff759a376d40069e3d93d97eb1e498 inherit pub_methods_struct_state"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:abbff759a376d40069e3d93d97eb1e498 inherit pub_methods_struct_state"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">transition</a> (const T &amp;)</td></tr>
+<tr class="memdesc:abbff759a376d40069e3d93d97eb1e498 inherit pub_methods_struct_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every frame to see if this <a class="el" href="struct_state.html" title="Represents current state of the StateMachine. Holds all necessary info about current state in itself.">State</a> need to be changed to another.  <a href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">More...</a><br /></td></tr>
 <tr class="separator:abbff759a376d40069e3d93d97eb1e498 inherit pub_methods_struct_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -86,11 +93,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a6db8d204f3d74fd145d371e66c69d6f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea9e3700a2ba2ff02461d4e7135a5f0c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_counting.html#aea9e3700a2ba2ff02461d4e7135a5f0c">mCountdown</a></td></tr>
 <tr class="separator:aea9e3700a2ba2ff02461d4e7135a5f0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_struct_state"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_struct_state')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="struct_state.html">State</a></td></tr>
-<tr class="memitem:a6271cf4ddcd86d4c6be9b1dbcbcd4d9d inherit pub_attribs_struct_state"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_state.html#a6271cf4ddcd86d4c6be9b1dbcbcd4d9d">uid</a></td></tr>
-<tr class="separator:a6271cf4ddcd86d4c6be9b1dbcbcd4d9d inherit pub_attribs_struct_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Struct representing the state of bomb when it's ticking, counting time to explosion. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a05782199b1c626fb3fa32100e9215d79"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a05782199b1c626fb3fa32100e9215d79">&#9670;&nbsp;</a></span>onEntry()</h2>
 
@@ -162,6 +168,8 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Called every frame to see if this <a class="el" href="struct_state.html" title="Represents current state of the StateMachine. Holds all necessary info about current state in itself.">State</a> need to be changed to another. </p>
 
 </div>
 </div>

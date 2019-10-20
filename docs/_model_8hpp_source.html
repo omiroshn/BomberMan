@@ -78,47 +78,51 @@ $(function() {
 <div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="class_model.html">   28</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_model.html">Model</a> </div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="class_model.html#ad9aa2612d8fa252c7538edc97ec3f867">Model</a>(std::string <span class="keyword">const</span> &amp;path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, <span class="keywordtype">float</span> angle);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="class_model.html#ad6ebd2062a0b823db841a0b88baac4c0">~Model</a>();</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_model.html#ab4dd47a2138fa14d2b45de705f902848">draw</a>(std::shared_ptr&lt;Shader&gt; <span class="keyword">const</span>&amp; shader, std::vector&lt;glm::mat4&gt; <span class="keyword">const</span>&amp; transforms);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="class_a_a_b_b.html">AABB</a> <a class="code" href="class_model.html#a51bccd7fd92339003492037e504907f1">getAABB</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="class_model.html#a8131ad79030a98b1cd36151e0265ff48">Model</a>(std::string <span class="keyword">const</span> &amp;path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, <span class="keywordtype">float</span> angle, <span class="keywordtype">float</span> glossiness);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="class_model.html">Model</a>&amp; <a class="code" href="class_model.html#abcb9e87997a8e6d9cae91d2692935726">operator=</a>(<span class="keyword">const</span> <a class="code" href="class_model.html">Model</a>&amp;) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="class_model.html#ad6ebd2062a0b823db841a0b88baac4c0">~Model</a>();</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_model.html#ab4dd47a2138fa14d2b45de705f902848">draw</a>(std::shared_ptr&lt;Shader&gt; <span class="keyword">const</span>&amp; shader, std::vector&lt;glm::mat4&gt; <span class="keyword">const</span>&amp; transforms);</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_model.html#a9bd36d5dcca19cb0fdad10c34b6c4c31">transform</a>(glm::mat4 <span class="keyword">const</span> &amp; aTransform);</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_model.html#a6f613fdf958c369c333e597bba9ff652">setAnimation</a>(<a class="code" href="class_animation.html">Animation</a> <span class="keyword">const</span>&amp; anim);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordtype">void</span> makeUnitModel();</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordtype">void</span> loadModel(std::string <span class="keyword">const</span>&amp; path);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">void</span> processNode(aiNode <span class="keyword">const</span>* node,  aiScene <span class="keyword">const</span>* scene);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordtype">void</span> processMesh(aiMesh <span class="keyword">const</span>* mesh,  aiScene <span class="keyword">const</span>* scene);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    std::map&lt;std::string, unsigned int&gt; processBones(aiMesh <span class="keyword">const</span>* mesh, std::vector&lt;glm::mat4&gt; &amp; aOffsets, std::vector&lt;Vertex&gt; &amp; vertices);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    std::vector&lt;Vertex&gt; loadVertices(aiMesh <span class="keyword">const</span>* mesh);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    std::vector&lt;unsigned int&gt; loadIndices(aiMesh <span class="keyword">const</span>* mesh);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    std::vector&lt;std::shared_ptr&lt;Texture&gt;&gt; loadTextures(aiMesh <span class="keyword">const</span>* mesh, aiScene <span class="keyword">const</span>* scene);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    std::vector&lt;std::shared_ptr&lt;Texture&gt;&gt; loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    std::vector&lt;std::unique_ptr&lt;Mesh&gt;&gt; mMeshes;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    std::string         mDirectory;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="class_a_a_b_b.html">AABB</a>                mAABB;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    glm::mat4           mTransFormMatrix;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">bool</span>                mAnimated;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    Assimp::Importer    *mImporter;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;};</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="class_model.html#aeefeff0f7ae91c12ea495a0f747b4d0c">   38</a></span>&#160;    <span class="keywordtype">bool</span>                <a class="code" href="class_model.html#aeefeff0f7ae91c12ea495a0f747b4d0c">mAnimated</a>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">void</span> makeUnitModel();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordtype">void</span> loadModel(std::string <span class="keyword">const</span>&amp; path);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">void</span> processNode(aiNode <span class="keyword">const</span>* node,  aiScene <span class="keyword">const</span>* scene);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">void</span> processMesh(aiMesh <span class="keyword">const</span>* mesh,  aiScene <span class="keyword">const</span>* scene);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    std::map&lt;std::string, unsigned int&gt; processBones(aiMesh <span class="keyword">const</span>* mesh, std::vector&lt;glm::mat4&gt; &amp; aOffsets, std::vector&lt;WeightData&gt; &amp; vertices);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    std::vector&lt;Vertex&gt; loadVertices(aiMesh <span class="keyword">const</span>* mesh);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    std::vector&lt;unsigned int&gt; loadIndices(aiMesh <span class="keyword">const</span>* mesh);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    std::vector&lt;std::shared_ptr&lt;Texture&gt;&gt; loadTextures(aiMesh <span class="keyword">const</span>* mesh, aiScene <span class="keyword">const</span>* scene);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    std::vector&lt;std::shared_ptr&lt;Texture&gt;&gt; loadMaterialTextures(aiMaterial *mat, aiTextureType type, <a class="code" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a> texType);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    std::vector&lt;std::unique_ptr&lt;Mesh&gt;&gt; mMeshes;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    std::string         mDirectory;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="class_a_a_b_b.html">AABB</a>                mAABB;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    glm::mat4           mTransFormMatrix;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">float</span>               mGlossiness;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    Assimp::Importer    *mImporter;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;};</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclass_model_html_a6f613fdf958c369c333e597bba9ff652"><div class="ttname"><a href="class_model.html#a6f613fdf958c369c333e597bba9ff652">Model::setAnimation</a></div><div class="ttdeci">void setAnimation(Animation const &amp;anim)</div><div class="ttdef"><b>Definition:</b> Model.cpp:203</div></div>
-<div class="ttc" id="aclass_model_html_a51bccd7fd92339003492037e504907f1"><div class="ttname"><a href="class_model.html#a51bccd7fd92339003492037e504907f1">Model::getAABB</a></div><div class="ttdeci">AABB getAABB() const</div><div class="ttdef"><b>Definition:</b> Model.cpp:192</div></div>
-<div class="ttc" id="aclass_model_html_ad9aa2612d8fa252c7538edc97ec3f867"><div class="ttname"><a href="class_model.html#ad9aa2612d8fa252c7538edc97ec3f867">Model::Model</a></div><div class="ttdeci">Model(std::string const &amp;path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle)</div><div class="ttdef"><b>Definition:</b> Model.cpp:7</div></div>
+<div class="ttc" id="a_texture_8hpp_html_a65468556d79304b3a4bfc464cc12e549"><div class="ttname"><a href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a></div><div class="ttdeci">TextureType</div><div class="ttdef"><b>Definition:</b> Texture.hpp:12</div></div>
+<div class="ttc" id="aclass_model_html_a6f613fdf958c369c333e597bba9ff652"><div class="ttname"><a href="class_model.html#a6f613fdf958c369c333e597bba9ff652">Model::setAnimation</a></div><div class="ttdeci">void setAnimation(Animation const &amp;anim)</div><div class="ttdef"><b>Definition:</b> Model.cpp:222</div></div>
 <div class="ttc" id="a_mesh_8hpp_html"><div class="ttname"><a href="_mesh_8hpp.html">Mesh.hpp</a></div></div>
-<div class="ttc" id="aclass_model_html_ad6ebd2062a0b823db841a0b88baac4c0"><div class="ttname"><a href="class_model.html#ad6ebd2062a0b823db841a0b88baac4c0">Model::~Model</a></div><div class="ttdeci">~Model()</div><div class="ttdef"><b>Definition:</b> Model.cpp:18</div></div>
+<div class="ttc" id="aclass_model_html_a8131ad79030a98b1cd36151e0265ff48"><div class="ttname"><a href="class_model.html#a8131ad79030a98b1cd36151e0265ff48">Model::Model</a></div><div class="ttdeci">Model(std::string const &amp;path, glm::vec3 scale, glm::vec3 offset, glm::vec3 axis, float angle, float glossiness)</div><div class="ttdef"><b>Definition:</b> Model.cpp:8</div></div>
+<div class="ttc" id="aclass_model_html_abcb9e87997a8e6d9cae91d2692935726"><div class="ttname"><a href="class_model.html#abcb9e87997a8e6d9cae91d2692935726">Model::operator=</a></div><div class="ttdeci">Model &amp; operator=(const Model &amp;)=default</div></div>
+<div class="ttc" id="aclass_model_html_ad6ebd2062a0b823db841a0b88baac4c0"><div class="ttname"><a href="class_model.html#ad6ebd2062a0b823db841a0b88baac4c0">Model::~Model</a></div><div class="ttdeci">~Model()</div><div class="ttdef"><b>Definition:</b> Model.cpp:20</div></div>
 <div class="ttc" id="aclass_animation_html"><div class="ttname"><a href="class_animation.html">Animation</a></div><div class="ttdef"><b>Definition:</b> Animation.h:16</div></div>
 <div class="ttc" id="aclass_model_html"><div class="ttname"><a href="class_model.html">Model</a></div><div class="ttdef"><b>Definition:</b> Model.hpp:28</div></div>
 <div class="ttc" id="a_shader_8hpp_html"><div class="ttname"><a href="_shader_8hpp.html">Shader.hpp</a></div></div>
 <div class="ttc" id="a_a_a_b_b_8hpp_html"><div class="ttname"><a href="_a_a_b_b_8hpp.html">AABB.hpp</a></div></div>
 <div class="ttc" id="aclass_a_a_b_b_html"><div class="ttname"><a href="class_a_a_b_b.html">AABB</a></div><div class="ttdef"><b>Definition:</b> AABB.hpp:10</div></div>
-<div class="ttc" id="aclass_model_html_ab4dd47a2138fa14d2b45de705f902848"><div class="ttname"><a href="class_model.html#ab4dd47a2138fa14d2b45de705f902848">Model::draw</a></div><div class="ttdeci">void draw(std::shared_ptr&lt; Shader &gt; const &amp;shader, std::vector&lt; glm::mat4 &gt; const &amp;transforms)</div><div class="ttdef"><b>Definition:</b> Model.cpp:182</div></div>
-<div class="ttc" id="aclass_model_html_a9bd36d5dcca19cb0fdad10c34b6c4c31"><div class="ttname"><a href="class_model.html#a9bd36d5dcca19cb0fdad10c34b6c4c31">Model::transform</a></div><div class="ttdeci">void transform(glm::mat4 const &amp;aTransform)</div><div class="ttdef"><b>Definition:</b> Model.cpp:197</div></div>
+<div class="ttc" id="aclass_model_html_ab4dd47a2138fa14d2b45de705f902848"><div class="ttname"><a href="class_model.html#ab4dd47a2138fa14d2b45de705f902848">Model::draw</a></div><div class="ttdeci">void draw(std::shared_ptr&lt; Shader &gt; const &amp;shader, std::vector&lt; glm::mat4 &gt; const &amp;transforms)</div><div class="ttdef"><b>Definition:</b> Model.cpp:206</div></div>
+<div class="ttc" id="aclass_model_html_a9bd36d5dcca19cb0fdad10c34b6c4c31"><div class="ttname"><a href="class_model.html#a9bd36d5dcca19cb0fdad10c34b6c4c31">Model::transform</a></div><div class="ttdeci">void transform(glm::mat4 const &amp;aTransform)</div><div class="ttdef"><b>Definition:</b> Model.cpp:216</div></div>
 <div class="ttc" id="a_texture_8hpp_html"><div class="ttname"><a href="_texture_8hpp.html">Texture.hpp</a></div></div>
+<div class="ttc" id="aclass_model_html_aeefeff0f7ae91c12ea495a0f747b4d0c"><div class="ttname"><a href="class_model.html#aeefeff0f7ae91c12ea495a0f747b4d0c">Model::mAnimated</a></div><div class="ttdeci">bool mAnimated</div><div class="ttdef"><b>Definition:</b> Model.hpp:38</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

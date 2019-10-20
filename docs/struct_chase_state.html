@@ -49,6 +49,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Struct representing the state of entity when it's seen a player. Makes pawn chase after the player.  
+ <a href="struct_chase_state.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_a_i_controller_8h_source.html">AIController.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for ChaseState:</div>
@@ -56,12 +59,20 @@ Inheritance diagram for ChaseState:</div>
  <div class="center">
   <img src="struct_chase_state.png" usemap="#ChaseState_map" alt=""/>
   <map id="ChaseState_map" name="ChaseState_map">
-<area href="struct_state.html" alt="State" shape="rect" coords="0,0,76,24"/>
+<area href="struct_state.html" title="Represents current state of the StateMachine. Holds all necessary info about current state in itself." alt="State" shape="rect" coords="0,0,76,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a653f54c9f42aa1bc8453f07a8f2d4e40"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_chase_state.html#a653f54c9f42aa1bc8453f07a8f2d4e40">ChaseState</a> ()</td></tr>
+<tr class="separator:a653f54c9f42aa1bc8453f07a8f2d4e40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac88828c2653a317bee3c50521e25a237"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_chase_state.html#ac88828c2653a317bee3c50521e25a237">~ChaseState</a> ()</td></tr>
+<tr class="separator:ac88828c2653a317bee3c50521e25a237"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09f044981fa64d7bcea83c78a51ca2bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_chase_state.html#a09f044981fa64d7bcea83c78a51ca2bb">ChaseState</a> (<a class="el" href="struct_chase_state.html">ChaseState</a> const &amp;)</td></tr>
+<tr class="separator:a09f044981fa64d7bcea83c78a51ca2bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c39f3e99de5cdfb1c47618c02c236b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_chase_state.html">ChaseState</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_chase_state.html#a5c39f3e99de5cdfb1c47618c02c236b4">operator=</a> (<a class="el" href="struct_chase_state.html">ChaseState</a> const &amp;)</td></tr>
+<tr class="separator:a5c39f3e99de5cdfb1c47618c02c236b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4b00a45745e7f19d7e752c445500937"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_chase_state.html#ad4b00a45745e7f19d7e752c445500937">transition</a> (const <a class="el" href="struct_confused_state.html">ConfusedState</a> &amp;)</td></tr>
 <tr class="separator:ad4b00a45745e7f19d7e752c445500937"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b59c2838f8375e5efb1d573e66a147b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_chase_state.html#a1b59c2838f8375e5efb1d573e66a147b">onTick</a> (<a class="el" href="class_moving_entity.html">MovingEntity</a> &amp;, float DeltaTime=0)</td></tr>
@@ -70,16 +81,20 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3ab068aa845bdaa2ea762b4158606b10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbff759a376d40069e3d93d97eb1e498"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:abbff759a376d40069e3d93d97eb1e498"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_chase_state.html#abbff759a376d40069e3d93d97eb1e498">transition</a> (const T &amp;)</td></tr>
+<tr class="memdesc:abbff759a376d40069e3d93d97eb1e498"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every frame to see if this <a class="el" href="struct_state.html" title="Represents current state of the StateMachine. Holds all necessary info about current state in itself.">State</a> need to be changed to another.  <a href="struct_chase_state.html#abbff759a376d40069e3d93d97eb1e498">More...</a><br /></td></tr>
 <tr class="separator:abbff759a376d40069e3d93d97eb1e498"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_struct_state"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_struct_state')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="struct_state.html">State</a></td></tr>
 <tr class="memitem:a4a64851966bcb5374029bcb5931cc424 inherit pub_methods_struct_state"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a4a64851966bcb5374029bcb5931cc424 inherit pub_methods_struct_state"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">onTick</a> (T &amp;, float)</td></tr>
+<tr class="memdesc:a4a64851966bcb5374029bcb5931cc424 inherit pub_methods_struct_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every frame for this state and lets him do everything he needs to.  <a href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">More...</a><br /></td></tr>
 <tr class="separator:a4a64851966bcb5374029bcb5931cc424 inherit pub_methods_struct_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bab7dcc32ebb6a4b2ed112298694abe inherit pub_methods_struct_state"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a5bab7dcc32ebb6a4b2ed112298694abe inherit pub_methods_struct_state"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">onEntry</a> (T &amp;)</td></tr>
+<tr class="memdesc:a5bab7dcc32ebb6a4b2ed112298694abe inherit pub_methods_struct_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every time this state is entered. Lets this state setup it's data.  <a href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">More...</a><br /></td></tr>
 <tr class="separator:a5bab7dcc32ebb6a4b2ed112298694abe inherit pub_methods_struct_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbff759a376d40069e3d93d97eb1e498 inherit pub_methods_struct_state"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:abbff759a376d40069e3d93d97eb1e498 inherit pub_methods_struct_state"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">transition</a> (const T &amp;)</td></tr>
+<tr class="memdesc:abbff759a376d40069e3d93d97eb1e498 inherit pub_methods_struct_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every frame to see if this <a class="el" href="struct_state.html" title="Represents current state of the StateMachine. Holds all necessary info about current state in itself.">State</a> need to be changed to another.  <a href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">More...</a><br /></td></tr>
 <tr class="separator:abbff759a376d40069e3d93d97eb1e498 inherit pub_methods_struct_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -90,14 +105,63 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a7bd6c69f9392854beecffcfcd3f262f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8b69dd2c307fbd163c6239b20fffcf7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_chase_state.html#ac8b69dd2c307fbd163c6239b20fffcf7">mIsConfused</a></td></tr>
 <tr class="separator:ac8b69dd2c307fbd163c6239b20fffcf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_struct_state"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_struct_state')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="struct_state.html">State</a></td></tr>
-<tr class="memitem:a6271cf4ddcd86d4c6be9b1dbcbcd4d9d inherit pub_attribs_struct_state"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_state.html#a6271cf4ddcd86d4c6be9b1dbcbcd4d9d">uid</a></td></tr>
-<tr class="separator:a6271cf4ddcd86d4c6be9b1dbcbcd4d9d inherit pub_attribs_struct_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Patrol state</p>
-<p>Makes pawn walk through the maze randomly. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<div class="textblock"><p>Struct representing the state of entity when it's seen a player. Makes pawn chase after the player. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a653f54c9f42aa1bc8453f07a8f2d4e40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a653f54c9f42aa1bc8453f07a8f2d4e40">&#9670;&nbsp;</a></span>ChaseState() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ChaseState::ChaseState </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac88828c2653a317bee3c50521e25a237"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac88828c2653a317bee3c50521e25a237">&#9670;&nbsp;</a></span>~ChaseState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ChaseState::~ChaseState </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a09f044981fa64d7bcea83c78a51ca2bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09f044981fa64d7bcea83c78a51ca2bb">&#9670;&nbsp;</a></span>ChaseState() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ChaseState::ChaseState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_chase_state.html">ChaseState</a> const &amp;&#160;</td>
+          <td class="paramname"><em>Other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="a3ab068aa845bdaa2ea762b4158606b10"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3ab068aa845bdaa2ea762b4158606b10">&#9670;&nbsp;</a></span>onEntry()</h2>
 
@@ -154,6 +218,24 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a5c39f3e99de5cdfb1c47618c02c236b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c39f3e99de5cdfb1c47618c02c236b4">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_chase_state.html">ChaseState</a> &amp; ChaseState::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_chase_state.html">ChaseState</a> const &amp;&#160;</td>
+          <td class="paramname"><em>Other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad4b00a45745e7f19d7e752c445500937"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad4b00a45745e7f19d7e752c445500937">&#9670;&nbsp;</a></span>transition() <span class="overload">[1/2]</span></h2>
 
@@ -197,6 +279,8 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Called every frame to see if this <a class="el" href="struct_state.html" title="Represents current state of the StateMachine. Holds all necessary info about current state in itself.">State</a> need to be changed to another. </p>
 
 </div>
 </div>

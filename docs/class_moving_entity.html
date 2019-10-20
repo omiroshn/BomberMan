@@ -49,6 +49,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Extends the functionality of <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. Represents all Moving entities in game.  
+ <a href="class_moving_entity.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_moving_entity_8h_source.html">MovingEntity.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for MovingEntity:</div>
@@ -56,9 +59,9 @@ Inheritance diagram for MovingEntity:</div>
  <div class="center">
   <img src="class_moving_entity.png" usemap="#MovingEntity_map" alt=""/>
   <map id="MovingEntity_map" name="MovingEntity_map">
-<area href="class_entity.html" alt="Entity" shape="rect" coords="0,0,85,24"/>
+<area href="class_entity.html" title="The class from which almost everything on screen derives." alt="Entity" shape="rect" coords="0,0,85,24"/>
 <area href="class_tickable.html" alt="Tickable" shape="rect" coords="95,0,180,24"/>
-<area href="class_hero.html" alt="Hero" shape="rect" coords="47,112,132,136"/>
+<area href="class_hero.html" title="The class that represents Hero." alt="Hero" shape="rect" coords="47,112,132,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -72,23 +75,23 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a49b12b9f70a4d60995dd96187594d24c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad207c8536d211fdf7980c57eb4438223"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_moving_entity.html">MovingEntity</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#ad207c8536d211fdf7980c57eb4438223">operator=</a> (<a class="el" href="class_moving_entity.html">MovingEntity</a> const &amp;)=delete</td></tr>
 <tr class="separator:ad207c8536d211fdf7980c57eb4438223"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c9252984ed78c1afe129ecff18b890c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#a6c9252984ed78c1afe129ecff18b890c">kill</a> ()</td></tr>
+<tr class="memdesc:a6c9252984ed78c1afe129ecff18b890c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non-virtual override of <a class="el" href="class_entity.html#a522648b330daab91b49f78f0737a943f" title="Marks this Entity as dead.">Entity::kill</a>.  <a href="class_moving_entity.html#a6c9252984ed78c1afe129ecff18b890c">More...</a><br /></td></tr>
+<tr class="separator:a6c9252984ed78c1afe129ecff18b890c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a721962ec168b788c187311d4d0e60760"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#a721962ec168b788c187311d4d0e60760">isDeadForAwhile</a> () const</td></tr>
+<tr class="separator:a721962ec168b788c187311d4d0e60760"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf9be7fc02a202de98ab058f312ca8bf"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#adf9be7fc02a202de98ab058f312ca8bf">GetSpeed</a> () const</td></tr>
 <tr class="separator:adf9be7fc02a202de98ab058f312ca8bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a090ffebebde0253b315539be8f9a66f6"><td class="memItemLeft" align="right" valign="top">glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#a090ffebebde0253b315539be8f9a66f6">GetVelocity</a> () const</td></tr>
-<tr class="separator:a090ffebebde0253b315539be8f9a66f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a357674bb2f8f8badf8d4afe9e6069704"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#a357674bb2f8f8badf8d4afe9e6069704">SetVelocity</a> (glm::vec2)</td></tr>
-<tr class="separator:a357674bb2f8f8badf8d4afe9e6069704"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a557eea813e5623de0e51622b11c099af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#a557eea813e5623de0e51622b11c099af">AddVelocity</a> (glm::vec2)</td></tr>
-<tr class="separator:a557eea813e5623de0e51622b11c099af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88c483500b3806ff2118f8581da25411"><td class="memItemLeft" align="right" valign="top">glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#a88c483500b3806ff2118f8581da25411">GetAcceleration</a> () const</td></tr>
-<tr class="separator:a88c483500b3806ff2118f8581da25411"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24938a510c3554f83db6bfd65371f3f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#a24938a510c3554f83db6bfd65371f3f3">SetAcceleration</a> (glm::vec2)</td></tr>
-<tr class="separator:a24938a510c3554f83db6bfd65371f3f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a917603fe81d6f98014aa6063d67b207e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#a917603fe81d6f98014aa6063d67b207e">AddVelocity</a> (glm::vec2 velocityOffset)</td></tr>
+<tr class="memdesc:a917603fe81d6f98014aa6063d67b207e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds velocity to this <a class="el" href="class_moving_entity.html" title="Extends the functionality of Entity. Represents all Moving entities in game.">MovingEntity</a> own velocity.  <a href="class_moving_entity.html#a917603fe81d6f98014aa6063d67b207e">More...</a><br /></td></tr>
+<tr class="separator:a917603fe81d6f98014aa6063d67b207e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaeb569a3200a38c8c373cbcdd2225869"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#aaeb569a3200a38c8c373cbcdd2225869">AddAcceleration</a> (glm::vec2)</td></tr>
+<tr class="memdesc:aaeb569a3200a38c8c373cbcdd2225869"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds acceleration to this <a class="el" href="class_moving_entity.html" title="Extends the functionality of Entity. Represents all Moving entities in game.">MovingEntity</a> own acceleration.  <a href="class_moving_entity.html#aaeb569a3200a38c8c373cbcdd2225869">More...</a><br /></td></tr>
 <tr class="separator:aaeb569a3200a38c8c373cbcdd2225869"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb5c554aee22341e34c9d54b1ef4b9bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_animation.html">Animation</a> const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#afb5c554aee22341e34c9d54b1ef4b9bb">getAnimation</a> () const</td></tr>
-<tr class="separator:afb5c554aee22341e34c9d54b1ef4b9bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cbb28873f29f2378d8deab9a8f4be06"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_animation.html">Animation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#a2cbb28873f29f2378d8deab9a8f4be06">getAnimation</a> ()</td></tr>
+<tr class="separator:a2cbb28873f29f2378d8deab9a8f4be06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4967a7b63a2b68053591c97c0c0d64db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#a4967a7b63a2b68053591c97c0c0d64db">debug</a> ()</td></tr>
+<tr class="memdesc:a4967a7b63a2b68053591c97c0c0d64db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expands on <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>'s debug func. Adds even more fields to debug window.  <a href="class_moving_entity.html#a4967a7b63a2b68053591c97c0c0d64db">More...</a><br /></td></tr>
 <tr class="separator:a4967a7b63a2b68053591c97c0c0d64db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab27bd2e6900d725821774b30372946c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#ab27bd2e6900d725821774b30372946c0">tick</a> (float DeltaTime=0) override</td></tr>
 <tr class="separator:ab27bd2e6900d725821774b30372946c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -101,14 +104,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae4e47d384f4be6b320b2af4689552f3c inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a6692f197b3805385e5c6b284466749 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_entity.html">Entity</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a2a6692f197b3805385e5c6b284466749">operator=</a> (<a class="el" href="class_entity.html">Entity</a> const &amp;)=delete</td></tr>
 <tr class="separator:a2a6692f197b3805385e5c6b284466749 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada3ba31fa9922f7ee1d89bbdffa1b391 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#ada3ba31fa9922f7ee1d89bbdffa1b391">move</a> (glm::vec2)</td></tr>
-<tr class="separator:ada3ba31fa9922f7ee1d89bbdffa1b391 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b23f1ad094b52cda21f29e9278f0d7e inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a2b23f1ad094b52cda21f29e9278f0d7e">move</a> (glm::vec2 offset)</td></tr>
+<tr class="memdesc:a2b23f1ad094b52cda21f29e9278f0d7e inherit pub_methods_class_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">changes the position of <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> by offset  <a href="class_entity.html#a2b23f1ad094b52cda21f29e9278f0d7e">More...</a><br /></td></tr>
+<tr class="separator:a2b23f1ad094b52cda21f29e9278f0d7e inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7d0b21d73af043a237cc80c803036f8 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aa7d0b21d73af043a237cc80c803036f8">getModelMatrix</a> () const</td></tr>
+<tr class="memdesc:aa7d0b21d73af043a237cc80c803036f8 inherit pub_methods_class_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculates ModelMatrix with correct rotation and translation on the fly. Useful for rendering.  <a href="class_entity.html#aa7d0b21d73af043a237cc80c803036f8">More...</a><br /></td></tr>
+<tr class="separator:aa7d0b21d73af043a237cc80c803036f8 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab594c701870f02c9cb95fdd527226c8f inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#ab594c701870f02c9cb95fdd527226c8f">getPosition</a> () const</td></tr>
 <tr class="separator:ab594c701870f02c9cb95fdd527226c8f inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba0cea66efe303d1ee1676c50bf3b7b3 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aba0cea66efe303d1ee1676c50bf3b7b3">getPosition3D</a> () const</td></tr>
 <tr class="separator:aba0cea66efe303d1ee1676c50bf3b7b3 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7d0b21d73af043a237cc80c803036f8 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aa7d0b21d73af043a237cc80c803036f8">getModelMatrix</a> () const</td></tr>
-<tr class="separator:aa7d0b21d73af043a237cc80c803036f8 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba202774afe6170248118835fb91e0ae inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aba202774afe6170248118835fb91e0ae">getAngle</a> () const</td></tr>
 <tr class="separator:aba202774afe6170248118835fb91e0ae inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82cfb80d37959f7a74ff06a98de088ad inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a82cfb80d37959f7a74ff06a98de088ad">getScale</a> () const</td></tr>
@@ -116,27 +121,25 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a513f0590fc7ef8fa82056ff2ebe5e5f5 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a513f0590fc7ef8fa82056ff2ebe5e5f5">isDead</a> () const</td></tr>
 <tr class="separator:a513f0590fc7ef8fa82056ff2ebe5e5f5 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aced69803bcd63230ada4fde797e15d4d inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aced69803bcd63230ada4fde797e15d4d">setPosition</a> (glm::vec2 position)</td></tr>
+<tr class="memdesc:aced69803bcd63230ada4fde797e15d4d inherit pub_methods_class_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the position of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. Useful for rendering.  <a href="class_entity.html#aced69803bcd63230ada4fde797e15d4d">More...</a><br /></td></tr>
 <tr class="separator:aced69803bcd63230ada4fde797e15d4d inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8fd95815afa7b3094b5402edc65bf00 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aa8fd95815afa7b3094b5402edc65bf00">setAngle</a> (float radians)</td></tr>
+<tr class="memdesc:aa8fd95815afa7b3094b5402edc65bf00 inherit pub_methods_class_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the angle of rotation of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. Useful for rendering.  <a href="class_entity.html#aa8fd95815afa7b3094b5402edc65bf00">More...</a><br /></td></tr>
 <tr class="separator:aa8fd95815afa7b3094b5402edc65bf00 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9421ad5569c18584b181df5e64dd37d9 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a9421ad5569c18584b181df5e64dd37d9">setScale</a> (float value)</td></tr>
+<tr class="memdesc:a9421ad5569c18584b181df5e64dd37d9 inherit pub_methods_class_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the scale of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. Useful for rendering.  <a href="class_entity.html#a9421ad5569c18584b181df5e64dd37d9">More...</a><br /></td></tr>
 <tr class="separator:a9421ad5569c18584b181df5e64dd37d9 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a522648b330daab91b49f78f0737a943f inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a522648b330daab91b49f78f0737a943f">kill</a> ()</td></tr>
+<tr class="memdesc:a522648b330daab91b49f78f0737a943f inherit pub_methods_class_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> as dead.  <a href="class_entity.html#a522648b330daab91b49f78f0737a943f">More...</a><br /></td></tr>
 <tr class="separator:a522648b330daab91b49f78f0737a943f inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08b6411655b961af4d8e68606cf39584 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a08b6411655b961af4d8e68606cf39584">debug</a> ()</td></tr>
+<tr class="memdesc:a08b6411655b961af4d8e68606cf39584 inherit pub_methods_class_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds this entity info to Debug window. Call it from anywhere in game loop, and you will have accessors for all major variables.  <a href="class_entity.html#a08b6411655b961af4d8e68606cf39584">More...</a><br /></td></tr>
 <tr class="separator:a08b6411655b961af4d8e68606cf39584 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43a066e3ab4376eb6afbade526c2d1e2 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a43a066e3ab4376eb6afbade526c2d1e2">getX</a> () const</td></tr>
-<tr class="separator:a43a066e3ab4376eb6afbade526c2d1e2 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1628120ebbd5b236a029eaa4a9547313 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a1628120ebbd5b236a029eaa4a9547313">getY</a> () const</td></tr>
-<tr class="separator:a1628120ebbd5b236a029eaa4a9547313 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f11898d6440a4c86f75f7abf17c91d6 inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a4f11898d6440a4c86f75f7abf17c91d6">setX</a> (float x)</td></tr>
-<tr class="separator:a4f11898d6440a4c86f75f7abf17c91d6 inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdaad02b63a9449b1f708d7803095dcb inherit pub_methods_class_entity"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#abdaad02b63a9449b1f708d7803095dcb">setY</a> (float y)</td></tr>
-<tr class="separator:abdaad02b63a9449b1f708d7803095dcb inherit pub_methods_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a1e2918f4849eec9928b23d89d0fe4de1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_moving_entity.html#a1e2918f4849eec9928b23d89d0fe4de1">debugMovement</a> ()</td></tr>
+<tr class="memdesc:a1e2918f4849eec9928b23d89d0fe4de1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds Entity-independant movement variables to debug window.  <a href="class_moving_entity.html#a1e2918f4849eec9928b23d89d0fe4de1">More...</a><br /></td></tr>
 <tr class="separator:a1e2918f4849eec9928b23d89d0fe4de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_methods_class_tickable"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_class_tickable')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="class_tickable.html">Tickable</a></td></tr>
 <tr class="memitem:a40ef1048b75e601fda9b98c277195161 inherit pub_static_methods_class_tickable"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tickable.html#a40ef1048b75e601fda9b98c277195161">tickTickables</a> (float DeltaTime)</td></tr>
@@ -155,8 +158,13 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a20f26a9af56576d265e58836e6a3b213 inherit pro_methods_class_tickable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa49752a34ee96c9a7c193e7db470e5b6 inherit pro_methods_class_tickable"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tickable.html#aa49752a34ee96c9a7c193e7db470e5b6">~Tickable</a> ()</td></tr>
 <tr class="separator:aa49752a34ee96c9a7c193e7db470e5b6 inherit pro_methods_class_tickable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_class_entity"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_class_entity')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="class_entity.html">Entity</a></td></tr>
+<tr class="memitem:a86c72a4ac85ca5d3718a45c7efedfbad inherit pro_attribs_class_entity"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a86c72a4ac85ca5d3718a45c7efedfbad">mDead</a> = false</td></tr>
+<tr class="separator:a86c72a4ac85ca5d3718a45c7efedfbad inherit pro_attribs_class_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Extends the functionality of <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. Represents all Moving entities in game. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0d83806963c3bed3427898f5b8b47da8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d83806963c3bed3427898f5b8b47da8">&#9670;&nbsp;</a></span>MovingEntity() <span class="overload">[1/3]</span></h2>
 
@@ -265,10 +273,18 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Adds acceleration to this <a class="el" href="class_moving_entity.html" title="Extends the functionality of Entity. Represents all Moving entities in game.">MovingEntity</a> own acceleration. </p>
+<p>This is basically the only appropriate way to move an <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> that will look and feel properly. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">velocityOffset</td><td>Velocity to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="a557eea813e5623de0e51622b11c099af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a557eea813e5623de0e51622b11c099af">&#9670;&nbsp;</a></span>AddVelocity()</h2>
+<a id="a917603fe81d6f98014aa6063d67b207e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a917603fe81d6f98014aa6063d67b207e">&#9670;&nbsp;</a></span>AddVelocity()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -282,6 +298,14 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Adds velocity to this <a class="el" href="class_moving_entity.html" title="Extends the functionality of Entity. Represents all Moving entities in game.">MovingEntity</a> own velocity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">velocityOffset</td><td>Velocity to add. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -299,6 +323,8 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Expands on <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>'s debug func. Adds even more fields to debug window. </p>
 
 </div>
 </div>
@@ -325,39 +351,25 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Adds Entity-independant movement variables to debug window. </p>
+
 </div>
 </div>
-<a id="a88c483500b3806ff2118f8581da25411"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a88c483500b3806ff2118f8581da25411">&#9670;&nbsp;</a></span>GetAcceleration()</h2>
+<a id="a2cbb28873f29f2378d8deab9a8f4be06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cbb28873f29f2378d8deab9a8f4be06">&#9670;&nbsp;</a></span>getAnimation()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::vec2 MovingEntity::GetAcceleration </td>
+          <td class="memname"><a class="el" href="class_animation.html">Animation</a> &amp; MovingEntity::getAnimation </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="afb5c554aee22341e34c9d54b1ef4b9bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb5c554aee22341e34c9d54b1ef4b9bb">&#9670;&nbsp;</a></span>getAnimation()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_animation.html">Animation</a> const  &amp; MovingEntity::getAnimation </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>Reference to <a class="el" href="class_animation.html">Animation</a> for this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> </dd></dl>
 
 </div>
 </div>
@@ -375,23 +387,44 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>Speed of this <a class="el" href="class_moving_entity.html" title="Extends the functionality of Entity. Represents all Moving entities in game.">MovingEntity</a> </dd></dl>
 
 </div>
 </div>
-<a id="a090ffebebde0253b315539be8f9a66f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a090ffebebde0253b315539be8f9a66f6">&#9670;&nbsp;</a></span>GetVelocity()</h2>
+<a id="a721962ec168b788c187311d4d0e60760"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a721962ec168b788c187311d4d0e60760">&#9670;&nbsp;</a></span>isDeadForAwhile()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::vec2 MovingEntity::GetVelocity </td>
+          <td class="memname">bool MovingEntity::isDeadForAwhile </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>Whether this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> was dead for a long time. </dd></dl>
+
+</div>
+</div>
+<a id="a6c9252984ed78c1afe129ecff18b890c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c9252984ed78c1afe129ecff18b890c">&#9670;&nbsp;</a></span>kill()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MovingEntity::kill </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Non-virtual override of <a class="el" href="class_entity.html#a522648b330daab91b49f78f0737a943f" title="Marks this Entity as dead.">Entity::kill</a>. </p>
 
 </div>
 </div>
@@ -417,42 +450,6 @@ Additional Inherited Members</h2></td></tr>
 <span class="mlabels"><span class="mlabel">delete</span></span>  </td>
   </tr>
 </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a24938a510c3554f83db6bfd65371f3f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24938a510c3554f83db6bfd65371f3f3">&#9670;&nbsp;</a></span>SetAcceleration()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void MovingEntity::SetAcceleration </td>
-          <td>(</td>
-          <td class="paramtype">glm::vec2&#160;</td>
-          <td class="paramname"><em>acceleration</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a357674bb2f8f8badf8d4afe9e6069704"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a357674bb2f8f8badf8d4afe9e6069704">&#9670;&nbsp;</a></span>SetVelocity()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void MovingEntity::SetVelocity </td>
-          <td>(</td>
-          <td class="paramtype">glm::vec2&#160;</td>
-          <td class="paramname"><em>velocity</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
 </div><div class="memdoc">
 
 </div>

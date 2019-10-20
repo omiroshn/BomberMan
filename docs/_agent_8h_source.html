@@ -52,26 +52,26 @@ $(function() {
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_a_i_controller_8h.html">AI/AIController.h</a>&quot;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> Pawn, <span class="keyword">class</span> Controller&gt;</div>
-<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="struct_agent.html">    6</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_agent.html">Agent</a></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="struct_agent.html#a68ea9553ad3856ac8aa2283c8a3d70a7">    8</a></span>&#160;    std::shared_ptr&lt;Pawn&gt;   <a class="code" href="struct_agent.html#a68ea9553ad3856ac8aa2283c8a3d70a7">pawn</a>;</div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="struct_agent.html#a128090afac6b0219491e61239f1aad73">    9</a></span>&#160;    Controller              <a class="code" href="struct_agent.html#a128090afac6b0219491e61239f1aad73">controller</a>;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="struct_agent.html#a073f84d9334f5a8c87b11809844a058d">   11</a></span>&#160;    <span class="keyword">operator</span> Pawn*() {<span class="keywordflow">return</span> <a class="code" href="struct_agent.html#a68ea9553ad3856ac8aa2283c8a3d70a7">pawn</a>.get();}</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="struct_agent.html#a10a11f641b32ffd6f324a1d5ce208487">   14</a></span>&#160;    <a class="code" href="struct_agent.html#a10a11f641b32ffd6f324a1d5ce208487">Agent</a>(Args ...arg)</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    : <a class="code" href="struct_agent.html#a68ea9553ad3856ac8aa2283c8a3d70a7">pawn</a>(std::make_shared&lt;Pawn&gt;(arg...))</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    }</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;};</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> Pawn, <span class="keyword">class</span> Controller&gt;</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="struct_agent.html">   11</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_agent.html">Agent</a></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;{</div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="struct_agent.html#a68ea9553ad3856ac8aa2283c8a3d70a7">   13</a></span>&#160;    std::shared_ptr&lt;Pawn&gt;   <a class="code" href="struct_agent.html#a68ea9553ad3856ac8aa2283c8a3d70a7">pawn</a>;</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="struct_agent.html#a128090afac6b0219491e61239f1aad73">   14</a></span>&#160;    Controller              <a class="code" href="struct_agent.html#a128090afac6b0219491e61239f1aad73">controller</a>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="struct_agent.html#a073f84d9334f5a8c87b11809844a058d">   16</a></span>&#160;    <span class="keyword">operator</span> Pawn*() {<span class="keywordflow">return</span> <a class="code" href="struct_agent.html#a68ea9553ad3856ac8aa2283c8a3d70a7">pawn</a>.get();}</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="struct_agent.html#a10a11f641b32ffd6f324a1d5ce208487">   19</a></span>&#160;    <a class="code" href="struct_agent.html#a10a11f641b32ffd6f324a1d5ce208487">Agent</a>(Args ...arg)</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    : <a class="code" href="struct_agent.html#a68ea9553ad3856ac8aa2283c8a3d70a7">pawn</a>(std::make_shared&lt;Pawn&gt;(arg...))</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    }</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;};</div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="astruct_agent_html_a10a11f641b32ffd6f324a1d5ce208487"><div class="ttname"><a href="struct_agent.html#a10a11f641b32ffd6f324a1d5ce208487">Agent::Agent</a></div><div class="ttdeci">Agent(Args ...arg)</div><div class="ttdef"><b>Definition:</b> Agent.h:14</div></div>
-<div class="ttc" id="astruct_agent_html"><div class="ttname"><a href="struct_agent.html">Agent</a></div><div class="ttdef"><b>Definition:</b> Agent.h:6</div></div>
-<div class="ttc" id="astruct_agent_html_a128090afac6b0219491e61239f1aad73"><div class="ttname"><a href="struct_agent.html#a128090afac6b0219491e61239f1aad73">Agent::controller</a></div><div class="ttdeci">Controller controller</div><div class="ttdef"><b>Definition:</b> Agent.h:9</div></div>
+<div class="ttc" id="astruct_agent_html_a10a11f641b32ffd6f324a1d5ce208487"><div class="ttname"><a href="struct_agent.html#a10a11f641b32ffd6f324a1d5ce208487">Agent::Agent</a></div><div class="ttdeci">Agent(Args ...arg)</div><div class="ttdef"><b>Definition:</b> Agent.h:19</div></div>
+<div class="ttc" id="astruct_agent_html"><div class="ttname"><a href="struct_agent.html">Agent</a></div><div class="ttdoc">Templated class for all entities which are controlled by some kind of StateMachine.</div><div class="ttdef"><b>Definition:</b> Agent.h:11</div></div>
+<div class="ttc" id="astruct_agent_html_a128090afac6b0219491e61239f1aad73"><div class="ttname"><a href="struct_agent.html#a128090afac6b0219491e61239f1aad73">Agent::controller</a></div><div class="ttdeci">Controller controller</div><div class="ttdef"><b>Definition:</b> Agent.h:14</div></div>
 <div class="ttc" id="a_a_i_controller_8h_html"><div class="ttname"><a href="_a_i_controller_8h.html">AIController.h</a></div></div>
-<div class="ttc" id="astruct_agent_html_a68ea9553ad3856ac8aa2283c8a3d70a7"><div class="ttname"><a href="struct_agent.html#a68ea9553ad3856ac8aa2283c8a3d70a7">Agent::pawn</a></div><div class="ttdeci">std::shared_ptr&lt; Pawn &gt; pawn</div><div class="ttdef"><b>Definition:</b> Agent.h:8</div></div>
+<div class="ttc" id="astruct_agent_html_a68ea9553ad3856ac8aa2283c8a3d70a7"><div class="ttname"><a href="struct_agent.html#a68ea9553ad3856ac8aa2283c8a3d70a7">Agent::pawn</a></div><div class="ttdeci">std::shared_ptr&lt; Pawn &gt; pawn</div><div class="ttdef"><b>Definition:</b> Agent.h:13</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

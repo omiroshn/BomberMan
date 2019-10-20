@@ -42,11 +42,15 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="class_entity-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Entity Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>The class from which almost everything on screen derives.  
+ <a href="class_entity.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_entity_8h_source.html">Entity.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -55,9 +59,9 @@ Inheritance diagram for Entity:</div>
  <div class="center">
   <img src="class_entity.png" usemap="#Entity_map" alt=""/>
   <map id="Entity_map" name="Entity_map">
-<area href="class_bomb.html" alt="Bomb" shape="rect" coords="0,56,85,80"/>
-<area href="class_moving_entity.html" alt="MovingEntity" shape="rect" coords="95,56,180,80"/>
-<area href="class_hero.html" alt="Hero" shape="rect" coords="95,112,180,136"/>
+<area href="class_bomb.html" title="The class representing bomb." alt="Bomb" shape="rect" coords="0,56,85,80"/>
+<area href="class_moving_entity.html" title="Extends the functionality of Entity. Represents all Moving entities in game." alt="MovingEntity" shape="rect" coords="95,56,180,80"/>
+<area href="class_hero.html" title="The class that represents Hero." alt="Hero" shape="rect" coords="95,112,180,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -71,14 +75,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae4e47d384f4be6b320b2af4689552f3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a6692f197b3805385e5c6b284466749"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_entity.html">Entity</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a2a6692f197b3805385e5c6b284466749">operator=</a> (<a class="el" href="class_entity.html">Entity</a> const &amp;)=delete</td></tr>
 <tr class="separator:a2a6692f197b3805385e5c6b284466749"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada3ba31fa9922f7ee1d89bbdffa1b391"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#ada3ba31fa9922f7ee1d89bbdffa1b391">move</a> (glm::vec2)</td></tr>
-<tr class="separator:ada3ba31fa9922f7ee1d89bbdffa1b391"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b23f1ad094b52cda21f29e9278f0d7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a2b23f1ad094b52cda21f29e9278f0d7e">move</a> (glm::vec2 offset)</td></tr>
+<tr class="memdesc:a2b23f1ad094b52cda21f29e9278f0d7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">changes the position of <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> by offset  <a href="class_entity.html#a2b23f1ad094b52cda21f29e9278f0d7e">More...</a><br /></td></tr>
+<tr class="separator:a2b23f1ad094b52cda21f29e9278f0d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7d0b21d73af043a237cc80c803036f8"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aa7d0b21d73af043a237cc80c803036f8">getModelMatrix</a> () const</td></tr>
+<tr class="memdesc:aa7d0b21d73af043a237cc80c803036f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculates ModelMatrix with correct rotation and translation on the fly. Useful for rendering.  <a href="class_entity.html#aa7d0b21d73af043a237cc80c803036f8">More...</a><br /></td></tr>
+<tr class="separator:aa7d0b21d73af043a237cc80c803036f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab594c701870f02c9cb95fdd527226c8f"><td class="memItemLeft" align="right" valign="top">glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#ab594c701870f02c9cb95fdd527226c8f">getPosition</a> () const</td></tr>
 <tr class="separator:ab594c701870f02c9cb95fdd527226c8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba0cea66efe303d1ee1676c50bf3b7b3"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aba0cea66efe303d1ee1676c50bf3b7b3">getPosition3D</a> () const</td></tr>
 <tr class="separator:aba0cea66efe303d1ee1676c50bf3b7b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7d0b21d73af043a237cc80c803036f8"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aa7d0b21d73af043a237cc80c803036f8">getModelMatrix</a> () const</td></tr>
-<tr class="separator:aa7d0b21d73af043a237cc80c803036f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba202774afe6170248118835fb91e0ae"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aba202774afe6170248118835fb91e0ae">getAngle</a> () const</td></tr>
 <tr class="separator:aba202774afe6170248118835fb91e0ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82cfb80d37959f7a74ff06a98de088ad"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a82cfb80d37959f7a74ff06a98de088ad">getScale</a> () const</td></tr>
@@ -86,25 +92,30 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a513f0590fc7ef8fa82056ff2ebe5e5f5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a513f0590fc7ef8fa82056ff2ebe5e5f5">isDead</a> () const</td></tr>
 <tr class="separator:a513f0590fc7ef8fa82056ff2ebe5e5f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aced69803bcd63230ada4fde797e15d4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aced69803bcd63230ada4fde797e15d4d">setPosition</a> (glm::vec2 position)</td></tr>
+<tr class="memdesc:aced69803bcd63230ada4fde797e15d4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the position of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. Useful for rendering.  <a href="class_entity.html#aced69803bcd63230ada4fde797e15d4d">More...</a><br /></td></tr>
 <tr class="separator:aced69803bcd63230ada4fde797e15d4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8fd95815afa7b3094b5402edc65bf00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#aa8fd95815afa7b3094b5402edc65bf00">setAngle</a> (float radians)</td></tr>
+<tr class="memdesc:aa8fd95815afa7b3094b5402edc65bf00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the angle of rotation of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. Useful for rendering.  <a href="class_entity.html#aa8fd95815afa7b3094b5402edc65bf00">More...</a><br /></td></tr>
 <tr class="separator:aa8fd95815afa7b3094b5402edc65bf00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9421ad5569c18584b181df5e64dd37d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a9421ad5569c18584b181df5e64dd37d9">setScale</a> (float value)</td></tr>
+<tr class="memdesc:a9421ad5569c18584b181df5e64dd37d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the scale of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. Useful for rendering.  <a href="class_entity.html#a9421ad5569c18584b181df5e64dd37d9">More...</a><br /></td></tr>
 <tr class="separator:a9421ad5569c18584b181df5e64dd37d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a522648b330daab91b49f78f0737a943f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a522648b330daab91b49f78f0737a943f">kill</a> ()</td></tr>
+<tr class="memdesc:a522648b330daab91b49f78f0737a943f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> as dead.  <a href="class_entity.html#a522648b330daab91b49f78f0737a943f">More...</a><br /></td></tr>
 <tr class="separator:a522648b330daab91b49f78f0737a943f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08b6411655b961af4d8e68606cf39584"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a08b6411655b961af4d8e68606cf39584">debug</a> ()</td></tr>
+<tr class="memdesc:a08b6411655b961af4d8e68606cf39584"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds this entity info to Debug window. Call it from anywhere in game loop, and you will have accessors for all major variables.  <a href="class_entity.html#a08b6411655b961af4d8e68606cf39584">More...</a><br /></td></tr>
 <tr class="separator:a08b6411655b961af4d8e68606cf39584"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43a066e3ab4376eb6afbade526c2d1e2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a43a066e3ab4376eb6afbade526c2d1e2">getX</a> () const</td></tr>
-<tr class="separator:a43a066e3ab4376eb6afbade526c2d1e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1628120ebbd5b236a029eaa4a9547313"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a1628120ebbd5b236a029eaa4a9547313">getY</a> () const</td></tr>
-<tr class="separator:a1628120ebbd5b236a029eaa4a9547313"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f11898d6440a4c86f75f7abf17c91d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a4f11898d6440a4c86f75f7abf17c91d6">setX</a> (float x)</td></tr>
-<tr class="separator:a4f11898d6440a4c86f75f7abf17c91d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdaad02b63a9449b1f708d7803095dcb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#abdaad02b63a9449b1f708d7803095dcb">setY</a> (float y)</td></tr>
-<tr class="separator:abdaad02b63a9449b1f708d7803095dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a86c72a4ac85ca5d3718a45c7efedfbad"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a86c72a4ac85ca5d3718a45c7efedfbad">mDead</a> = false</td></tr>
+<tr class="separator:a86c72a4ac85ca5d3718a45c7efedfbad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The class from which almost everything on screen derives. </p>
+<p>It gives common functionality to everyone. It's mostly a container for position/orientation in the scene + some functionality that happens to useful to every <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3d810f7c7ae05c68492901a5b308c33d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3d810f7c7ae05c68492901a5b308c33d">&#9670;&nbsp;</a></span>Entity() <span class="overload">[1/2]</span></h2>
 
@@ -191,7 +202,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>call it from anywhere in game loop, and you will have accessors for all major variables </p>
+
+<p>Adds this entity info to Debug window. Call it from anywhere in game loop, and you will have accessors for all major variables. </p>
 
 </div>
 </div>
@@ -209,6 +221,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>Angle of rotation for this entity. Useful for both rendering and game logic. </dd></dl>
 
 </div>
 </div>
@@ -226,7 +239,9 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>calculates ModelMatrix with correct rotation end translation on the fly.(Doesn't store it, but we may add this later) </p>
+
+<p>calculates ModelMatrix with correct rotation and translation on the fly. Useful for rendering. </p>
+<dl class="section return"><dt>Returns</dt><dd>matrix representing transformation of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. </dd></dl>
 
 </div>
 </div>
@@ -244,7 +259,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>self-explanatory </p>
+<dl class="section return"><dt>Returns</dt><dd>2D Position of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> on map. Useful for collision detection and game logic. </dd></dl>
 
 </div>
 </div>
@@ -262,6 +277,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>3D Position of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> on map. Useful for rendering. </dd></dl>
 
 </div>
 </div>
@@ -279,41 +295,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a43a066e3ab4376eb6afbade526c2d1e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43a066e3ab4376eb6afbade526c2d1e2">&#9670;&nbsp;</a></span>getX()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float Entity::getX </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>compatibility with existing code </p>
-
-</div>
-</div>
-<a id="a1628120ebbd5b236a029eaa4a9547313"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1628120ebbd5b236a029eaa4a9547313">&#9670;&nbsp;</a></span>getY()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float Entity::getY </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>Scale of this entity. Useful for rendering. </dd></dl>
 
 </div>
 </div>
@@ -331,6 +313,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>Whether this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> was marked as dead. </dd></dl>
 
 </div>
 </div>
@@ -349,10 +332,12 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Marks this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> as dead. </p>
+
 </div>
 </div>
-<a id="ada3ba31fa9922f7ee1d89bbdffa1b391"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada3ba31fa9922f7ee1d89bbdffa1b391">&#9670;&nbsp;</a></span>move()</h2>
+<a id="a2b23f1ad094b52cda21f29e9278f0d7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b23f1ad094b52cda21f29e9278f0d7e">&#9670;&nbsp;</a></span>move()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -366,8 +351,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Changes position of <a class="el" href="class_entity.html">Entity</a> by offset</p>
-<p>changes the position of <a class="el" href="class_entity.html">Entity</a> by offset </p>
+
+<p>changes the position of <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> by offset </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>How much translation to apply </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -413,6 +404,8 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Sets the angle of rotation of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. Useful for rendering. </p>
+
 </div>
 </div>
 <a id="aced69803bcd63230ada4fde797e15d4d"></a>
@@ -430,6 +423,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Sets the position of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. Useful for rendering. </p>
 
 </div>
 </div>
@@ -449,40 +444,29 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Sets the scale of this <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a>. Useful for rendering. </p>
+
 </div>
 </div>
-<a id="a4f11898d6440a4c86f75f7abf17c91d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f11898d6440a4c86f75f7abf17c91d6">&#9670;&nbsp;</a></span>setX()</h2>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a86c72a4ac85ca5d3718a45c7efedfbad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86c72a4ac85ca5d3718a45c7efedfbad">&#9670;&nbsp;</a></span>mDead</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Entity::setX </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>x</em></td><td>)</td>
-          <td></td>
+          <td class="memname">bool Entity::mDead = false</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abdaad02b63a9449b1f708d7803095dcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdaad02b63a9449b1f708d7803095dcb">&#9670;&nbsp;</a></span>setY()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Entity::setY </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>y</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

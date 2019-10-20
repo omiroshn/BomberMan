@@ -41,6 +41,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="class_resource_manager-members.html">List of all members</a>  </div>
@@ -68,24 +69,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad19736d4dce7511318c63a54f3ab288e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_shader.html">Shader</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#ad19736d4dce7511318c63a54f3ab288e">getShader</a> (std::string const &amp;name)</td></tr>
 <tr class="memdesc:ad19736d4dce7511318c63a54f3ab288e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns pointer to the shader program.  <a href="class_resource_manager.html#ad19736d4dce7511318c63a54f3ab288e">More...</a><br /></td></tr>
 <tr class="separator:ad19736d4dce7511318c63a54f3ab288e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d6a6af35418dbfb3ccfc85532866807"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a5d6a6af35418dbfb3ccfc85532866807">loadTexture</a> (const GLchar *path, std::string const &amp;name, std::string const &amp;texType=&quot;texture_diffuse&quot;)</td></tr>
-<tr class="memdesc:a5d6a6af35418dbfb3ccfc85532866807"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads texture to the resource manager.  <a href="class_resource_manager.html#a5d6a6af35418dbfb3ccfc85532866807">More...</a><br /></td></tr>
-<tr class="separator:a5d6a6af35418dbfb3ccfc85532866807"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a5d497c2e63a425dc2512167253d22e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a7a5d497c2e63a425dc2512167253d22e">loadTexture</a> (const GLchar *path, std::string const &amp;name, <a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a> texType=<a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549a41178642cae095a6bdb909119b4d16e8">TextureType::Diffuse</a>)</td></tr>
+<tr class="memdesc:a7a5d497c2e63a425dc2512167253d22e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads texture to the resource manager.  <a href="class_resource_manager.html#a7a5d497c2e63a425dc2512167253d22e">More...</a><br /></td></tr>
+<tr class="separator:a7a5d497c2e63a425dc2512167253d22e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed64d57e34b383c7dd24143d43b36a7a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_texture.html">Texture</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#aed64d57e34b383c7dd24143d43b36a7a">getTexture</a> (std::string const &amp;name)</td></tr>
 <tr class="memdesc:aed64d57e34b383c7dd24143d43b36a7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns pointer to the texture.  <a href="class_resource_manager.html#aed64d57e34b383c7dd24143d43b36a7a">More...</a><br /></td></tr>
 <tr class="separator:aed64d57e34b383c7dd24143d43b36a7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a806ed28af8d0f83e9c60a709cbf1cb14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a806ed28af8d0f83e9c60a709cbf1cb14">loadModel</a> (const GLchar *path, std::string const &amp;name, glm::vec3 scale=glm::vec3(1.0f), glm::vec3 offset=glm::vec3(.0f), glm::vec3 rotate=glm::vec3(.0f, 1.0f,.0f), float angle=.0f)</td></tr>
-<tr class="memdesc:a806ed28af8d0f83e9c60a709cbf1cb14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads model to the resource manager.  <a href="class_resource_manager.html#a806ed28af8d0f83e9c60a709cbf1cb14">More...</a><br /></td></tr>
-<tr class="separator:a806ed28af8d0f83e9c60a709cbf1cb14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9444b367330b719868274962a9144893"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a9444b367330b719868274962a9144893">loadModel</a> (const GLchar *path, std::string const &amp;name, glm::vec3 scale=glm::vec3(1.0f), glm::vec3 offset=glm::vec3(.0f), glm::vec3 rotate=glm::vec3(.0f, 1.0f,.0f), float angle=.0f, float glossiness=.0f)</td></tr>
+<tr class="memdesc:a9444b367330b719868274962a9144893"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads model to the resource manager.  <a href="class_resource_manager.html#a9444b367330b719868274962a9144893">More...</a><br /></td></tr>
+<tr class="separator:a9444b367330b719868274962a9144893"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a674679176b6ffa42aca9607a6569a544"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_model.html">Model</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a674679176b6ffa42aca9607a6569a544">getModel</a> (std::string const &amp;name)</td></tr>
 <tr class="memdesc:a674679176b6ffa42aca9607a6569a544"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns pointer to the model.  <a href="class_resource_manager.html#a674679176b6ffa42aca9607a6569a544">More...</a><br /></td></tr>
 <tr class="separator:a674679176b6ffa42aca9607a6569a544"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86a599167b2ac621118b4dd1948636f0"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_texture.html">Texture</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a86a599167b2ac621118b4dd1948636f0">loadTextureFromFile</a> (const GLchar *path, std::string const &amp;texType, bool isModelTexture=false)</td></tr>
-<tr class="memdesc:a86a599167b2ac621118b4dd1948636f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads texture.  <a href="class_resource_manager.html#a86a599167b2ac621118b4dd1948636f0">More...</a><br /></td></tr>
-<tr class="separator:a86a599167b2ac621118b4dd1948636f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2e89be751933f0e7c4dfcf28942aaa6"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_texture.html">Texture</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#ac2e89be751933f0e7c4dfcf28942aaa6">loadTextureFromMemory</a> (unsigned char *data, std::string const &amp;texType, int width, int height, int nrChannels, bool isModelTexture)</td></tr>
-<tr class="memdesc:ac2e89be751933f0e7c4dfcf28942aaa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads texture from memory.  <a href="class_resource_manager.html#ac2e89be751933f0e7c4dfcf28942aaa6">More...</a><br /></td></tr>
-<tr class="separator:ac2e89be751933f0e7c4dfcf28942aaa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4662c59e3584c534cf3df9e37dcacf1e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_texture.html">Texture</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a4662c59e3584c534cf3df9e37dcacf1e">loadTextureFromFile</a> (const GLchar *path, <a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a> texType, bool isModelTexture=false)</td></tr>
+<tr class="memdesc:a4662c59e3584c534cf3df9e37dcacf1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads texture.  <a href="class_resource_manager.html#a4662c59e3584c534cf3df9e37dcacf1e">More...</a><br /></td></tr>
+<tr class="separator:a4662c59e3584c534cf3df9e37dcacf1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bbee25a750a8b602883c26eee4c6bb2"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_texture.html">Texture</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a4bbee25a750a8b602883c26eee4c6bb2">loadTextureFromMemory</a> (unsigned char *data, <a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a> texType, int width, int height, int nrChannels, bool isModelTexture)</td></tr>
+<tr class="memdesc:a4bbee25a750a8b602883c26eee4c6bb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads texture from memory.  <a href="class_resource_manager.html#a4bbee25a750a8b602883c26eee4c6bb2">More...</a><br /></td></tr>
+<tr class="separator:a4bbee25a750a8b602883c26eee4c6bb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b1319f8c809d7a03ea066a279af04a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a6b1319f8c809d7a03ea066a279af04a5">loadSkybox</a> (std::string const &amp;name)</td></tr>
 <tr class="memdesc:a6b1319f8c809d7a03ea066a279af04a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads skybox to the resource manager.  <a href="class_resource_manager.html#a6b1319f8c809d7a03ea066a279af04a5">More...</a><br /></td></tr>
 <tr class="separator:a6b1319f8c809d7a03ea066a279af04a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -95,12 +96,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a50cf42daa0ff355fef64431740e498ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a50cf42daa0ff355fef64431740e498ab">clear</a> ()</td></tr>
 <tr class="memdesc:a50cf42daa0ff355fef64431740e498ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears resource manager.  <a href="class_resource_manager.html#a50cf42daa0ff355fef64431740e498ab">More...</a><br /></td></tr>
 <tr class="separator:a50cf42daa0ff355fef64431740e498ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a98045172e05a15945f5b9941301c42"><td class="memItemLeft" align="right" valign="top">std::fstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a0a98045172e05a15945f5b9941301c42">getMap</a> (std::string const &amp;aName)</td></tr>
-<tr class="memdesc:a0a98045172e05a15945f5b9941301c42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads map.  <a href="class_resource_manager.html#a0a98045172e05a15945f5b9941301c42">More...</a><br /></td></tr>
-<tr class="separator:a0a98045172e05a15945f5b9941301c42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc07e5cd980d9750be1fe1d5b5e2e7b0"><td class="memItemLeft" align="right" valign="top">std::ifstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#acc07e5cd980d9750be1fe1d5b5e2e7b0">getMap</a> (std::string const &amp;aName)</td></tr>
+<tr class="memdesc:acc07e5cd980d9750be1fe1d5b5e2e7b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads map.  <a href="class_resource_manager.html#acc07e5cd980d9750be1fe1d5b5e2e7b0">More...</a><br /></td></tr>
+<tr class="separator:acc07e5cd980d9750be1fe1d5b5e2e7b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28878570677169ff20819d6751786650"><td class="memItemLeft" align="right" valign="top">std::vector&lt; char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a28878570677169ff20819d6751786650">loadFont</a> (std::string const &amp;path)</td></tr>
 <tr class="memdesc:a28878570677169ff20819d6751786650"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads font.  <a href="class_resource_manager.html#a28878570677169ff20819d6751786650">More...</a><br /></td></tr>
 <tr class="separator:a28878570677169ff20819d6751786650"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35d68f05b506df9fb29faa3c47fdc9c0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a35d68f05b506df9fb29faa3c47fdc9c0">tickLoading</a> ()</td></tr>
+<tr class="memdesc:a35d68f05b506df9fb29faa3c47fdc9c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process a little bit of textures.  <a href="class_resource_manager.html#a35d68f05b506df9fb29faa3c47fdc9c0">More...</a><br /></td></tr>
+<tr class="separator:a35d68f05b506df9fb29faa3c47fdc9c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad13f3d2e4cd527d1ed9863385b977048"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#ad13f3d2e4cd527d1ed9863385b977048">endLoading</a> ()</td></tr>
+<tr class="memdesc:ad13f3d2e4cd527d1ed9863385b977048"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes sure that async texture loading is done.  <a href="class_resource_manager.html#ad13f3d2e4cd527d1ed9863385b977048">More...</a><br /></td></tr>
+<tr class="separator:ad13f3d2e4cd527d1ed9863385b977048"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af32aef2595f8dc63c63516d36cc031b5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#af32aef2595f8dc63c63516d36cc031b5">ResourceManager</a> (<a class="el" href="class_resource_manager.html">ResourceManager</a> const &amp;)=delete</td></tr>
 <tr class="separator:af32aef2595f8dc63c63516d36cc031b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0b62cd7d730125090668351e5661e35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_resource_manager.html">ResourceManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#ab0b62cd7d730125090668351e5661e35">operator=</a> (<a class="el" href="class_resource_manager.html">ResourceManager</a> const &amp;)=delete</td></tr>
@@ -163,6 +170,25 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ad13f3d2e4cd527d1ed9863385b977048"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad13f3d2e4cd527d1ed9863385b977048">&#9670;&nbsp;</a></span>endLoading()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ResourceManager::endLoading </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Makes sure that async texture loading is done. </p>
+
+</div>
+</div>
 <a id="a260d8ca05eb49066a0d1a15609c56c50"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a260d8ca05eb49066a0d1a15609c56c50">&#9670;&nbsp;</a></span>getBinFolder()</h2>
 
@@ -211,14 +237,14 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a0a98045172e05a15945f5b9941301c42"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a98045172e05a15945f5b9941301c42">&#9670;&nbsp;</a></span>getMap()</h2>
+<a id="acc07e5cd980d9750be1fe1d5b5e2e7b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc07e5cd980d9750be1fe1d5b5e2e7b0">&#9670;&nbsp;</a></span>getMap()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::fstream ResourceManager::getMap </td>
+          <td class="memname">std::ifstream ResourceManager::getMap </td>
           <td>(</td>
           <td class="paramtype">std::string const &amp;&#160;</td>
           <td class="paramname"><em>aName</em></td><td>)</td>
@@ -373,8 +399,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a806ed28af8d0f83e9c60a709cbf1cb14"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a806ed28af8d0f83e9c60a709cbf1cb14">&#9670;&nbsp;</a></span>loadModel()</h2>
+<a id="a9444b367330b719868274962a9144893"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9444b367330b719868274962a9144893">&#9670;&nbsp;</a></span>loadModel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -413,7 +439,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>angle</em> = <code>.0f</code>&#160;</td>
+          <td class="paramname"><em>angle</em> = <code>.0f</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>glossiness</em> = <code>.0f</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -432,6 +464,7 @@ Static Public Member Functions</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>[optional] The basic offset of the model </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">rotate</td><td>[optional] The basic rotation axis of the model </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">angle</td><td>[optional] The basic rotation angle of the model </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">glossiness</td><td>[optional] The multiplier for model's specular component </td></tr>
   </table>
   </dd>
 </dl>
@@ -508,8 +541,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5d6a6af35418dbfb3ccfc85532866807"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d6a6af35418dbfb3ccfc85532866807">&#9670;&nbsp;</a></span>loadTexture()</h2>
+<a id="a7a5d497c2e63a425dc2512167253d22e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a5d497c2e63a425dc2512167253d22e">&#9670;&nbsp;</a></span>loadTexture()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -529,8 +562,8 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string const &amp;&#160;</td>
-          <td class="paramname"><em>texType</em> = <code>&quot;texture_diffuse&quot;</code>&#160;</td>
+          <td class="paramtype"><a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a>&#160;</td>
+          <td class="paramname"><em>texType</em> = <code><a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549a41178642cae095a6bdb909119b4d16e8">TextureType::Diffuse</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -552,8 +585,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a86a599167b2ac621118b4dd1948636f0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a86a599167b2ac621118b4dd1948636f0">&#9670;&nbsp;</a></span>loadTextureFromFile()</h2>
+<a id="a4662c59e3584c534cf3df9e37dcacf1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4662c59e3584c534cf3df9e37dcacf1e">&#9670;&nbsp;</a></span>loadTextureFromFile()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -567,7 +600,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a>&#160;</td>
           <td class="paramname"><em>texType</em>, </td>
         </tr>
         <tr>
@@ -597,8 +630,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac2e89be751933f0e7c4dfcf28942aaa6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac2e89be751933f0e7c4dfcf28942aaa6">&#9670;&nbsp;</a></span>loadTextureFromMemory()</h2>
+<a id="a4bbee25a750a8b602883c26eee4c6bb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bbee25a750a8b602883c26eee4c6bb2">&#9670;&nbsp;</a></span>loadTextureFromMemory()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -612,7 +645,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a>&#160;</td>
           <td class="paramname"><em>texType</em>, </td>
         </tr>
         <tr>
@@ -712,6 +745,26 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a35d68f05b506df9fb29faa3c47fdc9c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35d68f05b506df9fb29faa3c47fdc9c0">&#9670;&nbsp;</a></span>tickLoading()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ResourceManager::tickLoading </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Process a little bit of textures. </p>
+<dl class="section return"><dt>Returns</dt><dd>whether did something useful </dd></dl>
 
 </div>
 </div>

@@ -98,6 +98,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a134afd02987b381e6532c820b0c8fb6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac014e94d42a575cec20f6071ea9d6f37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_system.html#ac014e94d42a575cec20f6071ea9d6f37">start</a> ()</td></tr>
 <tr class="separator:ac014e94d42a575cec20f6071ea9d6f37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9f66f706dc9ac2dd2822fe64f64c595"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_system.html#ab9f66f706dc9ac2dd2822fe64f64c595">stop</a> ()</td></tr>
+<tr class="separator:ab9f66f706dc9ac2dd2822fe64f64c595"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac785d85499189436722e3066dee38929"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_system.html#ac785d85499189436722e3066dee38929">isRunning</a> () const</td></tr>
 <tr class="separator:ac785d85499189436722e3066dee38929"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57aa70275af01ab504957b763fd63095"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_system.html#a57aa70275af01ab504957b763fd63095">chekLiveTime</a> ()</td></tr>
@@ -145,7 +147,7 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a86c0704f41671888e1a936b697b14fae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c02cd88d0f75e02c8eb628727d3b2b6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_system.html#a8c02cd88d0f75e02c8eb628727d3b2b6">m_deltaTime</a></td></tr>
 <tr class="separator:a8c02cd88d0f75e02c8eb628727d3b2b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afea773182a1d7cc04b94e6d2b6f9ed01"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_system.html#afea773182a1d7cc04b94e6d2b6f9ed01">m_totalTime</a></td></tr>
+<tr class="memitem:afea773182a1d7cc04b94e6d2b6f9ed01"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_system.html#afea773182a1d7cc04b94e6d2b6f9ed01">m_totalTime</a> = 0.f</td></tr>
 <tr class="separator:afea773182a1d7cc04b94e6d2b6f9ed01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bbe454f45f3282c4ec8e8ede3636ca2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_system.html#a6bbe454f45f3282c4ec8e8ede3636ca2">m_liveTime</a></td></tr>
 <tr class="separator:a6bbe454f45f3282c4ec8e8ede3636ca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -646,6 +648,23 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab9f66f706dc9ac2dd2822fe64f64c595"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9f66f706dc9ac2dd2822fe64f64c595">&#9670;&nbsp;</a></span>stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ParticleSystem::stop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a3c0484687ddb004e4f081b7bc2fd6a78"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3c0484687ddb004e4f081b7bc2fd6a78">&#9670;&nbsp;</a></span>updateGLBufers()</h2>
 
@@ -971,7 +990,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float ParticleSystem::m_totalTime</td>
+          <td class="memname">float ParticleSystem::m_totalTime = 0.f</td>
         </tr>
       </table>
   </td>

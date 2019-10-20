@@ -52,118 +52,94 @@ $(function() {
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &lt;tuple&gt;</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno"><a class="line" href="struct_event.html">    5</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_event.html">Event</a></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;};</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
 <div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="struct_state.html">    9</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_state.html">State</a></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="struct_state.html#a6271cf4ddcd86d4c6be9b1dbcbcd4d9d">   11</a></span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="struct_state.html#a6271cf4ddcd86d4c6be9b1dbcbcd4d9d">uid</a>;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">   14</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">onTick</a>(T&amp;, <span class="keywordtype">float</span>) {};</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">   16</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">onEntry</a>(T&amp;) {}</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">   19</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">transition</a>(<span class="keyword">const</span> T&amp;) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;};</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> OwnerType, <span class="keyword">typename</span>... Ts&gt;</div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="class_s_m.html">   23</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_s_m.html">SM</a> {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> uint8_t INVALID_STATE = 255;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="class_s_m.html#ad312241e35f498af567cf32a2fe656b2">   26</a></span>&#160;    <a class="code" href="class_s_m.html#ad312241e35f498af567cf32a2fe656b2">SM</a>() :</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        m_CurrentState(INVALID_STATE)</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        init();</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    }</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="class_s_m.html#a08236828de8499c44112432c3dfb40cd">   32</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_s_m.html#a08236828de8499c44112432c3dfb40cd">tick</a>(OwnerType&amp; owner, <span class="keywordtype">float</span> DeltaTime = 0)</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">if</span> (m_CurrentState == INVALID_STATE)</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            m_CurrentState = 0;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            dispatchEntry&lt;0, Ts...&gt;(owner);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        }</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        tickCurrentState(owner, DeltaTime);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        dispatchTransitions(owner);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    std::tuple&lt;Ts...&gt;   m_States;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>       m_CurrentState;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">void</span> init()</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    {</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        setStateIds&lt;0, Ts...&gt;();</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">template</span> &lt;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> N, <span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">auto</span> dispatchTick(OwnerType&amp; owner, <span class="keywordtype">float</span> DeltaTime)</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">if</span> (m_CurrentState == N)</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">return</span> std::get&lt;N&gt;(m_States).onTick(owner, DeltaTime);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">if</span> constexpr (<span class="keyword">sizeof</span>...(Args) &gt; 0)</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            dispatchTick&lt;N + 1, Args...&gt;(owner, DeltaTime);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    }</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    template &lt;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> N, typename T, typename... Args&gt;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    auto dispatchEntry(OwnerType&amp; owner)</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">if</span> (m_CurrentState == N)</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">return</span> std::get&lt;N&gt;(m_States).onEntry(owner);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">if</span> constexpr (<span class="keyword">sizeof</span>...(Args) &gt; 0)</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            dispatchEntry&lt;N + 1, Args...&gt;(owner);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    template&lt;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> N, typename T, typename... Args&gt;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">void</span> setStateIds()</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    {</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        std::get&lt;N&gt;(m_States).uid = N;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">if</span> constexpr (<span class="keyword">sizeof</span>...(Args) &gt; 0)</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            setStateIds&lt;N + 1, Args...&gt;();</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    }</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    template &lt;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> N, typename T, typename... Args&gt;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    auto dispatchTransitionsImpl(OwnerType&amp; owner)</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">if</span> (m_CurrentState == N)</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordflow">return</span> dispatchTransitionInner&lt;N, 0, Ts...&gt;(owner);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">if</span> constexpr (<span class="keyword">sizeof</span>...(Args) &gt; 0)</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            dispatchTransitionsImpl&lt;N + 1, Args...&gt;(owner);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">void</span> tickCurrentState(OwnerType&amp; owner, <span class="keywordtype">float</span> DeltaTime) { dispatchTick&lt;0, Ts...&gt;(owner, DeltaTime); }</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">void</span> dispatchTransitions(OwnerType&amp; owner) {</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        dispatchTransitionsImpl&lt;0, Ts...&gt;(owner);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    }</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">template</span>&lt;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> Current, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> N, <span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">auto</span> dispatchTransitionInner(OwnerType&amp; owner)</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    {</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span> &amp;StateToCheck = std::get&lt;N&gt;(m_States);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">if</span> (Current != N &amp;&amp; std::get&lt;Current&gt;(m_States).transition(StateToCheck))</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        {</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            m_CurrentState = N;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            dispatchEntry&lt;0, Ts...&gt;(owner);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        }</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordflow">if</span> constexpr (<span class="keyword">sizeof</span>...(Args) &gt; 0)</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            dispatchTransitionInner&lt;Current, N + 1, Args...&gt;(owner);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    }</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;};</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">   15</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">onTick</a>(T&amp;, <span class="keywordtype">float</span>) {};</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">   20</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">onEntry</a>(T&amp;) {}</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">   25</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">transition</a>(<span class="keyword">const</span> T&amp;) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;};</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> OwnerType, <span class="keyword">typename</span>... Ts&gt;</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="class_s_m.html">   35</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_s_m.html">SM</a> {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> uint8_t INVALID_STATE = 255;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="class_s_m.html#a08236828de8499c44112432c3dfb40cd">   43</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_s_m.html#a08236828de8499c44112432c3dfb40cd">tick</a>(OwnerType&amp; owner, <span class="keywordtype">float</span> DeltaTime = 0)</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordflow">if</span> (m_CurrentState == INVALID_STATE)    </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        {   </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            m_CurrentState = 0; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            dispatchEntry&lt;0, Ts...&gt;(owner); </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        }</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        tickCurrentState(owner, DeltaTime);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        dispatchTransitions(owner);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    }</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    std::tuple&lt;Ts...&gt;   m_States;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>       m_CurrentState = INVALID_STATE;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">template</span> &lt;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> N, <span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">auto</span> dispatchTick(OwnerType&amp; owner, <span class="keywordtype">float</span> DeltaTime)</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">if</span> (m_CurrentState == N)</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordflow">return</span> std::get&lt;N&gt;(m_States).onTick(owner, DeltaTime);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">if</span> constexpr (<span class="keyword">sizeof</span>...(Args) &gt; 0)</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            dispatchTick&lt;N + 1, Args...&gt;(owner, DeltaTime);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    }</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    template &lt;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> N, typename T, typename... Args&gt;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    auto dispatchEntry(OwnerType&amp; owner)</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">if</span> (m_CurrentState == N)</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="keywordflow">return</span> std::get&lt;N&gt;(m_States).onEntry(owner);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">if</span> constexpr (<span class="keyword">sizeof</span>...(Args) &gt; 0)</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            dispatchEntry&lt;N + 1, Args...&gt;(owner);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    }</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    template &lt;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> N, typename T, typename... Args&gt;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    auto dispatchTransitionsImpl(OwnerType&amp; owner)</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">if</span> (m_CurrentState == N)</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keywordflow">return</span> dispatchTransitionInner&lt;N, 0, Ts...&gt;(owner);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">if</span> constexpr (<span class="keyword">sizeof</span>...(Args) &gt; 0)</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            dispatchTransitionsImpl&lt;N + 1, Args...&gt;(owner);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    }</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">void</span> tickCurrentState(OwnerType&amp; owner, <span class="keywordtype">float</span> DeltaTime)</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    {</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        dispatchTick&lt;0, Ts...&gt;(owner, DeltaTime);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    }</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordtype">void</span> dispatchTransitions(OwnerType&amp; owner)</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    {</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        dispatchTransitionsImpl&lt;0, Ts...&gt;(owner);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keyword">template</span>&lt;<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> Current, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> N, <span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keyword">auto</span> dispatchTransitionInner(OwnerType&amp; owner)</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    {</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span> &amp;StateToCheck = std::get&lt;N&gt;(m_States);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordflow">if</span> (Current != N &amp;&amp; std::get&lt;Current&gt;(m_States).transition(StateToCheck))</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        {</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            m_CurrentState = N;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            dispatchEntry&lt;0, Ts...&gt;(owner);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        }</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordflow">if</span> constexpr (<span class="keyword">sizeof</span>...(Args) &gt; 0)</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            dispatchTransitionInner&lt;Current, N + 1, Args...&gt;(owner);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;};</div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclass_s_m_html_a08236828de8499c44112432c3dfb40cd"><div class="ttname"><a href="class_s_m.html#a08236828de8499c44112432c3dfb40cd">SM::tick</a></div><div class="ttdeci">void tick(OwnerType &amp;owner, float DeltaTime=0)</div><div class="ttdef"><b>Definition:</b> StateMachine.h:32</div></div>
-<div class="ttc" id="astruct_state_html_a6271cf4ddcd86d4c6be9b1dbcbcd4d9d"><div class="ttname"><a href="struct_state.html#a6271cf4ddcd86d4c6be9b1dbcbcd4d9d">State::uid</a></div><div class="ttdeci">unsigned char uid</div><div class="ttdef"><b>Definition:</b> StateMachine.h:11</div></div>
-<div class="ttc" id="astruct_state_html_a5bab7dcc32ebb6a4b2ed112298694abe"><div class="ttname"><a href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">State::onEntry</a></div><div class="ttdeci">void onEntry(T &amp;)</div><div class="ttdef"><b>Definition:</b> StateMachine.h:16</div></div>
-<div class="ttc" id="astruct_state_html"><div class="ttname"><a href="struct_state.html">State</a></div><div class="ttdef"><b>Definition:</b> StateMachine.h:9</div></div>
-<div class="ttc" id="aclass_s_m_html_ad312241e35f498af567cf32a2fe656b2"><div class="ttname"><a href="class_s_m.html#ad312241e35f498af567cf32a2fe656b2">SM::SM</a></div><div class="ttdeci">SM()</div><div class="ttdef"><b>Definition:</b> StateMachine.h:26</div></div>
-<div class="ttc" id="astruct_state_html_a4a64851966bcb5374029bcb5931cc424"><div class="ttname"><a href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">State::onTick</a></div><div class="ttdeci">void onTick(T &amp;, float)</div><div class="ttdef"><b>Definition:</b> StateMachine.h:14</div></div>
-<div class="ttc" id="astruct_state_html_abbff759a376d40069e3d93d97eb1e498"><div class="ttname"><a href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">State::transition</a></div><div class="ttdeci">bool transition(const T &amp;)</div><div class="ttdef"><b>Definition:</b> StateMachine.h:19</div></div>
-<div class="ttc" id="astruct_event_html"><div class="ttname"><a href="struct_event.html">Event</a></div><div class="ttdef"><b>Definition:</b> StateMachine.h:5</div></div>
-<div class="ttc" id="aclass_s_m_html"><div class="ttname"><a href="class_s_m.html">SM</a></div><div class="ttdef"><b>Definition:</b> StateMachine.h:23</div></div>
+<div class="ttc" id="aclass_s_m_html_a08236828de8499c44112432c3dfb40cd"><div class="ttname"><a href="class_s_m.html#a08236828de8499c44112432c3dfb40cd">SM::tick</a></div><div class="ttdeci">void tick(OwnerType &amp;owner, float DeltaTime=0)</div><div class="ttdoc">Called every frame. This is where current state is ticked and transitions are dispatched.</div><div class="ttdef"><b>Definition:</b> StateMachine.h:43</div></div>
+<div class="ttc" id="astruct_state_html_a5bab7dcc32ebb6a4b2ed112298694abe"><div class="ttname"><a href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">State::onEntry</a></div><div class="ttdeci">void onEntry(T &amp;)</div><div class="ttdoc">Called every time this state is entered. Lets this state setup it's data.</div><div class="ttdef"><b>Definition:</b> StateMachine.h:20</div></div>
+<div class="ttc" id="astruct_state_html"><div class="ttname"><a href="struct_state.html">State</a></div><div class="ttdoc">Represents current state of the StateMachine. Holds all necessary info about current state in itself.</div><div class="ttdef"><b>Definition:</b> StateMachine.h:9</div></div>
+<div class="ttc" id="astruct_state_html_a4a64851966bcb5374029bcb5931cc424"><div class="ttname"><a href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">State::onTick</a></div><div class="ttdeci">void onTick(T &amp;, float)</div><div class="ttdoc">Called every frame for this state and lets him do everything he needs to.</div><div class="ttdef"><b>Definition:</b> StateMachine.h:15</div></div>
+<div class="ttc" id="astruct_state_html_abbff759a376d40069e3d93d97eb1e498"><div class="ttname"><a href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">State::transition</a></div><div class="ttdeci">bool transition(const T &amp;)</div><div class="ttdoc">Called every frame to see if this State need to be changed to another.</div><div class="ttdef"><b>Definition:</b> StateMachine.h:25</div></div>
+<div class="ttc" id="aclass_s_m_html"><div class="ttname"><a href="class_s_m.html">SM</a></div><div class="ttdoc">Compile-time generated StateMachine. Useful for implementing AI.</div><div class="ttdef"><b>Definition:</b> StateMachine.h:35</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

@@ -42,7 +42,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="class_texture-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Texture Class Reference</div>  </div>
@@ -53,8 +52,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a2d6eb7c54388c1a1e586e225ff620aa0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_texture.html#a2d6eb7c54388c1a1e586e225ff620aa0">Texture</a> (<a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a> aType, GLuint width, GLuint height, unsigned char *data, GLenum format, GLuint filterMin, GLuint filerMax)</td></tr>
+<tr class="separator:a2d6eb7c54388c1a1e586e225ff620aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13c112a1f8fb1e4bd9bdc31ffed3712e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_texture.html#a13c112a1f8fb1e4bd9bdc31ffed3712e">Texture</a> (<a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a> aType=<a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549a41178642cae095a6bdb909119b4d16e8">TextureType::Diffuse</a>)</td></tr>
 <tr class="separator:a13c112a1f8fb1e4bd9bdc31ffed3712e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa26eda2a091a95e96e67a6b4f98484f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_texture.html#afa26eda2a091a95e96e67a6b4f98484f">Texture</a> (<a class="el" href="class_texture.html">Texture</a> const &amp;)=delete</td></tr>
+<tr class="separator:afa26eda2a091a95e96e67a6b4f98484f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02f96ca28b4b433e762876d8a85a7c33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_texture.html">Texture</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_texture.html#a02f96ca28b4b433e762876d8a85a7c33">operator=</a> (<a class="el" href="class_texture.html">Texture</a> const &amp;)=delete</td></tr>
+<tr class="separator:a02f96ca28b4b433e762876d8a85a7c33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09c4bcb7462f64c1d20fa69dba3cee8a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_texture.html#a09c4bcb7462f64c1d20fa69dba3cee8a">~Texture</a> ()</td></tr>
 <tr class="separator:a09c4bcb7462f64c1d20fa69dba3cee8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaf8c8bfbcea13673d9f3eca4e2d70ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_texture.html#adaf8c8bfbcea13673d9f3eca4e2d70ec">generate</a> (GLuint width, GLuint height, unsigned char *data, GLenum format, GLuint filterMin=GL_LINEAR, GLuint filerMax=GL_LINEAR)</td></tr>
@@ -65,17 +70,68 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a45806f726c58e963e44cbe54b0afa58e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2329d37c89bb29a6bd244ac66b6bc408"><td class="memItemLeft" align="right" valign="top">GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_texture.html#a2329d37c89bb29a6bd244ac66b6bc408">getTextureID</a> ()</td></tr>
 <tr class="separator:a2329d37c89bb29a6bd244ac66b6bc408"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a5302ed00b1be586ff48600c2f3b06afc"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_texture.html#a5302ed00b1be586ff48600c2f3b06afc">getTextureTypeStringFromType</a> (<a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a>)</td></tr>
-<tr class="separator:a5302ed00b1be586ff48600c2f3b06afc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e2b591f38cff36bfd3e3a826d8a3788"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_texture.html#a9e2b591f38cff36bfd3e3a826d8a3788">getTextureTypeFromString</a> (std::string)</td></tr>
-<tr class="separator:a9e2b591f38cff36bfd3e3a826d8a3788"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a2d6eb7c54388c1a1e586e225ff620aa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d6eb7c54388c1a1e586e225ff620aa0">&#9670;&nbsp;</a></span>Texture() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Texture::Texture </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a>&#160;</td>
+          <td class="paramname"><em>aType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GLuint&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GLuint&#160;</td>
+          <td class="paramname"><em>height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GLenum&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GLuint&#160;</td>
+          <td class="paramname"><em>filterMin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GLuint&#160;</td>
+          <td class="paramname"><em>filerMax</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a13c112a1f8fb1e4bd9bdc31ffed3712e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a13c112a1f8fb1e4bd9bdc31ffed3712e">&#9670;&nbsp;</a></span>Texture()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a13c112a1f8fb1e4bd9bdc31ffed3712e">&#9670;&nbsp;</a></span>Texture() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -88,6 +144,32 @@ Static Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afa26eda2a091a95e96e67a6b4f98484f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa26eda2a091a95e96e67a6b4f98484f">&#9670;&nbsp;</a></span>Texture() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Texture::Texture </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_texture.html">Texture</a> const &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -213,8 +295,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9e2b591f38cff36bfd3e3a826d8a3788"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e2b591f38cff36bfd3e3a826d8a3788">&#9670;&nbsp;</a></span>getTextureTypeFromString()</h2>
+<a id="a02f96ca28b4b433e762876d8a85a7c33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02f96ca28b4b433e762876d8a85a7c33">&#9670;&nbsp;</a></span>operator=()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -223,42 +305,16 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a> Texture::getTextureTypeFromString </td>
+          <td class="memname"><a class="el" href="class_texture.html">Texture</a>&amp; Texture::operator= </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>typeString</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="class_texture.html">Texture</a> const &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5302ed00b1be586ff48600c2f3b06afc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5302ed00b1be586ff48600c2f3b06afc">&#9670;&nbsp;</a></span>getTextureTypeStringFromType()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string Texture::getTextureTypeStringFromType </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="_texture_8hpp.html#a65468556d79304b3a4bfc464cc12e549">TextureType</a>&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

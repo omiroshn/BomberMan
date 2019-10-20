@@ -59,28 +59,64 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_idle_state.html">IdleState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct representing the state of entity when it's doing nothing.  <a href="struct_idle_state.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_patrol_state.html">PatrolState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct representing the state of entity when it's wandering around the map Makes pawn walk through the maze randomly.  <a href="struct_patrol_state.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_chase_state.html">ChaseState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct representing the state of entity when it's seen a player. Makes pawn chase after the player.  <a href="struct_chase_state.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_confused_state.html">ConfusedState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct representing the state of entity when it's lost a player when chasing him. Makes pawn stay in place trying to find the player.  <a href="struct_confused_state.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a9bf9638863c963f24fda96916bc6b9ab"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_s_m.html">SM</a>&lt; <a class="el" href="class_moving_entity.html">MovingEntity</a>, <a class="el" href="struct_idle_state.html">IdleState</a>, <a class="el" href="struct_patrol_state.html">PatrolState</a>, <a class="el" href="struct_chase_state.html">ChaseState</a>, <a class="el" href="struct_confused_state.html">ConfusedState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_i_controller_8h.html#a9bf9638863c963f24fda96916bc6b9ab">BalloonController</a></td></tr>
-<tr class="separator:a9bf9638863c963f24fda96916bc6b9ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a387cab8da1f9a77bf077a548e19e4c9d"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_s_m.html">SM</a>&lt; <a class="el" href="class_moving_entity.html">MovingEntity</a>, <a class="el" href="struct_idle_state.html">IdleState</a>, <a class="el" href="struct_patrol_state.html">PatrolState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_i_controller_8h.html#a387cab8da1f9a77bf077a548e19e4c9d">BalloonController</a></td></tr>
+<tr class="separator:a387cab8da1f9a77bf077a548e19e4c9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a356fc078a22fe05ccb0c0590379bee99"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_s_m.html">SM</a>&lt; <a class="el" href="class_moving_entity.html">MovingEntity</a>, <a class="el" href="struct_idle_state.html">IdleState</a>, <a class="el" href="struct_patrol_state.html">PatrolState</a>, <a class="el" href="struct_chase_state.html">ChaseState</a>, <a class="el" href="struct_confused_state.html">ConfusedState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_i_controller_8h.html#a356fc078a22fe05ccb0c0590379bee99">OnilController</a></td></tr>
+<tr class="separator:a356fc078a22fe05ccb0c0590379bee99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a496ba79abc11ce1c61a277a403f748ee"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_s_m.html">SM</a>&lt; <a class="el" href="class_moving_entity.html">MovingEntity</a>, <a class="el" href="struct_idle_state.html">IdleState</a>, <a class="el" href="struct_patrol_state.html">PatrolState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_i_controller_8h.html#a496ba79abc11ce1c61a277a403f748ee">OvapeController</a></td></tr>
+<tr class="separator:a496ba79abc11ce1c61a277a403f748ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a id="a9bf9638863c963f24fda96916bc6b9ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9bf9638863c963f24fda96916bc6b9ab">&#9670;&nbsp;</a></span>BalloonController</h2>
+<a id="a387cab8da1f9a77bf077a548e19e4c9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a387cab8da1f9a77bf077a548e19e4c9d">&#9670;&nbsp;</a></span>BalloonController</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="class_s_m.html">SM</a>&lt;<a class="el" href="class_moving_entity.html">MovingEntity</a>, <a class="el" href="struct_idle_state.html">IdleState</a>, <a class="el" href="struct_patrol_state.html">PatrolState</a>, <a class="el" href="struct_chase_state.html">ChaseState</a>, <a class="el" href="struct_confused_state.html">ConfusedState</a>&gt; <a class="el" href="_a_i_controller_8h.html#a9bf9638863c963f24fda96916bc6b9ab">BalloonController</a></td>
+          <td class="memname">typedef <a class="el" href="class_s_m.html">SM</a>&lt;<a class="el" href="class_moving_entity.html">MovingEntity</a>, <a class="el" href="struct_idle_state.html">IdleState</a>, <a class="el" href="struct_patrol_state.html">PatrolState</a>&gt; <a class="el" href="_a_i_controller_8h.html#a387cab8da1f9a77bf077a548e19e4c9d">BalloonController</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a356fc078a22fe05ccb0c0590379bee99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a356fc078a22fe05ccb0c0590379bee99">&#9670;&nbsp;</a></span>OnilController</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="class_s_m.html">SM</a>&lt;<a class="el" href="class_moving_entity.html">MovingEntity</a>, <a class="el" href="struct_idle_state.html">IdleState</a>, <a class="el" href="struct_patrol_state.html">PatrolState</a>, <a class="el" href="struct_chase_state.html">ChaseState</a>, <a class="el" href="struct_confused_state.html">ConfusedState</a>&gt; <a class="el" href="_a_i_controller_8h.html#a356fc078a22fe05ccb0c0590379bee99">OnilController</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a496ba79abc11ce1c61a277a403f748ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a496ba79abc11ce1c61a277a403f748ee">&#9670;&nbsp;</a></span>OvapeController</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="class_s_m.html">SM</a>&lt;<a class="el" href="class_moving_entity.html">MovingEntity</a>, <a class="el" href="struct_idle_state.html">IdleState</a>, <a class="el" href="struct_patrol_state.html">PatrolState</a>&gt; <a class="el" href="_a_i_controller_8h.html#a496ba79abc11ce1c61a277a403f748ee">OvapeController</a></td>
         </tr>
       </table>
 </div><div class="memdoc">

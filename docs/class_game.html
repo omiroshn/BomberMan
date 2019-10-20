@@ -44,11 +44,15 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="class_game-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Game Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>The class to hold current game state.  
+ <a href="class_game.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_game_8hpp_source.html">Game.hpp</a>&gt;</code></p>
 <table class="memberdecls">
@@ -59,79 +63,121 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae3d112ca6e0e55150d2fdbc704474530"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#ae3d112ca6e0e55150d2fdbc704474530">~Game</a> ()</td></tr>
 <tr class="separator:ae3d112ca6e0e55150d2fdbc704474530"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d9b98f7c4a96ecf578f75b96c9f0e90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a3d9b98f7c4a96ecf578f75b96c9f0e90">start</a> ()</td></tr>
+<tr class="memdesc:a3d9b98f7c4a96ecf578f75b96c9f0e90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the game loop.  <a href="class_game.html#a3d9b98f7c4a96ecf578f75b96c9f0e90">More...</a><br /></td></tr>
 <tr class="separator:a3d9b98f7c4a96ecf578f75b96c9f0e90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b507ab6c09910b3a621cf1980d65604"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a4b507ab6c09910b3a621cf1980d65604">pause</a> ()</td></tr>
+<tr class="memdesc:a4b507ab6c09910b3a621cf1980d65604"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pauses the game and opens main menu.  <a href="class_game.html#a4b507ab6c09910b3a621cf1980d65604">More...</a><br /></td></tr>
 <tr class="separator:a4b507ab6c09910b3a621cf1980d65604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a262d08e4485758303d32de7a8e18eb24"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a262d08e4485758303d32de7a8e18eb24">saveCurrentState</a> (std::string fileName=&quot;ConfigureFile&quot;)</td></tr>
+<tr class="memdesc:a262d08e4485758303d32de7a8e18eb24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serializing current game state as means of saving game progress.  <a href="class_game.html#a262d08e4485758303d32de7a8e18eb24">More...</a><br /></td></tr>
 <tr class="separator:a262d08e4485758303d32de7a8e18eb24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af90a5b2ff878dfb9a80abcf54930417c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#af90a5b2ff878dfb9a80abcf54930417c">loadStateFromFile</a> (std::string fileName=&quot;ConfigureFile&quot;)</td></tr>
+<tr class="memdesc:af90a5b2ff878dfb9a80abcf54930417c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserializing current game state from file.  <a href="class_game.html#af90a5b2ff878dfb9a80abcf54930417c">More...</a><br /></td></tr>
 <tr class="separator:af90a5b2ff878dfb9a80abcf54930417c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0843b0fcd33bca4e0e5913e85ca1ec7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a0843b0fcd33bca4e0e5913e85ca1ec7b">applyWindowChange</a> ()</td></tr>
+<tr class="memdesc:a0843b0fcd33bca4e0e5913e85ca1ec7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate window resolution change for whom this is useful.  <a href="class_game.html#a0843b0fcd33bca4e0e5913e85ca1ec7b">More...</a><br /></td></tr>
 <tr class="separator:a0843b0fcd33bca4e0e5913e85ca1ec7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcbcf63cb011c7608ff41c608ce72dad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#abcbcf63cb011c7608ff41c608ce72dad">stageFinished</a> ()</td></tr>
+<tr class="memdesc:abcbcf63cb011c7608ff41c608ce72dad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called on player's winning the stage. Makes a transition to next level.  <a href="class_game.html#abcbcf63cb011c7608ff41c608ce72dad">More...</a><br /></td></tr>
 <tr class="separator:abcbcf63cb011c7608ff41c608ce72dad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85f017994d39814f40daf04ba302eceb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a85f017994d39814f40daf04ba302eceb">onHeroDied</a> ()</td></tr>
+<tr class="memdesc:a85f017994d39814f40daf04ba302eceb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called on player's death. Plays death animation and cleans-up the level.  <a href="class_game.html#a85f017994d39814f40daf04ba302eceb">More...</a><br /></td></tr>
 <tr class="separator:a85f017994d39814f40daf04ba302eceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7d371f3f30513a4f3c57f521fac9b5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#ac7d371f3f30513a4f3c57f521fac9b5f">gameOver</a> ()</td></tr>
+<tr class="memdesc:ac7d371f3f30513a4f3c57f521fac9b5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called on player's losing all his lives. You start from scratch.  <a href="class_game.html#ac7d371f3f30513a4f3c57f521fac9b5f">More...</a><br /></td></tr>
 <tr class="separator:ac7d371f3f30513a4f3c57f521fac9b5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa831079ac72452e041cd198344bbe982"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#aa831079ac72452e041cd198344bbe982">cleanupOnStageChange</a> ()</td></tr>
-<tr class="separator:aa831079ac72452e041cd198344bbe982"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad62692a83e8ca94ab8f377356a4bde8b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#ad62692a83e8ca94ab8f377356a4bde8b">requestExit</a> ()</td></tr>
+<tr class="memdesc:ad62692a83e8ca94ab8f377356a4bde8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when someone wants to exit the game or when something went wrong.  <a href="class_game.html#ad62692a83e8ca94ab8f377356a4bde8b">More...</a><br /></td></tr>
+<tr class="separator:ad62692a83e8ca94ab8f377356a4bde8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab94bcabdd817d33e68d94fbd4e367f69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#ab94bcabdd817d33e68d94fbd4e367f69">doAction</a> (<a class="el" href="_input_manager_8hpp.html#a8bb1ef53467e4f61410d12822d922498">Action</a>)</td></tr>
+<tr class="memdesc:ab94bcabdd817d33e68d94fbd4e367f69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called from input manager when something important happens.  <a href="class_game.html#ab94bcabdd817d33e68d94fbd4e367f69">More...</a><br /></td></tr>
+<tr class="separator:ab94bcabdd817d33e68d94fbd4e367f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacfc48af90df08d4776dfd801561a081"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#aacfc48af90df08d4776dfd801561a081">explosion</a> (glm::ivec2 position, uint32_t span)</td></tr>
+<tr class="memdesc:aacfc48af90df08d4776dfd801561a081"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function for triggering explosion from bombs.  <a href="class_game.html#aacfc48af90df08d4776dfd801561a081">More...</a><br /></td></tr>
 <tr class="separator:aacfc48af90df08d4776dfd801561a081"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a586a831ed5ff1283fcf1b96f4eff065c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a586a831ed5ff1283fcf1b96f4eff065c">Game</a> (<a class="el" href="class_game.html">Game</a> const &amp;)=delete</td></tr>
 <tr class="separator:a586a831ed5ff1283fcf1b96f4eff065c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5171190a8158b6c42a9bf73988cfd832"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_game.html">Game</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a5171190a8158b6c42a9bf73988cfd832">operator=</a> (<a class="el" href="class_game.html">Game</a> const &amp;)=delete</td></tr>
 <tr class="separator:a5171190a8158b6c42a9bf73988cfd832"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab48a9db0dacba17759d1bcae0b291bd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#ab48a9db0dacba17759d1bcae0b291bd8">addEnemiesOnMap</a> ()</td></tr>
+<tr class="memdesc:ab48a9db0dacba17759d1bcae0b291bd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called at map creation. Populates map with enemies.  <a href="class_game.html#ab48a9db0dacba17759d1bcae0b291bd8">More...</a><br /></td></tr>
+<tr class="separator:ab48a9db0dacba17759d1bcae0b291bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada6b9c53ed5b1ca8a83abb37b072c70b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; glm::mat4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#ada6b9c53ed5b1ca8a83abb37b072c70b">getWallTransforms</a> ()</td></tr>
+<tr class="memdesc:ada6b9c53ed5b1ca8a83abb37b072c70b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms of all walls. Useful for rendering.  <a href="class_game.html#ada6b9c53ed5b1ca8a83abb37b072c70b">More...</a><br /></td></tr>
 <tr class="separator:ada6b9c53ed5b1ca8a83abb37b072c70b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10e45157f6afe43c11a600c502ecc713"><td class="memItemLeft" align="right" valign="top">std::vector&lt; glm::mat4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a10e45157f6afe43c11a600c502ecc713">getBrickTransforms</a> ()</td></tr>
+<tr class="memdesc:a10e45157f6afe43c11a600c502ecc713"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms of all bricks(destructible walls). Useful for rendering.  <a href="class_game.html#a10e45157f6afe43c11a600c502ecc713">More...</a><br /></td></tr>
 <tr class="separator:a10e45157f6afe43c11a600c502ecc713"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab7e891b554a1bad7a950c050d093c22"><td class="memItemLeft" align="right" valign="top">std::vector&lt; glm::mat4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#aab7e891b554a1bad7a950c050d093c22">getBombTransforms</a> ()</td></tr>
+<tr class="memdesc:aab7e891b554a1bad7a950c050d093c22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms of all bombs. Useful for rendering.  <a href="class_game.html#aab7e891b554a1bad7a950c050d093c22">More...</a><br /></td></tr>
 <tr class="separator:aab7e891b554a1bad7a950c050d093c22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a776aa90b2f3470c655cf8a69b4df81"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a7a776aa90b2f3470c655cf8a69b4df81">getPowerupTransform</a> ()</td></tr>
+<tr class="memdesc:a7a776aa90b2f3470c655cf8a69b4df81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform of powerup on map. Useful for rendering.  <a href="class_game.html#a7a776aa90b2f3470c655cf8a69b4df81">More...</a><br /></td></tr>
 <tr class="separator:a7a776aa90b2f3470c655cf8a69b4df81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8980800eef6970477d5cc52aadcaf36b"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a8980800eef6970477d5cc52aadcaf36b">getExitTransform</a> ()</td></tr>
+<tr class="memdesc:a8980800eef6970477d5cc52aadcaf36b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform of exit on map. Useful for rendering.  <a href="class_game.html#a8980800eef6970477d5cc52aadcaf36b">More...</a><br /></td></tr>
 <tr class="separator:a8980800eef6970477d5cc52aadcaf36b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af15bc5d8eeaad8df51bc5fd8f47c9e17"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_moving_entity.html">MovingEntity</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#af15bc5d8eeaad8df51bc5fd8f47c9e17">getEnemies</a> ()</td></tr>
+<tr class="memdesc:af15bc5d8eeaad8df51bc5fd8f47c9e17"><td class="mdescLeft">&#160;</td><td class="mdescRight">All of the enemies.  <a href="class_game.html#af15bc5d8eeaad8df51bc5fd8f47c9e17">More...</a><br /></td></tr>
 <tr class="separator:af15bc5d8eeaad8df51bc5fd8f47c9e17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88ac313d7bb662a281edce8a5637de9c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="struct_agent.html">Balloon</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a88ac313d7bb662a281edce8a5637de9c">getBalloons</a> ()</td></tr>
-<tr class="separator:a88ac313d7bb662a281edce8a5637de9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a285c444d429b5551b335d07a2c5330ed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_hero.html">Hero</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a285c444d429b5551b335d07a2c5330ed">getHero</a> ()</td></tr>
+<tr class="memdesc:a285c444d429b5551b335d07a2c5330ed"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_hero.html" title="The class that represents Hero.">Hero</a> reference.  <a href="class_game.html#a285c444d429b5551b335d07a2c5330ed">More...</a><br /></td></tr>
 <tr class="separator:a285c444d429b5551b335d07a2c5330ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02099fc8d19b448ecdc344a6b2b188ed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_hero.html#ad7b56887821b99aabccecf911f68c752">Hero::PowerupType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a02099fc8d19b448ecdc344a6b2b188ed">powerupTypeOnMap</a> ()</td></tr>
+<tr class="memdesc:a02099fc8d19b448ecdc344a6b2b188ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of powerup on current map.  <a href="class_game.html#a02099fc8d19b448ecdc344a6b2b188ed">More...</a><br /></td></tr>
 <tr class="separator:a02099fc8d19b448ecdc344a6b2b188ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff58043c94281d5c4d2304468886b457"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#aff58043c94281d5c4d2304468886b457">isExitActive</a> ()</td></tr>
+<tr class="memdesc:aff58043c94281d5c4d2304468886b457"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells whether <a class="el" href="class_hero.html" title="The class that represents Hero.">Hero</a> can proceed to next stage.  <a href="class_game.html#aff58043c94281d5c4d2304468886b457">More...</a><br /></td></tr>
 <tr class="separator:aff58043c94281d5c4d2304468886b457"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbf6a7c253ebecb63ea95d7c9e23fcde"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#adbf6a7c253ebecb63ea95d7c9e23fcde">extractInfo</a> ()</td></tr>
+<tr class="memdesc:adbf6a7c253ebecb63ea95d7c9e23fcde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after map is desirialized. Extracts info from the map.  <a href="class_game.html#adbf6a7c253ebecb63ea95d7c9e23fcde">More...</a><br /></td></tr>
 <tr class="separator:adbf6a7c253ebecb63ea95d7c9e23fcde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1945c514de2910cda12acbbf4aa8ba11"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a1945c514de2910cda12acbbf4aa8ba11">plantBomb</a> (glm::vec2 position, int strength)</td></tr>
+<tr class="memdesc:a1945c514de2910cda12acbbf4aa8ba11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new bomb and places it on map.  <a href="class_game.html#a1945c514de2910cda12acbbf4aa8ba11">More...</a><br /></td></tr>
 <tr class="separator:a1945c514de2910cda12acbbf4aa8ba11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac154c6c562a1c8a1a87a5290dec838f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#ac154c6c562a1c8a1a87a5290dec838f9">tickAI</a> (float deltaTime)</td></tr>
+<tr class="memdesc:ac154c6c562a1c8a1a87a5290dec838f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates all AI Controllers.  <a href="class_game.html#ac154c6c562a1c8a1a87a5290dec838f9">More...</a><br /></td></tr>
 <tr class="separator:ac154c6c562a1c8a1a87a5290dec838f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a61506c03b35e21f5078997b7d5f80ea2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_game.html">Game</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a61506c03b35e21f5078997b7d5f80ea2">get</a> ()</td></tr>
+<tr class="memdesc:a61506c03b35e21f5078997b7d5f80ea2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gives the instance of <a class="el" href="class_game.html" title="The class to hold current game state.">Game</a>.  <a href="class_game.html#a61506c03b35e21f5078997b7d5f80ea2">More...</a><br /></td></tr>
+<tr class="separator:a61506c03b35e21f5078997b7d5f80ea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a662d6bee40bc606996aaaa069e022e27"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a662d6bee40bc606996aaaa069e022e27">getCurrentTime</a> ()</td></tr>
+<tr class="memdesc:a662d6bee40bc606996aaaa069e022e27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns current time in seconds.  <a href="class_game.html#a662d6bee40bc606996aaaa069e022e27">More...</a><br /></td></tr>
 <tr class="separator:a662d6bee40bc606996aaaa069e022e27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af46905ae67fd1c9bdeba11594bc9e754"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_collision_info.html">CollisionInfo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#af46905ae67fd1c9bdeba11594bc9e754">getCollisionInfo</a> ()</td></tr>
+<tr class="memdesc:af46905ae67fd1c9bdeba11594bc9e754"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns reference to collision info for current map.  <a href="class_game.html#af46905ae67fd1c9bdeba11594bc9e754">More...</a><br /></td></tr>
 <tr class="separator:af46905ae67fd1c9bdeba11594bc9e754"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61506c03b35e21f5078997b7d5f80ea2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_game.html">Game</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a61506c03b35e21f5078997b7d5f80ea2">get</a> ()</td></tr>
-<tr class="separator:a61506c03b35e21f5078997b7d5f80ea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a0f0e5a954b1c13f9c747e2ac4dddbdff"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a0f0e5a954b1c13f9c747e2ac4dddbdff">mReloadStage</a> = true</td></tr>
+<tr class="memdesc:a0f0e5a954b1c13f9c747e2ac4dddbdff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility variable.  <a href="class_game.html#a0f0e5a954b1c13f9c747e2ac4dddbdff">More...</a><br /></td></tr>
 <tr class="separator:a0f0e5a954b1c13f9c747e2ac4dddbdff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaca723ea5068633825b02d1e0544c28"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#adaca723ea5068633825b02d1e0544c28">mStageTimer</a> = 200</td></tr>
+<tr class="memdesc:adaca723ea5068633825b02d1e0544c28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility variable.  <a href="class_game.html#adaca723ea5068633825b02d1e0544c28">More...</a><br /></td></tr>
 <tr class="separator:adaca723ea5068633825b02d1e0544c28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a288cadaed039e90397bc755e2e08bbbd"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a288cadaed039e90397bc755e2e08bbbd">mStageStartedTimer</a> = 0</td></tr>
+<tr class="memdesc:a288cadaed039e90397bc755e2e08bbbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility variable.  <a href="class_game.html#a288cadaed039e90397bc755e2e08bbbd">More...</a><br /></td></tr>
 <tr class="separator:a288cadaed039e90397bc755e2e08bbbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2eb4260096c6438208a539063506af92"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a2eb4260096c6438208a539063506af92">mIsRunning</a> = true</td></tr>
+<tr class="memdesc:a2eb4260096c6438208a539063506af92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the game running?  <a href="class_game.html#a2eb4260096c6438208a539063506af92">More...</a><br /></td></tr>
 <tr class="separator:a2eb4260096c6438208a539063506af92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83016fd014834a54e3e6d5f8b774c4ae"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a83016fd014834a54e3e6d5f8b774c4ae">mDeltaTime</a></td></tr>
+<tr class="memdesc:a83016fd014834a54e3e6d5f8b774c4ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much time passed during last frame.  <a href="class_game.html#a83016fd014834a54e3e6d5f8b774c4ae">More...</a><br /></td></tr>
 <tr class="separator:a83016fd014834a54e3e6d5f8b774c4ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a70538530bc36e033e360880ef311df61"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game.html#a70538530bc36e033e360880ef311df61">Renderer</a></td></tr>
+<tr class="separator:a70538530bc36e033e360880ef311df61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The class to hold current game state. </p>
+<p>It holds info about enemies, hero, map, time, collision. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad59df6562a58a614fda24622d3715b65"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad59df6562a58a614fda24622d3715b65">&#9670;&nbsp;</a></span>Game() <span class="overload">[1/2]</span></h2>
 
@@ -193,6 +239,25 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab48a9db0dacba17759d1bcae0b291bd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab48a9db0dacba17759d1bcae0b291bd8">&#9670;&nbsp;</a></span>addEnemiesOnMap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Game::addEnemiesOnMap </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Called at map creation. Populates map with enemies. </p>
+
+</div>
+</div>
 <a id="a0843b0fcd33bca4e0e5913e85ca1ec7b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0843b0fcd33bca4e0e5913e85ca1ec7b">&#9670;&nbsp;</a></span>applyWindowChange()</h2>
 
@@ -208,22 +273,27 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Propagate window resolution change for whom this is useful. </p>
+
 </div>
 </div>
-<a id="aa831079ac72452e041cd198344bbe982"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa831079ac72452e041cd198344bbe982">&#9670;&nbsp;</a></span>cleanupOnStageChange()</h2>
+<a id="ab94bcabdd817d33e68d94fbd4e367f69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab94bcabdd817d33e68d94fbd4e367f69">&#9670;&nbsp;</a></span>doAction()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Game::cleanupOnStageChange </td>
+          <td class="memname">void Game::doAction </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="_input_manager_8hpp.html#a8bb1ef53467e4f61410d12822d922498">Action</a>&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Called from input manager when something important happens. </p>
 
 </div>
 </div>
@@ -253,6 +323,15 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Utility function for triggering explosion from bombs. </p>
+<p>Handles all the edge-cases (bombs triggering other bombs, walls, bricks). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">position</td><td>Center of the explosion. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">span</td><td>How much ground does this explosion covers. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="adbf6a7c253ebecb63ea95d7c9e23fcde"></a>
@@ -270,6 +349,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Called after map is desirialized. Extracts info from the map. </p>
+<p>Reading the position of exit and powerup on current map. </p>
+
 </div>
 </div>
 <a id="ac7d371f3f30513a4f3c57f521fac9b5f"></a>
@@ -286,6 +368,8 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Called on player's losing all his lives. You start from scratch. </p>
 
 </div>
 </div>
@@ -312,22 +396,8 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="a88ac313d7bb662a281edce8a5637de9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a88ac313d7bb662a281edce8a5637de9c">&#9670;&nbsp;</a></span>getBalloons()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="struct_agent.html">Game::Balloon</a> &gt; &amp; Game::getBalloons </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Gives the instance of <a class="el" href="class_game.html" title="The class to hold current game state.">Game</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>The pointer to the already created <a class="el" href="class_game.html" title="The class to hold current game state.">Game</a> class. </dd></dl>
 
 </div>
 </div>
@@ -346,6 +416,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transforms of all bombs. Useful for rendering. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector of bomb transforms </dd></dl>
+
 </div>
 </div>
 <a id="a10e45157f6afe43c11a600c502ecc713"></a>
@@ -362,6 +435,9 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transforms of all bricks(destructible walls). Useful for rendering. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector of brick transforms </dd></dl>
 
 </div>
 </div>
@@ -388,6 +464,9 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Returns reference to collision info for current map. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="struct_collision_info.html">CollisionInfo</a> struct for queries. It only holds blocks, not player or enemies. </dd></dl>
+
 </div>
 </div>
 <a id="a662d6bee40bc606996aaaa069e022e27"></a>
@@ -413,6 +492,9 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Returns current time in seconds. </p>
+<dl class="section return"><dt>Returns</dt><dd>Current time in seconds. useful for something that keeps track of time. For example bombs and menu screens. </dd></dl>
+
 </div>
 </div>
 <a id="af15bc5d8eeaad8df51bc5fd8f47c9e17"></a>
@@ -429,6 +511,9 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>All of the enemies. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector of pointers to enemies. </dd></dl>
 
 </div>
 </div>
@@ -447,6 +532,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transform of exit on map. Useful for rendering. </p>
+<dl class="section return"><dt>Returns</dt><dd>Matrix transform for the exit. </dd></dl>
+
 </div>
 </div>
 <a id="a285c444d429b5551b335d07a2c5330ed"></a>
@@ -463,6 +551,9 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="class_hero.html" title="The class that represents Hero.">Hero</a> reference. </p>
+<dl class="section return"><dt>Returns</dt><dd>non-const reference to <a class="el" href="class_hero.html" title="The class that represents Hero.">Hero</a>. </dd></dl>
 
 </div>
 </div>
@@ -481,6 +572,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transform of powerup on map. Useful for rendering. </p>
+<dl class="section return"><dt>Returns</dt><dd>Matrix transform for this powerup. </dd></dl>
+
 </div>
 </div>
 <a id="ada6b9c53ed5b1ca8a83abb37b072c70b"></a>
@@ -498,6 +592,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transforms of all walls. Useful for rendering. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector of wall transforms </dd></dl>
+
 </div>
 </div>
 <a id="aff58043c94281d5c4d2304468886b457"></a>
@@ -514,6 +611,9 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Tells whether <a class="el" href="class_hero.html" title="The class that represents Hero.">Hero</a> can proceed to next stage. </p>
+<p>Under the hood counts enemies. </p><dl class="section return"><dt>Returns</dt><dd>True if player can already exit. </dd></dl>
 
 </div>
 </div>
@@ -533,6 +633,8 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Deserializing current game state from file. </p>
+
 </div>
 </div>
 <a id="a85f017994d39814f40daf04ba302eceb"></a>
@@ -549,6 +651,8 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Called on player's death. Plays death animation and cleans-up the level. </p>
 
 </div>
 </div>
@@ -593,6 +697,8 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Pauses the game and opens main menu. </p>
+
 </div>
 </div>
 <a id="a1945c514de2910cda12acbbf4aa8ba11"></a>
@@ -621,6 +727,15 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Creates a new bomb and places it on map. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">position</td><td>Position of new bomb. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">strength</td><td>Span of the explosion of new bomb. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a02099fc8d19b448ecdc344a6b2b188ed"></a>
@@ -637,6 +752,28 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Type of powerup on current map. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_hero.html#ad7b56887821b99aabccecf911f68c752" title="Types of powerup Hero can pick up.">Hero::PowerupType</a> enum. </dd></dl>
+
+</div>
+</div>
+<a id="ad62692a83e8ca94ab8f377356a4bde8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad62692a83e8ca94ab8f377356a4bde8b">&#9670;&nbsp;</a></span>requestExit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Game::requestExit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Called when someone wants to exit the game or when something went wrong. </p>
 
 </div>
 </div>
@@ -656,6 +793,8 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Serializing current game state as means of saving game progress. </p>
+
 </div>
 </div>
 <a id="abcbcf63cb011c7608ff41c608ce72dad"></a>
@@ -672,6 +811,8 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Called on player's winning the stage. Makes a transition to next level. </p>
 
 </div>
 </div>
@@ -690,6 +831,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Starts the game loop. </p>
+<p>This is where the game happends. This function returns only when the game is exiting. </p>
+
 </div>
 </div>
 <a id="ac154c6c562a1c8a1a87a5290dec838f9"></a>
@@ -706,6 +850,37 @@ Static Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+<p>Updates all AI Controllers. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">deltaTime</td><td>How much time passed during last frame </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a70538530bc36e033e360880ef311df61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70538530bc36e033e360880ef311df61">&#9670;&nbsp;</a></span>Renderer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="class_renderer.html">Renderer</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -731,6 +906,8 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>How much time passed during last frame. </p>
+
 </div>
 </div>
 <a id="a2eb4260096c6438208a539063506af92"></a>
@@ -752,6 +929,8 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Is the game running? </p>
 
 </div>
 </div>
@@ -775,6 +954,8 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Utility variable. </p>
+
 </div>
 </div>
 <a id="a288cadaed039e90397bc755e2e08bbbd"></a>
@@ -797,6 +978,8 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Utility variable. </p>
+
 </div>
 </div>
 <a id="adaca723ea5068633825b02d1e0544c28"></a>
@@ -818,6 +1001,8 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Utility variable. </p>
 
 </div>
 </div>

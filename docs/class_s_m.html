@@ -48,44 +48,24 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Compile-time generated StateMachine. Useful for implementing AI.  
+ <a href="class_s_m.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_state_machine_8h_source.html">StateMachine.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad312241e35f498af567cf32a2fe656b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_m.html#ad312241e35f498af567cf32a2fe656b2">SM</a> ()</td></tr>
-<tr class="separator:ad312241e35f498af567cf32a2fe656b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08236828de8499c44112432c3dfb40cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_m.html#a08236828de8499c44112432c3dfb40cd">tick</a> (OwnerType &amp;owner, float DeltaTime=0)</td></tr>
+<tr class="memdesc:a08236828de8499c44112432c3dfb40cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every frame. This is where current state is ticked and transitions are dispatched.  <a href="class_s_m.html#a08236828de8499c44112432c3dfb40cd">More...</a><br /></td></tr>
 <tr class="separator:a08236828de8499c44112432c3dfb40cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ad312241e35f498af567cf32a2fe656b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad312241e35f498af567cf32a2fe656b2">&#9670;&nbsp;</a></span>SM()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename OwnerType, typename... Ts&gt;<br />
+class SM&lt; OwnerType, Ts &gt;</h3>
 
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename OwnerType , typename... Ts&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_s_m.html">SM</a>&lt; OwnerType, Ts &gt;::<a class="el" href="class_s_m.html">SM</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
+<p>Compile-time generated StateMachine. Useful for implementing AI. </p>
+<p>Holds all of it's states in itself. It controlls 1 specific type of <a class="el" href="class_entity.html" title="The class from which almost everything on screen derives.">Entity</a> per template instatiation. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a08236828de8499c44112432c3dfb40cd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a08236828de8499c44112432c3dfb40cd">&#9670;&nbsp;</a></span>tick()</h2>
 
@@ -121,6 +101,8 @@ template&lt;typename OwnerType , typename... Ts&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Called every frame. This is where current state is ticked and transitions are dispatched. </p>
 
 </div>
 </div>

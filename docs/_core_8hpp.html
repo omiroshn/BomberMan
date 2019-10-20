@@ -46,10 +46,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#define-members">Macros</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">Core.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -64,50 +61,12 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tickable.html">Tickable</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacebm"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebm.html">bm</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a1d9f820d1ffac61cad5472713960b59e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_core_8hpp.html#a1d9f820d1ffac61cad5472713960b59e">BM_ASSERT</a>(x)&#160;&#160;&#160;SDL_assert(x)</td></tr>
-<tr class="separator:a1d9f820d1ffac61cad5472713960b59e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08adc9cc525000c327b8327d3053a1cf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_core_8hpp.html#a08adc9cc525000c327b8327d3053a1cf">BM_INIT_LOG</a>()&#160;&#160;&#160;<a class="el" href="namespacebm.html#a3092153346a8818968d74f89d691169d">bm::SetLogLevels</a>()</td></tr>
-<tr class="separator:a08adc9cc525000c327b8327d3053a1cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6b05fa3f0198b54659d25f1278ad3b7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_core_8hpp.html#ad6b05fa3f0198b54659d25f1278ad3b7">BM_LOG</a>(...)</td></tr>
-<tr class="separator:ad6b05fa3f0198b54659d25f1278ad3b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8cb2ead39f3fc3f6984e5a0de325286"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_core_8hpp.html#ae8cb2ead39f3fc3f6984e5a0de325286">BM_WARN</a>(...)&#160;&#160;&#160;SDL_LogWarn(<a class="el" href="namespacebm.html#acf1bf461add37bf6d16c559fc536abc3a8cb5af46ba4bcea0502e259f5fb03d37">bm::LogCategory::Default</a>, __VA_ARGS__)</td></tr>
-<tr class="separator:ae8cb2ead39f3fc3f6984e5a0de325286"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af126b02b2e9bda71a5eb93a0d4d9885a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_core_8hpp.html#af126b02b2e9bda71a5eb93a0d4d9885a">BM_CAT_LOG</a>(x, ...)</td></tr>
-<tr class="separator:af126b02b2e9bda71a5eb93a0d4d9885a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf039f158691f15d6aae2b4f8181b162"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_core_8hpp.html#adf039f158691f15d6aae2b4f8181b162">BM_CAT_WARN</a>(x, ...)&#160;&#160;&#160;SDL_LogWarn(bm::LogCategory::##x, #x &quot;: &quot; __VA_ARGS__)</td></tr>
-<tr class="separator:adf039f158691f15d6aae2b4f8181b162"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ed5751023a8eb43c1cea60cfc75771c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_core_8hpp.html#a2ed5751023a8eb43c1cea60cfc75771c">BM_ASSERT_ALWAYS</a>(x)&#160;&#160;&#160;SDL_assert(x)</td></tr>
-<tr class="separator:a2ed5751023a8eb43c1cea60cfc75771c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a018ff62491aeadab140f3a66970c22aa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_core_8hpp.html#a018ff62491aeadab140f3a66970c22aa">BM_CRITICAL</a>(...)&#160;&#160;&#160;SDL_LogCritical(<a class="el" href="namespacebm.html#acf1bf461add37bf6d16c559fc536abc3a8cb5af46ba4bcea0502e259f5fb03d37">bm::LogCategory::Default</a>, __VA_ARGS__)</td></tr>
+<tr class="memitem:a018ff62491aeadab140f3a66970c22aa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_core_8hpp.html#a018ff62491aeadab140f3a66970c22aa">BM_CRITICAL</a>(...)&#160;&#160;&#160;SDL_LogCritical(SDL_LOG_CATEGORY_CUSTOM, __VA_ARGS__)</td></tr>
 <tr class="separator:a018ff62491aeadab140f3a66970c22aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69567d3a934bcadac972bbf5d98c6597"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_core_8hpp.html#a69567d3a934bcadac972bbf5d98c6597">BM_CAT_CRITICAL</a>(x, ...)&#160;&#160;&#160;SDL_LogCritical(bm::LogCategory::##x, #x &quot;: &quot; __VA_ARGS__)</td></tr>
-<tr class="separator:a69567d3a934bcadac972bbf5d98c6597"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77baa56c8d3584b953f0a2626e6844ad"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_core_8hpp.html#a77baa56c8d3584b953f0a2626e6844ad">ARRAY_COUNT</a>(x)&#160;&#160;&#160;(sizeof(x) / sizeof(x[0]))</td></tr>
 <tr class="separator:a77baa56c8d3584b953f0a2626e6844ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:acf1bf461add37bf6d16c559fc536abc3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebm.html#acf1bf461add37bf6d16c559fc536abc3">bm::LogCategory</a> { <a class="el" href="namespacebm.html#acf1bf461add37bf6d16c559fc536abc3a8cb5af46ba4bcea0502e259f5fb03d37">bm::Default</a> = SDL_LOG_CATEGORY_CUSTOM, 
-<a class="el" href="namespacebm.html#acf1bf461add37bf6d16c559fc536abc3ae8beaee03be8007e1481af86b3748363">bm::Init</a>, 
-<a class="el" href="namespacebm.html#acf1bf461add37bf6d16c559fc536abc3a13e8596207e8f076182527cfd6b7755c">bm::StateMachine</a>, 
-<a class="el" href="namespacebm.html#acf1bf461add37bf6d16c559fc536abc3a4357ee89dc1683fb48c6f87554c22d7e">bm::MAX</a>
- }</td></tr>
-<tr class="separator:acf1bf461add37bf6d16c559fc536abc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a3092153346a8818968d74f89d691169d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebm.html#a3092153346a8818968d74f89d691169d">bm::SetLogLevels</a> ()</td></tr>
-<tr class="separator:a3092153346a8818968d74f89d691169d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3400cfde9ce837e2dac7b5845a400e89"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a3400cfde9ce837e2dac7b5845a400e89"><td class="memTemplItemLeft" align="right" valign="top">const char *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebm.html#a3400cfde9ce837e2dac7b5845a400e89">bm::getTypeName</a> ()</td></tr>
-<tr class="separator:a3400cfde9ce837e2dac7b5845a400e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a77baa56c8d3584b953f0a2626e6844ad"></a>
@@ -128,128 +87,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1d9f820d1ffac61cad5472713960b59e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d9f820d1ffac61cad5472713960b59e">&#9670;&nbsp;</a></span>BM_ASSERT</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define BM_ASSERT</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">x</td><td>)</td>
-          <td>&#160;&#160;&#160;SDL_assert(x)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>A few macro for logging. *_CAT_* versions use a specific category, so you could clearly see every log you print. </p>
-
-</div>
-</div>
-<a id="a2ed5751023a8eb43c1cea60cfc75771c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ed5751023a8eb43c1cea60cfc75771c">&#9670;&nbsp;</a></span>BM_ASSERT_ALWAYS</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define BM_ASSERT_ALWAYS</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">x</td><td>)</td>
-          <td>&#160;&#160;&#160;SDL_assert(x)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Be sure to use this only when everything is really bad </p>
-
-</div>
-</div>
-<a id="a69567d3a934bcadac972bbf5d98c6597"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69567d3a934bcadac972bbf5d98c6597">&#9670;&nbsp;</a></span>BM_CAT_CRITICAL</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define BM_CAT_CRITICAL</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">x, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td>&#160;&#160;&#160;SDL_LogCritical(bm::LogCategory::##x, #x &quot;: &quot; __VA_ARGS__)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af126b02b2e9bda71a5eb93a0d4d9885a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af126b02b2e9bda71a5eb93a0d4d9885a">&#9670;&nbsp;</a></span>BM_CAT_LOG</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define BM_CAT_LOG</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">x, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="adf039f158691f15d6aae2b4f8181b162"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf039f158691f15d6aae2b4f8181b162">&#9670;&nbsp;</a></span>BM_CAT_WARN</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define BM_CAT_WARN</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">x, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td>&#160;&#160;&#160;SDL_LogWarn(bm::LogCategory::##x, #x &quot;: &quot; __VA_ARGS__)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a018ff62491aeadab140f3a66970c22aa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a018ff62491aeadab140f3a66970c22aa">&#9670;&nbsp;</a></span>BM_CRITICAL</h2>
 
@@ -261,63 +98,11 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>...</em></td><td>)</td>
-          <td>&#160;&#160;&#160;SDL_LogCritical(<a class="el" href="namespacebm.html#acf1bf461add37bf6d16c559fc536abc3a8cb5af46ba4bcea0502e259f5fb03d37">bm::LogCategory::Default</a>, __VA_ARGS__)</td>
+          <td>&#160;&#160;&#160;SDL_LogCritical(SDL_LOG_CATEGORY_CUSTOM, __VA_ARGS__)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a08adc9cc525000c327b8327d3053a1cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08adc9cc525000c327b8327d3053a1cf">&#9670;&nbsp;</a></span>BM_INIT_LOG</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define BM_INIT_LOG</td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="namespacebm.html#a3092153346a8818968d74f89d691169d">bm::SetLogLevels</a>()</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad6b05fa3f0198b54659d25f1278ad3b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6b05fa3f0198b54659d25f1278ad3b7">&#9670;&nbsp;</a></span>BM_LOG</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define BM_LOG</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae8cb2ead39f3fc3f6984e5a0de325286"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8cb2ead39f3fc3f6984e5a0de325286">&#9670;&nbsp;</a></span>BM_WARN</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define BM_WARN</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em></td><td>)</td>
-          <td>&#160;&#160;&#160;SDL_LogWarn(<a class="el" href="namespacebm.html#acf1bf461add37bf6d16c559fc536abc3a8cb5af46ba4bcea0502e259f5fb03d37">bm::LogCategory::Default</a>, __VA_ARGS__)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Be sure to use this only when everything is really bad </p>
 
 </div>
 </div>

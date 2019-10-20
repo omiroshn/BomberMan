@@ -42,12 +42,14 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="struct_state-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">State Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents current state of the StateMachine. Holds all necessary info about current state in itself.  
+ <a href="struct_state.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_state_machine_8h_source.html">StateMachine.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -56,12 +58,12 @@ Inheritance diagram for State:</div>
  <div class="center">
   <img src="struct_state.png" usemap="#State_map" alt=""/>
   <map id="State_map" name="State_map">
-<area href="struct_chase_state.html" alt="ChaseState" shape="rect" coords="0,56,94,80"/>
-<area href="struct_confused_state.html" alt="ConfusedState" shape="rect" coords="104,56,198,80"/>
-<area href="struct_counting.html" alt="Counting" shape="rect" coords="208,56,302,80"/>
-<area href="struct_idle_state.html" alt="IdleState" shape="rect" coords="312,56,406,80"/>
-<area href="struct_patrol_state.html" alt="PatrolState" shape="rect" coords="416,56,510,80"/>
-<area href="struct_spawning.html" alt="Spawning" shape="rect" coords="520,56,614,80"/>
+<area href="struct_chase_state.html" title="Struct representing the state of entity when it&#39;s seen a player. Makes pawn chase after the player." alt="ChaseState" shape="rect" coords="0,56,94,80"/>
+<area href="struct_confused_state.html" title="Struct representing the state of entity when it&#39;s lost a player when chasing him. Makes pawn stay in ..." alt="ConfusedState" shape="rect" coords="104,56,198,80"/>
+<area href="struct_counting.html" title="Struct representing the state of bomb when it&#39;s ticking, counting time to explosion." alt="Counting" shape="rect" coords="208,56,302,80"/>
+<area href="struct_idle_state.html" title="Struct representing the state of entity when it&#39;s doing nothing." alt="IdleState" shape="rect" coords="312,56,406,80"/>
+<area href="struct_patrol_state.html" title="Struct representing the state of entity when it&#39;s wandering around the map Makes pawn walk through th..." alt="PatrolState" shape="rect" coords="416,56,510,80"/>
+<area href="struct_spawning.html" title="Struct representing the state of bomb when it&#39;s just spawned and slowly grows." alt="Spawning" shape="rect" coords="520,56,614,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -69,20 +71,20 @@ Inheritance diagram for State:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a4a64851966bcb5374029bcb5931cc424"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a4a64851966bcb5374029bcb5931cc424"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">onTick</a> (T &amp;, float)</td></tr>
+<tr class="memdesc:a4a64851966bcb5374029bcb5931cc424"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every frame for this state and lets him do everything he needs to.  <a href="struct_state.html#a4a64851966bcb5374029bcb5931cc424">More...</a><br /></td></tr>
 <tr class="separator:a4a64851966bcb5374029bcb5931cc424"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bab7dcc32ebb6a4b2ed112298694abe"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a5bab7dcc32ebb6a4b2ed112298694abe"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">onEntry</a> (T &amp;)</td></tr>
+<tr class="memdesc:a5bab7dcc32ebb6a4b2ed112298694abe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every time this state is entered. Lets this state setup it's data.  <a href="struct_state.html#a5bab7dcc32ebb6a4b2ed112298694abe">More...</a><br /></td></tr>
 <tr class="separator:a5bab7dcc32ebb6a4b2ed112298694abe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbff759a376d40069e3d93d97eb1e498"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:abbff759a376d40069e3d93d97eb1e498"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">transition</a> (const T &amp;)</td></tr>
+<tr class="memdesc:abbff759a376d40069e3d93d97eb1e498"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called every frame to see if this <a class="el" href="struct_state.html" title="Represents current state of the StateMachine. Holds all necessary info about current state in itself.">State</a> need to be changed to another.  <a href="struct_state.html#abbff759a376d40069e3d93d97eb1e498">More...</a><br /></td></tr>
 <tr class="separator:abbff759a376d40069e3d93d97eb1e498"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a6271cf4ddcd86d4c6be9b1dbcbcd4d9d"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_state.html#a6271cf4ddcd86d4c6be9b1dbcbcd4d9d">uid</a></td></tr>
-<tr class="separator:a6271cf4ddcd86d4c6be9b1dbcbcd4d9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents current state of the StateMachine. Holds all necessary info about current state in itself. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a5bab7dcc32ebb6a4b2ed112298694abe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5bab7dcc32ebb6a4b2ed112298694abe">&#9670;&nbsp;</a></span>onEntry()</h2>
 
@@ -108,6 +110,8 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Called every time this state is entered. Lets this state setup it's data. </p>
 
 </div>
 </div>
@@ -147,6 +151,8 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Called every frame for this state and lets him do everything he needs to. </p>
+
 </div>
 </div>
 <a id="abbff759a376d40069e3d93d97eb1e498"></a>
@@ -175,20 +181,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a6271cf4ddcd86d4c6be9b1dbcbcd4d9d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6271cf4ddcd86d4c6be9b1dbcbcd4d9d">&#9670;&nbsp;</a></span>uid</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned char State::uid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Called every frame to see if this <a class="el" href="struct_state.html" title="Represents current state of the StateMachine. Holds all necessary info about current state in itself.">State</a> need to be changed to another. </p>
 
 </div>
 </div>

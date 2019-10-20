@@ -57,12 +57,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a62ad4c6b4b1965a0a6d8536a50d4c090"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77a92db4492ed94ed4bd101b05ffb1f4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_skybox.html#a77a92db4492ed94ed4bd101b05ffb1f4">Skybox</a> ()</td></tr>
 <tr class="separator:a77a92db4492ed94ed4bd101b05ffb1f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac05ea625e6aa52fc2d665d88979eee83"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_skybox.html#ac05ea625e6aa52fc2d665d88979eee83">Skybox</a> (<a class="el" href="class_skybox.html">Skybox</a> const &amp;)</td></tr>
-<tr class="separator:ac05ea625e6aa52fc2d665d88979eee83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b91956623a72498731171331484d093"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_skybox.html">Skybox</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_skybox.html#a9b91956623a72498731171331484d093">operator=</a> (<a class="el" href="class_skybox.html">Skybox</a> const &amp;)</td></tr>
-<tr class="separator:a9b91956623a72498731171331484d093"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24a0a14ed27a40865407f028508509d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_skybox.html#a24a0a14ed27a40865407f028508509d9">generate</a> (std::vector&lt; unsigned char * &gt; aFacesData, std::vector&lt; std::pair&lt; int, int &gt;&gt; textureSizes)</td></tr>
-<tr class="separator:a24a0a14ed27a40865407f028508509d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a260ac6286e0072ac5daefeba84ce7a67"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_skybox.html#a260ac6286e0072ac5daefeba84ce7a67">Skybox</a> (<a class="el" href="class_skybox.html">Skybox</a> const &amp;)=delete</td></tr>
+<tr class="separator:a260ac6286e0072ac5daefeba84ce7a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adad6563bd065734ff0ff963ead636a71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_skybox.html">Skybox</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_skybox.html#adad6563bd065734ff0ff963ead636a71">operator=</a> (<a class="el" href="class_skybox.html">Skybox</a> const &amp;)=delete</td></tr>
+<tr class="separator:adad6563bd065734ff0ff963ead636a71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03b64af11ca9924c6c7ea4d92f402e68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_skybox.html#a03b64af11ca9924c6c7ea4d92f402e68">generate</a> (std::vector&lt; unsigned char * &gt; aFacesData, std::vector&lt; std::pair&lt; int, int &gt;&gt; textureSizes, GLenum format)</td></tr>
+<tr class="separator:a03b64af11ca9924c6c7ea4d92f402e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91a9d33d2981a877366afebd373412be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_skybox.html#a91a9d33d2981a877366afebd373412be">draw</a> (std::shared_ptr&lt; <a class="el" href="class_shader.html">Shader</a> &gt; aShader)</td></tr>
 <tr class="separator:a91a9d33d2981a877366afebd373412be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -106,11 +106,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac05ea625e6aa52fc2d665d88979eee83"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac05ea625e6aa52fc2d665d88979eee83">&#9670;&nbsp;</a></span>Skybox() <span class="overload">[2/2]</span></h2>
+<a id="a260ac6286e0072ac5daefeba84ce7a67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a260ac6286e0072ac5daefeba84ce7a67">&#9670;&nbsp;</a></span>Skybox() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">Skybox::Skybox </td>
@@ -120,6 +123,11 @@ Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -143,8 +151,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a24a0a14ed27a40865407f028508509d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24a0a14ed27a40865407f028508509d9">&#9670;&nbsp;</a></span>generate()</h2>
+<a id="a03b64af11ca9924c6c7ea4d92f402e68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03b64af11ca9924c6c7ea4d92f402e68">&#9670;&nbsp;</a></span>generate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -159,7 +167,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; std::pair&lt; int, int &gt;&gt;&#160;</td>
-          <td class="paramname"><em>textureSizes</em>&#160;</td>
+          <td class="paramname"><em>textureSizes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GLenum&#160;</td>
+          <td class="paramname"><em>format</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -171,20 +185,28 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9b91956623a72498731171331484d093"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b91956623a72498731171331484d093">&#9670;&nbsp;</a></span>operator=()</h2>
+<a id="adad6563bd065734ff0ff963ead636a71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adad6563bd065734ff0ff963ead636a71">&#9670;&nbsp;</a></span>operator=()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_skybox.html">Skybox</a> &amp; Skybox::operator= </td>
+          <td class="memname"><a class="el" href="class_skybox.html">Skybox</a>&amp; Skybox::operator= </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_skybox.html">Skybox</a> const &amp;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

@@ -64,16 +64,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a679b33126247360399b642800cda58a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b47bd15d6d55067cf069cafeb90ccf6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_keyboard_handler.html#a9b47bd15d6d55067cf069cafeb90ccf6">isReleased</a> (int keycode)</td></tr>
 <tr class="separator:a9b47bd15d6d55067cf069cafeb90ccf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74d48470be1360046ec9d24117284f1c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_keyboard_handler.html#a74d48470be1360046ec9d24117284f1c">handleKeyboardEvent</a> (SDL_Event &amp;event)</td></tr>
-<tr class="separator:a74d48470be1360046ec9d24117284f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03130ca925ff7ce8d73e90a06516952f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_keyboard_handler.html#a03130ca925ff7ce8d73e90a06516952f">handleJoystickEvent</a> (SDL_JoyAxisEvent jaxis)</td></tr>
 <tr class="separator:a03130ca925ff7ce8d73e90a06516952f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff7a8e34df9f9ee58cf364db85a5522b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_keyboard_handler.html#aff7a8e34df9f9ee58cf364db85a5522b">handleJoystickButtonUpEvent</a> (SDL_JoyBallEvent jball)</td></tr>
-<tr class="separator:aff7a8e34df9f9ee58cf364db85a5522b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b989024593298e3caea9ff4417cdacc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_keyboard_handler.html#a4b989024593298e3caea9ff4417cdacc">handleJoystickButtonDownEvent</a> (SDL_JoyBallEvent jball)</td></tr>
-<tr class="separator:a4b989024593298e3caea9ff4417cdacc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1402dc21653184be0f1b04f83ba00164"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_keyboard_handler.html#a1402dc21653184be0f1b04f83ba00164">LeftJoystickIsActive</a> ()</td></tr>
-<tr class="separator:a1402dc21653184be0f1b04f83ba00164"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea662aa2ced56e34c84256c72daf6100"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_keyboard_handler.html#aea662aa2ced56e34c84256c72daf6100">handleJoystickButtonUpEvent</a> (SDL_JoyButtonEvent jball)</td></tr>
+<tr class="separator:aea662aa2ced56e34c84256c72daf6100"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c60d5f89efbfa82688dd1c866b94264"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_keyboard_handler.html#a8c60d5f89efbfa82688dd1c866b94264">handleJoystickButtonDownEvent</a> (SDL_JoyButtonEvent jball)</td></tr>
+<tr class="separator:a8c60d5f89efbfa82688dd1c866b94264"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2be7d84b570273cc40014f24e53bf0d9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_keyboard_handler.html#a2be7d84b570273cc40014f24e53bf0d9">JButtonIsPressed</a> (int button)</td></tr>
 <tr class="separator:a2be7d84b570273cc40014f24e53bf0d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -139,8 +135,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4b989024593298e3caea9ff4417cdacc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b989024593298e3caea9ff4417cdacc">&#9670;&nbsp;</a></span>handleJoystickButtonDownEvent()</h2>
+<a id="a8c60d5f89efbfa82688dd1c866b94264"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c60d5f89efbfa82688dd1c866b94264">&#9670;&nbsp;</a></span>handleJoystickButtonDownEvent()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,7 +144,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void KeyboardHandler::handleJoystickButtonDownEvent </td>
           <td>(</td>
-          <td class="paramtype">SDL_JoyBallEvent&#160;</td>
+          <td class="paramtype">SDL_JoyButtonEvent&#160;</td>
           <td class="paramname"><em>jball</em></td><td>)</td>
           <td></td>
         </tr>
@@ -157,8 +153,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aff7a8e34df9f9ee58cf364db85a5522b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff7a8e34df9f9ee58cf364db85a5522b">&#9670;&nbsp;</a></span>handleJoystickButtonUpEvent()</h2>
+<a id="aea662aa2ced56e34c84256c72daf6100"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea662aa2ced56e34c84256c72daf6100">&#9670;&nbsp;</a></span>handleJoystickButtonUpEvent()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -166,7 +162,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void KeyboardHandler::handleJoystickButtonUpEvent </td>
           <td>(</td>
-          <td class="paramtype">SDL_JoyBallEvent&#160;</td>
+          <td class="paramtype">SDL_JoyButtonEvent&#160;</td>
           <td class="paramname"><em>jball</em></td><td>)</td>
           <td></td>
         </tr>
@@ -186,24 +182,6 @@ Public Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">SDL_JoyAxisEvent&#160;</td>
           <td class="paramname"><em>jaxis</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a74d48470be1360046ec9d24117284f1c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74d48470be1360046ec9d24117284f1c">&#9670;&nbsp;</a></span>handleKeyboardEvent()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void KeyboardHandler::handleKeyboardEvent </td>
-          <td>(</td>
-          <td class="paramtype">SDL_Event &amp;&#160;</td>
-          <td class="paramname"><em>event</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -258,23 +236,6 @@ Public Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>button</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1402dc21653184be0f1b04f83ba00164"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1402dc21653184be0f1b04f83ba00164">&#9670;&nbsp;</a></span>LeftJoystickIsActive()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool KeyboardHandler::LeftJoystickIsActive </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>

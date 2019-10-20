@@ -58,12 +58,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a55b071c0390e45c064a160c1e6baaa08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91e9584fa74547af5f20243bd4a13459"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game_window.html#a91e9584fa74547af5f20243bd4a13459">update</a> ()</td></tr>
 <tr class="separator:a91e9584fa74547af5f20243bd4a13459"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2c7f4f2eda24da14a824ddb57e7e588"><td class="memItemLeft" align="right" valign="top">SDL_Event &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game_window.html#ae2c7f4f2eda24da14a824ddb57e7e588">getEvent</a> ()</td></tr>
-<tr class="separator:ae2c7f4f2eda24da14a824ddb57e7e588"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2910bb07f7a714357ae9964d0327ea1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game_window.html#aa2910bb07f7a714357ae9964d0327ea1">tickGui</a> ()</td></tr>
 <tr class="separator:aa2910bb07f7a714357ae9964d0327ea1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9df1a80dde56999fc3258882538a46dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game_window.html#a9df1a80dde56999fc3258882538a46dd">getSize</a> (int &amp;w, int &amp;h)</td></tr>
 <tr class="separator:a9df1a80dde56999fc3258882538a46dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8447f641966b6ce4517c3bc5d7e9fd63"><td class="memItemLeft" align="right" valign="top">SDL_Window *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game_window.html#a8447f641966b6ce4517c3bc5d7e9fd63">getSDLWindow</a> () const</td></tr>
+<tr class="separator:a8447f641966b6ce4517c3bc5d7e9fd63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d67fde11696aa781887624f7568b0cc"><td class="memItemLeft" align="right" valign="top">const SDL_GLContext &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game_window.html#a9d67fde11696aa781887624f7568b0cc">getSDLGLContext</a> () const</td></tr>
+<tr class="separator:a9d67fde11696aa781887624f7568b0cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06c34be25e6bc20127acc4f52da6f550"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game_window.html#a06c34be25e6bc20127acc4f52da6f550">getPosition</a> (int &amp;x, int &amp;y)</td></tr>
+<tr class="separator:a06c34be25e6bc20127acc4f52da6f550"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cfebdd9f9735f2b01c6ce58e5890020"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game_window.html#a8cfebdd9f9735f2b01c6ce58e5890020">setPosition</a> (int const x, int const y)</td></tr>
+<tr class="separator:a8cfebdd9f9735f2b01c6ce58e5890020"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3e0670439003efcb0ce7c8beea3c890"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game_window.html#ac3e0670439003efcb0ce7c8beea3c890">IsGameRunning</a> ()</td></tr>
 <tr class="separator:ac3e0670439003efcb0ce7c8beea3c890"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af26ee22f271b19b40cc4a5e7fdc5593b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_game_window.html#af26ee22f271b19b40cc4a5e7fdc5593b">ShowStartingMenu</a> ()</td></tr>
@@ -162,17 +168,62 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae2c7f4f2eda24da14a824ddb57e7e588"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae2c7f4f2eda24da14a824ddb57e7e588">&#9670;&nbsp;</a></span>getEvent()</h2>
+<a id="a06c34be25e6bc20127acc4f52da6f550"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06c34be25e6bc20127acc4f52da6f550">&#9670;&nbsp;</a></span>getPosition()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">SDL_Event &amp; GameWindow::getEvent </td>
+          <td class="memname">void GameWindow::getPosition </td>
+          <td>(</td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9d67fde11696aa781887624f7568b0cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d67fde11696aa781887624f7568b0cc">&#9670;&nbsp;</a></span>getSDLGLContext()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const SDL_GLContext &amp; GameWindow::getSDLGLContext </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8447f641966b6ce4517c3bc5d7e9fd63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8447f641966b6ce4517c3bc5d7e9fd63">&#9670;&nbsp;</a></span>getSDLWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SDL_Window * GameWindow::getSDLWindow </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -280,6 +331,34 @@ Public Member Functions</h2></td></tr>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>isFullScreen</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8cfebdd9f9735f2b01c6ce58e5890020"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cfebdd9f9735f2b01c6ce58e5890020">&#9670;&nbsp;</a></span>setPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GameWindow::setPosition </td>
+          <td>(</td>
+          <td class="paramtype">int const&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int const&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

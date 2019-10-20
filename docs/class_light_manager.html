@@ -42,6 +42,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_light_manager-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">LightManager Class Reference</div>  </div>
@@ -62,12 +63,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5f72d83e3f4ef73c37ebfe5ee538de49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6b72ccdca1435b081f2e62c2f98f4e2"><td class="memItemLeft" align="right" valign="top">glm::mat4 const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_light_manager.html#ac6b72ccdca1435b081f2e62c2f98f4e2">getLightSpaceMatrix</a> ()</td></tr>
 <tr class="separator:ac6b72ccdca1435b081f2e62c2f98f4e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57c63ba698755e35d58bafbef4e93765"><td class="memItemLeft" align="right" valign="top">glm::vec3 const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_light_manager.html#a57c63ba698755e35d58bafbef4e93765">getCurrentLightPos</a> () const</td></tr>
-<tr class="separator:a57c63ba698755e35d58bafbef4e93765"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75b4f75732c16212ad6730a96244dc8e"><td class="memItemLeft" align="right" valign="top">glm::vec3 const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_light_manager.html#a75b4f75732c16212ad6730a96244dc8e">getCurrentLightDir</a> () const</td></tr>
+<tr class="separator:a75b4f75732c16212ad6730a96244dc8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d7a0e6d1098b231f4417e3ea69d3e4c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_light_manager.html#a2d7a0e6d1098b231f4417e3ea69d3e4c">bindDepthMap</a> ()</td></tr>
 <tr class="separator:a2d7a0e6d1098b231f4417e3ea69d3e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b298817a54c8ad1f3ea3129e38fbd2e"><td class="memItemLeft" align="right" valign="top">GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_light_manager.html#a7b298817a54c8ad1f3ea3129e38fbd2e">getDepthFrameBufferID</a> ()</td></tr>
 <tr class="separator:a7b298817a54c8ad1f3ea3129e38fbd2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a019ff697a4a9a67d61a49579bbc948df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_light_manager.html#a019ff697a4a9a67d61a49579bbc948df">prepareForShadowPass</a> ()</td></tr>
+<tr class="separator:a019ff697a4a9a67d61a49579bbc948df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a491371ed035d27db98e247f12a05d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_light_manager.html#a6a491371ed035d27db98e247f12a05d4">initLightSpaceMatrix</a> (glm::vec3 shadowMapOffset)</td></tr>
+<tr class="separator:a6a491371ed035d27db98e247f12a05d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a336ad960d415fb127b132cf5699d9c77"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_texture.html">Texture</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_light_manager.html#a336ad960d415fb127b132cf5699d9c77">mDepthTexture</a></td></tr>
+<tr class="separator:a336ad960d415fb127b132cf5699d9c77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1eee8eb276ec7f041d961a567389754a"></a>
@@ -156,14 +166,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a57c63ba698755e35d58bafbef4e93765"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57c63ba698755e35d58bafbef4e93765">&#9670;&nbsp;</a></span>getCurrentLightPos()</h2>
+<a id="a75b4f75732c16212ad6730a96244dc8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75b4f75732c16212ad6730a96244dc8e">&#9670;&nbsp;</a></span>getCurrentLightDir()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::vec3 const  &amp; LightManager::getCurrentLightPos </td>
+          <td class="memname">glm::vec3 const  &amp; LightManager::getCurrentLightDir </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -207,6 +217,24 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a6a491371ed035d27db98e247f12a05d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a491371ed035d27db98e247f12a05d4">&#9670;&nbsp;</a></span>initLightSpaceMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LightManager::initLightSpaceMatrix </td>
+          <td>(</td>
+          <td class="paramtype">glm::vec3&#160;</td>
+          <td class="paramname"><em>shadowMapOffset</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a5f72d83e3f4ef73c37ebfe5ee538de49"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5f72d83e3f4ef73c37ebfe5ee538de49">&#9670;&nbsp;</a></span>operator=()</h2>
 
@@ -229,6 +257,38 @@ Public Member Functions</h2></td></tr>
 <span class="mlabels"><span class="mlabel">delete</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a019ff697a4a9a67d61a49579bbc948df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a019ff697a4a9a67d61a49579bbc948df">&#9670;&nbsp;</a></span>prepareForShadowPass()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LightManager::prepareForShadowPass </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a336ad960d415fb127b132cf5699d9c77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a336ad960d415fb127b132cf5699d9c77">&#9670;&nbsp;</a></span>mDepthTexture</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="class_texture.html">Texture</a>&gt; LightManager::mDepthTexture</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
