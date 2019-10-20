@@ -1,4 +1,5 @@
 #include "LogicCore/Hero.h"
+#include "ResourceManagement/MusicPlayer.hpp"
 #include "Game.hpp"
 
 Hero::Hero(Stats info, glm::vec2 position /*= {1.5f, 1.5f}*/)
@@ -30,6 +31,7 @@ void Hero::kill()
 {
 	if (mDead)
 		return;
+	MUSIC_PLAYER.playSound("death");
 	getAnimation().setTime(0);
 	MovingEntity::kill();
 }

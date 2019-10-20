@@ -1,6 +1,7 @@
 #include "Entity/MovingEntity.h"
 #include "imgui.h"
 #include "Game.hpp"
+#include "ResourceManagement/MusicPlayer.hpp"
 #include <assimp/types.h>
 #include <glm/common.hpp>
 #include <glm/ext/quaternion_float.hpp>
@@ -41,6 +42,7 @@ bool MovingEntity::isDeadForAwhile() const
 
 void MovingEntity::kill()
 {
+	MUSIC_PLAYER.playSound("ugh");
 	mAnimation.setTime(0.0);
 	mTimeOfDeath = Game::get()->getCurrentTime();
 	Entity::kill();

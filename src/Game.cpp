@@ -319,6 +319,7 @@ void Game::resolveCollisions()
     && circle_circle_collision(Position, radius, mPowerup, radius))
     {
         Hero.applyPowerup(mPowerupType);
+        MUSIC_PLAYER.playSound("bonus");
         mPowerupType = Hero::PowerupType::PT_NONE;
     }
 
@@ -624,7 +625,10 @@ void       Game::stageFinished()
     {
         CONFIGURATION.setChosenStage(current_stage < 3 ? current_stage + 1 : 0);
         if (current_stage == 3)
+        {
+            MUSIC_PLAYER.playSound("bomberman");
             FFMPEG.playVideo("victory.mp4");
+        }
     }
     Game::mReloadStage = true;
     if (mStageTimer > 4)

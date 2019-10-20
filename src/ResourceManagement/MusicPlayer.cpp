@@ -45,6 +45,10 @@ void 			MusicPlayer::initLoad()
 		loadMusic("tango","tango_siciliana_proud.wav");
 		loadMusic("candyman","candyman.wav");
 		loadSound("explosion","explosion.wav");
+		loadSound("death","death.wav");
+		loadSound("bonus","bonus.wav");
+		loadSound("bomberman","bomberman.wav");
+		loadSound("ugh","ugh.wav");
 	} catch (std::exception &e) {
 		std::cout << e.what();
 	}

@@ -12,6 +12,7 @@
 
 #include "ResourceManagement/FfmpegPlayer.hpp"
 #include "Configure.hpp"
+#include "Game.hpp"
 #include "CustomException.hpp"
 
 static const Uint32 videoFrameDelay = 40;
@@ -215,7 +216,11 @@ void 			FfmpegPlayer::renderVideo()
 		SDL_Event e;
 		while(SDL_PollEvent(&e))
 		{
-			continue;
+			if (e.type == SDL_QUIT)
+			{
+				Game::get()->requestExit();
+				return;
+			}
 		}
 		av_packet_unref(&packet);
 	}
