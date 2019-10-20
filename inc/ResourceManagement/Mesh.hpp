@@ -36,6 +36,8 @@ struct WeightData
 class Mesh
 {
 public:
+    Mesh();
+    Mesh& operator=(const Mesh&) = default;
     Mesh(std::vector<Vertex>& aVertices,
         std::vector<WeightData>& aWeights,
         std::vector<unsigned int>& aIndices,
@@ -55,22 +57,22 @@ private:
     aiNodeAnim const*       findNodeAnimation(aiAnimation const* animation, const std::string& nodeName) const;
 
 private:
-    unsigned int mVBO, mEBO, mVAO, mWBO, mIBO;
+    unsigned int mVBO = 0, mEBO = 0, mVAO = 0, mWBO = 0, mIBO = 0;
     std::vector<Vertex> mVertices;
     std::vector<WeightData> mWeights;
     std::vector<unsigned int> mIndices;
     std::vector<std::shared_ptr<Texture>> mTextures;
-    bool mIsAnimated;
+    bool mIsAnimated = false;
 
     void setupAnimations();
 
-    float mAnimationTime;
-    float mGlossiness;
-    AnimationType mCurrentAnimation;
+    float mAnimationTime = 0.f;
+    float mGlossiness = 1.f;
+    AnimationType mCurrentAnimation = AnimationType::Idle;
     std::map<AnimationType, const aiAnimation *> mAnimations;
     std::map<std::string, unsigned int> const mBones;
     std::vector<glm::mat4> const mOffsetMatrices;
     std::vector<glm::mat4> mBoneTransforms;
-    aiScene const *mScene;
+    aiScene const *mScene = nullptr;
 };
 #endif

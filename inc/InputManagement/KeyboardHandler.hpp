@@ -21,7 +21,6 @@ public:
     void handleJoystickEvent(SDL_JoyAxisEvent jaxis);
     void handleJoystickButtonUpEvent(SDL_JoyButtonEvent jball);
     void handleJoystickButtonDownEvent(SDL_JoyButtonEvent jball);
-    bool LeftJoystickIsActive();
     bool JButtonIsPressed(int button);
 };
 

@@ -1,4 +1,4 @@
-#version 330 core
+#version 410 core
 in float 	vtime;
 out vec4 	color;
 

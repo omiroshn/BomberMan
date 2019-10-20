@@ -1,4 +1,4 @@
-#version 330 core
+#version 410 core
 
 const int MAX_BONES = 50;
 const int MAX_WEIGHTS = 3;

@@ -3,6 +3,11 @@
 #include "Utilities/AnimationUtils.h"
 #include <imgui.h>
 
+Mesh::Mesh()
+{
+
+}
+
 Mesh::Mesh(std::vector<Vertex>& vertices,
             std::vector<WeightData>& weights,
             std::vector<unsigned int>& indices,

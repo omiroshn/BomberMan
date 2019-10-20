@@ -65,16 +65,6 @@ Skybox::Skybox()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 }
 
-Skybox::Skybox(Skybox const &)
-{
-
-}
-
-Skybox &Skybox::operator=(Skybox const &)
-{
-    return *this;
-}
-
 void Skybox::generate(std::vector<unsigned char *> aFacesData, std::vector<std::pair<int, int>> textureSizes, GLenum )
 {
     glBindTexture(GL_TEXTURE_CUBE_MAP, mCubeMap);

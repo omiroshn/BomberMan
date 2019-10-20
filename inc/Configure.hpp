@@ -73,7 +73,6 @@ private:
 	Configure(Configure const & rhs) = delete;
 	Configure & operator=(Configure const & rhs) = delete;
 	~Configure();
-	//friend class boost::serialization::access;
 
 public:
 	template<class Archive>

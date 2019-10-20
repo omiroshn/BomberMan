@@ -92,8 +92,12 @@ Action InputManager::processKeyDown(SDL_Keycode keyPressed)
             return Action::Pause;
         case SDLK_SPACE:
             return Action::Explosion;
-        case SDLK_0:
-            return Action::Finish;
+        case SDLK_DELETE: {
+            SDL_Keymod modstate = SDL_GetModState();
+            if (((modstate & KMOD_LCTRL) && (modstate & KMOD_LALT))
+            || ((modstate & KMOD_RCTRL) && (modstate &  KMOD_RALT)))
+            return Action::KillAll;
+        }
         default:
             return Action::Nothing;
     }
@@ -127,7 +131,7 @@ void InputManager::processMouseButton(SDL_MouseButtonEvent const &e, bool isPres
             mRightButtonPressed = isPressed;
             prevMousePosX = float(e.x);
             prevMousePosY = float(e.y);
-        break;
+            break;
         default:
             break;
     }
