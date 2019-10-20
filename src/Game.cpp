@@ -72,6 +72,7 @@ void Game::start()
     mStageStartedTimer = getCurrentTime();
 
     SDL_GL_MakeCurrent(mWindow->getSDLWindow(), mWindow->getSDLGLContext());
+    SDL_SetWindowInputFocus(mWindow->getSDLWindow());
 	RESOURCES.endLoading();
 	
 	// sync files here
@@ -258,8 +259,6 @@ void Game::handleInput()
             if (mKeyHandler->isPressed(SDL_SCANCODE_J))
                 mHero->AddAcceleration(glm::vec2(0, offset));
         }
-        if (mKeyHandler->isPressed(SDL_SCANCODE_SPACE))
-            mHero->tryPlaceBomb();
         if (auto *joystick = mIManager->getJoystick())
         {
             short x_move = SDL_JoystickGetAxis(joystick, 0);
@@ -276,9 +275,6 @@ void Game::handleInput()
                 x_move / (float)MAX_JOYSTICK_VALUE,
                 y_move / (float)MAX_JOYSTICK_VALUE);
             mHero->AddAcceleration(normalizedJoystick * offset);
-
-            if (mKeyHandler->JButtonIsPressed(SDL_CONTROLLER_BUTTON_X))
-                mHero->tryPlaceBomb();
         }
     }
     if (auto *joystick = mIManager->getJoystick())
@@ -374,6 +370,10 @@ void Game::doAction(Action a)
         case Action::Finish:
             requestExit();
 			saveCurrentState();
+            break;
+        case Action::Explosion:
+            if (mHero)
+                mHero->tryPlaceBomb();
             break;
         case Action::Pause:
             pause();
