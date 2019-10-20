@@ -330,7 +330,9 @@ void Game::resolveCollisions()
     {
         glm::vec2 ProbePoint = Position + offsets[i];
 		SquareType inObstacle = mCollisionInfo[ProbePoint];
-        if ((inObstacle == SquareType::EmptySquare) || (Hero.mStats.wallpass && inObstacle == SquareType::Brick))
+        if ((inObstacle == SquareType::EmptySquare)
+        || (Hero.mStats.wallpass && inObstacle == SquareType::Brick)
+        || (Hero.mStats.bombpass && inObstacle == SquareType::Bomb))
 			continue;
         glm::vec2 ResolutionOffset;
         if (circle_box_collision(Position, radius, glm::floor(ProbePoint), glm::ceil(ProbePoint), &ResolutionOffset))
@@ -459,12 +461,8 @@ void Game::loadModels()
     // powerups placeholder, please do something about this!!!!!!!!!!!!!!!!!!!!!
     RESOURCES.loadModel("general/powerup/model.dae", "bonus_bombs", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
     RESOURCES.loadModel("general/powerup/model.dae", "bonus_flames", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
-    RESOURCES.loadModel("general/powerup/model.dae", "bonus_speed", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
     RESOURCES.loadModel("general/powerup/model.dae", "bonus_wallpass", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
-    RESOURCES.loadModel("general/powerup/model.dae", "bonus_detonator", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
-    RESOURCES.loadModel("general/powerup/model.dae", "bonus_bombpass", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
     RESOURCES.loadModel("general/powerup/model.dae", "bonus_flamepass", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
-    RESOURCES.loadModel("general/powerup/model.dae", "bonus_mystery", glm::vec3(0.5f), glm::vec3(0), glm::vec3(0,1,0), 180.f);
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     RESOURCES.loadModel("map/first/ground/model.fbx", "ground");
@@ -823,7 +821,7 @@ void Game::extractInfo()
     for (size_t i = 0; i < mCollisionInfo.Squares.size(); i++)
     {
         auto& It = mCollisionInfo.Squares[i];
-        if (It >= SquareType::Powerup_Bombs && It <= SquareType::Powerup_Mystery)
+        if (It >= SquareType::Powerup_Bombs && It <= SquareType::Powerup_Flamepass)
         {
             mPowerupType = (Hero::PowerupType)((int)It - (int)SquareType::Powerup_Bombs);
             mPowerup = glm::vec2 { i % mCollisionInfo.width, i / mCollisionInfo.width };

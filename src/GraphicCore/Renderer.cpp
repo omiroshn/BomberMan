@@ -71,7 +71,6 @@ void Renderer::renderObstacles(std::shared_ptr<Shader> &s)
             RESOURCES.getModel("bonus_bombs"),
             RESOURCES.getModel("bonus_flames"),
             RESOURCES.getModel("bonus_wallpass"),
-            RESOURCES.getModel("bonus_detonator"),
             RESOURCES.getModel("bonus_bombpass"),
             RESOURCES.getModel("bonus_flamepass")
         };

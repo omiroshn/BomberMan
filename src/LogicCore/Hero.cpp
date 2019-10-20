@@ -54,11 +54,6 @@ void Hero::applyPowerup(PowerupType type)
 			mStats.wallpass = 1;
 			break;
 		}
-		case PowerupType::PT_Detonator:
-		{
-			mStats.detonator = 1;
-			break;
-		}
 		case PowerupType::PT_Bombpass:
 		{
 			mStats.bombpass = 1;
