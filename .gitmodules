@@ -31,3 +31,6 @@
 [submodule "3rdParty/stb"]
 	path = 3rdParty/stb
 	url = https://Arxcel@bitbucket.org/Arxcel/stb_image_mirror.git
+[submodule "3rdParty/cl_adapter"]
+	path = 3rdParty/cl_adapter
+	url = git@github.com:mrassokh/OpenCL_CXX.git

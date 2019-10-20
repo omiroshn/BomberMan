@@ -41,6 +41,11 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/3rdParty/ffmpeg/macOs/")
     message(FATAL_ERROR "ffmpeg submodule was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/3rdParty/cl_adapter/cl.hpp")
+    message(FATAL_ERROR "cl_adapter submodule was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+endif()
+
+
 set( BUILD_SHARED_LIBS OFF CACHE BOOL "Build only static libs" )
 
 ## SDL2
@@ -141,7 +146,7 @@ add_definitions(-DASSIMP_BUILD_NO_NDO_EXPORTER)
 set( ASSIMP_BUILD_OFF_IMPORTER OFF CACHE BOOL "Build importer" )
 add_definitions(-DASSIMP_BUILD_NO_OFF_EXPORTER)
 
-set( ASSIMP_BUILD_OBJ_IMPORTER ON CACHE BOOL "Build importer" )
+set( ASSIMP_BUILD_OBJ_IMPORTER OFF CACHE BOOL "Build importer" )
 add_definitions(-DASSIMP_BUILD_NO_OBJ_EXPORTER)
 
 set( ASSIMP_BUILD_OGRE_IMPORTER OFF CACHE BOOL "Build importer" )
@@ -232,3 +237,8 @@ add_library(stb::stb ALIAS stb)
 add_library(cereal INTERFACE)
 target_include_directories(cereal INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/cereal/include/)
 add_library(cereal::cereal ALIAS cereal)
+
+##
+add_library(cl_hpp INTERFACE)
+target_include_directories(cl_hpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/cl_adapter/)
+add_library(adapters::cl_hpp ALIAS cl_hpp)
