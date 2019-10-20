@@ -48,8 +48,6 @@ std::vector<SquareType> Serialization::LoadCampaignMap(int stage, unsigned& outW
         {
             if (line[i] >= '0' && line[i] <= '9')
                 map.push_back((SquareType)(line[i] - '0'));
-            else if(line[i] >= 'a' && line[i] <= 'z')
-                map.push_back((SquareType)(line[i] - 'a' + 10));
             else 
                 map.push_back(SquareType::EmptySquare);
         };

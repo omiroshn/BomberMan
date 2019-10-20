@@ -21,7 +21,6 @@ public:
 		PT_Bombs,
 		PT_Flames,
 		PT_Wallpass,
-		PT_Detonator,
 		PT_Bombpass,
 		PT_Flamepass,
 		PT_NONE
