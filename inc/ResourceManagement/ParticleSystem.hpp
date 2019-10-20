@@ -70,6 +70,7 @@ public:
 	std::vector<cl::Memory>  &  getMemoryStack();
 
 	void 						start();
+	void 						stop();
 	bool						isRunning( ) const;
 	bool 						chekLiveTime();
 

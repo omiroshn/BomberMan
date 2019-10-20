@@ -101,16 +101,16 @@ bool			ParticleSystem::isRunning( ) const
 }
 
 bool 			ParticleSystem::chekLiveTime() {
-	if (m_isRunning) {
+	if (m_isRunning)
+	{
 		auto currentTime = std::chrono::high_resolution_clock::now();
 		m_deltaTime = Game::mDeltaTime;
 		m_stepTime = currentTime;
 		m_totalTime += m_deltaTime;
 	}
-	if (m_totalTime > m_liveTime && m_isRunning) {
-		m_totalTime = 0.0;
-		m_isRunning = false;
-		initGLBufers(m_initKernelName);
+	if (m_totalTime > m_liveTime && m_isRunning)
+	{
+		stop();
 	}
 	return m_isRunning;
 }
@@ -120,6 +120,13 @@ void 			ParticleSystem::start()
 	m_startTime = std::chrono::high_resolution_clock::now();
 	m_stepTime = m_startTime;
 	m_isRunning = true;
+}
+
+void ParticleSystem::stop()
+{
+	m_totalTime = 0.0;
+	m_isRunning = false;
+	initGLBufers(m_initKernelName);
 }
 
 std::string const & 		ParticleSystem::getInitKernelName() const

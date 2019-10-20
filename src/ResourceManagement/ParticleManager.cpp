@@ -41,6 +41,13 @@ void 		ParticleManager::init()
 	}
 }
 
+void ParticleManager::clear()
+{
+	for (auto & element : m_particleSystemMap)
+		element.second->stop();
+	m_transformsMap.clear();
+}
+
 void 		ParticleManager::initCLEngine()
 {
 

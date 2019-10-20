@@ -662,6 +662,7 @@ void  Game::cleanupOnStageChange()
     mOnils.clear();
     mOvapes.clear();
     mBombs.clear();
+    mRenderer->getParticleManager()->clear();
 }
 
 void Game::requestExit()
