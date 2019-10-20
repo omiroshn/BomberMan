@@ -143,9 +143,8 @@ void Gui::ShowStartNewGameMenu()
 {
 	if (ImGui::Button("Start new Campaign", STANDARD_MENU_BUTTON))
 	{
-		//ImGui::OpenPopup("Select stage");
 		mCurrentMenu = CurrentMenu::inGameMenu;
-		CONFIGURATION.setChosenStage(CONFIGURATION.getChosenStage());
+		CONFIGURATION.setChosenStage(DefaultChosenStage);
 		CONFIGURATION.setLives(DefaultLives);
 		CONFIGURATION.setBestLevelAchieved(DefaultBestLevelAchieved);
 		CONFIGURATION.setScore(DefaultScore);
@@ -242,8 +241,8 @@ void Gui::ShowSettingsMenu()
 		}
 
 		ImGui::Text("\nSet screen resolution\n");
-        const char* items[] = {"960 x 720", "1280 x 1080", "1600 x 1440", "1920 x 480"};
-
+        const char* items[] = {"720 p", "1080 p", "1200 p", "1440 p"};
+		glm::ivec2 resolutions[] = {{960, 720},{1280, 1080},{1600, 1200},{1920, 1440}};
 		ImGuiStyle& style = ImGui::GetStyle();
 		float w = ImGui::CalcItemWidth();
 		float spacing = style.ItemInnerSpacing.x;
@@ -254,7 +253,7 @@ void Gui::ShowSettingsMenu()
 			if (CONFIGURATION.getWidth() >= 1280)
 			{
 				CONFIGURATION.getScreenResolution()--;
-				CONFIGURATION.setSize(CONFIGURATION.getWidth() - 320, CONFIGURATION.getHeight() - 360);
+				CONFIGURATION.setSize(resolutions[CONFIGURATION.getScreenResolution()][0],resolutions[CONFIGURATION.getScreenResolution()][1]);
 			}
 		}
 		static const char* current_item = items[CONFIGURATION.getScreenResolution()];
@@ -266,7 +265,7 @@ void Gui::ShowSettingsMenu()
 				bool is_selected = (current_item == items[n]);
 				if (ImGui::Selectable(items[n], is_selected))
 				{
-					CONFIGURATION.setSize(640 + n * 320, 360 + n * 360);
+					CONFIGURATION.setSize(resolutions[n][0],resolutions[n][1]);
 					current_item = items[n];
 				}
 				if (is_selected)
@@ -278,10 +277,10 @@ void Gui::ShowSettingsMenu()
 		ImGui::SameLine(0, spacing);
 		if (ImGui::ArrowButton("##r", ImGuiDir_Right))
 		{
-			if (CONFIGURATION.getWidth() <= 1600)
+			if (CONFIGURATION.getWidth() <= 1200)
 			{
 				CONFIGURATION.getScreenResolution()++;
-				CONFIGURATION.setSize(CONFIGURATION.getWidth() + 320, CONFIGURATION.getHeight() + 360);
+				CONFIGURATION.setSize(resolutions[CONFIGURATION.getScreenResolution()][0],resolutions[CONFIGURATION.getScreenResolution()][1]);
 			}
 		}
 		ImGui::EndChildFrame();

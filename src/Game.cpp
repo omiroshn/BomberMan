@@ -737,7 +737,7 @@ void  Game::addEnemiesOnMap()
     for (size_t i = 20; i < mCollisionInfo.Squares.size() - 20; i++)
     {
         auto& It = mCollisionInfo.Squares[i];
-        if (It >= SquareType::Brick && rand() % 2)
+        if (It >= SquareType::Brick && rand() % 9 == 0)
         {
             int type = rand() % 3;
             switch (type)
