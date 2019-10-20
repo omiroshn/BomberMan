@@ -85,7 +85,7 @@ void Renderer::renderMovable(std::shared_ptr<Shader> &s, std::shared_ptr<Shader>
     static auto heroModel = RESOURCES.getModel("hero");
     static auto balloon = RESOURCES.getModel("enemy2");
     static auto onil = RESOURCES.getModel("enemy1");
-    static auto ovape = RESOURCES.getModel("unbreakableWall");
+    static auto ovape = RESOURCES.getModel("enemy3");
 
     //render hero
     auto& Hero = g.getHero();
