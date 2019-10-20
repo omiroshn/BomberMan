@@ -63,8 +63,8 @@ public:
 	void            setStats(Hero::Stats stats);
 	void            setBestLevelAchieved(int const BestLevelAchieved);
 
-	void 			serialise(std::string fileName  = "~/.BombermanConfigureFile");
-	void 			deserialise(std::string fileName  = "~/.BombermanConfigureFile");
+	void 			serialise(std::string fileName  = "/tmp/BombermanConfigureFile");
+	void 			deserialise(std::string fileName  = "/tmp/BombermanConfigureFile");
 
 	void 			setObservableWindow(std::shared_ptr<GameWindow> gameWindow);
 

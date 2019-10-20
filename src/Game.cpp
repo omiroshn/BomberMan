@@ -469,7 +469,7 @@ void Game::loadModels()
 
     RESOURCES.loadModel("general/monster/model.fbx", "enemy1");
     RESOURCES.loadModel("general/villain/model.fbx", "enemy2");
-    RESOURCES.loadModel("general/troll/model.fbx", "enemy3", glm::vec3(0.025f), glm::vec3(0.f, -5.f, 0.f));
+    RESOURCES.loadModel("general/troll/model.fbx", "enemy3", glm::vec3(0.025f), glm::vec3(0.f, -150.f, 0.f));
 
     RESOURCES.loadModel("general/gate_active/model.fbx", "gate1", glm::vec3(0.9f), glm::vec3(0.f, -45.f, 0.f), glm::vec3(1,0,0), 270.f);
     RESOURCES.loadModel("general/gate_inactive/model.fbx", "gate2", glm::vec3(0.9f), glm::vec3(0.f, -45.f, 0.f), glm::vec3(1,0,0), 270.f);
